@@ -9,15 +9,15 @@ interface UpdateReviewProps {
 }
 
 const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
   const [desc, setDesc] = useState("");
   const [rate, setRate] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
-    name: "",
-    city: "",
+    companyName: "",
+    contactPerson: "",
     desc: "",
   });
 
@@ -25,8 +25,9 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     const fetchReview = async () => {
       try {
         const review = await getReviewById(reviewId);
-        setName(review.name);
-        setCity(review.city);
+        setCompanyName(review.company_name);
+        setContactPerson(review.contact_person);
+
         setDesc(review.desc);
         setRate(review.rate);
       } catch (error) {
@@ -42,10 +43,11 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     setLoading(true);
     setError(null);
 
-    if (!name || !desc || !city) {
+    if (!contactPerson || !companyName || !desc) {
       setErrors({
-        name: !name ? t("company_name_required") : "",
-        city: !city ? t("city_required") : "",
+        companyName: !companyName ? t("company_name_required") : "",
+        contactPerson: !contactPerson ? t("company_name_required") : "",
+
         desc: !desc ? t("desc_required") : "",
       });
       setLoading(false);
@@ -53,7 +55,7 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     }
 
     try {
-      await updateReview(reviewId, name, city, desc, rate);
+      await updateReview(reviewId, companyName, contactPerson, desc, rate);
       onReviewUpdated();
     } catch (err) {
       console.error("Failed to update review:", err);
@@ -85,40 +87,41 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("company_name")}</legend>
+            <legend className="fieldset-legend">{t("contact_person")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
               placeholder="Reviewer name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={contactPerson}
+              onChange={(e) => setContactPerson(e.target.value)}
               required
             />
           </fieldset>
-          {errors.name && (
+          {errors.contactPerson && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.name}
+              {errors.contactPerson}
             </span>
           )}
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("city")}</legend>
+            <legend className="fieldset-legend">{t("company_name")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
-              placeholder="Reviewer city"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
+              placeholder="Reviewer name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
               required
             />
           </fieldset>
-          {errors.city && (
+          {errors.companyName && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.city}
+              {errors.companyName}
             </span>
           )}
         </div>
+
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
             <legend className="fieldset-legend">{t("description")}</legend>

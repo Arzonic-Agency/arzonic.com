@@ -8,8 +8,6 @@ interface CreateReviewProps {
 }
 
 const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
   const [desc, setDesc] = useState("");
   const [rate, setRate] = useState<number>(1);
   const [companyName, setCompanyName] = useState("");
@@ -17,8 +15,6 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
-    name: "",
-    city: "",
     desc: "",
     companyName: "",
     contactPerson: "",
@@ -29,10 +25,8 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
     setLoading(true);
     setError(null);
 
-    if (!name || !desc || !city || !companyName || !contactPerson) {
+    if (!desc || !companyName || !contactPerson) {
       setErrors({
-        name: !name ? t("company_name_required") : "",
-        city: !city ? t("city_required") : "",
         desc: !desc ? t("desc_required") : "",
         companyName: !companyName ? t("company_name_required") : "",
         contactPerson: !contactPerson ? t("contact_person_required") : "",
@@ -42,7 +36,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
     }
 
     try {
-      await createReview(city, desc, rate, companyName, contactPerson);
+      await createReview(desc, rate, companyName, contactPerson);
       onReviewCreated();
     } catch {
       setError("Failed to create review. Please try again.");
@@ -65,63 +59,10 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
         className="flex flex-col items-start gap-5 w-full"
       >
         {error && <div className="alert alert-error">{error}</div>}
+
         <div className="form-control">
           <label className="label">Rating</label>
           <CreateRating rate={rate} setRate={(value) => setRate(value)} />
-        </div>
-        <div className="flex flex-col gap-2 relative w-full">
-          <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("contact_person")}</legend>
-            <input
-              type="text"
-              className="input input-bordered input-md"
-              placeholder={t("contact_person_placeholder")}
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
-              required
-            />
-          </fieldset>
-          {errors.contactPerson && (
-            <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.contactPerson}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 relative w-full">
-          <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("company_name")}</legend>
-            <input
-              type="text"
-              className="input input-bordered input-md"
-              placeholder={t("company_name_placeholder")}
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              required
-            />
-          </fieldset>
-          {errors.companyName && (
-            <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.companyName}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col gap-2 relative w-full">
-          <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("city")}</legend>
-            <input
-              type="text"
-              className="input input-bordered input-md"
-              placeholder="Reviewer company"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
-          </fieldset>
-          {errors.city && (
-            <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.city}
-            </span>
-          )}
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
@@ -137,13 +78,50 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
               cols={30}
               rows={5}
             ></textarea>
-            <div className="text-right text-xs font-medium text-gray-500">
+            <div className="absolute right-2 -bottom-5 text-right text-xs font-medium text-gray-500">
               {desc.length} / 100
             </div>
           </fieldset>
           {errors.desc && (
             <span className="absolute -bottom-4 text-xs text-red-500">
               {errors.desc}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col gap-2 relative w-full">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">{t("company_name")}</legend>
+            <input
+              type="text"
+              className="input input-bordered input-md"
+              placeholder={t("write_company_name")}
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              required
+            />
+          </fieldset>
+          {errors.companyName && (
+            <span className="absolute -bottom-4 text-xs text-red-500">
+              {errors.companyName}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 relative w-full">
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">{t("contact_person")}</legend>
+            <input
+              type="text"
+              className="input input-bordered input-md"
+              placeholder={t("write_contact_person")}
+              value={contactPerson}
+              onChange={(e) => setContactPerson(e.target.value)}
+              required
+            />
+          </fieldset>
+          {errors.contactPerson && (
+            <span className="absolute -bottom-4 text-xs text-red-500">
+              {errors.contactPerson}
             </span>
           )}
         </div>

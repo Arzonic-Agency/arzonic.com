@@ -13,7 +13,8 @@ interface ReviewsListProps {
 
 interface ReviewItem {
   id: number;
-  name: string;
+  company_name: string;
+  contact_person: string;
   city: string;
   desc: string;
   rate: number;
@@ -87,22 +88,26 @@ const ReviewsList = ({
                   key={item.id}
                   className="card card-compact shadow-lg rounded-md"
                 >
-                  <div className="card-body p-5">
+                  <div className="card-body gap-3 p-5">
                     <ReviewsRating rate={item.rate} />
-                    <p className="text-sm">{item.desc}</p>
-                    <h2 className="text-xs font-bold flex items-center gap-1">
-                      {item.name}, {item.city} <FaLocationDot />
-                    </h2>
+                    <p className="text-xs">{item.desc}</p>
+                    <div className="flex justify-between items-center mt-1">
+                      <h2 className="text-sm font-semibold">
+                        {item.contact_person} {t("from_reviews")}{" "}
+                        {item.company_name}
+                      </h2>
+                    </div>
+
                     <div className="card-actions justify-end">
                       <button
-                        className="btn btn-sm"
+                        className="btn btn-sm btn-neutral"
                         onClick={() => onEditReview(item.id)}
                       >
                         <FaPen />
                         {t("edit")}
                       </button>
                       <button
-                        className="btn btn-sm"
+                        className="btn btn-sm btn-neutral"
                         onClick={() => {
                           setDeletingReviewId(item.id);
                           setIsModalOpen(true);
@@ -121,12 +126,12 @@ const ReviewsList = ({
                 <React.Fragment key={item.id}>
                   <li>
                     <div className="flex gap-3 items-center">
-                      <div className="flex gap-2 items-center flex-initial sm:flex-1 w-16 sm:w-auto truncate">
+                      <div className="flex gap-2 items-center flex-initial sm:flex-1 w-18 sm:w-auto truncate">
                         <h3 className="font-semibold text-xs hidden sm:block ">
-                          {item.name}, {item.city}
+                          {item.contact_person}, {item.company_name}
                         </h3>
                         <h3 className="font-semibold text-xs block sm:hidden">
-                          {item.name}
+                          {item.company_name}
                         </h3>
                       </div>
                       <div className="flex-1">
@@ -166,11 +171,20 @@ const ReviewsList = ({
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">{t("confirm_delete")}</h3>
-            <p className="py-4">{t("delete_confirmation")}</p>
+            <h3 className="font-bold text-lg">
+              {t("delete_review_confirmation")}
+            </h3>
+            <p className="py-4">{t("delete_review_prompt")}</p>
+            <p className="text-sm text-warning ">
+              {t("delete_review_warning")}
+            </p>
             <div className="modal-action">
-              <button className="btn">{t("cancel")}</button>
-              <button className="btn btn-error">{t("delete")}</button>
+              <button className="btn" onClick={closeModal}>
+                {t("cancel")}
+              </button>
+              <button className="btn btn-error" onClick={handleDelete}>
+                {t("delete")}
+              </button>
             </div>
           </div>
         </div>

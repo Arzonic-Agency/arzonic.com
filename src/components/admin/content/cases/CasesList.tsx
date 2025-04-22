@@ -3,7 +3,6 @@ import Image from "next/image";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import { getAllCases, deleteCase } from "@/lib/server/actions";
 import UpdateCase from "./updateCase/UpdateCase";
-import ReactCompareImage from "react-compare-image";
 import { useTranslation } from "react-i18next";
 
 interface CasesListProps {
@@ -206,7 +205,9 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">{t("delete_confirmation")}</h3>
+            <h3 className="font-bold text-lg">
+              {t("delete_case_confirmation")}
+            </h3>
             <p className="py-4">{t("delete_case_prompt")}</p>
             <p className="text-sm text-warning">{t("delete_case_warning")}</p>
             <div className="modal-action">

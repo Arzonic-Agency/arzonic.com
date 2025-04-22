@@ -132,7 +132,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 cols={30}
                 rows={8}
               ></textarea>
-              <div className="text-right text-xs font-medium text-gray-500">
+              <div className="text-right text-xs font-medium text-zinc-500">
                 {desc.length} / 250
               </div>
               {errors.desc && (

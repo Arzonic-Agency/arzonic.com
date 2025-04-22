@@ -530,7 +530,6 @@ export async function deleteCase(caseId: number): Promise<void> {
 // REVIEWS
 
 export async function createReview(
-  city: string,
   desc: string,
   rate: number,
   company_name: string,
@@ -547,7 +546,6 @@ export async function createReview(
     const { error } = await supabase.from("reviews").insert([
       {
         creator: userData.user.id,
-        city,
         desc,
         rate,
         contact_person,
@@ -627,8 +625,8 @@ export async function getLatestReviews(limit: number = 10) {
 
 export async function updateReview(
   reviewId: number,
-  name: string,
-  city: string,
+  company_name: string,
+  contact_person: string,
   desc: string,
   rate: number
 ): Promise<void> {
@@ -637,7 +635,7 @@ export async function updateReview(
   try {
     const { error } = await supabase
       .from("reviews")
-      .update({ name, city, desc, rate })
+      .update({ company_name, contact_person, desc, rate })
       .eq("id", reviewId);
 
     if (error) {
