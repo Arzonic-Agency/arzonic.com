@@ -46,7 +46,7 @@ function LaptopModel({ scrollY }) {
             // Swap the emissiveMap texture with the new texture.
             mat.emissiveMap = newTexture;
             // Lower the emissive intensity so the texture appears less bright.
-            mat.emissiveIntensity = 0.5; // Adjust this value as needed.
+            mat.emissiveIntensity = 0.4; // Adjust this value as needed.
             mat.needsUpdate = true;
             console.log(
               `Swapped emissive texture for material: ${mat.name} on mesh: ${child.name}`
