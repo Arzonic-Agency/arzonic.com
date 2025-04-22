@@ -4,6 +4,7 @@ import Process from "@/components/client/home/Process";
 import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
 import React from "react";
+import OfferForm from "@/components/client/forms/OfferForm";
 
 const Home = () => {
   return (
@@ -14,8 +15,8 @@ const Home = () => {
       <section className="h-[800px]">
         <Prices />
       </section>
-      <section className="h-[200px]">
-        <NavProcess />
+      <section className="h-[200px] mb-[2000px]">
+        <OfferForm />
       </section>
       <section id="Process" className="h-[2000px]">
         <Process />
