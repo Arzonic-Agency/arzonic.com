@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import Requests from "./requests/Requests";
 import { FaCalendarCheck, FaClipboardCheck } from "react-icons/fa6";
 import Bookings from "./bookings/Bookings";
+import { useTranslation } from "react-i18next";
 
 const NavMessages = () => {
   const [activeTab, setActiveTab] = useState("users");
+  const { t } = useTranslation();
   return (
     <div className="w-full">
       <div
@@ -23,7 +25,7 @@ const NavMessages = () => {
           onClick={() => setActiveTab("users")}
         >
           <FaClipboardCheck />
-          Kontaktformular
+          {t("requests")}
         </button>
         <button
           role="tab"

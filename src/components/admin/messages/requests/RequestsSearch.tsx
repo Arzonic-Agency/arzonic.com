@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
@@ -31,7 +32,7 @@ const RequestsSearch = ({
         <input
           type="text"
           className="grow"
-          placeholder="Search"
+          placeholder={t("search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -39,27 +40,30 @@ const RequestsSearch = ({
       </label>
       <div className="flex items-center gap-2">
         <button
-          className="btn btn-danger"
+          className="btn btn-sm btn-error"
           onClick={openModal}
           disabled={selectedRequests.length === 0}
         >
           <FaTrash />
-          <span className="hidden md:block">Slet valgte</span>
+          <span className="hidden md:block">{t("delete_selected")}</span>
         </button>
       </div>
       {showModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Bekræft sletning</h3>
-            <p className="py-4">
-              Er du sikker på, at du vil slette de valgte anmodninger?
+            <h3 className="font-bold text-lg">
+              {t("delete_requests_confirmation")}
+            </h3>
+            <p className="py-4">{t("delete_requests_prompt")}</p>
+            <p className="text-sm text-warning">
+              {t("delete_requests_warning")}
             </p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
-                Annuller
+                {t("cancel")}
               </button>
               <button className="btn btn-error" onClick={handleDelete}>
-                Slet
+                {t("delete")}
               </button>
             </div>
           </div>

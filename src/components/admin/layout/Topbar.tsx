@@ -19,7 +19,7 @@ const Topbar = () => {
   const pageTitles: PageTitleMapping = {
     "/admin": t("overview"),
     "/admin/content": t("content"),
-    "/admin/messages": t("requests"),
+    "/admin/messages": t("customers"),
     "/admin/settings": t("settings"),
   };
 

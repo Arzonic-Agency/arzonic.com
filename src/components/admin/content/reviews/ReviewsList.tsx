@@ -99,7 +99,7 @@ const ReviewsList = ({
                         onClick={() => onEditReview(item.id)}
                       >
                         <FaPen />
-                        Rediger
+                        {t("edit")}
                       </button>
                       <button
                         className="btn btn-sm"
@@ -138,7 +138,7 @@ const ReviewsList = ({
                           onClick={() => onEditReview(item.id)}
                         >
                           <FaPen />
-                          <span className="md:flex hidden"> Rediger </span>
+                          <span className="md:flex hidden"> {t("edit")} </span>
                         </button>
                         <button
                           className="btn btn-sm"
@@ -148,7 +148,10 @@ const ReviewsList = ({
                           }}
                         >
                           <FaTrash />
-                          <span className="md:flex hidden"> Slet </span>
+                          <span className="md:flex hidden">
+                            {" "}
+                            {t("delete")}{" "}
+                          </span>
                         </button>
                       </div>
                     </div>

@@ -55,7 +55,7 @@ const Navbar = () => {
                 className={pathname === "/admin/messages" ? "menu-active" : ""}
                 href="/admin/messages"
               >
-                {t("requests")}
+                {t("customers")}
               </Link>
             </li>
             {role === "admin" && (

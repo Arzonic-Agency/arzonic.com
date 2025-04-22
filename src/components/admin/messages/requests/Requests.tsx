@@ -10,6 +10,8 @@ import {
   updateRequest,
 } from "@/lib/server/actions";
 
+import { useTranslation } from "react-i18next";
+
 const Requests = () => {
   const [selectedRequestId, setSelectedRequestId] = useState<number | null>(
     null
@@ -22,6 +24,7 @@ const Requests = () => {
   const [selectedRequests, setSelectedRequests] = useState<number[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const { t } = useTranslation();
 
   const handleDetailsClick = (requestId: number) => {
     setSelectedRequestId(requestId);
@@ -138,7 +141,7 @@ const Requests = () => {
           {loading ? (
             <div className="flex justify-center gap-3 items-center">
               <span className="loading loading-spinner loading-md"></span>
-              Indhenter data...
+              {t("loading_request")}
             </div>
           ) : (
             <>

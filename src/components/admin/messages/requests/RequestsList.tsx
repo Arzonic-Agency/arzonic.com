@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { FaAngleRight } from "react-icons/fa6";
 
 export interface Request {
@@ -32,6 +33,7 @@ const RequestsList = ({
   handleCheckboxChange,
 }: RequestsListProps) => {
   const [localRequests, setLocalRequests] = useState<Request[]>(requests);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLocalRequests(
@@ -52,7 +54,7 @@ const RequestsList = ({
   if (!localRequests.length) {
     return (
       <div className="h-52 flex items-center justify-center">
-        Ingen henvendelser fundet
+        {t("no_requests")}
       </div>
     );
   }
