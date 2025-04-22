@@ -1,56 +1,71 @@
-import { useEffect, useRef, Suspense, useState } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import React, { useEffect, useRef, Suspense, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF, Html, useProgress } from "@react-three/drei";
 import {
   Mesh,
+  Texture,
   TextureLoader,
   Box3,
   Vector3,
   AnimationMixer,
   PCFSoftShadowMap,
+  Group,
 } from "three";
+import { createClient } from "@supabase/supabase-js";
 
-function LaptopModel({ scrollY }) {
-  const group = useRef(null);
-  const { scene, animations } = useGLTF("/models/laptop.glb");
-  const mixer = useRef(null);
-  // Load the new texture for the screen. Then fix its orientation.
-  const newTexture = useLoader(TextureLoader, "/models/screen.png");
-  newTexture.flipY = false; // Correct the upside-down texture.
-  
-  const clipDuration = animations[0]?.duration || 0;
+// Supabase client
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+interface LaptopModelProps {
+  modelUrl: string;
+  scrollY: number;
+}
+
+function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
+  const group = useRef<Group>(null);
+  const { scene, animations } = useGLTF(modelUrl);
+  const mixer = useRef<AnimationMixer>();
+  const [screenTexture, setScreenTexture] = useState<Texture | null>(null);
+
+  // Load the screen texture once
+  useEffect(() => {
+    const loader = new TextureLoader();
+    loader.load("/models/screen.png", (tex) => {
+      tex.flipY = false;
+      setScreenTexture(tex);
+    });
+  }, []);
+
+  const clipDuration = animations[0]?.duration ?? 0;
   const maxScroll = 600;
 
+  // Run once both model *and* texture are available
   useEffect(() => {
-    if (!group.current) return;
+    if (!group.current || !screenTexture) return;
 
-    // Center and scale the model.
     const model = scene;
+    // Center & scale
     const box = new Box3().setFromObject(model);
     const size = box.getSize(new Vector3()).length();
     const center = box.getCenter(new Vector3());
     model.position.sub(center);
-    const minY = new Box3().setFromObject(model).min.y;
-    model.position.y -= minY;
-    const scaleFactor = 6 / size;
-    model.scale.setScalar(scaleFactor);
+    model.position.y -= new Box3().setFromObject(model).min.y;
+    model.scale.setScalar(6 / size);
 
-    // Traverse and swap the emissive texture for materials named "Screen".
+    // Swap emissiveMap on "Screen" materials
     model.traverse((child) => {
       if (child instanceof Mesh) {
-        const materials = Array.isArray(child.material)
+        const mats = Array.isArray(child.material)
           ? child.material
           : [child.material];
-        materials.forEach((mat) => {
+        mats.forEach((mat) => {
           if (mat.name === "Screen") {
-            // Swap the emissiveMap texture with the new texture.
-            mat.emissiveMap = newTexture;
-            // Lower the emissive intensity so the texture appears less bright.
-            mat.emissiveIntensity = 0.4; // Adjust this value as needed.
+            mat.emissiveMap = screenTexture;
+            mat.emissiveIntensity = 0.4;
             mat.needsUpdate = true;
-            console.log(
-              `Swapped emissive texture for material: ${mat.name} on mesh: ${child.name}`
-            );
           }
         });
       }
@@ -58,24 +73,19 @@ function LaptopModel({ scrollY }) {
 
     group.current.add(model);
 
-    // Initialize the animation mixer and play the animation.
+    // Animation mixer setup
     mixer.current = new AnimationMixer(model);
     const action = mixer.current.clipAction(animations[0]);
     action.reset().play();
+    mixer.current.setTime(clipDuration - 1 / 24);
+  }, [scene, animations, screenTexture, clipDuration]);
 
-    // Start the animation near the end of the clip.
-    const fps = 24;
-    const oneFrameTime = 1 / fps;
-    mixer.current.setTime(clipDuration - oneFrameTime);
-  }, [scene, newTexture]);
-
+  // Drive the animation by scroll
   useFrame((_, delta) => {
-    if (!mixer.current || !animations.length) return;
-    const currentProgress = Math.min(1, Math.max(0, scrollY / maxScroll));
-    const easedProgress = 1 - Math.pow(1 - currentProgress, 2);
-    const oneFrameTime = 1 / 24;
-    const adjustedDuration = clipDuration - oneFrameTime;
-    const newTime = (1 - easedProgress) * adjustedDuration;
+    if (!mixer.current) return;
+    const t = Math.min(1, Math.max(0, scrollY / maxScroll));
+    const eased = 1 - (1 - t) ** 2;
+    const newTime = (1 - eased) * (clipDuration - 1 / 24);
     mixer.current.setTime(newTime);
     mixer.current.update(delta);
   });
@@ -83,17 +93,37 @@ function LaptopModel({ scrollY }) {
   return <group ref={group} rotation={[0, -Math.PI / 6, 0]} />;
 }
 
-export default function ThreeAnimation() {
-  const [scrollY, setScrollY] = useState(0);
+// Loader that lives inside the Canvas
+function CanvasLoader() {
+  const { progress } = useProgress();
+  return (
+    <Html center style={{ pointerEvents: "none" }}>
+      <div className="text-white">{progress.toFixed(0)}%</div>
+    </Html>
+  );
+}
 
+export default function ThreeAnimation() {
+  const [scrollY, setScrollY] = useState<number>(0);
+  const [modelUrl, setModelUrl] = useState<string | null>(null);
+
+  // Fetch the GLB public URL on mount
+  useEffect(() => {
+    const { data } = supabase.storage.from("models").getPublicUrl("laptop.glb");
+    setModelUrl(data.publicUrl);
+  }, []);
+
+  // Track scroll
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  if (!modelUrl) return <div>Loading model…</div>;
+
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <Canvas
         shadows
         camera={{ position: [0.4, 2.7, 4.7], fov: 70 }}
@@ -141,8 +171,8 @@ export default function ThreeAnimation() {
             />
           );
         })}
-        <Suspense fallback={null}>
-          <LaptopModel scrollY={scrollY} />
+        <Suspense fallback={<CanvasLoader />}>
+          <LaptopModel modelUrl={modelUrl} scrollY={scrollY} />
         </Suspense>
       </Canvas>
     </div>
