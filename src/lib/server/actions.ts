@@ -530,10 +530,11 @@ export async function deleteCase(caseId: number): Promise<void> {
 // REVIEWS
 
 export async function createReview(
-  name: string,
   city: string,
   desc: string,
-  rate: number
+  rate: number,
+  company_name: string,
+  contact_person: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -546,10 +547,11 @@ export async function createReview(
     const { error } = await supabase.from("reviews").insert([
       {
         creator: userData.user.id,
-        name,
         city,
         desc,
         rate,
+        contact_person,
+        company_name,
       },
     ]);
 
