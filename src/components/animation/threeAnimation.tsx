@@ -126,7 +126,7 @@ export default function ThreeAnimation() {
     <div className="w-full h-full relative">
       <Canvas
         shadows
-        camera={{ position: [0.4, 2.7, 4.7], fov: 70 }}
+        camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
         dpr={Math.min(window.devicePixelRatio, 2)}
         gl={{ antialias: true, alpha: true }}
         onCreated={({ gl }) => {
