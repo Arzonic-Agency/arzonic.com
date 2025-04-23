@@ -20,13 +20,13 @@
   --color-neutral-content: #e4e4e4;
   --color-info: oklch(50% 0.134 242.749);
   --color-info-content: oklch(29% 0.066 243.157);
-  --color-success: oklch(62% 0.194 149.214);
+  --color-success: #177512;
   --color-success-content: oklch(27% 0.072 132.109);
-  --color-warning: oklch(68% 0.162 75.834);
+  --color-warning: #AE9F17;
   --color-warning-content: oklch(28% 0.066 53.813);
   --color-error: oklch(45% 0.188 13.697);
   --color-error-content: #e4e4e4;
-  --radius-selector: 1rem;
+  --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
   --radius-box: 0.5rem;
   --size-selector: 0.25rem;
@@ -59,8 +59,8 @@
   --color-success-content: oklch(27% 0.072 132.109);
   --color-warning: oklch(79% 0.184 86.047);
   --color-warning-content: oklch(28% 0.066 53.813);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(27% 0.105 12.094);
+  --color-error: #D82E2E;
+  --color-error-content: #F2F3F5;
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
   --radius-box: 0.5rem;

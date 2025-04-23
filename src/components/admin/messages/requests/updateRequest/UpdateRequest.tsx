@@ -17,11 +17,15 @@ const UpdateRequest = ({
   onUpdateRequest,
 }: UpdateRequestProps) => {
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [category, setCategory] = useState("");
   const [mobile, setMobile] = useState("");
   const [mail, setMail] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
+  const [message, setMessage] = useState("");
+  const [charCount, setCharCount] = useState(0);
+  const charLimit = 500;
 
   useEffect(() => {
     const fetchRequestData = async () => {
@@ -29,11 +33,14 @@ const UpdateRequest = ({
         const requestData = await getRequestById(requestId);
         if (requestData) {
           setName(requestData.name || "");
+          setCompany(requestData.company || "");
           setCategory(requestData.category || "");
           setMobile(requestData.mobile?.toString() || "");
           setMail(requestData.mail || "");
           setAddress(requestData.address || "");
           setCity(requestData.city || "");
+          setMessage(requestData.message || "");
+          setCharCount(requestData.message?.length || 0);
         }
       } catch (error) {
         console.error("Failed to fetch request data:", error);
@@ -43,15 +50,25 @@ const UpdateRequest = ({
     fetchRequestData();
   }, [requestId]);
 
+  const handleMessageChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= charLimit) {
+      setMessage(value);
+      setCharCount(value.length);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const updatedData: Partial<Request> = {
       name,
+      company,
       category,
       mobile,
       mail,
       address,
       city,
+      message,
     };
     onUpdateRequest(requestId, updatedData); // Optimistic update
     setShowToast(true);
@@ -71,107 +88,124 @@ const UpdateRequest = ({
           Tilbage
         </button>
       </div>
-      <div className="flex flex-col gap-10 w-full p-3 ">
+
+      <div className="flex flex-col gap-10 w-full p-3">
         <h2 className="text-lg font-bold">Opdater kundedetaljer</h2>
         <form className="flex flex-col gap-10 w-full" onSubmit={handleSubmit}>
-          <div className="flex gap-10 flex-col md:flex-row">
-            <div className="w-full md:w-1/3">
-              <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Navn</span>
-                </div>
+          <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
+            <div className="flex flex-col gap-5 items-center w-full lg:w-1/3">
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Company</legend>
                 <input
                   type="text"
-                  placeholder="Tilføj navn"
-                  className="input input-bordered"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  className="input input-bordered input-md "
+                  placeholder="Tilføj virksomhed"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  required
                 />
-              </label>
-            </div>
-            <div className="w-full md:w-1/3">
-              <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Valg af opgave</span>
-                </div>
+              </fieldset>
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Mailadresse</legend>
+                <input
+                  type="text"
+                  className="input input-bordered input-md"
+                  placeholder="Tilføj mail"
+                  value={mail}
+                  onChange={(e) => setMail(e.target.value)}
+                  required
+                />
+              </fieldset>
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Mobil nr.</legend>
+                <input
+                  type="text"
+                  className="input input-bordered input-md"
+                  placeholder="Tilføj mobil nr."
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  required
+                />
+              </fieldset>
+
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Valg af opgave</legend>
                 <select
                   className="select select-bordered"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
+                  required
                 >
                   <option value="" disabled>
-                    Vælg opgave
+                    Choose Task
                   </option>
-                  <option value="Græsslåning">Græsslåning</option>
-                  <option value="Hækkeklipning">Hækkeklipning</option>
-                  <option value="Plantning">Plantning</option>
-                  <option value="Specialopgaver">Specialopgaver</option>
-                  <option value="Andet">Andet</option>
+                  <option value="Website">Website</option>
+                  <option value="Web App">Web App</option>
+                  <option value="3D Visualization">3D Visualization</option>
+                  <option value="Branding">Branding</option>
+                  <option value="Social Media Content">
+                    Social Media Content
+                  </option>
+                  <option value="Other">Other</option>
                 </select>
-              </label>
+              </fieldset>
             </div>
-          </div>
-          <div className="flex gap-10 flex-col md:flex-row">
-            <div className="w-full md:w-1/3">
-              <label className="form-control max-w-xs">
-                <div className="label">
-                  <span className="label-text">Mobil nr.</span>
-                </div>
+
+            <div className="flex flex-col gap-5 items-center w-full lg:w-1/3">
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Kontaktperson</legend>
                 <input
                   type="text"
-                  placeholder="Tilføj mobil nr."
-                  className="input input-bordered"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  className="input input-bordered input-md"
+                  placeholder="Tilføj navn"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
                 />
-              </label>
-            </div>
-            <div className="w-full md:w-1/3">
-              <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Mailadresse</span>
-                </div>
+              </fieldset>
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Adresse & husnr.</legend>
                 <input
                   type="text"
-                  placeholder="Tilføj mail"
-                  className="input input-bordered"
-                  value={mail}
-                  onChange={(e) => setMail(e.target.value)}
-                />
-              </label>
-            </div>
-          </div>
-          <div className="flex gap-10 flex-col md:flex-row">
-            <div className="w-full md:w-1/3">
-              <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Adresse & husnr.</span>
-                </div>
-                <input
-                  type="text"
+                  className="input input-bordered input-md"
                   placeholder="Tilføj addresse"
-                  className="input input-bordered"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  required
                 />
-              </label>
-            </div>
-            <div className="w-full md:w-1/3">
-              <label className="form-control w-full max-w-xs">
-                <div className="label">
-                  <span className="label-text">Postnr. & By</span>
-                </div>
+              </fieldset>
+
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Postnr. & By</legend>
                 <input
                   type="text"
+                  className="input input-bordered input-md"
                   placeholder="Tilføj by"
-                  className="input input-bordered"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                  required
                 />
-              </label>
+              </fieldset>
+              <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+                <legend className="fieldset-legend">Besked</legend>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={3}
+                  className="textarea textarea-bordered textarea-md text-base w-full resize-none"
+                  placeholder="Tilføj besked"
+                  value={message}
+                  onChange={handleMessageChange}
+                  required
+                />
+                <div className="text-right text-xs font-medium text-zinc-500">
+                  {charCount}/{charLimit}
+                </div>
+              </fieldset>
             </div>
           </div>
-          <div className="flex items-center justify-start gap-3 mt-5">
+
+          <div className="flex items-center justify-start gap-3">
             <button className="btn btn-primary" type="submit">
               Opdater kunde
             </button>

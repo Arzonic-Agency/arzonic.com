@@ -76,7 +76,7 @@ const UserList = ({
     <div>
       {loading ? (
         <div className="flex justify-center gap-3 items-center">
-          <span className="loading loading-spinner loading-md"></span>
+          <span className="loading loading-spinner loading-md h-36"></span>
           Indhenter data...
         </div>
       ) : (

@@ -7,6 +7,7 @@ import ConsentModal from "../modal/ConsentModal";
 
 const OfferForm = () => {
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [mobile, setMobile] = useState("");
   const [mail, setMail] = useState("");
   const [category, setCategory] = useState("");
@@ -42,7 +43,7 @@ const OfferForm = () => {
 
     try {
       // 1) persist the request
-      await createRequest(name, mobile, mail, category, isChecked, message);
+      await createRequest(name, "", mobile, mail, category, isChecked, message);
 
       // 2) ask the API to send the emails
       const emailBody = [
@@ -69,7 +70,9 @@ const OfferForm = () => {
       setSuccessText("Your request has been sent.");
     } catch (err: any) {
       console.error("Submit error:", err);
-      setErrorText(err.message || "Something went wrong. Please try again later.");
+      setErrorText(
+        err.message || "Something went wrong. Please try again later."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +110,10 @@ const OfferForm = () => {
           </button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 bg-base-100 rounded-lg shadow-md p-8 md:p-10">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-5 bg-base-100 rounded-lg shadow-md p-8 md:p-10"
+        >
           <h2 className="text-xl font-bold">Request a Quote</h2>
 
           {/* Name / Email / Phone */}
@@ -124,7 +130,7 @@ const OfferForm = () => {
                   placeholder="Enter your name"
                   className="input input-bordered w-full max-w-xs"
                   value={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   required
                 />
               </label>
@@ -139,7 +145,7 @@ const OfferForm = () => {
                   placeholder="Enter your email"
                   className="input input-bordered w-full max-w-xs"
                   value={mail}
-                  onChange={e => setMail(e.target.value)}
+                  onChange={(e) => setMail(e.target.value)}
                   required
                 />
               </label>
@@ -154,7 +160,7 @@ const OfferForm = () => {
                   placeholder="Enter your phone number"
                   className="input input-bordered w-full max-w-xs"
                   value={mobile}
-                  onChange={e => setMobile(e.target.value)}
+                  onChange={(e) => setMobile(e.target.value)}
                   required
                 />
               </label>
@@ -163,7 +169,10 @@ const OfferForm = () => {
             {/* Category & Message */}
             <div className="flex-1 flex flex-col gap-3">
               <TaskSelect onChange={setCategory} />
-              <label htmlFor="message" className="form-control w-full max-w-xs relative">
+              <label
+                htmlFor="message"
+                className="form-control w-full max-w-xs relative"
+              >
                 <span className="label-text md:text-base">Message</span>
                 <textarea
                   id="message"
@@ -192,7 +201,7 @@ const OfferForm = () => {
               type="checkbox"
               className="checkbox checkbox-md checkbox-primary"
               checked={isChecked}
-              onChange={e => setIsChecked(e.target.checked)}
+              onChange={(e) => setIsChecked(e.target.checked)}
               required
             />
             <label htmlFor="consent" className="label-text text-xs max-w-60">
@@ -204,7 +213,11 @@ const OfferForm = () => {
           {errorText && <p className="text-error">{errorText}</p>}
           {successText && <p className="text-success">{successText}</p>}
 
-          <button type="submit" className="btn btn-primary mt-5" disabled={isLoading}>
+          <button
+            type="submit"
+            className="btn btn-primary mt-5"
+            disabled={isLoading}
+          >
             {isLoading ? "Sending..." : "Send Request"}
           </button>
         </form>

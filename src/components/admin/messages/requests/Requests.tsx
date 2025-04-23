@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import RequestsSearch from "./RequestsSearch";
 import RequestsList, { Request } from "./RequestsList";
 import RequestsDetails from "./RequestsDetails";
 import { FaAngleLeft } from "react-icons/fa6";
-import RequestsPagination from "./RequestsPagination";
-import {
-  getAllRequests,
-  deleteRequest,
-  updateRequest,
-} from "@/lib/server/actions";
+import { deleteRequest, updateRequest } from "@/lib/server/actions";
 
 import { useTranslation } from "react-i18next";
 
@@ -17,7 +12,6 @@ const Requests = () => {
     null
   );
   const [requests, setRequests] = useState<Request[]>([]);
-  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
@@ -59,33 +53,14 @@ const Requests = () => {
     );
   };
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        setLoading(true);
-        const { requests, total } = await getAllRequests(page);
-        setRequests(requests);
-        setTotal(total);
-      } catch (error) {
-        console.error("Failed to fetch requests:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRequests();
-  }, [page]);
-
-  const filteredRequests = requests.filter(
-    (request) =>
-      request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.mobile.toString().includes(searchTerm)
-  );
-
-  const selectedRequest = requests.find(
-    (request) => request.id === selectedRequestId
-  );
+  const handleDeleteRequest = (deletedRequestId: number) => {
+    setRequests((prevRequests) =>
+      prevRequests.filter((request) => request.id !== deletedRequestId)
+    );
+    setSelectedRequestId(null); // Redirect to list view
+    setShowToast(true); // Trigger toast
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   const handleUpdateRequest = async (
     requestId: string,
@@ -105,29 +80,47 @@ const Requests = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      {selectedRequest ? (
+      {selectedRequestId ? (
         <div className="flex flex-col items-start gap-5">
           {!isEditing && (
             <div className="flex items-start gap-5">
               <button onClick={handleBackClick} className="btn btn-ghost">
                 <FaAngleLeft />
-                Tilbage
+                {t("back")}
               </button>
             </div>
           )}
           <RequestsDetails
-            name={selectedRequest.name}
-            category={selectedRequest.category}
-            created_at={selectedRequest.created_at}
-            mobile={selectedRequest.mobile}
-            mail={selectedRequest.mail}
-            city={selectedRequest.city}
-            address={selectedRequest.address}
-            message={selectedRequest.message}
-            consent={selectedRequest.consent}
-            requestId={selectedRequest.id.toString()}
+            name={requests.find((r) => r.id === selectedRequestId)?.name || ""}
+            company={
+              requests.find((r) => r.id === selectedRequestId)?.company || ""
+            }
+            category={
+              requests.find((r) => r.id === selectedRequestId)?.category || ""
+            }
+            created_at={
+              requests.find((r) => r.id === selectedRequestId)?.created_at || ""
+            }
+            mobile={
+              requests.find((r) => r.id === selectedRequestId)?.mobile || ""
+            }
+            mail={requests.find((r) => r.id === selectedRequestId)?.mail || ""}
+            city={requests.find((r) => r.id === selectedRequestId)?.city || ""}
+            address={
+              requests.find((r) => r.id === selectedRequestId)?.address || ""
+            }
+            message={
+              requests.find((r) => r.id === selectedRequestId)?.message || ""
+            }
+            consent={
+              !!requests.find((r) => r.id === selectedRequestId)?.consent
+            }
+            requestId={selectedRequestId.toString()}
             setIsEditing={setIsEditing}
             onUpdateRequest={handleUpdateRequest}
+            onDeleteRequest={(deletedRequestId) => {
+              handleDeleteRequest(deletedRequestId);
+            }}
           />
         </div>
       ) : (
@@ -138,36 +131,25 @@ const Requests = () => {
             selectedRequests={selectedRequests}
             onDeleteSelected={handleDeleteSelected}
           />
-          {loading ? (
-            <div className="flex justify-center gap-3 items-center">
-              <span className="loading loading-spinner loading-md"></span>
-              {t("loading_request")}
-            </div>
-          ) : (
-            <>
-              <RequestsList
-                requests={filteredRequests}
-                searchTerm={searchTerm}
-                onDetailsClick={handleDetailsClick}
-                selectedRequests={selectedRequests}
-                setSelectedRequests={setSelectedRequests}
-                handleCheckboxChange={handleCheckboxChange}
-              />
-              <div className="flex w-full justify-center">
-                <RequestsPagination
-                  page={page}
-                  setPage={setPage}
-                  total={total}
-                />
-              </div>
-            </>
-          )}
+          <RequestsList
+            requests={requests}
+            setRequests={setRequests}
+            page={page}
+            setPage={setPage}
+            total={total}
+            setTotal={setTotal}
+            searchTerm={searchTerm}
+            onDetailsClick={handleDetailsClick}
+            selectedRequests={selectedRequests}
+            setSelectedRequests={setSelectedRequests}
+            handleCheckboxChange={handleCheckboxChange}
+          />
         </>
       )}
       {showToast && (
         <div className="toast bottom-20 md:bottom-0 toast-end">
           <div className="alert alert-success text-neutral-content">
-            <span className="text-base md:text-lg">Henvendelse slettet</span>
+            <span className="text-base md:text-lg">{t("deleted_request")}</span>
           </div>
         </div>
       )}

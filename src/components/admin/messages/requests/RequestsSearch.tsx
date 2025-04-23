@@ -1,5 +1,5 @@
-import { t } from "i18next";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaSearch } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 
@@ -17,7 +17,7 @@ const RequestsSearch = ({
   onDeleteSelected,
 }: RequestsSearchProps) => {
   const [showModal, setShowModal] = useState(false);
-
+  const { t } = useTranslation();
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
 
@@ -52,11 +52,11 @@ const RequestsSearch = ({
         <div className="modal modal-open">
           <div className="modal-box">
             <h3 className="font-bold text-lg">
-              {t("delete_requests_confirmation")}
+              {t("delete_request_confirmation")}
             </h3>
-            <p className="py-4">{t("delete_requests_prompt")}</p>
+            <p className="py-4">{t("delete_request_prompt_selected")}</p>
             <p className="text-sm text-warning">
-              {t("delete_requests_warning")}
+              {t("delete_request_warning")}
             </p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>

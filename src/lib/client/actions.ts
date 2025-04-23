@@ -63,6 +63,7 @@ export async function getLatestReviews() {
 
 export async function createRequest(
   name: string,
+  company: string,
   mobile: string,
   mail: string,
   category: string,
@@ -83,6 +84,7 @@ export async function createRequest(
     const { error } = await supabase.from("requests").insert([
       {
         name,
+        company,
         mobile,
         mail,
         category,

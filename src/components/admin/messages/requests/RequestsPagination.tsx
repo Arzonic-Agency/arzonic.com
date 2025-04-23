@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 interface RequestsPaginationProps {
@@ -13,6 +14,7 @@ const RequestsPagination = ({
   total,
 }: RequestsPaginationProps) => {
   const totalPages = Math.ceil(total / 6);
+  const { t } = useTranslation();
 
   if (total <= 6) {
     return null; // Do not render pagination if there are 6 or fewer requests
@@ -39,7 +41,9 @@ const RequestsPagination = ({
       >
         <FaAngleLeft />
       </button>
-      <span className="join-item btn bg-base-100">Side {page}</span>
+      <span className="join-item btn bg-base-100">
+        {t("site")} {page}
+      </span>
       <button
         className="join-item btn bg-base-100"
         onClick={handleNext}

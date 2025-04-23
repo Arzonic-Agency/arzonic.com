@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReviewsList from "./ReviewsList";
 import ReviewsListChange from "./ReviewsListChange";
 import ReviewsPagination from "./ReviewsPagination";
@@ -18,6 +18,24 @@ const Reviews = () => {
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        // Simulate fetching reviews (e.g., API call)
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, [page]);
 
   const handleViewChange = (view: "cards" | "list") => {
     setView(view);
@@ -77,21 +95,17 @@ const Reviews = () => {
             view={view}
             page={page}
             setTotal={setTotal}
+            loading={loading} // Pass loading as a prop
             onEditReview={(reviewId: number) => {
               setSelectedReviewId(reviewId);
               setShowUpdateReview(true);
             }}
           />
-          {total > 0 &&
-            total > 6 && ( // Ensure pagination only shows if there are reviews
-              <div className="flex w-full justify-center">
-                <ReviewsPagination
-                  page={page}
-                  setPage={setPage}
-                  total={total}
-                />
-              </div>
-            )}
+          {total > 0 && total > 6 && (
+            <div className="flex w-full justify-center">
+              <ReviewsPagination page={page} setPage={setPage} total={total} />
+            </div>
+          )}
         </>
       )}
       {showToast && (

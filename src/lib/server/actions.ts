@@ -714,6 +714,7 @@ export async function updateRequest(
   requestId: string,
   data: {
     name?: string;
+    company?: string;
     category?: string;
     mobile?: string;
     mail?: string;
@@ -763,26 +764,24 @@ export async function getRequestById(requestId: string) {
 // REQUEST NOTES
 
 export async function createRequestNote(
-  desc: string,
+  message: string,
   requestId: string
-): Promise<{ id: string; desc: string; created_at: string }> {
+): Promise<{ id: string; message: string; created_at: string }> {
   const supabase = await createServerClientInstance();
 
   try {
-    // Hent den autentificerede bruger
     const { data: userData } = await supabase.auth.getUser();
     if (!userData?.user) {
       throw new Error("User not authenticated");
     }
 
-    // Indsæt noten og returner dataene
     const { data, error } = await supabase
       .from("notes")
       .insert([
         {
-          desc: desc,
+          message: message,
           request_id: requestId,
-          creator_id: userData.user.id,
+          creator: userData.user.id,
         },
       ])
       .select("*")

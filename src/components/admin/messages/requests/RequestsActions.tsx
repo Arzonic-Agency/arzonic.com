@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { FaEllipsis, FaPen, FaTrash } from "react-icons/fa6";
 import { deleteRequest } from "@/lib/server/actions"; // Import delete action
+import { t } from "i18next";
 
 const RequestsActions = ({
   requestId,
   onEditClick,
   onDeleteSuccess,
+  setShowToast, // Add setShowToast prop
 }: {
   requestId: string;
   onEditClick: () => void;
   onDeleteSuccess: () => void;
+  setShowToast: (value: boolean) => void;
 }) => {
   const [showModal, setShowModal] = useState(false);
 
@@ -38,16 +41,16 @@ const RequestsActions = ({
         </div>
         <ul
           tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-56 gap-2 p-2 shadow"
+          className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 gap-2 p-2 shadow"
         >
           <li>
-            <button className="md:text-lg" onClick={onEditClick}>
-              <FaPen /> Opdater kunde
+            <button className="" onClick={onEditClick}>
+              <FaPen /> {`${t("update")} ${t("customer")}`}
             </button>
           </li>
           <li>
-            <button className="md:text-lg" onClick={openModal}>
-              <FaTrash /> Slet kunde
+            <button className="" onClick={openModal}>
+              <FaTrash /> {`${t("delete")} ${t("customer")}`}
             </button>
           </li>
         </ul>
@@ -55,16 +58,14 @@ const RequestsActions = ({
       {showModal && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Bekræft sletning</h3>
-            <p className="py-4">
-              Er du sikker på, at du vil slette denne kunde?
-            </p>
+            <h3 className="font-bold text-lg">{t("delete_confirmation")}</h3>
+            <p className="py-4">{t("delete_request_prompt")}</p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
-                Annuller
+                {t("cancel")}
               </button>
               <button className="btn btn-error" onClick={handleDelete}>
-                Slet
+                {t("delete")}
               </button>
             </div>
           </div>

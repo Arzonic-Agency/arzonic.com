@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   createRequestNote,
   getNotesByRequestId,
@@ -7,9 +8,10 @@ import {
 import { FaTrashAlt } from "react-icons/fa";
 
 const RequestNote = ({ requestId }: { requestId: string }) => {
-  const [desc, setDesc] = useState("");
+  const { t } = useTranslation();
+  const [message, setMessage] = useState("");
   const [notes, setNotes] = useState<
-    { id: string; desc: string; created_at: string }[]
+    { id: string; message: string; created_at: string }[]
   >([]);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -23,7 +25,7 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
         setNotes(
           fetchedNotes.map((note) => ({
             id: note.id,
-            desc: note.desc,
+            message: note.message,
             created_at: note.created_at,
           }))
         );
@@ -42,14 +44,14 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
       const tempId = Math.random().toString();
       setNotes((prevNotes) => [
         ...prevNotes,
-        { id: tempId, desc, created_at: currentTime },
+        { id: tempId, message, created_at: currentTime },
       ]);
 
-      setDesc("");
+      setMessage("");
       setToastMessage("Kundenote tilføjet");
       setShowToast(true);
 
-      const newNote = await createRequestNote(desc, requestId);
+      const newNote = await createRequestNote(message, requestId);
 
       setNotes((prevNotes) =>
         prevNotes.map((note) =>
@@ -78,7 +80,7 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDesc(e.target.value);
+    setMessage(e.target.value);
     setCharCount(e.target.value.length);
   };
 
@@ -92,34 +94,40 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
   return (
     <div className="flex flex-col gap-2 w-full md:w-4/5 2xl:w-3/5">
       <span className="text-xs md:text-sm font-medium text-gray-400">
-        Noter for kunde
+        {t("customer_notes")}
       </span>
       <hr className="border-base-300 rounded-lg" />
       <div className="flex flex-col gap-2">
-        {notes.map((note) => (
-          <div
-            key={note.id}
-            className="flex justify-between items-center gap-4 bg-gray-100 p-2 rounded-lg"
-          >
-            <div className="flex flex-col gap-1 px-2">
-              <p className="text-sm md:text-xl font-semibold">{note.desc}</p>
-              <p className="text-xs text-gray-500">
-                {note.created_at
-                  ? new Date(note.created_at).toLocaleDateString("da-DK")
-                  : "Ugyldig dato"}
-              </p>
+        {notes.length === 0 ? (
+          <p className="text-sm text-zinc-500">{t("no_notes_available")}</p>
+        ) : (
+          notes.map((note) => (
+            <div
+              key={note.id}
+              className="flex justify-between items-center gap-4 bg-base-100 p-2 rounded-lg"
+            >
+              <div className="flex flex-col gap-1 px-2">
+                <p className="text-sm md:text-xl font-semibold">
+                  {note.message}
+                </p>
+                <p className="text-xs text-zinc-500">
+                  {note.created_at
+                    ? new Date(note.created_at).toLocaleDateString("da-DK")
+                    : t("invalid_date")}
+                </p>
+              </div>
+              <div>
+                <button
+                  className="btn btn-ghost"
+                  onClick={() => handleDelete(note.id)}
+                >
+                  {t("delete")}
+                  <FaTrashAlt />
+                </button>
+              </div>
             </div>
-            <div>
-              <button
-                className="btn btn-ghost"
-                onClick={() => handleDelete(note.id)}
-              >
-                Slet
-                <FaTrashAlt />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <form
         onSubmit={handleSubmit}
@@ -128,19 +136,19 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
         <div className="relative w-full max-w-xs">
           <input
             type="text"
-            placeholder="Skriv en kundenote"
-            className="input input-bordered w-full max-w-xs"
-            value={desc}
+            placeholder={t("write_note")}
+            className="input input-bordered w-full max-w-xs "
+            value={message}
             onChange={handleInputChange}
             maxLength={maxCharLimit}
           />
-          <span className="text-xs text-gray-500 absolute -bottom-5 right-0">
-            {charCount}/{maxCharLimit} tegn
+          <span className="text-xs text-zinc-500 absolute -bottom-6 right-0">
+            {charCount}/{maxCharLimit} {t("chars")}
           </span>
         </div>
 
-        <button type="submit" className="btn">
-          Tilføj note
+        <button type="submit" className="btn" disabled={!message.trim()}>
+          {t("add_note")}
         </button>
       </form>
       {showToast && (

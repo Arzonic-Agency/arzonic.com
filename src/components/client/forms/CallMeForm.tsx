@@ -8,6 +8,7 @@ import ConsentModal from "../modal/ConsentModal";
 
 const CallMeForm = () => {
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [mobile, setMobile] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");
@@ -38,30 +39,9 @@ const CallMeForm = () => {
 
     try {
       // 1. Gem kundehenvendelsen i databasen
-      await createRequest(name, mobile, "", category, isChecked, "");
+      await createRequest(name, "", mobile, "", category, isChecked, "");
 
-      // 2. Send e-mail til virksomheden via EmailJS
-      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!;
-      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!;
-      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!;
-
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: name,
-        },
-        publicKey
-      );
-
-      setIsSuccess(true);
-      setMessage("Henvendelsen er sendt.");
-    } catch (error) {
-      console.error("Failed to send email:", error);
-      setMessage("Noget gik galt. Prøv igen senere.");
-    } finally {
-      setIsLoading(false);
-    }
+      
   };
 
   const handleClose = () => {

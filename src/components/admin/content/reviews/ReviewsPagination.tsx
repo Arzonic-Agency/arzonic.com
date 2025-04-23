@@ -1,6 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { t } from "i18next";
 
 interface ReviewPaginationProps {
   page: number;
@@ -10,7 +10,7 @@ interface ReviewPaginationProps {
 
 const ReviewsPagination = ({ page, setPage, total }: ReviewPaginationProps) => {
   const totalPages = Math.ceil(total / 6);
-
+  const { t } = useTranslation();
   const handlePrevious = () => {
     if (page > 1) {
       setPage(page - 1);

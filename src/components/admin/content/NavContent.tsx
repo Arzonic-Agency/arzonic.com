@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import { FaRegNewspaper, FaStar } from "react-icons/fa6";
 import Cases from "./cases/Cases";
 import Reviews from "./reviews/Reviews";
+import { useTranslation } from "react-i18next";
 
 const NavContent = () => {
   const [activeTab, setActiveTab] = useState("cases");
+  const { t } = useTranslation();
   return (
     <div className="w-full">
       <div
@@ -35,7 +37,7 @@ const NavContent = () => {
           onClick={() => setActiveTab("reviews")}
         >
           <FaStar />
-          Reviews
+          {t("reviews")}
         </button>
       </div>
 

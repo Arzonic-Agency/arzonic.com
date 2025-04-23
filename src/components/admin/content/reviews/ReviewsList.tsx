@@ -9,6 +9,7 @@ interface ReviewsListProps {
   page: number;
   setTotal: (total: number) => void;
   onEditReview: (reviewId: number) => void;
+  loading: boolean; // Used for rendering the loading spinner
 }
 
 interface ReviewItem {
@@ -25,15 +26,14 @@ const ReviewsList = ({
   page,
   setTotal,
   onEditReview,
+  loading, // Used for rendering the loading spinner
 }: ReviewsListProps) => {
-  const [loading, setLoading] = useState<boolean>(true);
   const [reviewItems, setReviewItems] = useState<ReviewItem[]>([]);
   const [deletingReviewId, setDeletingReviewId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const fetchReviews = useCallback(async () => {
     try {
-      setLoading(true);
       const { reviews, total } = await getAllReviews(page);
       setReviewItems(reviews || []);
       setTotal(total || 0);
@@ -41,8 +41,6 @@ const ReviewsList = ({
       console.error("Failed to fetch reviews:", error);
       setReviewItems([]);
       setTotal(0);
-    } finally {
-      setLoading(false);
     }
   }, [page, setTotal]);
 
@@ -71,7 +69,7 @@ const ReviewsList = ({
   return (
     <div className="w-full">
       {loading ? (
-        <div className="flex justify-center gap-3 items-center">
+        <div className="flex justify-center gap-3 items-center h-40">
           <span className="loading loading-spinner loading-md"></span>
           Loading {t("reviews")}...
         </div>

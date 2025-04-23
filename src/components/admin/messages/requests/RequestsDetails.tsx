@@ -11,9 +11,11 @@ import {
 import RequestsActions from "./RequestsActions";
 import UpdateRequest from "./updateRequest/UpdateRequest";
 import { Request } from "./RequestsList";
+import { useTranslation } from "react-i18next";
 
 interface RequestsDetailsProps {
   name: string;
+  company: string;
   category: string;
   created_at: string;
   mobile: string;
@@ -25,10 +27,12 @@ interface RequestsDetailsProps {
   requestId: string;
   setIsEditing: (isEditing: boolean) => void;
   onUpdateRequest: (requestId: string, data: Partial<Request>) => void;
+  onDeleteRequest: (deletedRequestId: number) => void;
 }
 
 const RequestsDetails = ({
   name,
+  company,
   category,
   created_at,
   mobile,
@@ -40,13 +44,14 @@ const RequestsDetails = ({
   requestId,
   setIsEditing,
   onUpdateRequest,
+  onDeleteRequest,
 }: RequestsDetailsProps) => {
-  console.log("Message prop:", message); // Add this line to log the message prop
-
+  const { t } = useTranslation();
   const [isEditing, setLocalIsEditing] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [requestDetails, setRequestDetails] = useState({
     name,
+    company,
     category,
     mobile,
     message,
@@ -56,7 +61,7 @@ const RequestsDetails = ({
   });
 
   useEffect(() => {
-    console.log("Request details message:", requestDetails.message); // Add this line to log the message in requestDetails
+    console.log("Request details message:", requestDetails.message);
   }, [requestDetails]);
 
   const handleUpdateRequest = (requestId: string, data: Partial<Request>) => {
@@ -67,8 +72,8 @@ const RequestsDetails = ({
   };
 
   const handleDeleteSuccess = () => {
-    // Handle the success of the delete action
-    console.log("Request deleted successfully");
+    onDeleteRequest(parseInt(requestId)); // Notify parent about deletion
+    setIsEditing(false); // Ensure editing state is reset
   };
 
   const endDate = created_at ? addDays(new Date(created_at), 30) : null;
@@ -99,14 +104,15 @@ const RequestsDetails = ({
         requestId={requestId}
         onBackClick={handleBackClick}
         setShowToast={setShowToast}
-        onUpdateRequest={handleUpdateRequest} // Use local handler
+        onUpdateRequest={handleUpdateRequest}
       />
     );
   }
 
   return (
     <div className="flex flex-col gap-10 w-full p-3 ">
-      <h2 className="text-lg font-bold">Detaljer for henvendelse</h2>
+      <h2 className="text-lg font-bold">{t("request_details")}</h2>{" "}
+      {/* Use translation */}
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-5">
           <a
@@ -115,12 +121,12 @@ const RequestsDetails = ({
               !mobile ? "btn-disabled" : ""
             }`}
           >
-            <FaPhoneVolume /> Kontakt kunde
+            <FaPhoneVolume /> {t("contact_customer")}
           </a>
 
           <div
             className="tooltip tooltip-bottom"
-            data-tip={!requestDetails.address ? "Ingen adresse" : undefined}
+            data-tip={!requestDetails.address ? t("no_address") : undefined}
           >
             <a
               href={`https://www.google.com/maps?q=${encodeURIComponent(
@@ -132,7 +138,7 @@ const RequestsDetails = ({
                 !requestDetails.address ? "btn-disabled" : ""
               }`}
             >
-              <span className="hidden md:block">Vis vej</span>
+              <span className="hidden md:block">{t("show_route")}</span>
               <FaLocationArrow />
             </a>
           </div>
@@ -140,14 +146,18 @@ const RequestsDetails = ({
         <RequestsActions
           requestId={requestId}
           onEditClick={handleEditClick}
-          onDeleteSuccess={handleDeleteSuccess} // Add this line
+          onDeleteSuccess={() => {
+            handleDeleteSuccess();
+            setLocalIsEditing(false); // Reset local editing state
+          }}
+          setShowToast={() => {}} // Remove toast handling here
         />
       </div>
       <div className="flex flex-col gap-10">
         <div className="flex flex-col md:flex-row gap-10 md:gap-0">
           <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
             <span className="text-sm font-medium text-gray-400">
-              Antal dage tilbage
+              {t("days_left")} {/* Use translation */}
             </span>
             <span
               className={`text-lg font-bold ${
@@ -164,90 +174,97 @@ const RequestsDetails = ({
             >
               {daysLeft !== null
                 ? daysLeft > 0
-                  ? `${daysLeft} dage`
-                  : "Tiden er udløbet"
-                : "Ugyldigt antal dage"}
+                  ? `${daysLeft} ${t("days_left").toLowerCase()}`
+                  : t("time_expired")
+                : t("invalid_days")}
             </span>
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-gray-400">
-              Tidspunkt for henvendelse
+              {t("request_time")}
             </span>
             <span className="text-lg font-semibold">
               {created_at
                 ? format(new Date(created_at), "d. MMMM yyyy 'kl.' HH:mm", {
                     locale: da,
                   })
-                : "Ugyldig dato"}
+                : t("invalid_date")}
             </span>
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-10 md:gap-0">
           <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
-            <p className="text-sm font-medium text-gray-400">Kundenavn</p>
-            <span className="text-lg font-semibold">{requestDetails.name}</span>
-          </div>
-          <div className="flex flex-col gap-2">
             <p className="text-sm font-medium text-gray-400">
-              Opgave interesse
+              {t("company_name")}
             </p>
             <span className="text-lg font-semibold">
-              {requestDetails.category}
+              {requestDetails.company || t("unknown")}
             </span>
           </div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-10 md:gap-0">
-          <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
-            <p className="text-sm font-medium text-gray-400">Mobil nr.</p>
-            <span className="text-lg font-semibold">
-              {requestDetails.mobile || "Ukendt"}
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-gray-400">Mailadresse</p>
-            <span className="text-lg font-semibold">
-              {requestDetails.mail || "Ukendt"}
-            </span>
-          </div>
-        </div>
-        <div className="flex flex-col md:flex-row gap-10 md:gap-0">
           <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
             <p className="text-sm font-medium text-gray-400">
-              Adresse & husnr.
+              {t("contact_person")}
             </p>
             <span className="text-lg font-semibold">
-              {requestDetails.address || "Ukendt"}
+              {requestDetails.name || t("unknown")}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-10 md:gap-0">
+          <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
+            <p className="text-sm font-medium text-gray-400">{t("mobile")}</p>
+            <span className="text-lg font-semibold">
+              {requestDetails.mobile || t("unknown")}
             </span>
           </div>
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-gray-400">Postnr. & By</p>
+            <p className="text-sm font-medium text-gray-400">{t("email")}</p>
             <span className="text-lg font-semibold">
-              {requestDetails.city || "Ukendt"}
+              {requestDetails.mail || t("unknown")}
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-10 md:gap-0">
+          <div className="flex flex-col gap-2 md:w-1/2 2xl:w-1/3">
+            <p className="text-sm font-medium text-gray-400">
+              {t("address_and_city")}
+            </p>
+            <span className="text-lg font-semibold">
+              {requestDetails.address || t("unknown")},{" "}
+              {requestDetails.city || t("unknown")}
+            </span>
+          </div>
+          <div className="flex flex-col gap-2 ">
+            <p className="text-sm font-medium text-gray-400">
+              {t("task_interest")}
+            </p>
+            <span className="text-lg font-semibold">
+              {requestDetails.category || t("unknown")}
             </span>
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-10 md:gap-0">
           <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
             <p className="text-sm font-medium text-gray-400">
-              Status for samtykke
+              {t("consent_status")}
             </p>
             <div>
               {consent ? (
                 <span className="text-lg font-semibold text-success flex items-center gap-2">
-                  <FaCircleCheck /> Samtykke givet
+                  <FaCircleCheck /> {t("consent_given")}
                 </span>
               ) : (
                 <span className="text-lg font-semibold text-error flex items-center gap-2">
-                  <FaCircleXmark /> Samtykke mangler
+                  <FaCircleXmark /> {t("consent_missing")}
                 </span>
               )}
             </div>
           </div>
           <div className="flex flex-col gap-2 md:w-1/2">
-            <p className="text-sm font-medium text-gray-400">Besked</p>
+            <p className="text-sm font-medium text-gray-400">{t("message")}</p>
             <div className="max-h-32 overflow-y-auto flex flex-col gap-5 width-full">
               <span className="text-base font-semibold">
-                {requestDetails.message || "Ingen besked"}
+                {requestDetails.message || t("no_message")}
               </span>
             </div>
           </div>
@@ -259,7 +276,7 @@ const RequestsDetails = ({
       {showToast && (
         <div className="toast bottom-20 md:bottom-0 toast-end">
           <div className="alert alert-success text-neutral-content">
-            <span>Kundedetaljer opdateret</span>
+            <span>{t("customer_details_updated")}</span>
           </div>
         </div>
       )}
