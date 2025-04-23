@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FaMoon } from "react-icons/fa6";
 import { MdSunny } from "react-icons/md";
 
 const Theme = () => {
   const [isLight, setIsLight] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
@@ -26,7 +28,7 @@ const Theme = () => {
   };
 
   return (
-    <label className="swap swap-rotate">
+    <label className="swap swap-rotate justify-start">
       <input
         type="checkbox"
         checked={isLight}
@@ -35,10 +37,16 @@ const Theme = () => {
       />
 
       {/* sun icon (light mode) */}
-      <MdSunny className="swap-off" size={25} />
+      <div className="text-lg swap-off flex items-center gap-2">
+        <MdSunny className="" />
+        <span className="text-sm">{t("light")}</span>
+      </div>
 
       {/* moon icon (dark mode) */}
-      <FaMoon className="swap-on" size={25} />
+      <div className="text-lg swap-on flex items-center gap-2">
+        <FaMoon className="" />
+        <span className="text-sm">{t("dark")}</span>
+      </div>
     </label>
   );
 };

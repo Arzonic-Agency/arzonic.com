@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaEnvelope, FaKey, FaShield, FaSignature } from "react-icons/fa6";
 import { updateUser, getAllUsers } from "@/lib/server/actions";
+import { useTranslation } from "react-i18next";
 
 const UpdateUser = ({
   userId,
@@ -9,6 +10,7 @@ const UpdateUser = ({
   userId: string;
   onUserUpdated: () => void;
 }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,17 +52,17 @@ const UpdateUser = ({
     const errors = { email: "", password: "", confirmPassword: "" };
 
     if (email && !validateEmail(email)) {
-      errors.email = "Mailen er ugyldig";
+      errors.email = t("invalid_email");
       valid = false;
     }
 
     if (password && password.length < 6) {
-      errors.password = "Kodeordet skal være mindst 6 tegn";
+      errors.password = t("password_too_short");
       valid = false;
     }
 
     if (password && password !== confirmPassword) {
-      errors.confirmPassword = "Kodeordene er ikke ens";
+      errors.confirmPassword = t("passwords_not_matching");
       valid = false;
     }
 
@@ -83,7 +85,7 @@ const UpdateUser = ({
         await updateUser(userId, updateData); // Use updateUser function
         onUserUpdated(); // Call onUserUpdated after successful update
       } catch {
-        setErrors({ ...errors, password: "Fejl ved opdatering, prøv igen" });
+        setErrors({ ...errors, password: t("registration_error") }); // Use translation key
       } finally {
         setLoading(false);
       }
@@ -96,7 +98,7 @@ const UpdateUser = ({
         onSubmit={handleUpdate}
         className=" flex flex-col items-start  gap-5 w-72 p-3"
       >
-        <span className="text-lg font-bold">Opdater bruger</span>
+        <span className="text-lg font-bold">{t("update_user")}</span>
         <div className="flex gap-2 relative">
           <select
             className="select select-bordered w-full"
@@ -105,10 +107,10 @@ const UpdateUser = ({
             onChange={(e) => setRole(e.target.value as "editor" | "admin")}
           >
             <option disabled value="">
-              Hvilken adgang?
+              {t("select_access_level")}
             </option>
-            <option value="editor">Redaktør</option>
-            <option value="admin">Admin</option>
+            <option value="editor">{t("editor")}</option>
+            <option value="admin">{t("admin")}</option>
           </select>
         </div>
         <div className="flex flex-col gap-2 relative">
@@ -123,7 +125,7 @@ const UpdateUser = ({
               name="name"
               type="text"
               className="grow"
-              placeholder="Navn"
+              placeholder={t("name")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -141,7 +143,7 @@ const UpdateUser = ({
               id="email"
               type="text"
               className="grow"
-              placeholder="Mail"
+              placeholder={t("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -164,7 +166,7 @@ const UpdateUser = ({
               autoComplete="new-password"
               type="password"
               className="grow"
-              placeholder="Kodeord"
+              placeholder={t("password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -187,7 +189,7 @@ const UpdateUser = ({
               autoComplete="new-password"
               type="password"
               className="grow"
-              placeholder="Gentag kodeord"
+              placeholder={t("confirm_password")}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -204,7 +206,7 @@ const UpdateUser = ({
           className="btn btn-primary mt-2"
           disabled={loading}
         >
-          {loading ? "Opdaterer" : "Opdater bruger"}
+          {loading ? t("updating") : t("update")}
         </button>
       </form>
     </div>

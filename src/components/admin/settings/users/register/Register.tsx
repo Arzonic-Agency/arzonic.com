@@ -1,13 +1,15 @@
 import { createMember } from "@/lib/server/actions";
 import React, { useState } from "react";
 import { FaEnvelope, FaKey, FaShield, FaSignature } from "react-icons/fa6";
+import { useTranslation } from "react-i18next"; // Import translation hook
 
 const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState<"editor" | "admin">("editor"); // Default role to 'editor'
-  const [name, setName] = useState(""); // New state for name
+  const [role, setRole] = useState<"editor" | "admin">("editor");
+  const [name, setName] = useState("");
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -26,17 +28,17 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
     const errors = { email: "", password: "", confirmPassword: "" };
 
     if (!validateEmail(email)) {
-      errors.email = "Mailen er ugyldig";
+      errors.email = t("invalid_email"); // Use translation key
       valid = false;
     }
 
     if (password.length < 6) {
-      errors.password = "Kodeordet skal være mindst 6 tegn";
+      errors.password = t("password_too_short"); // Use translation key
       valid = false;
     }
 
     if (password !== confirmPassword) {
-      errors.confirmPassword = "Kodeordene er ikke ens";
+      errors.confirmPassword = t("passwords_not_matching"); // Use translation key
       valid = false;
     }
 
@@ -53,7 +55,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
         });
         onUserCreated();
       } catch {
-        setErrors({ ...errors, password: "Fejl ved registrering, prøv igen" });
+        setErrors({ ...errors, password: t("registration_error") }); // Use translation key
       } finally {
         setLoading(false);
       }
@@ -66,7 +68,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
         onSubmit={handleRegister}
         className=" flex flex-col items-start  gap-5 w-72 p-3"
       >
-        <span className="text-lg font-bold">Opret ny bruger</span>
+        <span className="text-lg font-bold">{t("create_new_user")}</span>
         <div className="flex gap-2 relative">
           <select
             className="select select-bordered w-full"
@@ -76,10 +78,10 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
             required
           >
             <option disabled value="">
-              Hvilken adgang?
+              {t("select_access_level")}
             </option>
-            <option value="editor">Redaktør</option>
-            <option value="admin">Admin</option>
+            <option value="editor">{t("editor")}</option>
+            <option value="admin">{t("admin")}</option>
           </select>
         </div>
         <div className="flex flex-col gap-2 relative">
@@ -94,7 +96,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               name="name"
               type="text"
               className="grow"
-              placeholder="Navn"
+              placeholder={t("name")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -113,7 +115,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               id="email"
               type="text"
               className="grow"
-              placeholder="Mail"
+              placeholder={t("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -137,7 +139,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               autoComplete="new-password"
               type="password"
               className="grow"
-              placeholder="Kodeord"
+              placeholder={t("password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -161,7 +163,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               autoComplete="new-password"
               type="password"
               className="grow"
-              placeholder="Gentag kodeord"
+              placeholder={t("confirm_password")}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -179,7 +181,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
           className="btn btn-primary mt-2"
           disabled={loading}
         >
-          {loading ? "Opretter" : "Opret bruger"}
+          {loading ? t("creating_user") : t("create_user")}
         </button>
       </form>
     </div>

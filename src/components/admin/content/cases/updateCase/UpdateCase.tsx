@@ -14,7 +14,7 @@ const UpdateCase = ({
   const [desc, setDesc] = useState("");
   const [city, setCity] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [contact_person, setContactPerson] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
   const [country, setCountry] = useState("");
 
   const [existingImage, setExistingImage] = useState<string | null>(null);
@@ -26,7 +26,7 @@ const UpdateCase = ({
     country: "",
     image: "",
     created_at: "",
-    contact_person: "",
+    contactPerson: "",
   });
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -40,12 +40,12 @@ const UpdateCase = ({
           console.error(t("case_not_found"));
           return;
         }
-        setCompanyName(caseData.title || "");
+        setCompanyName(caseData.companyName || "");
         setDesc(caseData.desc || "");
         setCity(caseData.city || "");
         setCountry(caseData.country || "");
         setExistingImage(caseData.image || null);
-        setContactPerson(caseData.contact_person || "");
+        setContactPerson(caseData.contactPerson || "");
 
         setCreatedAt(
           caseData.created_at
@@ -64,7 +64,7 @@ const UpdateCase = ({
     e.preventDefault();
     setLoading(true);
 
-    if (!companyName || !desc || !city || !country || !contact_person) {
+    if (!companyName || !desc || !city || !country || !contactPerson) {
       setErrors({
         companyName: !companyName ? t("company_name_required") : "",
         desc: !desc ? t("desc_required") : "",
@@ -72,7 +72,7 @@ const UpdateCase = ({
         country: !country ? t("country_required") : "",
         image: "",
         created_at: "",
-        contact_person: !contact_person ? t("contact_person_required") : "",
+        contactPerson: !contactPerson ? t("contact_person_required") : "",
       });
       setLoading(false);
       return;
@@ -85,7 +85,7 @@ const UpdateCase = ({
       formData.append("desc", desc);
       formData.append("city", city);
       formData.append("country", country);
-      formData.append("contact_person", contact_person);
+      formData.append("contact_person", contactPerson);
 
       formData.append("createdAt", createdAt);
 
@@ -97,7 +97,7 @@ const UpdateCase = ({
         desc,
         city,
         country,
-        contact_person,
+        contactPerson,
         image || undefined,
         createdAt
       );
@@ -162,13 +162,13 @@ const UpdateCase = ({
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_contact_person")}
-                value={contact_person}
+                value={contactPerson}
                 onChange={(e) => setContactPerson(e.target.value)}
                 required
               />
-              {errors.contact_person && (
+              {errors.contactPerson && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.contact_person}
+                  {errors.contactPerson}
                 </span>
               )}
             </fieldset>

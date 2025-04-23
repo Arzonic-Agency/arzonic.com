@@ -14,8 +14,8 @@ interface ReviewsListProps {
 
 interface ReviewItem {
   id: number;
-  company_name: string;
-  contact_person: string;
+  companyName: string;
+  contactPerson: string;
   city: string;
   desc: string;
   rate: number;
@@ -91,8 +91,8 @@ const ReviewsList = ({
                     <p className="text-xs">{item.desc}</p>
                     <div className="flex justify-between items-center mt-1">
                       <h2 className="text-sm font-semibold">
-                        {item.contact_person} {t("from_reviews")}{" "}
-                        {item.company_name}
+                        {item.contactPerson} {t("from_reviews")}{" "}
+                        {item.companyName}
                       </h2>
                     </div>
 
@@ -126,10 +126,10 @@ const ReviewsList = ({
                     <div className="flex gap-3 items-center">
                       <div className="flex gap-2 items-center flex-initial sm:flex-1 w-18 sm:w-auto truncate">
                         <h3 className="font-semibold text-xs hidden sm:block ">
-                          {item.contact_person}, {item.company_name}
+                          {item.contactPerson}, {item.companyName}
                         </h3>
                         <h3 className="font-semibold text-xs block sm:hidden">
-                          {item.company_name}
+                          {item.companyName}
                         </h3>
                       </div>
                       <div className="flex-1">

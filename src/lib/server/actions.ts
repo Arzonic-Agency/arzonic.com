@@ -254,18 +254,18 @@ export async function updateUser(
 // CASES
 
 export async function createCase({
-  company_name,
+  companyName,
   desc,
   city,
   country,
-  contact_person,
+  contactPerson,
   image,
 }: {
-  company_name: string;
+  companyName: string;
   desc: string;
   city: string;
   country: string;
-  contact_person: string;
+  contactPerson: string;
   image?: File;
 }): Promise<void> {
   const supabase = await createServerClientInstance();
@@ -333,11 +333,11 @@ export async function createCase({
 
     const { error } = await supabase.from("cases").insert([
       {
-        company_name,
+        companyName,
         desc,
         city,
         country,
-        contact_person,
+        contactPerson,
         image: imageUrl,
         creator_id: userData.user.id, // Ensure user ID is passed here
       },
@@ -354,11 +354,11 @@ export async function createCase({
 
 export async function updateCase(
   id: number,
-  company_name: string,
+  companyName: string,
   desc: string,
   city: string,
   country: string,
-  contact_person: string,
+  contactPerson: string,
   image: File,
   created_at?: string
 ): Promise<void> {
@@ -383,8 +383,8 @@ export async function updateCase(
       const optimizedImage = await sharp(Buffer.from(fileBuffer))
         .rotate()
         .resize({
-          width: 1024,
-          height: 576,
+          width: 1536,
+          height: 1024,
           fit: "cover",
           position: "center",
         })
@@ -429,22 +429,22 @@ export async function updateCase(
     }
 
     const updateData: {
-      company_name: string;
+      companyName: string;
       desc: string;
       city: string;
       country: string;
       image: string | null;
       creator_id: string;
       created_at?: string;
-      contact_person: string;
+      contactPerson: string;
     } = {
-      company_name,
+      companyName,
       desc,
       city,
       country,
       image: imageUrl,
       creator_id: userData.user.id,
-      contact_person,
+      contactPerson,
     };
 
     if (created_at) {
@@ -532,8 +532,8 @@ export async function deleteCase(caseId: number): Promise<void> {
 export async function createReview(
   desc: string,
   rate: number,
-  company_name: string,
-  contact_person: string
+  companyName: string,
+  contactPerson: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -548,8 +548,8 @@ export async function createReview(
         creator: userData.user.id,
         desc,
         rate,
-        contact_person,
-        company_name,
+        companyName,
+        contactPerson,
       },
     ]);
 
@@ -625,8 +625,8 @@ export async function getLatestReviews(limit: number = 10) {
 
 export async function updateReview(
   reviewId: number,
-  company_name: string,
-  contact_person: string,
+  companyName: string,
+  contactPerson: string,
   desc: string,
   rate: number
 ): Promise<void> {
@@ -635,7 +635,7 @@ export async function updateReview(
   try {
     const { error } = await supabase
       .from("reviews")
-      .update({ company_name, contact_person, desc, rate })
+      .update({ companyName, contactPerson, desc, rate })
       .eq("id", reviewId);
 
     if (error) {

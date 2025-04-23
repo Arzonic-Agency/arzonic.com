@@ -5,9 +5,11 @@ import Setup from "./setup/Setup";
 import Users from "./users/Users";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
 const NavSettings = () => {
   const [activeTab, setActiveTab] = useState("users");
+  const { t } = useTranslation();
   return (
     <div className="w-full">
       <div
@@ -24,7 +26,7 @@ const NavSettings = () => {
           onClick={() => setActiveTab("users")}
         >
           <FaUsers />
-          Brugeradgang
+          {t("user_control")}
         </button>
         <button
           role="tab"
@@ -36,7 +38,7 @@ const NavSettings = () => {
           onClick={() => setActiveTab("setup")}
         >
           <FaExternalLinkAlt />
-          Sideopsætning
+          {t("layout_settings")}
         </button>
       </div>
 

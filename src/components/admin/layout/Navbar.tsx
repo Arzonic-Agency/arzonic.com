@@ -109,7 +109,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-      <div className="flex flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-0">
+      <div className="flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-0 hidden sm:flex">
         <span className="text-zinc-500 text-[11px] flex items-center justify-center gap-0.5">
           © {new Date().getFullYear()} Powered by{" "}
           <span className="font-bold">Arzonic</span>

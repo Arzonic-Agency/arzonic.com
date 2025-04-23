@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import { getAllUsers, deleteUser } from "@/lib/server/actions";
+import { useTranslation } from "react-i18next";
 
 interface User {
   id: string;
@@ -11,14 +12,17 @@ interface User {
 
 const UserList = ({
   onUpdateUserClick,
+  onUserDeleted,
 }: {
   onUpdateUserClick: (userId: string) => void;
+  onUserDeleted: () => void;
 }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -51,6 +55,7 @@ const UserList = ({
         setUsers(users.filter((user) => user.id !== userToDelete.id));
         setUserToDelete(null);
         setIsModalOpen(false);
+        onUserDeleted(); // Trigger toast for deletion
       } catch (error) {
         console.error("Failed to delete user:", error);
         setError("Failed to delete user");
@@ -76,8 +81,8 @@ const UserList = ({
     <div>
       {loading ? (
         <div className="flex justify-center gap-3 items-center">
-          <span className="loading loading-spinner loading-md h-36"></span>
-          Indhenter data...
+          <span className="loading loading-spinner loading-md h-52"></span>
+          {t("loading_users")}
         </div>
       ) : (
         <>
@@ -134,16 +139,17 @@ const UserList = ({
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Bekræft sletning</h3>
-            <p className="py-4">
-              Er du sikker på, at du vil slette denne bruger?
-            </p>
+            <h3 className="font-bold text-lg">
+              {t("delete_user_confirmation")}
+            </h3>
+            <p className="py-4">{t("delete_user_prompt")}</p>
+            <p className="text-sm text-warning">{t("delete_user_warning")}</p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
-                Annuller
+                {t("cancel")}
               </button>
               <button className="btn btn-error" onClick={handleDelete}>
-                Slet
+                {t("delete")}
               </button>
             </div>
           </div>

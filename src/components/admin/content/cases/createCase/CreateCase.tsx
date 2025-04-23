@@ -4,20 +4,20 @@ import { useTranslation } from "react-i18next";
 
 const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   const { t } = useTranslation();
-  const [company_name, setCompanyName] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [desc, setDesc] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [contact_person, setContactPerson] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
 
   const [errors, setErrors] = useState({
-    company_name: "",
+    companyName: "",
     desc: "",
     city: "",
     country: "",
     image: "",
-    contact_person: "",
+    contactPerson: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -25,14 +25,14 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!company_name || !desc || !city || !country || !contact_person) {
+    if (!companyName || !desc || !city || !country || !contactPerson) {
       setErrors({
-        company_name: !company_name ? t("company_name_required") : "",
+        companyName: !companyName ? t("company_name_required") : "",
         desc: !desc ? t("desc_required") : "",
         city: !city ? t("city_required") : "",
         country: !country ? t("country_required") : "",
         image: "",
-        contact_person: !contact_person ? t("contact_person_required") : "",
+        contactPerson: !contactPerson ? t("contact_person_required") : "",
       });
       setLoading(false);
       return;
@@ -40,11 +40,11 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
 
     try {
       await createCase({
-        company_name,
+        companyName,
         desc,
         city,
         country,
-        contact_person,
+        contactPerson,
         image,
       });
 
@@ -69,7 +69,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   };
 
   const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= 250) {
+    if (e.target.value.length <= 500) {
       setDesc(e.target.value);
     }
   };
@@ -86,17 +86,17 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("company_name")}</legend>
               <input
-                name="title"
+                name="companyName"
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_company_name")}
-                value={company_name}
+                value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 required
               />
-              {errors.company_name && (
+              {errors.companyName && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.company_name}
+                  {errors.companyName}
                 </span>
               )}
             </fieldset>
@@ -108,13 +108,13 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_contact_person")}
-                value={contact_person}
+                value={contactPerson}
                 onChange={(e) => setContactPerson(e.target.value)}
                 required
               />
-              {errors.contact_person && (
+              {errors.contactPerson && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.contact_person}
+                  {errors.contactPerson}
                 </span>
               )}
             </fieldset>
@@ -133,7 +133,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 rows={8}
               ></textarea>
               <div className="text-right text-xs font-medium text-zinc-500">
-                {desc.length} / 250
+                {desc.length} / 500
               </div>
               {errors.desc && (
                 <span className="absolute -bottom-4 text-xs text-red-500">

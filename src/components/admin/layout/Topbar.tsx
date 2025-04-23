@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
-import { FaEllipsis } from "react-icons/fa6";
+import { FaEllipsis, FaRightFromBracket } from "react-icons/fa6";
+import LanguageToggle from "@/components/client/layout/LanguageToggle";
 
 interface PageTitleMapping {
   [key: string]: string;
@@ -34,7 +35,11 @@ const Topbar = () => {
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-bottom dropdown-end">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-sm m-1">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-sm md:btn-md m-1 text-lg"
+          >
             <FaEllipsis />
           </div>
           <ul
@@ -45,16 +50,23 @@ const Topbar = () => {
               <Theme />
             </li>
             <li>
-              <button onClick={() => i18n.changeLanguage("da")}>
-                {t("language")}: Dansk
-              </button>
-              <button onClick={() => i18n.changeLanguage("en")}>
-                {t("language")}: English
-              </button>
+              <LanguageToggle />
             </li>
             <li>
-              <button onClick={signOut}>{t("logout")}</button>
+              <button
+                onClick={signOut}
+                className="pl-[14px] flex items-center gap-2"
+              >
+                <FaRightFromBracket /> {t("logout")}
+              </button>
             </li>
+
+            <div className="flex-col gap-10 w-full p-4 flex">
+              <span className="text-zinc-500 text-[11px] flex items-center gap-0.5">
+                © {new Date().getFullYear()} Powered by{" "}
+                <span className="font-bold">Arzonic</span>
+              </span>
+            </div>
           </ul>
         </div>
       </div>

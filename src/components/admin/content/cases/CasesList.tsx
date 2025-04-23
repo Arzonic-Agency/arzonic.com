@@ -14,7 +14,7 @@ interface CasesListProps {
 
 interface CaseItem {
   id: number;
-  company_name: string;
+  companyName: string;
   desc: string | null;
   formType: "normal" | "beforeAfter";
   image: string | null;
@@ -108,13 +108,13 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
               {caseItems.map((item) => (
                 <div
                   key={item.id}
-                  className="card card-compact shadow-lg rounded-md"
+                  className="card card-compact shadow-md bg-base-300 rounded-md"
                 >
                   <figure className="relative w-full aspect-[4/3] h-56 md:h-40 xl:h-56 overflow-hidden">
                     <div className="relative w-full h-full">
                       <Image
                         src={item.image || FALLBACK_IMAGE}
-                        alt={item.company_name}
+                        alt={item.companyName}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
@@ -122,7 +122,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                     </div>
                   </figure>
                   <div className="card-body">
-                    <h2 className="card-title text-lg">{item.company_name}</h2>
+                    <h2 className="card-title text-lg">{item.companyName}</h2>
                     <p className="text-xs">
                       {truncateDescription(item.desc, 100)}
                     </p>
@@ -159,16 +159,16 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                         <div className="relative w-12 h-10 rounded-md overflow-hidden">
                           <Image
                             src={item.image || FALLBACK_IMAGE}
-                            alt={item.company_name}
+                            alt={item.companyName}
                             fill
                             style={{ objectFit: "cover" }}
                           />
                         </div>
                         <h3 className="font-semibold text-xs hidden sm:block">
-                          {item.company_name}
+                          {item.companyName}
                         </h3>
                         <h3 className="font-semibold text-xs block sm:hidden">
-                          {truncateTitle(item.company_name, 20)}
+                          {truncateTitle(item.companyName, 20)}
                         </h3>
                       </div>
                       <div className="flex gap-5 md:gap-2">

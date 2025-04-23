@@ -137,7 +137,7 @@ const RequestsList = ({
               </th>
               <td
                 onClick={() => onDetailsClick(request.id)}
-                className="cursor-pointer"
+                className="cursor-pointer w-full md:w-auto"
               >
                 <div className="flex items-center gap-1 text-xs md:text-sm font-bold ">
                   <div>{request.company || request.name}</div>

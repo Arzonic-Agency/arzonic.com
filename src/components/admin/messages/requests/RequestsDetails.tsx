@@ -117,7 +117,7 @@ const RequestsDetails = ({
         <div className="flex items-center gap-5">
           <a
             href={`tel:+45${mobile}`}
-            className={`btn btn-primary flex items-center gap-2 ${
+            className={`btn btn-primary btn-sm sm:btn-md flex items-center gap-2 ${
               !mobile ? "btn-disabled" : ""
             }`}
           >
@@ -134,7 +134,7 @@ const RequestsDetails = ({
               )}%20${encodeURIComponent(requestDetails.city)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-lg font-semibold btn btn-neutral ${
+              className={`text-lg font-semibold btn btn-sm sm:btn-md btn-neutral ${
                 !requestDetails.address ? "btn-disabled" : ""
               }`}
             >
