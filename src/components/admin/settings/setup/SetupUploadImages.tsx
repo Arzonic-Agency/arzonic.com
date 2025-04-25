@@ -71,14 +71,14 @@ const SetupUploadImages = () => {
   return (
     <div className="p-4 w-full">
       <h3 className="text-lg md:text-xl font-semibold ">
-        {t("setupUploadImages.changeImage")}
+        {t("image_upload.change_image")}
       </h3>
       <div className="flex flex-col md:flex-row items-center md:justify-between lg:justify-start w-full gap-10 ">
         <div className="md:flex-1 flex flex-col gap-3 items-start w-full">
           <label className="form-control w-full max-w-xs">
             <div className="label">
               <span className="label-text">
-                {t("setupUploadImages.selectImageType")}
+                {t("image_upload.select_image_type")}
               </span>
             </div>
             <select
@@ -86,8 +86,8 @@ const SetupUploadImages = () => {
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
             >
-              <option value="hero">{t("setupUploadImages.intro")}</option>
-              <option value="about">{t("setupUploadImages.aboutUs")}</option>
+              <option value="hero">{t("image_upload.intro")}</option>
+              <option value="about">{t("image_upload.about_us")}</option>
             </select>
           </label>
           <label className="form-control w-full max-w-xs">
@@ -102,7 +102,7 @@ const SetupUploadImages = () => {
             className="btn btn-primary"
             disabled={!file}
           >
-            {t("setupUploadImages.upload")}
+            {t("image_upload.upload")}
           </button>
         </div>
         <div className="md:flex-1">
@@ -110,7 +110,7 @@ const SetupUploadImages = () => {
             <div className="relative w-64 h-36 overflow-hidden rounded-md border">
               <Image
                 src={preview}
-                alt={t("setupUploadImages.previewAlt")}
+                alt={t("image_upload.preview_alt")}
                 layout="fill"
                 objectFit="cover"
               />
@@ -121,7 +121,7 @@ const SetupUploadImages = () => {
       {showToast && (
         <div className="toast bottom-20 md:bottom-0 toast-end">
           <div className="alert alert-success text-neutral-content">
-            <span>{t("setupUploadImages.fileUploaded")}</span>
+            <span>{t("image_upload.file_uploaded")}</span>
           </div>
         </div>
       )}
@@ -129,20 +129,18 @@ const SetupUploadImages = () => {
         <div className="modal modal-open">
           <div className="modal-box">
             <h3 className="font-bold text-lg">
-              {t("setupUploadImages.confirmUpload")}
+              {t("image_upload.confirm_upload")}
             </h3>
-            <p className="py-4">
-              {t("setupUploadImages.confirmUploadMessage")}
-            </p>
+            <p className="py-4">{t("image_upload.confirm_upload_message")}</p>
             <p className="text-sm text-secondary font-bold">
-              {t("setupUploadImages.warning")}
+              {t("image_upload.warning")}
             </p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
-                {t("setupUploadImages.cancel")}
+                {t("cancel")}
               </button>
               <button className="btn btn-primary" onClick={confirmUpload}>
-                {t("setupUploadImages.upload")}
+                {t("upload")}
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, Suspense, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Html, useProgress } from "@react-three/drei";
 import {
   Mesh,
@@ -27,10 +27,11 @@ interface LaptopModelProps {
 function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF(modelUrl);
-  const mixer = useRef<AnimationMixer>();
+  const mixer = useRef<AnimationMixer | null>(null);
   const [screenTexture, setScreenTexture] = useState<Texture | null>(null);
+  const { size } = useThree();
 
-  // Load the screen texture once
+  // Load screen texture
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load("/models/screen.png", (tex) => {
@@ -42,20 +43,34 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   const clipDuration = animations[0]?.duration ?? 0;
   const maxScroll = 600;
 
-  // Run once both model *and* texture are available
   useEffect(() => {
     if (!group.current || !screenTexture) return;
 
-    const model = scene;
-    // Center & scale
+    const model = scene.clone(); // Prevent modifying original scene
     const box = new Box3().setFromObject(model);
-    const size = box.getSize(new Vector3()).length();
+    const sizeVec = box.getSize(new Vector3()).length();
     const center = box.getCenter(new Vector3());
     model.position.sub(center);
     model.position.y -= new Box3().setFromObject(model).min.y;
-    model.scale.setScalar(6 / size);
 
-    // Swap emissiveMap on "Screen" materials
+    // 💡 Responsive scale in percentage
+    let scalePercentage = 100;
+
+    if (size.width < 400) scalePercentage = 50;
+    else if (size.width < 600) scalePercentage = 65;
+    else if (size.width < 768) scalePercentage = 80;
+    else if (size.width < 1024) scalePercentage = 90;
+    else scalePercentage = 100;
+
+    const baseScale = 9;
+    const modelScale = (baseScale * scalePercentage) / 100;
+    model.scale.setScalar(modelScale / sizeVec);
+
+    // Optional: adjust vertical position slightly on small screens
+    if (size.width < 600) {
+      model.position.y += 0.5;
+    }
+
     model.traverse((child) => {
       if (child instanceof Mesh) {
         const mats = Array.isArray(child.material)
@@ -71,16 +86,16 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
       }
     });
 
+    group.current.clear(); // clear previous model if re-adding
     group.current.add(model);
 
-    // Animation mixer setup
+    // Animation
     mixer.current = new AnimationMixer(model);
     const action = mixer.current.clipAction(animations[0]);
     action.reset().play();
     mixer.current.setTime(clipDuration - 1 / 24);
-  }, [scene, animations, screenTexture, clipDuration]);
+  }, [scene, animations, screenTexture, clipDuration, size.width]);
 
-  // Drive the animation by scroll
   useFrame((_, delta) => {
     if (!mixer.current) return;
     const t = Math.min(1, Math.max(0, scrollY / maxScroll));
@@ -90,17 +105,14 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     mixer.current.update(delta);
   });
 
-  return <group ref={group} rotation={[0, -Math.PI / 6, 0]} />;
+  return (
+    <group ref={group} position={[0, 0, 0]} rotation={[0, -Math.PI / 6, 0]} />
+  );
 }
 
 // Loader that lives inside the Canvas
 function CanvasLoader() {
-  const { progress } = useProgress();
-  return (
-    <Html center style={{ pointerEvents: "none" }}>
-      <div className="text-white">{progress.toFixed(0)}%</div>
-    </Html>
-  );
+  return <Html />;
 }
 
 export default function ThreeAnimation() {
@@ -123,12 +135,13 @@ export default function ThreeAnimation() {
   if (!modelUrl) return <div>Loading model…</div>;
 
   return (
-    <div className="w-full h-full relative">
+    <>
       <Canvas
         shadows
         camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
         dpr={Math.min(window.devicePixelRatio, 2)}
         gl={{ antialias: true, alpha: true }}
+        style={{ background: "transparent" }}
         onCreated={({ gl }) => {
           gl.shadowMap.enabled = true;
           gl.shadowMap.type = PCFSoftShadowMap;
@@ -175,6 +188,6 @@ export default function ThreeAnimation() {
           <LaptopModel modelUrl={modelUrl} scrollY={scrollY} />
         </Suspense>
       </Canvas>
-    </div>
+    </>
   );
 }

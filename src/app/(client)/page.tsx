@@ -3,15 +3,16 @@ import Prices from "@/components/client/home/Prices";
 import Process from "@/components/client/home/Process";
 import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
-import React from "react";
+import SplashScreen from "@/components/client/layout/SplashScreen";
 
 const Home = () => {
   return (
     <>
-      <section className="h-[800px]">
+      <SplashScreen />
+      <section className="h-[700px]">
         <Hero />
       </section>
-      <section className="h-[800px]">
+      <section className="h-[700px]">
         <Prices />
       </section>
       <section className="h-[200px]">
