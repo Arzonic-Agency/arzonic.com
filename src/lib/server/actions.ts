@@ -8,6 +8,63 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
 
+// DeepL translation helper
+
+async function translateWithDeepL(
+  text: string
+): Promise<string> {
+  const apiKey = process.env.DEEPL_API_KEY;
+  if (!apiKey) throw new Error("Missing DEEPL_API_KEY env var");
+
+  // Always first ask DeepL to translate to English
+  const baseParams = new URLSearchParams({
+    auth_key: apiKey,
+    text,
+    target_lang: "EN",
+  });
+
+  const endpoint = "https://api-free.deepl.com/v2/translate";
+  const res1 = await fetch(endpoint, {
+    method: "POST",
+    body: baseParams,
+  });
+  if (!res1.ok) {
+    const body = await res1.text();
+    throw new Error(`DeepL error ${res1.status}: ${body}`);
+  }
+
+  const { translations: [first] } = await res1.json() as {
+    translations: Array<{
+      text: string;
+      detected_source_language: string;
+    }>;
+  };
+
+  // If it detected English, we actually want to go English → Danish
+  if (first.detected_source_language.toUpperCase() === "EN") {
+    const reverseParams = new URLSearchParams({
+      auth_key: apiKey,
+      text,
+      target_lang: "DA",
+    });
+    const res2 = await fetch(endpoint, {
+      method: "POST",
+      body: reverseParams,
+    });
+    if (!res2.ok) {
+      const body = await res2.text();
+      throw new Error(`DeepL error ${res2.status}: ${body}`);
+    }
+    const { translations: [second] } = await res2.json() as {
+      translations: Array<{ text: string }>;
+    };
+    return second.text;
+  }
+
+  // Otherwise the source was Danish, so EN was correct
+  return first.text;
+}
+
 //REGISTER
 
 export async function createMember(data: {
@@ -185,7 +242,7 @@ export async function deleteUser(userId: string) {
       );
       throw new Error(
         "Failed to delete user from permissions: " +
-          deletePermissionError.message
+        deletePermissionError.message
       );
     }
 
@@ -271,84 +328,51 @@ export async function createCase({
   const supabase = await createServerClientInstance();
 
   try {
+    // translate description
+    const desc_translated = await translateWithDeepL(desc);
+
+    // handle image upload
     let imageUrl: string | null = null;
-
-    const uploadFile = async (file: File) => {
-      const fileExt = "webp";
-      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userError || !userData?.user) {
-        throw new Error("User not authenticated for photo upload");
-      }
-
-      const filePath = `case-images/${userData.user.id}/${fileName}`;
-      const fileBuffer = await file.arrayBuffer();
-
-      const optimizedImage = await sharp(Buffer.from(fileBuffer))
-        .rotate()
-        .resize({
-          width: 1024,
-          height: 768,
-          fit: "cover",
-          position: "center",
-        })
-        .webp({ quality: 65 })
-        .toBuffer();
-
-      const { error: uploadError } = await supabase.storage
-        .from("case-images")
-        .upload(filePath, optimizedImage, {
+    if (image) {
+      const uploadFile = async (file: File) => {
+        const ext = "webp";
+        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+        const { data: ud, error: ue } = await supabase.auth.getUser();
+        if (ue || !ud?.user) throw new Error("Not authenticated");
+        const path = `case-images/${ud.user.id}/${name}`;
+        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+          .rotate()
+          .resize({ width: 1024, height: 768, fit: "cover" })
+          .webp({ quality: 65 })
+          .toBuffer();
+        await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-
-      if (uploadError) {
-        throw new Error(`File upload failed: ${uploadError.message}`);
-      }
-
-      const { data } = await supabase.storage
-        .from("case-images")
-        .getPublicUrl(filePath);
-
-      if (!data || !data.publicUrl) {
-        throw new Error("Failed to retrieve public URL");
-      }
-
-      return data.publicUrl;
-    };
-
-    if (image) {
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        return data.publicUrl!;
+      };
       imageUrl = await uploadFile(image);
     }
 
-    const { data: userData, error: userError } = await supabase.auth.getUser();
-    if (userError || !userData?.user) {
-      console.error(
-        "Failed to retrieve authenticated user:",
-        userError?.message
-      );
-      throw new Error("User not authenticated");
-    }
-
+    // insert
+    const { data: ud, error: ue } = await supabase.auth.getUser();
+    if (ue || !ud?.user) throw new Error("Not authenticated");
     const { error } = await supabase.from("cases").insert([
       {
         companyName,
         desc,
+        desc_translated,
         city,
         country,
         contactPerson,
         image: imageUrl,
-        creator_id: userData.user.id, // Ensure user ID is passed here
+        creator_id: ud.user.id,
       },
     ]);
-
-    if (error) {
-      throw new Error(`Failed to create case: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in createCase:", error);
-    throw error;
+    if (error) throw error;
+  } catch (err) {
+    console.error("createCase error:", err);
+    throw err;
   }
 }
 
@@ -359,172 +383,92 @@ export async function updateCase(
   city: string,
   country: string,
   contactPerson: string,
-  image: File,
+  image: File | null,
   created_at?: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
   try {
+    // translate description
+    const desc_translated = await translateWithDeepL(desc);
+
+    // handle image (upload new or reuse old)
     let imageUrl: string | null = null;
-
-    const uploadFile = async (file: File): Promise<string> => {
-      const fileExt = "webp";
-      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
-      if (userError || !userData?.user) {
-        throw new Error("User not authenticated for photo upload");
-      }
-
-      const filePath = `case-images/${userData.user.id}/${fileName}`;
-      const fileBuffer = await file.arrayBuffer();
-
-      const optimizedImage = await sharp(Buffer.from(fileBuffer))
-        .rotate()
-        .resize({
-          width: 1536,
-          height: 1024,
-          fit: "cover",
-          position: "center",
-        })
-        .webp({ quality: 65 })
-        .toBuffer();
-
-      const { error: uploadError } = await supabase.storage
-        .from("case-images")
-        .upload(filePath, optimizedImage, {
+    if (image) {
+      const uploadFile = async (file: File) => {
+        const ext = "webp";
+        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+        const { data: ud, error: ue } = await supabase.auth.getUser();
+        if (ue || !ud?.user) throw new Error("Not authenticated");
+        const path = `case-images/${ud.user.id}/${name}`;
+        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+          .rotate()
+          .resize({ width: 1024, height: 768, fit: "cover" })
+          .webp({ quality: 65 })
+          .toBuffer();
+        await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-
-      if (uploadError) {
-        throw new Error(`File upload failed: ${uploadError.message}`);
-      }
-
-      const { data } = await supabase.storage
-        .from("case-images")
-        .getPublicUrl(filePath);
-
-      if (!data || !data.publicUrl) {
-        throw new Error("Failed to retrieve public URL");
-      }
-
-      return data.publicUrl;
-    };
-
-    if (image) {
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        return data.publicUrl!;
+      };
       imageUrl = await uploadFile(image);
     } else {
-      const { data: existingCase } = await supabase
+      const { data: existing } = await supabase
         .from("cases")
         .select("image")
         .eq("id", id)
         .single();
-      imageUrl = existingCase?.image || null;
+      imageUrl = existing?.image ?? null;
     }
 
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) {
-      throw new Error("User not authenticated");
-    }
+    // update
+    const { data: ud, error: ue } = await supabase.auth.getUser();
+    if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const updateData: {
-      companyName: string;
-      desc: string;
-      city: string;
-      country: string;
-      image: string | null;
-      creator_id: string;
-      created_at?: string;
-      contactPerson: string;
-    } = {
+    const payload: any = {
       companyName,
       desc,
+      desc_translated,
       city,
       country,
-      image: imageUrl,
-      creator_id: userData.user.id,
       contactPerson,
+      image: imageUrl,
+      creator_id: ud.user.id,
     };
+    if (created_at) payload.created_at = created_at;
 
-    if (created_at) {
-      updateData.created_at = created_at;
-    }
-
-    const { error } = await supabase
-      .from("cases")
-      .update(updateData)
-      .eq("id", id);
-
-    if (error) {
-      throw new Error(`Failed to update case: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in updateCase:", error);
-    throw error;
-  }
-}
-
-export async function getAllCases(page: number = 1, limit: number = 6) {
-  const supabase = await createServerClientInstance();
-  const offset = (page - 1) * limit;
-
-  try {
-    const { data, count, error } = await supabase
-      .from("cases")
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1);
-
-    if (error) {
-      throw new Error(`Failed to fetch cases: ${error.message}`);
-    }
-
-    return { cases: data, total: count || 0 };
-  } catch (error) {
-    console.error(`Failed to fetch cases: ${error.message}`);
-    return { cases: [], total: 0 }; // Fallback response
-  }
-}
-
-export async function getCaseById(caseId: number) {
-  const supabase = await createServerClientInstance();
-
-  try {
-    if (!caseId) {
-      throw new Error(`Invalid case ID: Received ${caseId}`);
-    }
-
-    const { data, error } = await supabase
-      .from("cases")
-      .select("*")
-      .eq("id", caseId)
-      .single();
-
-    if (error) {
-      throw new Error(`Failed to fetch case by ID: ${error.message}`);
-    }
-
-    return data;
+    const { error } = await supabase.from("cases").update(payload).eq("id", id);
+    if (error) throw error;
   } catch (err) {
-    console.error("Unexpected error during fetching case by ID:", err);
+    console.error("updateCase error:", err);
     throw err;
   }
 }
 
+export async function getAllCases(page = 1, limit = 6) {
+  const supabase = await createServerClientInstance();
+  const offset = (page - 1) * limit;
+  const { data, count, error } = await supabase
+    .from("cases")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+  if (error) throw new Error(error.message);
+  return { cases: data, total: count ?? 0 };
+}
+
+export async function getCaseById(caseId: number) {
+  const supabase = await createServerClientInstance();
+  const { data, error } = await supabase.from("cases").select("*").eq("id", caseId).single();
+  if (error) throw new Error(error.message);
+  return data;
+}
+
 export async function deleteCase(caseId: number): Promise<void> {
   const supabase = await createServerClientInstance();
-
-  try {
-    const { error } = await supabase.from("cases").delete().eq("id", caseId);
-
-    if (error) {
-      throw new Error(`Failed to delete case: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in deleteCase:", error);
-    throw error;
-  }
+  const { error } = await supabase.from("cases").delete().eq("id", caseId);
+  if (error) throw new Error(error.message);
 }
 
 // REVIEWS
