@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, Suspense, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF, Html, useProgress } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import {
   Mesh,
   Texture,
@@ -62,11 +62,10 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     else if (size.width < 1024) scalePercentage = 90;
     else scalePercentage = 100;
 
-    const baseScale = 9;
+    const baseScale = 10;
     const modelScale = (baseScale * scalePercentage) / 100;
     model.scale.setScalar(modelScale / sizeVec);
 
-    // Optional: adjust vertical position slightly on small screens
     if (size.width < 600) {
       model.position.y += 0.5;
     }
@@ -86,10 +85,9 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
       }
     });
 
-    group.current.clear(); // clear previous model if re-adding
+    group.current.clear();
     group.current.add(model);
 
-    // Animation
     mixer.current = new AnimationMixer(model);
     const action = mixer.current.clipAction(animations[0]);
     action.reset().play();
@@ -106,88 +104,84 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   });
 
   return (
-    <group ref={group} position={[0, 0, 0]} rotation={[0, -Math.PI / 6, 0]} />
+    <group
+      ref={group}
+      position={[-0.8, -1, 0]}
+      rotation={[0, -Math.PI / 6, 0]}
+    />
   );
-}
-
-// Loader that lives inside the Canvas
-function CanvasLoader() {
-  return <Html />;
 }
 
 export default function ThreeAnimation() {
   const [scrollY, setScrollY] = useState<number>(0);
   const [modelUrl, setModelUrl] = useState<string | null>(null);
 
-  // Fetch the GLB public URL on mount
   useEffect(() => {
     const { data } = supabase.storage.from("models").getPublicUrl("laptop.glb");
     setModelUrl(data.publicUrl);
   }, []);
 
-  // Track scroll
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (!modelUrl) return <div>Loading model…</div>;
+  if (!modelUrl) return null;
 
   return (
-    <>
-      <Canvas
-        shadows
-        camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
-        dpr={Math.min(window.devicePixelRatio, 2)}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-        onCreated={({ gl }) => {
-          gl.shadowMap.enabled = true;
-          gl.shadowMap.type = PCFSoftShadowMap;
-        }}
-      >
-        <ambientLight intensity={1} />
-        <directionalLight
-          intensity={5}
-          position={[5, 15, 7.5]}
-          castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-bias={-0.0005}
-          shadow-normalBias={0.05}
-          shadow-camera-near={0.5}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        {[0, 2, 4].map((i) => {
-          const angle = (i * Math.PI * 2) / 3;
-          return (
-            <spotLight
-              key={i}
-              position={[4 * Math.cos(angle), 3, 4 * Math.sin(angle)]}
-              intensity={5}
-              angle={Math.PI / 6}
-              penumbra={0.2}
-              decay={2}
-              distance={10}
-              target-position={[0, 0, 0]}
-              castShadow
-              shadow-mapSize-width={512}
-              shadow-mapSize-height={512}
-              shadow-bias={-0.001}
-              shadow-camera-near={1}
-              shadow-camera-far={20}
-            />
-          );
-        })}
-        <Suspense fallback={<CanvasLoader />}>
-          <LaptopModel modelUrl={modelUrl} scrollY={scrollY} />
-        </Suspense>
-      </Canvas>
-    </>
+    <Canvas
+      shadows
+      camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
+      dpr={Math.min(window.devicePixelRatio, 2)}
+      gl={{ antialias: true, alpha: true }}
+      style={{ background: "transparent" }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 0); // Transparent black
+        gl.shadowMap.enabled = true;
+        gl.shadowMap.type = PCFSoftShadowMap;
+      }}
+    >
+      <ambientLight intensity={1} />
+      <directionalLight
+        intensity={5}
+        position={[5, 15, 7.5]}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-bias={-0.0005}
+        shadow-normalBias={0.05}
+        shadow-camera-near={0.5}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
+      {[0, 2, 4].map((i) => {
+        const angle = (i * Math.PI * 2) / 3;
+        return (
+          <spotLight
+            key={i}
+            position={[4 * Math.cos(angle), 3, 4 * Math.sin(angle)]}
+            intensity={5}
+            angle={Math.PI / 6}
+            penumbra={0.2}
+            decay={2}
+            distance={10}
+            target-position={[0, 0, 0]}
+            castShadow
+            shadow-mapSize-width={512}
+            shadow-mapSize-height={512}
+            shadow-bias={-0.001}
+            shadow-camera-near={1}
+            shadow-camera-far={20}
+          />
+        );
+      })}
+      <Suspense fallback={null}>
+        <LaptopModel modelUrl={modelUrl} scrollY={scrollY} />
+      </Suspense>
+    </Canvas>
   );
 }

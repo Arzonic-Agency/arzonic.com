@@ -36,7 +36,7 @@ const Hero = () => {
         </div>
 
         <div className="lg:w-[50%] h-full">
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative bg-transparent">
             <ThreeAnimation />
           </div>
         </div>

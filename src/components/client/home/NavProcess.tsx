@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const NavProcess: React.FC = () => {
+const NavProcess = () => {
   const navRef = useRef<HTMLDivElement | null>(null);
   const originalOffsetRef = useRef<number>(0);
   const [isSticky, setIsSticky] = useState<boolean>(false);
@@ -46,7 +46,10 @@ const NavProcess: React.FC = () => {
         const windowHeight = window.innerHeight;
         const scrollableHeight = height - windowHeight;
         const scrolled = -top;
-        const clampedScrolled = Math.max(0, Math.min(scrolled, scrollableHeight));
+        const clampedScrolled = Math.max(
+          0,
+          Math.min(scrolled, scrollableHeight)
+        );
         const sectionProgress =
           scrollableHeight > 0 ? (clampedScrolled / scrollableHeight) * 100 : 0;
         setProgress(sectionProgress);
@@ -62,7 +65,14 @@ const NavProcess: React.FC = () => {
   return (
     <div ref={navRef} className={`nav-process ${isSticky ? "sticky" : ""}`}>
       <div className="nav-process-content">
-        <h2>NavProcess</h2>
+        <div className="flex justify-center p-10">
+          <ul className="flex gap-2 justify-evenly w-full">
+            <li className="">Discovery & Strategy</li>
+            <li className="">Design & Experience</li>
+            <li className="">Development & Integration</li>
+            <li className="">Launch & Support</li>
+          </ul>
+        </div>
         <div className="progress-bar-container">
           <div
             className="progress-bar-fill"
