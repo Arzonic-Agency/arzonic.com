@@ -67,11 +67,15 @@ const OfferForm = () => {
 
       setIsSuccess(true);
       setSuccessText("Your request has been sent.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Submit error:", err);
-      setErrorText(
-        err.message || "Something went wrong. Please try again later."
-      );
+      if (err instanceof Error) {
+        setErrorText(
+          err.message || "Something went wrong. Please try again later."
+        );
+      } else {
+        setErrorText("Something went wrong. Please try again later.");
+      }
     } finally {
       setIsLoading(false);
     }
