@@ -56,7 +56,7 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     // 💡 Responsive scale in percentage
     let scalePercentage = 100;
 
-    if (size.width < 400) scalePercentage = 50;
+    if (size.width < 400) scalePercentage = 60;
     else if (size.width < 600) scalePercentage = 65;
     else if (size.width < 768) scalePercentage = 80;
     else if (size.width < 1024) scalePercentage = 90;

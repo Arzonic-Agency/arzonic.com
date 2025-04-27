@@ -7,7 +7,6 @@ import ConsentModal from "../modal/ConsentModal";
 
 const OfferForm = () => {
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
   const [mobile, setMobile] = useState("");
   const [mail, setMail] = useState("");
   const [category, setCategory] = useState("");

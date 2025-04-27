@@ -7,7 +7,6 @@ const RequestsActions = ({
   requestId,
   onEditClick,
   onDeleteSuccess,
-  setShowToast, // Add setShowToast prop
 }: {
   requestId: string;
   onEditClick: () => void;

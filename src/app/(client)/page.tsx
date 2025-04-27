@@ -12,10 +12,10 @@ const Home = () => {
       <section className="h-[700px]">
         <Hero />
       </section>
-      <section className="h-[700px]">
+      <section className="h-[2000px] lg:h-[800px]">
         <Prices />
       </section>
-      <section className="h-[200px]">
+      <section className="h-[800px]">
         <NavProcess />
       </section>
       <section id="Process" className="h-[2000px]">

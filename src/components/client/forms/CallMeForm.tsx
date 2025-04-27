@@ -8,7 +8,6 @@ import ConsentModal from "../modal/ConsentModal";
 
 const CallMeForm = () => {
   const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
   const [mobile, setMobile] = useState("");
   const [category, setCategory] = useState("");
   const [message, setMessage] = useState("");

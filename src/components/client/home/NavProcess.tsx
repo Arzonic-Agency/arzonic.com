@@ -63,21 +63,32 @@ const NavProcess = () => {
   if (!showNav) return null;
 
   return (
-    <div ref={navRef} className={`nav-process ${isSticky ? "sticky" : ""}`}>
-      <div className="nav-process-content">
-        <div className="flex justify-center p-10">
-          <ul className="flex gap-2 justify-evenly w-full">
-            <li className="">Discovery & Strategy</li>
-            <li className="">Design & Experience</li>
-            <li className="">Development & Integration</li>
-            <li className="">Launch & Support</li>
-          </ul>
-        </div>
-        <div className="progress-bar-container">
-          <div
-            className="progress-bar-fill"
-            style={{ width: `${progress}%` }}
-          />
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col items-center justify-center gap-3">
+        <h3 className="text-3xl font-bold">
+          This is how our customer process looks like
+        </h3>
+        <p className="text-sm text-center mt-2">
+          <u>We guide you</u> through every step with clarity, creativity, and
+          care.
+        </p>
+      </div>
+      <div ref={navRef} className={`nav-process ${isSticky ? "sticky" : ""}`}>
+        <div className="nav-process-content">
+          <div className="flex justify-center p-10">
+            <ul className="flex gap-2 justify-evenly w-full">
+              <li className="">Discovery & Strategy</li>
+              <li className="">Design & Experience</li>
+              <li className="">Development & Integration</li>
+              <li className="">Launch & Support</li>
+            </ul>
+          </div>
+          <div className="progress-bar-container">
+            <div
+              className="progress-bar-fill"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
       </div>
     </div>

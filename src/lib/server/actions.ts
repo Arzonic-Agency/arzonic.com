@@ -10,9 +10,7 @@ import sharp from "sharp";
 
 // DeepL translation helper
 
-async function translateWithDeepL(
-  text: string
-): Promise<string> {
+async function translateWithDeepL(text: string): Promise<string> {
   const apiKey = process.env.DEEPL_API_KEY;
   if (!apiKey) throw new Error("Missing DEEPL_API_KEY env var");
 
@@ -33,7 +31,9 @@ async function translateWithDeepL(
     throw new Error(`DeepL error ${res1.status}: ${body}`);
   }
 
-  const { translations: [first] } = await res1.json() as {
+  const {
+    translations: [first],
+  } = (await res1.json()) as {
     translations: Array<{
       text: string;
       detected_source_language: string;
@@ -55,7 +55,9 @@ async function translateWithDeepL(
       const body = await res2.text();
       throw new Error(`DeepL error ${res2.status}: ${body}`);
     }
-    const { translations: [second] } = await res2.json() as {
+    const {
+      translations: [second],
+    } = (await res2.json()) as {
       translations: Array<{ text: string }>;
     };
     return second.text;
@@ -242,7 +244,7 @@ export async function deleteUser(userId: string) {
       );
       throw new Error(
         "Failed to delete user from permissions: " +
-        deletePermissionError.message
+          deletePermissionError.message
       );
     }
 
@@ -348,7 +350,9 @@ export async function createCase({
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -409,7 +413,9 @@ export async function updateCase(
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -426,7 +432,17 @@ export async function updateCase(
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const payload: any = {
+    const payload: {
+      companyName: string;
+      desc: string;
+      desc_translated: string;
+      city: string;
+      country: string;
+      contactPerson: string;
+      image: string | null;
+      creator_id: string;
+      created_at?: string;
+    } = {
       companyName,
       desc,
       desc_translated,
@@ -460,7 +476,11 @@ export async function getAllCases(page = 1, limit = 6) {
 
 export async function getCaseById(caseId: number) {
   const supabase = await createServerClientInstance();
-  const { data, error } = await supabase.from("cases").select("*").eq("id", caseId).single();
+  const { data, error } = await supabase
+    .from("cases")
+    .select("*")
+    .eq("id", caseId)
+    .single();
   if (error) throw new Error(error.message);
   return data;
 }

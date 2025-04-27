@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FaLocationDot, FaPen, FaTrash } from "react-icons/fa6";
+import { FaPen, FaTrash } from "react-icons/fa6";
 import { getAllReviews, deleteReview } from "@/lib/server/actions";
 import ReviewsRating from "./ReviewsRating";
 import { t } from "i18next";

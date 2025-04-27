@@ -15,7 +15,7 @@ interface PageTitleMapping {
 
 const Topbar = () => {
   const pathname = usePathname();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const pageTitles: PageTitleMapping = {
     "/admin": t("overview"),

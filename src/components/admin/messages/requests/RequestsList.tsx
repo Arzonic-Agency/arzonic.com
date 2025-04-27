@@ -35,8 +35,6 @@ const RequestsList = ({
   requests,
   setRequests,
   page,
-  setPage,
-  total,
   setTotal,
   searchTerm,
   onDetailsClick,
