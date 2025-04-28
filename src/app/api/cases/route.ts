@@ -7,11 +7,26 @@ import {
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const pageParam = url.searchParams.get("page") || "1";
-    const page = parseInt(pageParam, 10);
+    const page = parseInt(url.searchParams.get("page") ?? "1", 10);
+    const rawLang = url.searchParams.get("lang")?.toLowerCase();
+    const uiLang = rawLang === "en" ? "en" : "da";
+    const { cases, total } = await getAllCases(page);
 
-    const result = await getAllCases(page);
-    return NextResponse.json(result, { status: 200 });
+    const transformed = cases.map((c: any) => {
+      const original = c.desc;
+      const translated = c.desc_translated;
+
+      const description =
+        c.source_lang === uiLang
+          ? original
+          : (translated ?? original);
+      return {
+        ...c,
+        description,
+      };
+    });
+
+    return NextResponse.json({ cases: transformed, total }, { status: 200 });
   } catch (err: any) {
     console.error("API GET /api/cases error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });

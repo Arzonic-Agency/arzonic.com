@@ -312,6 +312,9 @@ export async function updateUser(
 
 // CASES
 
+// ─────────────────────────────────────────────────────────────────────────────
+// CREATE CASE
+// ─────────────────────────────────────────────────────────────────────────────
 export async function createCase({
   companyName,
   desc,
@@ -330,10 +333,37 @@ export async function createCase({
   const supabase = await createServerClientInstance();
 
   try {
-    // translate description
-    const desc_translated = await translateWithDeepL(desc);
+    const apiKey = process.env.DEEPL_API_KEY!;
+    const endpoint = "https://api-free.deepl.com/v2/translate";
 
-    // handle image upload
+    const params1 = new URLSearchParams({
+      auth_key: apiKey,
+      text: desc,
+      target_lang: "EN",
+    });
+    const r1 = await fetch(endpoint, { method: "POST", body: params1 });
+    if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
+    const { translations: [first] } = (await r1.json()) as {
+      translations: { text: string; detected_source_language: string }[];
+    };
+
+    const sourceLang = first.detected_source_language.toLowerCase();
+
+    let desc_translated = first.text;
+    if (sourceLang === "en") {
+      const params2 = new URLSearchParams({
+        auth_key: apiKey,
+        text: desc,
+        target_lang: "DA",
+      });
+      const r2 = await fetch(endpoint, { method: "POST", body: params2 });
+      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const { translations: [second] } = (await r2.json()) as {
+        translations: { text: string }[];
+      };
+      desc_translated = second.text;
+    }
+
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -350,22 +380,21 @@ export async function createCase({
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage
-          .from("case-images")
-          .getPublicUrl(path);
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
     }
 
-    // insert
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
+
     const { error } = await supabase.from("cases").insert([
       {
         companyName,
         desc,
         desc_translated,
+        source_lang: sourceLang,
         city,
         country,
         contactPerson,
@@ -373,12 +402,14 @@ export async function createCase({
         creator_id: ud.user.id,
       },
     ]);
+
     if (error) throw error;
   } catch (err) {
     console.error("createCase error:", err);
     throw err;
   }
 }
+
 
 export async function updateCase(
   id: number,
@@ -393,10 +424,36 @@ export async function updateCase(
   const supabase = await createServerClientInstance();
 
   try {
-    // translate description
-    const desc_translated = await translateWithDeepL(desc);
+    const apiKey = process.env.DEEPL_API_KEY!;
+    const endpoint = "https://api-free.deepl.com/v2/translate";
 
-    // handle image (upload new or reuse old)
+    const params1 = new URLSearchParams({
+      auth_key: apiKey,
+      text: desc,
+      target_lang: "EN",
+    });
+    const r1 = await fetch(endpoint, { method: "POST", body: params1 });
+    if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
+    const { translations: [first] } = (await r1.json()) as {
+      translations: { text: string; detected_source_language: string }[];
+    };
+
+    const sourceLang = first.detected_source_language.toLowerCase();
+    let desc_translated = first.text;
+    if (sourceLang === "en") {
+      const params2 = new URLSearchParams({
+        auth_key: apiKey,
+        text: desc,
+        target_lang: "DA",
+      });
+      const r2 = await fetch(endpoint, { method: "POST", body: params2 });
+      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const { translations: [second] } = (await r2.json()) as {
+        translations: { text: string }[];
+      };
+      desc_translated = second.text;
+    }
+
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -413,9 +470,7 @@ export async function updateCase(
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage
-          .from("case-images")
-          .getPublicUrl(path);
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -428,24 +483,14 @@ export async function updateCase(
       imageUrl = existing?.image ?? null;
     }
 
-    // update
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const payload: {
-      companyName: string;
-      desc: string;
-      desc_translated: string;
-      city: string;
-      country: string;
-      contactPerson: string;
-      image: string | null;
-      creator_id: string;
-      created_at?: string;
-    } = {
+    const payload: any = {
       companyName,
       desc,
       desc_translated,
+      source_lang: sourceLang,
       city,
       country,
       contactPerson,
@@ -461,6 +506,7 @@ export async function updateCase(
     throw err;
   }
 }
+
 
 export async function getAllCases(page = 1, limit = 6) {
   const supabase = await createServerClientInstance();

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaPen, FaTrash } from "react-icons/fa6";
-import { getAllCases, deleteCase } from "@/lib/server/actions";
 import UpdateCase from "./updateCase/UpdateCase";
 import { useTranslation } from "react-i18next";
 
@@ -17,12 +16,8 @@ interface CasesListProps {
 interface CaseItem {
   id: number;
   companyName: string;
-  desc: string | null;                // Danish
-  desc_translated: string | null;     // English
-  formType: "normal" | "beforeAfter";
+  description: string;     // already in the correct language
   image: string | null;
-  imageBefore: string | null;
-  imageAfter: string | null;
 }
 
 const FALLBACK_IMAGE = "/demo.jpg";
@@ -38,9 +33,13 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const fetchCases = useCallback(async () => {
     setLoading(true);
     try {
-      const { cases, total } = await getAllCases(page);
-      setCaseItems(cases || []);
-      setTotal(total || 0);
+      const res = await fetch(
+        `/api/cases?page=${page}&lang=${i18n.language}`
+      );
+      if (!res.ok) throw new Error("Failed to load cases");
+      const { cases, total } = await res.json();
+      setCaseItems(cases);
+      setTotal(total);
     } catch (err) {
       console.error("Failed to fetch cases:", err);
       setCaseItems([]);
@@ -48,25 +47,14 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
     } finally {
       setLoading(false);
     }
-  }, [page, setTotal]);
+  }, [page, setTotal, i18n.language]);
 
   useEffect(() => {
     fetchCases();
   }, [fetchCases]);
 
-  const truncateDescription = (
-    danish: string | null,
-    english: string | null,
-    maxLength: number
-  ) => {
-    const full =
-      i18n.language === "en" ? english ?? danish : danish ?? english;
-    if (!full) return "";
-    return full.length > maxLength ? full.slice(0, maxLength) + "…" : full;
-  };
-
-  const truncateTitle = (title: string, maxLength: number) =>
-    title.length > maxLength ? title.slice(0, maxLength) + "…" : title;
+  const truncate = (text: string, max: number) =>
+    text.length > max ? text.slice(0, max) + "…" : text;
 
   const handleCaseUpdated = () => {
     setEditingCaseId(null);
@@ -76,7 +64,12 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const handleDelete = async () => {
     if (deletingCaseId == null) return;
     try {
-      await deleteCase(deletingCaseId);
+      const res = await fetch("/api/cases", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ caseId: deletingCaseId }),
+      });
+      if (!res.ok) throw new Error("Delete failed");
       setDeletingCaseId(null);
       setIsModalOpen(false);
       fetchCases();
@@ -109,10 +102,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
 
   if (editingCaseId) {
     return (
-      <UpdateCase
-        caseId={editingCaseId}
-        onCaseUpdated={handleCaseUpdated}
-      />
+      <UpdateCase caseId={editingCaseId} onCaseUpdated={handleCaseUpdated} />
     );
   }
 
@@ -136,11 +126,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
               <div className="card-body">
                 <h2 className="card-title text-lg">{item.companyName}</h2>
                 <p className="text-xs">
-                  {truncateDescription(
-                    item.desc,
-                    item.desc_translated,
-                    100
-                  )}
+                  {truncate(item.description, 100)}
                 </p>
                 <div className="card-actions justify-end mt-2">
                   <button
@@ -181,7 +167,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                     {item.companyName}
                   </h3>
                   <h3 className="font-semibold text-xs block sm:hidden">
-                    {truncateTitle(item.companyName, 20)}
+                    {truncate(item.companyName, 20)}
                   </h3>
                 </div>
                 <div className="flex gap-5 md:gap-2">
@@ -205,11 +191,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                 </div>
               </div>
               <p className="text-xs mt-1">
-                {truncateDescription(
-                  item.desc,
-                  item.desc_translated,
-                  80
-                )}
+                {truncate(item.description, 80)}
               </p>
             </li>
           ))}
