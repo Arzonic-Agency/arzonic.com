@@ -133,7 +133,7 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [positionState]);
+  }, [positionState, activeStep, onStickyChange]);
 
   if (!showNav) return null;
 

@@ -7,7 +7,6 @@ import { MdSunny } from "react-icons/md";
 
 const Theme = () => {
   const [isLight, setIsLight] = useState(false);
-  const { t } = useTranslation();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");

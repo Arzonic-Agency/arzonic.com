@@ -8,65 +8,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
 
-// DeepL translation helper
-
-async function translateWithDeepL(text: string): Promise<string> {
-  const apiKey = process.env.DEEPL_API_KEY;
-  if (!apiKey) throw new Error("Missing DEEPL_API_KEY env var");
-
-  // Always first ask DeepL to translate to English
-  const baseParams = new URLSearchParams({
-    auth_key: apiKey,
-    text,
-    target_lang: "EN",
-  });
-
-  const endpoint = "https://api-free.deepl.com/v2/translate";
-  const res1 = await fetch(endpoint, {
-    method: "POST",
-    body: baseParams,
-  });
-  if (!res1.ok) {
-    const body = await res1.text();
-    throw new Error(`DeepL error ${res1.status}: ${body}`);
-  }
-
-  const {
-    translations: [first],
-  } = (await res1.json()) as {
-    translations: Array<{
-      text: string;
-      detected_source_language: string;
-    }>;
-  };
-
-  // If it detected English, we actually want to go English → Danish
-  if (first.detected_source_language.toUpperCase() === "EN") {
-    const reverseParams = new URLSearchParams({
-      auth_key: apiKey,
-      text,
-      target_lang: "DA",
-    });
-    const res2 = await fetch(endpoint, {
-      method: "POST",
-      body: reverseParams,
-    });
-    if (!res2.ok) {
-      const body = await res2.text();
-      throw new Error(`DeepL error ${res2.status}: ${body}`);
-    }
-    const {
-      translations: [second],
-    } = (await res2.json()) as {
-      translations: Array<{ text: string }>;
-    };
-    return second.text;
-  }
-
-  // Otherwise the source was Danish, so EN was correct
-  return first.text;
-}
-
 //REGISTER
 
 export async function createMember(data: {
@@ -343,7 +284,9 @@ export async function createCase({
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const { translations: [first] } = (await r1.json()) as {
+    const {
+      translations: [first],
+    } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
 
@@ -357,8 +300,11 @@ export async function createCase({
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const { translations: [second] } = (await r2.json()) as {
+      if (!r2.ok)
+        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const {
+        translations: [second],
+      } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
@@ -380,7 +326,9 @@ export async function createCase({
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -410,7 +358,6 @@ export async function createCase({
   }
 }
 
-
 export async function updateCase(
   id: number,
   companyName: string,
@@ -434,7 +381,9 @@ export async function updateCase(
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const { translations: [first] } = (await r1.json()) as {
+    const {
+      translations: [first],
+    } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
 
@@ -447,8 +396,11 @@ export async function updateCase(
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const { translations: [second] } = (await r2.json()) as {
+      if (!r2.ok)
+        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const {
+        translations: [second],
+      } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
@@ -470,7 +422,9 @@ export async function updateCase(
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -506,7 +460,6 @@ export async function updateCase(
     throw err;
   }
 }
-
 
 export async function getAllCases(page = 1, limit = 6) {
   const supabase = await createServerClientInstance();

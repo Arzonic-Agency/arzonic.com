@@ -1,10 +1,10 @@
 "use client";
-
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import UpdateCase from "./updateCase/UpdateCase";
 import { useTranslation } from "react-i18next";
+import { deleteCase } from "@/lib/server/actions";
 
 interface CasesListProps {
   view: "cards" | "list";
@@ -16,7 +16,7 @@ interface CasesListProps {
 interface CaseItem {
   id: number;
   companyName: string;
-  description: string;     // already in the correct language
+  description: string;
   image: string | null;
 }
 
@@ -33,9 +33,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const fetchCases = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(
-        `/api/cases?page=${page}&lang=${i18n.language}`
-      );
+      const res = await fetch(`/api/cases?page=${page}&lang=${i18n.language}`);
       if (!res.ok) throw new Error("Failed to load cases");
       const { cases, total } = await res.json();
       setCaseItems(cases);
@@ -64,12 +62,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const handleDelete = async () => {
     if (deletingCaseId == null) return;
     try {
-      const res = await fetch("/api/cases", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ caseId: deletingCaseId }),
-      });
-      if (!res.ok) throw new Error("Delete failed");
+      await deleteCase(deletingCaseId); // Use deleteCase function
       setDeletingCaseId(null);
       setIsModalOpen(false);
       fetchCases();
@@ -85,7 +78,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center gap-3 items-center">
+      <div className="flex justify-center gap-3 items-center w-full">
         <span className="loading loading-spinner loading-md h-40" />
         {t("loading_cases")}
       </div>
@@ -125,9 +118,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
               </figure>
               <div className="card-body">
                 <h2 className="card-title text-lg">{item.companyName}</h2>
-                <p className="text-xs">
-                  {truncate(item.description, 100)}
-                </p>
+                <p className="text-xs">{truncate(item.description, 100)}</p>
                 <div className="card-actions justify-end mt-2">
                   <button
                     className="btn btn-sm"
@@ -190,9 +181,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                   </button>
                 </div>
               </div>
-              <p className="text-xs mt-1">
-                {truncate(item.description, 80)}
-              </p>
+              <p className="text-xs mt-1">{truncate(item.description, 80)}</p>
             </li>
           ))}
         </ul>
@@ -205,9 +194,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
               {t("delete_case_confirmation")}
             </h3>
             <p className="py-4">{t("delete_case_prompt")}</p>
-            <p className="text-sm text-warning">
-              {t("delete_case_warning")}
-            </p>
+            <p className="text-sm text-warning">{t("delete_case_warning")}</p>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
                 {t("cancel")}
