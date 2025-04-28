@@ -185,7 +185,7 @@ export async function deleteUser(userId: string) {
       );
       throw new Error(
         "Failed to delete user from permissions: " +
-          deletePermissionError.message
+        deletePermissionError.message
       );
     }
 
@@ -253,9 +253,12 @@ export async function updateUser(
 
 // CASES
 
+
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CREATE CASE
 // ─────────────────────────────────────────────────────────────────────────────
+
 export async function createCase({
   companyName,
   desc,
@@ -277,6 +280,7 @@ export async function createCase({
     const apiKey = process.env.DEEPL_API_KEY!;
     const endpoint = "https://api-free.deepl.com/v2/translate";
 
+    // 1️⃣ translate desc ↔ detect source
     const params1 = new URLSearchParams({
       auth_key: apiKey,
       text: desc,
@@ -284,12 +288,9 @@ export async function createCase({
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const {
-      translations: [first],
-    } = (await r1.json()) as {
+    const { translations: [first] } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
-
     const sourceLang = first.detected_source_language.toLowerCase();
 
     let desc_translated = first.text;
@@ -300,16 +301,29 @@ export async function createCase({
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok)
-        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const {
-        translations: [second],
-      } = (await r2.json()) as {
+      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const { translations: [second] } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
     }
 
+    // 2️⃣ translate country → English
+    const countryParams = new URLSearchParams({
+      auth_key: apiKey,
+      text: country,
+      target_lang: "EN",
+    });
+    const countryRes = await fetch(endpoint, { method: "POST", body: countryParams });
+    if (!countryRes.ok) {
+      throw new Error(`DeepL country error ${countryRes.status}: ${await countryRes.text()}`);
+    }
+    const { translations: [countryFirst] } = (await countryRes.json()) as {
+      translations: { text: string }[];
+    };
+    const country_translated = countryFirst.text;
+
+    // 3️⃣ image upload (unchanged)
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -326,14 +340,13 @@ export async function createCase({
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage
-          .from("case-images")
-          .getPublicUrl(path);
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
     }
 
+    // 4️⃣ insert row
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
@@ -345,12 +358,12 @@ export async function createCase({
         source_lang: sourceLang,
         city,
         country,
+        country_translated,
         contactPerson,
         image: imageUrl,
         creator_id: ud.user.id,
       },
     ]);
-
     if (error) throw error;
   } catch (err) {
     console.error("createCase error:", err);
@@ -374,6 +387,7 @@ export async function updateCase(
     const apiKey = process.env.DEEPL_API_KEY!;
     const endpoint = "https://api-free.deepl.com/v2/translate";
 
+    // 1️⃣ translate desc ↔ detect source
     const params1 = new URLSearchParams({
       auth_key: apiKey,
       text: desc,
@@ -381,13 +395,11 @@ export async function updateCase(
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const {
-      translations: [first],
-    } = (await r1.json()) as {
+    const { translations: [first] } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
-
     const sourceLang = first.detected_source_language.toLowerCase();
+
     let desc_translated = first.text;
     if (sourceLang === "en") {
       const params2 = new URLSearchParams({
@@ -396,16 +408,29 @@ export async function updateCase(
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok)
-        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const {
-        translations: [second],
-      } = (await r2.json()) as {
+      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const { translations: [second] } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
     }
 
+    // 2️⃣ translate country → English
+    const countryParams = new URLSearchParams({
+      auth_key: apiKey,
+      text: country,
+      target_lang: "EN",
+    });
+    const countryRes = await fetch(endpoint, { method: "POST", body: countryParams });
+    if (!countryRes.ok) {
+      throw new Error(`DeepL country error ${countryRes.status}: ${await countryRes.text()}`);
+    }
+    const { translations: [countryFirst] } = (await countryRes.json()) as {
+      translations: { text: string }[];
+    };
+    const country_translated = countryFirst.text;
+
+    // 3️⃣ image upload or reuse
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -422,9 +447,7 @@ export async function updateCase(
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage
-          .from("case-images")
-          .getPublicUrl(path);
+        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -437,27 +460,18 @@ export async function updateCase(
       imageUrl = existing?.image ?? null;
     }
 
+    // 4️⃣ update row
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const payload: {
-      companyName: string;
-      desc: string;
-      desc_translated: string;
-      source_lang: string;
-      city: string;
-      country: string;
-      contactPerson: string;
-      image: string | null;
-      creator_id: string;
-      created_at?: string;
-    } = {
+    const payload: any = {
       companyName,
       desc,
       desc_translated,
       source_lang: sourceLang,
       city,
       country,
+      country_translated,
       contactPerson,
       image: imageUrl,
       creator_id: ud.user.id,
@@ -503,6 +517,33 @@ export async function deleteCase(caseId: number): Promise<void> {
 
 // REVIEWS
 
+const DEEPL_ENDPOINT = "https://api-free.deepl.com/v2/translate";
+
+async function detectAndTranslate(text: string) {
+  const apiKey = process.env.DEEPL_API_KEY!;
+  const p1 = new URLSearchParams({ auth_key: apiKey, text, target_lang: "EN" });
+  const r1 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p1 });
+  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
+  const { translations: [first] } = await r1.json() as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+
+  const sourceLang = first.detected_source_language.toLowerCase(); // "en" or "da"
+  let translated = first.text;
+
+  if (sourceLang === "en") {
+    const p2 = new URLSearchParams({ auth_key: apiKey, text, target_lang: "DA" });
+    const r2 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p2 });
+    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+    const { translations: [second] } = await r2.json() as {
+      translations: { text: string }[];
+    };
+    translated = second.text;
+  }
+
+  return { sourceLang, translated };
+}
+
 export async function createReview(
   desc: string,
   rate: number,
@@ -510,70 +551,42 @@ export async function createReview(
   contactPerson: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
+  const { sourceLang, translated } = await detectAndTranslate(desc);
+  const { data: u, error: ue } = await supabase.auth.getUser();
+  if (ue || !u?.user) throw new Error("Not authenticated");
 
-  try {
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) {
-      throw new Error("User not authenticated");
-    }
+  const { error } = await supabase.from("reviews").insert([
+    {
+      creator: u.user.id,
+      desc,
+      desc_translated: translated,
+      source_lang: sourceLang,
+      rate,
+      companyName,
+      contactPerson,
+    },
+  ]);
 
-    const { error } = await supabase.from("reviews").insert([
-      {
-        creator: userData.user.id,
-        desc,
-        rate,
-        companyName,
-        contactPerson,
-      },
-    ]);
-
-    if (error) {
-      throw new Error(`Failed to create review: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in createReview:", error);
-    throw error;
-  }
+  if (error) throw error;
 }
 
-export async function getAllReviews(page: number = 1, limit: number = 6) {
+export async function getAllReviews(page = 1, limit = 6) {
   const supabase = await createServerClientInstance();
   const offset = (page - 1) * limit;
+  const { data, count, error } = await supabase
+    .from("reviews")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
 
-  try {
-    const { data, count, error } = await supabase
-      .from("reviews")
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1);
-
-    if (error) {
-      throw new Error(`Failed to fetch reviews: ${error.message}`);
-    }
-
-    return { reviews: data || [], total: count || 0 }; // Ensure fallback to empty array and zero
-  } catch (error) {
-    console.error(`Failed to fetch reviews: ${error.message}`);
-    return { reviews: [], total: 0 }; // Fallback response
-  }
+  if (error) throw new Error(error.message);
+  return { reviews: data, total: count ?? 0 };
 }
 
 export async function deleteReview(reviewId: number): Promise<void> {
   const supabase = await createServerClientInstance();
-
-  try {
-    const { error } = await supabase
-      .from("reviews")
-      .delete()
-      .eq("id", reviewId);
-
-    if (error) {
-      throw new Error(`Failed to delete review: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in deleteReview:", error);
-    throw error;
-  }
+  const { error } = await supabase.from("reviews").delete().eq("id", reviewId);
+  if (error) throw new Error(error.message);
 }
 
 export async function getLatestReviews(limit: number = 10) {
@@ -605,20 +618,24 @@ export async function updateReview(
   rate: number
 ): Promise<void> {
   const supabase = await createServerClientInstance();
+  const { sourceLang, translated } = await detectAndTranslate(desc);
+  const { data: u, error: ue } = await supabase.auth.getUser();
+  if (ue || !u?.user) throw new Error("Not authenticated");
 
-  try {
-    const { error } = await supabase
-      .from("reviews")
-      .update({ companyName, contactPerson, desc, rate })
-      .eq("id", reviewId);
+  const { error } = await supabase
+    .from("reviews")
+    .update({
+      desc,
+      desc_translated: translated,
+      source_lang: sourceLang,
+      rate,
+      companyName,
+      contactPerson,
+      creator: u.user.id,
+    })
+    .eq("id", reviewId);
 
-    if (error) {
-      throw new Error(`Failed to update review: ${error.message}`);
-    }
-  } catch (error) {
-    console.error("Error in updateReview:", error);
-    throw error;
-  }
+  if (error) throw error;
 }
 
 export async function getReviewById(reviewId: number) {
