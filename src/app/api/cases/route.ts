@@ -2,6 +2,34 @@
 import { NextResponse } from "next/server";
 import { getAllCases } from "@/lib/server/actions";
 
+interface CaseRow {
+  id: number;
+  companyName: string;
+  desc: string;
+  desc_translated: string | null;
+  source_lang: string;           // e.g. "en" or "da"
+  city: string;
+  country: string;
+  country_translated: string | null;
+  contactPerson: string;
+  image: string | null;
+  creator_id: string;
+  created_at: string;
+}
+
+interface CaseResponse
+  extends Omit<
+    CaseRow,
+    | "desc"
+    | "desc_translated"
+    | "source_lang"
+    | "country"
+    | "country_translated"
+  > {
+  description: string;
+  countryName: string;
+}
+
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
@@ -10,8 +38,19 @@ export async function GET(request: Request) {
     const uiLang = rawLang === "en" ? "en" : "da";
 
     const { cases, total } = await getAllCases(page);
+    const raw = cases as CaseRow[];
 
-    const transformed = cases.map((c: any) => {
+    const transformed: CaseResponse[] = raw.map((c) => {
+      const description =
+        c.source_lang === uiLang
+          ? c.desc
+          : c.desc_translated ?? c.desc;
+
+      const countryName =
+        uiLang === "en"
+          ? c.country_translated ?? c.country
+          : c.country;
+
       const {
         desc,
         desc_translated,
@@ -20,12 +59,6 @@ export async function GET(request: Request) {
         country_translated,
         ...rest
       } = c;
-
-      const description =
-        source_lang === uiLang ? desc : desc_translated ?? desc;
-
-      const countryName =
-        uiLang === "en" ? country_translated ?? country : country;
 
       return {
         ...rest,
@@ -37,7 +70,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ cases: transformed, total }, { status: 200 });
   } catch (err: unknown) {
     console.error("API GET /api/cases error:", err);
-    const message = err instanceof Error ? err.message : "Unknown error occurred";
+    const message =
+      err instanceof Error ? err.message : "Unknown error occurred";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

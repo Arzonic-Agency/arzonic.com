@@ -1,8 +1,26 @@
+// src/app/api/reviews/route.ts
 import { NextResponse } from "next/server";
 import {
   getAllReviews,
   deleteReview as supaDeleteReview,
 } from "@/lib/server/actions";
+
+interface ReviewRow {
+  id: number;
+  creator: string;
+  desc: string;
+  city: string;
+  desc_translated: string | null;
+  source_lang: string;        // e.g. "en" or "da"
+  rate: number;
+  companyName: string;
+  contactPerson: string;
+  created_at: string;
+}
+
+interface ReviewResponse extends ReviewRow {
+  description: string;
+}
 
 export async function GET(request: Request) {
   try {
@@ -11,19 +29,25 @@ export async function GET(request: Request) {
     const lang = url.searchParams.get("lang") === "en" ? "en" : "da";
 
     const { reviews, total } = await getAllReviews(page);
+    const raw = reviews as ReviewRow[];
 
-    const transformed = reviews.map((r: any) => {
+    const transformed: ReviewResponse[] = raw.map((r) => {
       const original = r.desc;
       const translated = r.desc_translated;
       const description =
-        r.source_lang === lang ? original : (translated ?? original);
-      return { ...r, description };
+        r.source_lang === lang ? original : translated ?? original;
+
+      return {
+        ...r,
+        description,
+      };
     });
 
     return NextResponse.json({ reviews: transformed, total }, { status: 200 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("API GET /api/reviews error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Unknown error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -32,8 +56,9 @@ export async function DELETE(request: Request) {
     const { reviewId } = (await request.json()) as { reviewId: number };
     await supaDeleteReview(reviewId);
     return new NextResponse(null, { status: 204 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("API DELETE /api/reviews error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Unknown error occurred";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -280,7 +280,6 @@ export async function createCase({
     const apiKey = process.env.DEEPL_API_KEY!;
     const endpoint = "https://api-free.deepl.com/v2/translate";
 
-    // 1️⃣ translate desc ↔ detect source
     const params1 = new URLSearchParams({
       auth_key: apiKey,
       text: desc,
@@ -308,7 +307,6 @@ export async function createCase({
       desc_translated = second.text;
     }
 
-    // 2️⃣ translate country → English
     const countryParams = new URLSearchParams({
       auth_key: apiKey,
       text: country,
@@ -323,7 +321,6 @@ export async function createCase({
     };
     const country_translated = countryFirst.text;
 
-    // 3️⃣ image upload (unchanged)
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -346,7 +343,6 @@ export async function createCase({
       imageUrl = await uploadFile(image);
     }
 
-    // 4️⃣ insert row
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
@@ -387,7 +383,6 @@ export async function updateCase(
     const apiKey = process.env.DEEPL_API_KEY!;
     const endpoint = "https://api-free.deepl.com/v2/translate";
 
-    // 1️⃣ translate desc ↔ detect source
     const params1 = new URLSearchParams({
       auth_key: apiKey,
       text: desc,
@@ -415,7 +410,6 @@ export async function updateCase(
       desc_translated = second.text;
     }
 
-    // 2️⃣ translate country → English
     const countryParams = new URLSearchParams({
       auth_key: apiKey,
       text: country,
@@ -430,7 +424,6 @@ export async function updateCase(
     };
     const country_translated = countryFirst.text;
 
-    // 3️⃣ image upload or reuse
     let imageUrl: string | null = null;
     if (image) {
       const uploadFile = async (file: File) => {
@@ -460,11 +453,22 @@ export async function updateCase(
       imageUrl = existing?.image ?? null;
     }
 
-    // 4️⃣ update row
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const payload: any = {
+    const payload: {
+      companyName: string;
+      desc: string;
+      desc_translated: string;
+      source_lang: string;
+      city: string;
+      country: string;
+      country_translated: string;
+      contactPerson: string;
+      image: string | null;
+      creator_id: string;
+      created_at?: string;
+    } = {
       companyName,
       desc,
       desc_translated,
@@ -475,6 +479,7 @@ export async function updateCase(
       contactPerson,
       image: imageUrl,
       creator_id: ud.user.id,
+      ...(created_at ? { created_at } : {}),
     };
     if (created_at) payload.created_at = created_at;
 
