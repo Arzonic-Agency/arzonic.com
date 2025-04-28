@@ -440,7 +440,18 @@ export async function updateCase(
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
-    const payload: any = {
+    const payload: {
+      companyName: string;
+      desc: string;
+      desc_translated: string;
+      source_lang: string;
+      city: string;
+      country: string;
+      contactPerson: string;
+      image: string | null;
+      creator_id: string;
+      created_at?: string;
+    } = {
       companyName,
       desc,
       desc_translated,
