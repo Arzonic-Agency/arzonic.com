@@ -7,6 +7,7 @@ import Link from "next/link";
 import { FaBars, FaFacebook, FaInstagram, FaXmark } from "react-icons/fa6";
 import Theme from "./Theme";
 import Image from "next/image";
+import Language from "./Language";
 
 const Header = () => {
   const pathname = usePathname();
@@ -59,9 +60,6 @@ const Header = () => {
             <Link href="/cases">Cases</Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
-          </li>
-          <li>
             <Link
               href="/contact"
               className="btn btn-outline text-base-content hover:btn-secondary"
@@ -71,6 +69,9 @@ const Header = () => {
           </li>
           <li>
             <Theme />
+          </li>
+          <li>
+            <Language />
           </li>
         </ul>
         <div className="drawer drawer-end flex md:hidden">
@@ -103,11 +104,6 @@ const Header = () => {
               <li className="text-2xl font-bold">
                 <Link href="/cases" onClick={handleCloseDrawer}>
                   Cases
-                </Link>
-              </li>
-              <li className="text-2xl font-bold">
-                <Link href="/about" onClick={handleCloseDrawer}>
-                  About
                 </Link>
               </li>
               <li>

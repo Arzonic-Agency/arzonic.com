@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { FaMoon } from "react-icons/fa6";
 import { MdSunny } from "react-icons/md";
 
-const Theme = () => {
+const ThemeAdmin = () => {
   const [isLight, setIsLight] = useState(false);
   const { t } = useTranslation();
 
@@ -38,15 +38,17 @@ const Theme = () => {
 
       {/* sun icon (light mode) */}
       <div className="text-lg swap-off flex items-center gap-2">
-        <MdSunny className="text-2xl" />
+        <MdSunny className="" />
+        <span className="text-sm">{t("light")}</span>
       </div>
 
       {/* moon icon (dark mode) */}
       <div className="text-lg swap-on flex items-center gap-2">
-        <FaMoon className="text-2xl" />
+        <FaMoon className="" />
+        <span className="text-sm">{t("dark")}</span>
       </div>
     </label>
   );
 };
 
-export default Theme;
+export default ThemeAdmin;

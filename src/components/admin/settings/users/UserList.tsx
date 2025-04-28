@@ -55,7 +55,7 @@ const UserList = ({
         setUsers(users.filter((user) => user.id !== userToDelete.id));
         setUserToDelete(null);
         setIsModalOpen(false);
-        onUserDeleted(); // Trigger toast for deletion
+        onUserDeleted();
       } catch (error) {
         console.error("Failed to delete user:", error);
         setError("Failed to delete user");

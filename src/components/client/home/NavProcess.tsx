@@ -1,69 +1,156 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
-const NavProcess = () => {
+const steps = [
+  "Discovery & Strategy",
+  "Design & Experience",
+  "Development & Integration",
+  "Launch & Support",
+];
+
+type NavProcessProps = {
+  onStickyChange?: (sticky: boolean) => void;
+};
+
+const NavProcess = ({ onStickyChange }: NavProcessProps) => {
   const navRef = useRef<HTMLDivElement | null>(null);
   const originalOffsetRef = useRef<number>(0);
-  const [isSticky, setIsSticky] = useState<boolean>(false);
+
+  const [positionState, setPositionState] = useState<
+    "normal" | "sticky" | "fixed"
+  >("normal");
+  const [fixedTop, setFixedTop] = useState<number>(0);
+
   const [progress, setProgress] = useState<number>(0);
   const [showNav, setShowNav] = useState<boolean>(true);
+  const [activeStep, setActiveStep] = useState<number>(0);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      // Record the original offset the first time we scroll.
-      if (navRef.current && originalOffsetRef.current === 0) {
-        originalOffsetRef.current =
-          navRef.current.getBoundingClientRect().top + window.scrollY;
-      }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (navRef.current && originalOffsetRef.current === 0) {
+            originalOffsetRef.current =
+              navRef.current.getBoundingClientRect().top + window.scrollY;
+          }
 
-      const currentScrollY = window.scrollY;
-      const processSection = document.getElementById("Process");
-      let processSectionBottom = 0;
+          const currentScrollY = window.scrollY;
+          const processSection = document.getElementById("Process");
+          const navHeight = navRef.current?.offsetHeight || 98;
 
-      if (processSection) {
-        processSectionBottom =
-          processSection.offsetTop + processSection.offsetHeight;
-      }
+          if (processSection) {
+            const processBottom =
+              processSection.offsetTop + processSection.offsetHeight;
 
-      // Show/hide/sticky logic
-      if (currentScrollY < originalOffsetRef.current) {
-        setIsSticky(false);
-        setShowNav(true);
-      } else if (
-        currentScrollY >= originalOffsetRef.current &&
-        currentScrollY <= processSectionBottom
-      ) {
-        setIsSticky(true);
-        setShowNav(true);
-      } else if (currentScrollY > processSectionBottom) {
-        setShowNav(false);
-      }
+            if (currentScrollY < originalOffsetRef.current) {
+              setPositionState("normal");
+              setShowNav(true);
+              onStickyChange?.(false);
+            } else if (
+              currentScrollY >= originalOffsetRef.current &&
+              currentScrollY < processBottom - navHeight
+            ) {
+              if (positionState !== "sticky") {
+                setPositionState("sticky");
+                onStickyChange?.(true);
+              }
+              setShowNav(true);
+            } else if (currentScrollY >= processBottom - navHeight) {
+              if (positionState !== "fixed") {
+                const navCurrentTop =
+                  navRef.current.getBoundingClientRect().top + window.scrollY;
+                setFixedTop(navCurrentTop);
+                setPositionState("fixed");
+                onStickyChange?.(false);
+              }
+              setShowNav(true);
+            }
+          }
 
-      // Progress bar calculation
-      if (processSection) {
-        const { top, height } = processSection.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const scrollableHeight = height - windowHeight;
-        const scrolled = -top;
-        const clampedScrolled = Math.max(
-          0,
-          Math.min(scrolled, scrollableHeight)
-        );
-        const sectionProgress =
-          scrollableHeight > 0 ? (clampedScrolled / scrollableHeight) * 100 : 0;
-        setProgress(sectionProgress);
+          // Aktivt step
+          const stepElements = [
+            document.getElementById("discovery-strategy"),
+            document.getElementById("design-experience"),
+            document.getElementById("development-integration"),
+            document.getElementById("launch-support"),
+          ];
+
+          let currentActiveStep = activeStep;
+
+          stepElements.forEach((el, index) => {
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              const sectionHeight = rect.height || 700;
+              const triggerPoint = sectionHeight * 0.6;
+
+              if (rect.top <= triggerPoint && rect.bottom >= triggerPoint) {
+                currentActiveStep = index;
+              }
+            }
+          });
+
+          setActiveStep(currentActiveStep);
+
+          // Smooth progress bar
+          if (processSection) {
+            const { top, height } = processSection.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            const scrollableHeight = height - windowHeight;
+            const scrolled = -top;
+
+            const startOffset = 10;
+            const maxProgress = 100;
+            const stepCount = steps.length;
+            const stepHeight = scrollableHeight / stepCount;
+            const correction = stepHeight * 0.3;
+
+            const clampedScrolled = Math.max(
+              0,
+              Math.min(scrolled - correction, scrollableHeight)
+            );
+
+            const sectionProgress =
+              scrollableHeight > 0
+                ? startOffset +
+                  (clampedScrolled / scrollableHeight) *
+                    (maxProgress - startOffset)
+                : startOffset;
+
+            setProgress(
+              Math.min(Math.max(sectionProgress, startOffset), maxProgress)
+            );
+          }
+
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [positionState]);
 
   if (!showNav) return null;
 
+  const getIdFromStep = (step: string) =>
+    step.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-");
+
+  const handleClick = (step: string) => {
+    const id = getIdFromStep(step);
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5">
+      {/* Header */}
       <div className="flex flex-col items-center justify-center gap-3">
         <h3 className="text-3xl font-bold">
           This is how our customer process looks like
@@ -73,20 +160,45 @@ const NavProcess = () => {
           care.
         </p>
       </div>
-      <div ref={navRef} className={`nav-process ${isSticky ? "sticky" : ""}`}>
+
+      {/* Sticky / Fixed Nav */}
+      <div
+        ref={navRef}
+        className={`nav-process w-full ${
+          positionState === "sticky" ? "sticky top-0" : ""
+        } ${
+          positionState === "fixed"
+            ? "absolute left-1/2 transform -translate-x-1/2"
+            : ""
+        }`}
+        style={positionState === "fixed" ? { top: `${fixedTop}px` } : {}}
+      >
         <div className="nav-process-content">
-          <div className="flex justify-center p-10">
-            <ul className="flex gap-2 justify-evenly w-full">
-              <li className="">Discovery & Strategy</li>
-              <li className="">Design & Experience</li>
-              <li className="">Development & Integration</li>
-              <li className="">Launch & Support</li>
+          <div className="flex justify-center px-3 pb-5 pt-10 w-full">
+            <ul className="flex gap-6 justify-evenly w-full">
+              {steps.map((step, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleClick(step)}
+                  className={`cursor-pointer font-semibold transition-all duration-300 ${
+                    activeStep === index
+                      ? "text-secondary"
+                      : "text-gray-500 hover:text-secondary"
+                  }`}
+                >
+                  {step}
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="progress-bar-container">
-            <div
+
+          {/* Progress bar */}
+          <div className="progress-bar-container px-10">
+            <motion.div
               className="progress-bar-fill"
-              style={{ width: `${progress}%` }}
+              initial={{ width: "0%" }}
+              animate={{ width: `${progress}%` }}
+              transition={{ type: "tween", ease: "easeOut", duration: 0.4 }}
             />
           </div>
         </div>

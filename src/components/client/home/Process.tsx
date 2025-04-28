@@ -1,37 +1,121 @@
 import React from "react";
+import { FaCaretRight } from "react-icons/fa6";
 
-const Process = () => {
+type ProcessProps = {
+  isSticky: boolean;
+};
+
+const Process = ({ isSticky }: ProcessProps) => {
   return (
-    <div>
-      <div className="flex flex-col gap-5">
-        <h3 className="text-2xl font-bold">Process</h3>
-        <p className="text-sm">
-          We follow a structured process to ensure your project is delivered on
-          time and meets your expectations.
-        </p>
-      </div>
-      <div className="flex flex-col gap-4 mt-5">
-        <div className="flex gap-2 items-center">
-          <span className="text-primary">1.</span>
-          <span className="text-sm font-semibold">Discovery</span>
+    <div className={`${isSticky ? "pt-[110px]" : ""}`}>
+      <section id="discovery-strategy" className="h-[700px] w-full ">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+          <h4 className="text-4xl font-extralight">
+            Understanding Your Vision
+          </h4>
+          <p>
+            We start by truly understanding your business, your goals, and the
+            people you want to reach. This gives us the right foundation for
+            everything that follows.
+          </p>
+          <ul className="flex flex-col gap-4">
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Deep dive into
+              your goals and needs
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" />
+              Research of your market and target audience
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Strategic
+              roadmap planning
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Clear project
+              scope and timeline definition
+            </li>
+          </ul>
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="text-primary">2.</span>
-          <span className="text-sm font-semibold">Design</span>
+      </section>
+      <section id="design-experience" className="h-[700px] w-full">
+        {" "}
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+          <h4 className="text-4xl font-extralight">
+            Crafting Engaging Experiences
+          </h4>
+          <p>
+            We design intuitive and beautiful user experiences that not only
+            look amazing but also guide your audience smoothly towards your
+            goals.
+          </p>
+          <ul className="flex flex-col gap-4">
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Wireframing
+              and user journey mapping
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" />
+              Visual design focused on clarity and impact
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Responsive
+              design for all devices
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> User-centered
+              experience optimization
+            </li>
+          </ul>
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="text-primary">3.</span>
-          <span className="text-sm font-semibold">Development</span>
+      </section>
+      <section id="development-integration" className="h-[700px] w-full">
+        {" "}
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+          <h4 className="text-4xl font-extralight">
+            Building Solid Foundations
+          </h4>
+          <p>
+            We turn designs into powerful, scalable, and future-proof digital
+            solutions — ready to grow with your business needs.
+          </p>
+          <ul className="flex flex-col gap-4">
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Frontend and
+              backend development
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" />
+              Clean, scalable, and efficient code
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> API and
+              third-party system integrations
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Ongoing
+              testing for quality assurance
+            </li>
+          </ul>
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="text-primary">4.</span>
-          <span className="text-sm font-semibold">Testing</span>
+      </section>
+      <section
+        id="launch-support"
+        className="h-[700px] w-full flex items-center justify-center"
+      >
+        <div className="h-80 w-80">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ width: "100%", height: "auto" }}
+          >
+            <source src="/test.webm" type="video/webm" />
+            Your browser does not support the video tag.
+          </video>
         </div>
-        <div className="flex gap-2 items-center">
-          <span className="text-primary">5.</span>
-          <span className="text-sm font-semibold">Launch</span>
-        </div>
-      </div>
+      </section>
     </div>
   );
 };

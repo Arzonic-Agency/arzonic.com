@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const LanguageToggle = () => {
+const LanguageAdmin = () => {
   const { i18n } = useTranslation();
   const [isEnglish, setIsEnglish] = useState(i18n.language === "en");
 
@@ -28,4 +28,4 @@ const LanguageToggle = () => {
   );
 };
 
-export default LanguageToggle;
+export default LanguageAdmin;

@@ -1,13 +1,14 @@
 "use client";
 
-import Theme from "@/components/client/layout/Theme";
 import { signOut } from "@/lib/server/actions";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
 import { FaEllipsis, FaRightFromBracket } from "react-icons/fa6";
-import LanguageToggle from "@/components/client/layout/LanguageToggle";
+
+import LanguageAdmin from "./LanguageAdmin";
+import ThemeAdmin from "./ThemeAdmin";
 
 interface PageTitleMapping {
   [key: string]: string;
@@ -47,10 +48,10 @@ const Topbar = () => {
             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-black ring-opacity-5"
           >
             <li>
-              <Theme />
+              <ThemeAdmin />
             </li>
             <li>
-              <LanguageToggle />
+              <LanguageAdmin />
             </li>
             <li>
               <button
