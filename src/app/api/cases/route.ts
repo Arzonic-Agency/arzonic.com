@@ -51,12 +51,13 @@ export async function GET(request: Request) {
           ? c.country_translated ?? c.country
           : c.country;
 
+      // rename omitted fields to underscore-prefixed to suppress "unused" lint
       const {
-        desc,
-        desc_translated,
-        source_lang,
-        country,
-        country_translated,
+        desc: _desc,
+        desc_translated: _desc_translated,
+        source_lang: _source_lang,
+        country: _country,
+        country_translated: _country_translated,
         ...rest
       } = c;
 
