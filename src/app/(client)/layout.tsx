@@ -30,7 +30,7 @@ export default function ClientLayout({
         <header>
           <Header />
         </header>
-        <main className="p-7 relative">{children}</main>
+        <main className="p-7">{children}</main>
         <footer></footer>
         {showScroll && (
           <button
