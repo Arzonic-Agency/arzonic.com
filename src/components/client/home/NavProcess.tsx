@@ -165,7 +165,7 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
       <div
         ref={navRef}
         className={`nav-process w-full ${
-          positionState === "sticky" ? "sticky top-0" : ""
+          positionState === "sticky" ? "sticky top-0 max-w-screen-xl" : ""
         } ${
           positionState === "fixed"
             ? "absolute left-1/2 transform -translate-x-1/2"
@@ -180,7 +180,7 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
                 <li
                   key={index}
                   onClick={() => handleClick(step)}
-                  className={`cursor-pointer font-semibold transition-all duration-300 ${
+                  className={`cursor-pointer font-semibold transition-all duration-300 xl:text-lg ${
                     activeStep === index
                       ? "text-secondary"
                       : "text-gray-500 hover:text-secondary"
