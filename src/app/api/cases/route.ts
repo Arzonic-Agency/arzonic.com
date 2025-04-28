@@ -7,7 +7,7 @@ interface CaseRow {
   companyName: string;
   desc: string;
   desc_translated: string | null;
-  source_lang: string;           // e.g. "en" or "da"
+  source_lang: string;           // "en" or "da"
   city: string;
   country: string;
   country_translated: string | null;
@@ -17,15 +17,14 @@ interface CaseRow {
   created_at: string;
 }
 
-interface CaseResponse
-  extends Omit<
-    CaseRow,
-    | "desc"
-    | "desc_translated"
-    | "source_lang"
-    | "country"
-    | "country_translated"
-  > {
+interface CaseResponse {
+  id: number;
+  companyName: string;
+  city: string;
+  contactPerson: string;
+  image: string | null;
+  creator_id: string;
+  created_at: string;
   description: string;
   countryName: string;
 }
@@ -34,35 +33,33 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get("page") ?? "1", 10);
-    const rawLang = url.searchParams.get("lang")?.toLowerCase();
-    const uiLang = rawLang === "en" ? "en" : "da";
+    const uiLang = url.searchParams.get("lang") === "en" ? "en" : "da";
 
     const { cases, total } = await getAllCases(page);
     const raw = cases as CaseRow[];
 
     const transformed: CaseResponse[] = raw.map((c) => {
+      // choose the right description
       const description =
         c.source_lang === uiLang
           ? c.desc
           : c.desc_translated ?? c.desc;
 
+      // choose the right country name
       const countryName =
         uiLang === "en"
           ? c.country_translated ?? c.country
           : c.country;
 
-      // rename omitted fields to underscore-prefixed to suppress "unused" lint
-      const {
-        desc: _desc,
-        desc_translated: _desc_translated,
-        source_lang: _source_lang,
-        country: _country,
-        country_translated: _country_translated,
-        ...rest
-      } = c;
-
+      // explicitly return only the props we need
       return {
-        ...rest,
+        id: c.id,
+        companyName: c.companyName,
+        city: c.city,
+        contactPerson: c.contactPerson,
+        image: c.image,
+        creator_id: c.creator_id,
+        created_at: c.created_at,
         description,
         countryName,
       };
