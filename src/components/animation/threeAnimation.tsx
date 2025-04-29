@@ -106,21 +106,52 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
 export default function ThreeAnimation() {
   const [scrollY, setScrollY] = useState(0);
   const [modelUrl, setModelUrl] = useState<string | null>(null);
-
-  // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const navConn = (navigator as any).connection;
+
+    const updateIsMobile = () => {
+      // UA sniff
+      const ua = navigator.userAgent || "";
+      const isPhoneUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        ua
+      );
+
+      const isSmallViewport = window.matchMedia("(max-width: 768px)").matches;
+
+      // Save-Data or 2G/slow-2G
+      const isSlowNetwork =
+        navConn &&
+        (navConn.saveData ||
+          /2g|slow-2g/.test(navConn.effectiveType || ""));
+
+      setIsMobile(!!(isPhoneUA || isSmallViewport || isSlowNetwork));
+    };
+
+    updateIsMobile();
+
     const mq = window.matchMedia("(max-width: 768px)");
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    setIsMobile(mq.matches);
-    return () => mq.removeEventListener("change", onChange);
+    mq.addEventListener("change", updateIsMobile);
+
+    if (navConn && typeof navConn.addEventListener === "function") {
+      navConn.addEventListener("change", updateIsMobile);
+    }
+
+    return () => {
+      mq.removeEventListener("change", updateIsMobile);
+      if (navConn && typeof navConn.removeEventListener === "function") {
+        navConn.removeEventListener("change", updateIsMobile);
+      }
+    };
   }, []);
 
   // Fetch the GLB URL from Supabase
   useEffect(() => {
-    const { data } = supabase.storage.from("models").getPublicUrl("laptop.glb");
+    const { data } = supabase.storage
+      .from("models")
+      .getPublicUrl("laptop.glb");
     setModelUrl(data.publicUrl);
   }, []);
 
@@ -131,7 +162,6 @@ export default function ThreeAnimation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // 1) Mobile fallback
   if (isMobile) {
     return (
       <div style={{ textAlign: "center", padding: "2rem" }}>
@@ -144,15 +174,19 @@ export default function ThreeAnimation() {
     );
   }
 
-  // 2) Still loading?
+  // Still loading?
   if (!modelUrl) return null;
 
-  // 3) Desktop / Tablet: full 3D scene
+  // Desktop / Tablet: full 3D scene
   return (
     <Canvas
       shadows
       camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
-      dpr={typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1}
+      dpr={
+        typeof window !== "undefined"
+          ? Math.min(window.devicePixelRatio, 2)
+          : 1
+      }
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
