@@ -8,28 +8,32 @@ import { useProgress } from "@react-three/drei";
 export default function SplashScreen() {
   const { progress } = useProgress();
   const [hideSplash, setHideSplash] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
+  // Detect mobile via media‐query
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const mq = window.matchMedia("(max-width: 768px)");
-      setIsMobile(mq.matches);
-      const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-      mq.addEventListener("change", onChange);
-      return () => mq.removeEventListener("change", onChange);
-    }
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
   useEffect(() => {
-    if (isMobile) {
-      setHideSplash(true);
-    } else if (progress === 100) {
-      const timeout = setTimeout(() => {
-        setHideSplash(true);
-      }, 300); // 300ms after load
-      return () => clearTimeout(timeout);
+    if (progress === 100) {
+      const t = setTimeout(() => setHideSplash(true), 300);
+      return () => clearTimeout(t);
     }
-  }, [progress, isMobile]);
+  }, [progress]);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const fallbackTimeout = setTimeout(() => {
+      setHideSplash(true);
+    }, 2000); // e.g. 2s max wait on mobile
+    return () => clearTimeout(fallbackTimeout);
+  }, [isMobile]);
 
   return (
     <AnimatePresence>
