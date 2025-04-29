@@ -140,7 +140,6 @@ export default function ThreeAnimation() {
           alt="3D model disabled on mobile"
           style={{ maxWidth: "100%", height: "auto" }}
         />
-        <p>3D animations disabled on mobile devices for performance reasons.</p>
       </div>
     );
   }
