@@ -1,3 +1,5 @@
+// components/ThreeAnimation.tsx
+
 import React, { useEffect, useRef, Suspense, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -13,7 +15,6 @@ import {
 } from "three";
 import { createClient } from "@supabase/supabase-js";
 
-// Supabase client
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -43,32 +44,26 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   const clipDuration = animations[0]?.duration ?? 0;
   const maxScroll = 600;
 
+  // Build and scale the model whenever scene or screenTexture or size changes
   useEffect(() => {
     if (!group.current || !screenTexture) return;
 
-    const model = scene.clone(); // Prevent modifying original scene
+    const model = scene.clone();
     const box = new Box3().setFromObject(model);
     const sizeVec = box.getSize(new Vector3()).length();
     const center = box.getCenter(new Vector3());
-    model.position.sub(center);
-    model.position.y -= new Box3().setFromObject(model).min.y;
+    model.position.sub(center).y -= box.min.y;
 
-    // 💡 Responsive scale in percentage
-    let scalePercentage = 100;
+    // Responsive scaling
+    let scalePct = 100;
+    if (size.width < 400) scalePct = 60;
+    else if (size.width < 600) scalePct = 65;
+    else if (size.width < 768) scalePct = 80;
+    else if (size.width < 1024) scalePct = 90;
+    const modelScale = (10 * scalePct) / 100 / sizeVec;
+    model.scale.setScalar(modelScale);
 
-    if (size.width < 400) scalePercentage = 60;
-    else if (size.width < 600) scalePercentage = 65;
-    else if (size.width < 768) scalePercentage = 80;
-    else if (size.width < 1024) scalePercentage = 90;
-    else scalePercentage = 100;
-
-    const baseScale = 10;
-    const modelScale = (baseScale * scalePercentage) / 100;
-    model.scale.setScalar(modelScale / sizeVec);
-
-    if (size.width < 600) {
-      model.position.y += 0.5;
-    }
+    if (size.width < 600) model.position.y += 0.5;
 
     model.traverse((child) => {
       if (child instanceof Mesh) {
@@ -94,46 +89,71 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     mixer.current.setTime(clipDuration - 1 / 24);
   }, [scene, animations, screenTexture, clipDuration, size.width]);
 
+  // Drive the animation by scroll
   useFrame((_, delta) => {
     if (!mixer.current) return;
     const t = Math.min(1, Math.max(0, scrollY / maxScroll));
     const eased = 1 - (1 - t) ** 2;
-    const newTime = (1 - eased) * (clipDuration - 1 / 24);
-    mixer.current.setTime(newTime);
+    mixer.current.setTime((1 - eased) * (clipDuration - 1 / 24));
     mixer.current.update(delta);
   });
 
   return (
-    <group
-      ref={group}
-      position={[-0.8, -1, 0]}
-      rotation={[0, -Math.PI / 6, 0]}
-    />
+    <group ref={group} position={[-0.8, -1, 0]} rotation={[0, -Math.PI / 6, 0]} />
   );
 }
 
 export default function ThreeAnimation() {
-  const [scrollY, setScrollY] = useState<number>(0);
+  const [scrollY, setScrollY] = useState(0);
   const [modelUrl, setModelUrl] = useState<string | null>(null);
 
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 768px)");
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Fetch the GLB URL from Supabase
   useEffect(() => {
     const { data } = supabase.storage.from("models").getPublicUrl("laptop.glb");
     setModelUrl(data.publicUrl);
   }, []);
 
+  // Track scroll position
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // 1) Mobile fallback
+  if (isMobile) {
+    return (
+      <div style={{ textAlign: "center", padding: "2rem" }}>
+        <img
+          src="/models/screen.png"
+          alt="3D model disabled on mobile"
+          style={{ maxWidth: "100%", height: "auto" }}
+        />
+        <p>3D animations disabled on mobile devices for performance reasons.</p>
+      </div>
+    );
+  }
+
+  // 2) Still loading?
   if (!modelUrl) return null;
 
+  // 3) Desktop / Tablet: full 3D scene
   return (
     <Canvas
       shadows
       camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
-      dpr={Math.min(window.devicePixelRatio, 2)}
+      dpr={typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
