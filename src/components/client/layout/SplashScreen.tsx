@@ -1,21 +1,35 @@
+// components/SplashScreen.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@react-three/drei";
 
-const SplashScreen = () => {
+export default function SplashScreen() {
   const { progress } = useProgress();
   const [hideSplash, setHideSplash] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    if (progress === 100) {
+    if (typeof window !== "undefined") {
+      const mq = window.matchMedia("(max-width: 768px)");
+      setIsMobile(mq.matches);
+      const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      setHideSplash(true);
+    } else if (progress === 100) {
       const timeout = setTimeout(() => {
         setHideSplash(true);
-      }, 300); // Vent 300ms efter progress = 100 før vi skjuler
+      }, 300); // 300ms after load
       return () => clearTimeout(timeout);
     }
-  }, [progress]);
+  }, [progress, isMobile]);
 
   return (
     <AnimatePresence>
@@ -39,6 +53,4 @@ const SplashScreen = () => {
       )}
     </AnimatePresence>
   );
-};
-
-export default SplashScreen;
+}
