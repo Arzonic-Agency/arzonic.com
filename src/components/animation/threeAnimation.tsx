@@ -99,7 +99,11 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   });
 
   return (
-    <group ref={group} position={[-0.8, -1, 0]} rotation={[0, -Math.PI / 6, 0]} />
+    <group
+      ref={group}
+      position={[-0.8, -1, 0]}
+      rotation={[0, -Math.PI / 6, 0]}
+    />
   );
 }
 
@@ -133,15 +137,7 @@ export default function ThreeAnimation() {
 
   // 1) Mobile fallback
   if (isMobile) {
-    return (
-      <div style={{ textAlign: "center", padding: "2rem" }}>
-        <img
-          src="/models/screen.png"
-          alt="3D model disabled on mobile"
-          style={{ maxWidth: "100%", height: "auto" }}
-        />
-      </div>
-    );
+    return null;
   }
 
   // 2) Still loading?
@@ -152,7 +148,9 @@ export default function ThreeAnimation() {
     <Canvas
       shadows
       camera={{ position: [0.4, 4.2, 6.7], fov: 70 }}
-      dpr={typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1}
+      dpr={
+        typeof window !== "undefined" ? Math.min(window.devicePixelRatio, 2) : 1
+      }
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {

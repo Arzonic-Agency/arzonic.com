@@ -1,6 +1,5 @@
 import React from "react";
 import { FaCaretRight } from "react-icons/fa6";
-import { Player } from "@lottiefiles/react-lottie-player";
 
 type ProcessProps = {
   isSticky: boolean;
@@ -73,14 +72,7 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
         <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[40%]">
-          <div className="w-full h-auto">
-            <Player
-              autoplay
-              loop
-              src="/lottie/animation.json"
-              style={{ height: "100%", width: "100%" }}
-            />
-          </div>
+          <div className="w-full h-auto"></div>
         </div>
       </section>
       <section id="development-integration" className="h-[700px] w-full">
