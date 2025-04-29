@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import ReviewsRating from "./ReviewsRating";
 import { useTranslation } from "react-i18next";
+import { deleteReview } from "@/lib/server/actions";
 
 interface ReviewsListProps {
   view: "cards" | "list";
@@ -59,12 +60,7 @@ const ReviewsList = ({
   const handleDelete = async () => {
     if (deletingId == null) return;
     try {
-      const res = await fetch("/api/reviews", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reviewId: deletingId }),
-      });
-      if (!res.ok) throw new Error("Delete failed");
+      await deleteReview(deletingId);
       setDeletingId(null);
       setIsModalOpen(false);
       fetchReviews();
