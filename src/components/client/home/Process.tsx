@@ -1,5 +1,6 @@
 import React from "react";
 import { FaCaretRight } from "react-icons/fa6";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 type ProcessProps = {
   isSticky: boolean;
@@ -38,7 +39,10 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
       </section>
-      <section id="design-experience" className="h-[700px] w-full">
+      <section
+        id="design-experience"
+        className="h-[700px] w-full flex justify-center"
+      >
         {" "}
         <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
           <h4 className="text-4xl font-extralight">
@@ -67,6 +71,16 @@ const Process = ({ isSticky }: ProcessProps) => {
               experience optimization
             </li>
           </ul>
+        </div>
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[40%]">
+          <div className="w-full h-auto">
+            <Player
+              autoplay
+              loop
+              src="/lottie/animation.json"
+              style={{ height: "100%", width: "100%" }}
+            />
+          </div>
         </div>
       </section>
       <section id="development-integration" className="h-[700px] w-full">
@@ -102,20 +116,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       <section
         id="launch-support"
         className="h-[700px] w-full flex items-center justify-center"
-      >
-        <div className="h-80 w-80 ">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{ width: "100%", height: "auto" }}
-          >
-            <source src="/test.webm" type="video/webm" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </section>
+      ></section>
     </div>
   );
 };
