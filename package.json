@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@react-three/drei": "^10.0.6",
     "@react-three/fiber": "^9.1.2",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
@@ -24,6 +25,7 @@
     "fs-extra": "^11.3.0",
     "i18next": "^25.0.0",
     "i18next-browser-languagedetector": "^8.0.4",
+    "lottie-react": "^2.4.1",
     "next": "^15.3.0",
     "next-i18next": "^15.4.2",
     "next-seo": "^6.6.0",
