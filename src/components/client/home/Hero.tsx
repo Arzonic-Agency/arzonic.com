@@ -10,7 +10,7 @@ const ThreeAnimation = dynamic(() => import("../../animation/threeAnimation"), {
 const Hero = () => {
   return (
     <div className="relative h-full w-full overflow-visible">
-      <div className="relative z-10 flex lg:flex-row flex-col items-center justify-between h-full pt-10 px-6">
+      <div className="relative z-10 flex lg:flex-row flex-col items-center justify-between h-full px-6">
         <div className="lg:w-[50%] flex flex-col gap-5">
           <div className="flex gap-3 items-center">
             <div className="flex relative">

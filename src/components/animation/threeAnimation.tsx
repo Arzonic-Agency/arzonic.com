@@ -137,7 +137,7 @@ export default function ThreeAnimation() {
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
-        gl.setClearColor(0x000000, 0); // Transparent black
+        gl.setClearColor(0x000000, 0);
         gl.shadowMap.enabled = true;
         gl.shadowMap.type = PCFSoftShadowMap;
       }}

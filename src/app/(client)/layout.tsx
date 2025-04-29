@@ -26,16 +26,16 @@ export default function ClientLayout({
 
   return (
     <>
-      <div className="sm:h-lvh h-dvh max-w-screen-2xl mx-auto 2xl:px-3 pt-[64px] md:pt-[93px] ">
+      <div className="sm:h-lvh h-dvh max-w-screen-2xl mx-auto pt-[64px] md:pt-[101px] ">
         <header>
           <Header />
         </header>
-        <main className="p-7">{children}</main>
+        <main className="">{children}</main>
         <footer></footer>
         {showScroll && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-16 right-4 p-3 bg-secondary text-white rounded-full shadow-lg z-50 block md:hidden"
+            className="fixed bottom-16 right-4 p-3 bg-secondary text-white rounded-full shadow-lg z-50 block"
           >
             <FaAngleUp />
           </button>

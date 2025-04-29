@@ -36,13 +36,13 @@ const Theme = () => {
       />
 
       {/* sun icon (light mode) */}
-      <div className="text-lg swap-off flex items-center gap-2">
-        <MdSunny className="text-2xl" />
+      <div className=" swap-off flex items-center gap-2">
+        <MdSunny className="text-3xl" />
       </div>
 
       {/* moon icon (dark mode) */}
-      <div className="text-lg swap-on flex items-center gap-2">
-        <FaMoon className="text-2xl" />
+      <div className=" swap-on flex items-center gap-2">
+        <FaMoon className="text-3xl" />
       </div>
     </label>
   );

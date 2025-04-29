@@ -7,9 +7,9 @@ type ProcessProps = {
 
 const Process = ({ isSticky }: ProcessProps) => {
   return (
-    <div className={`${isSticky ? "pt-[110px]" : ""}`}>
+    <div className={`${isSticky ? "pt-[112px]" : ""}`}>
       <section id="discovery-strategy" className="h-[700px] w-full ">
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
           <h4 className="text-4xl font-extralight">
             Understanding Your Vision
           </h4>
@@ -40,7 +40,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section id="design-experience" className="h-[700px] w-full">
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
           <h4 className="text-4xl font-extralight">
             Crafting Engaging Experiences
           </h4>
@@ -71,7 +71,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section id="development-integration" className="h-[700px] w-full">
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[70%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
           <h4 className="text-4xl font-extralight">
             Building Solid Foundations
           </h4>
@@ -103,7 +103,7 @@ const Process = ({ isSticky }: ProcessProps) => {
         id="launch-support"
         className="h-[700px] w-full flex items-center justify-center"
       >
-        <div className="h-80 w-80">
+        <div className="h-80 w-80 ">
           <video
             autoPlay
             loop

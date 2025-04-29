@@ -16,10 +16,10 @@ const Language = () => {
         checked={isEnglish}
         onChange={() => setIsEnglish(!isEnglish)}
       />
-      <div className="swap-on flex items-center gap-2 text-2xl">
+      <div className="swap-on flex items-center gap-2 text-3xl">
         <span>🇩🇰</span>
       </div>
-      <div className="swap-off flex items-center gap-2 text-2xl">
+      <div className="swap-off flex items-center gap-2 text-3xl">
         <span>🇬🇧</span>
       </div>
     </label>
