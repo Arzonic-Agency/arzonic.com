@@ -8,7 +8,7 @@ import { FaUsers } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
 const NavSettings = () => {
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("setup");
   const { t } = useTranslation();
   return (
     <div className="w-full">
@@ -16,18 +16,6 @@ const NavSettings = () => {
         role="tablist"
         className="tabs sm:tabs-lg w-full md:w-96 text-[15px]"
       >
-        <button
-          role="tab"
-          className={`tab gap-2  ${
-            activeTab === "users"
-              ? "tab-active bg-base-200 rounded-lg shadow-md"
-              : ""
-          }`}
-          onClick={() => setActiveTab("users")}
-        >
-          <FaUsers />
-          {t("user_control")}
-        </button>
         <button
           role="tab"
           className={`tab gap-2  ${
@@ -40,17 +28,29 @@ const NavSettings = () => {
           <FaExternalLinkAlt />
           {t("layout_settings")}
         </button>
+        <button
+          role="tab"
+          className={`tab gap-2  ${
+            activeTab === "users"
+              ? "tab-active bg-base-200 rounded-lg shadow-md"
+              : ""
+          }`}
+          onClick={() => setActiveTab("users")}
+        >
+          <FaUsers />
+          {t("user_control")}
+        </button>
       </div>
 
       <div className="mt-3 md:mt-5">
-        {activeTab === "users" && (
-          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
-            <Users />
-          </div>
-        )}
         {activeTab === "setup" && (
           <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
             <Setup />
+          </div>
+        )}
+        {activeTab === "users" && (
+          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+            <Users />
           </div>
         )}
       </div>

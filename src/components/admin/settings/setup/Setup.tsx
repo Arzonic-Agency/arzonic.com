@@ -1,12 +1,21 @@
 "use client";
 
-import React from "react";
-import SetupUploadImages from "./SetupUploadImages";
+import React, { useState } from "react";
+import SetupPackages from "./packages/SetupPackages";
+import SetupPackagesEdit from "./packages/SetupPackagesEdit";
 
 const Setup = () => {
-  return (
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleEditToggle = () => {
+    setIsEditing((prev) => !prev);
+  };
+
+  return isEditing ? (
+    <SetupPackagesEdit onClose={handleEditToggle} />
+  ) : (
     <div className="flex flex-col gap-5">
-      <SetupUploadImages />
+      <SetupPackages onEdit={handleEditToggle} />
       <hr className="border-1 border-gray-400 rounded-md" />
     </div>
   );

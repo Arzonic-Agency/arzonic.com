@@ -185,7 +185,7 @@ export async function deleteUser(userId: string) {
       );
       throw new Error(
         "Failed to delete user from permissions: " +
-        deletePermissionError.message
+          deletePermissionError.message
       );
     }
 
@@ -251,10 +251,6 @@ export async function updateUser(
   }
 }
 
-// CASES
-
-
-
 // ─────────────────────────────────────────────────────────────────────────────
 // CREATE CASE
 // ─────────────────────────────────────────────────────────────────────────────
@@ -287,7 +283,9 @@ export async function createCase({
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const { translations: [first] } = (await r1.json()) as {
+    const {
+      translations: [first],
+    } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
     const sourceLang = first.detected_source_language.toLowerCase();
@@ -300,8 +298,11 @@ export async function createCase({
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const { translations: [second] } = (await r2.json()) as {
+      if (!r2.ok)
+        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const {
+        translations: [second],
+      } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
@@ -312,11 +313,18 @@ export async function createCase({
       text: country,
       target_lang: "EN",
     });
-    const countryRes = await fetch(endpoint, { method: "POST", body: countryParams });
+    const countryRes = await fetch(endpoint, {
+      method: "POST",
+      body: countryParams,
+    });
     if (!countryRes.ok) {
-      throw new Error(`DeepL country error ${countryRes.status}: ${await countryRes.text()}`);
+      throw new Error(
+        `DeepL country error ${countryRes.status}: ${await countryRes.text()}`
+      );
     }
-    const { translations: [countryFirst] } = (await countryRes.json()) as {
+    const {
+      translations: [countryFirst],
+    } = (await countryRes.json()) as {
       translations: { text: string }[];
     };
     const country_translated = countryFirst.text;
@@ -337,7 +345,9 @@ export async function createCase({
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -390,7 +400,9 @@ export async function updateCase(
     });
     const r1 = await fetch(endpoint, { method: "POST", body: params1 });
     if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const { translations: [first] } = (await r1.json()) as {
+    const {
+      translations: [first],
+    } = (await r1.json()) as {
       translations: { text: string; detected_source_language: string }[];
     };
     const sourceLang = first.detected_source_language.toLowerCase();
@@ -403,8 +415,11 @@ export async function updateCase(
         target_lang: "DA",
       });
       const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const { translations: [second] } = (await r2.json()) as {
+      if (!r2.ok)
+        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+      const {
+        translations: [second],
+      } = (await r2.json()) as {
         translations: { text: string }[];
       };
       desc_translated = second.text;
@@ -415,11 +430,18 @@ export async function updateCase(
       text: country,
       target_lang: "EN",
     });
-    const countryRes = await fetch(endpoint, { method: "POST", body: countryParams });
+    const countryRes = await fetch(endpoint, {
+      method: "POST",
+      body: countryParams,
+    });
     if (!countryRes.ok) {
-      throw new Error(`DeepL country error ${countryRes.status}: ${await countryRes.text()}`);
+      throw new Error(
+        `DeepL country error ${countryRes.status}: ${await countryRes.text()}`
+      );
     }
-    const { translations: [countryFirst] } = (await countryRes.json()) as {
+    const {
+      translations: [countryFirst],
+    } = (await countryRes.json()) as {
       translations: { text: string }[];
     };
     const country_translated = countryFirst.text;
@@ -440,7 +462,9 @@ export async function updateCase(
         await supabase.storage.from("case-images").upload(path, buf, {
           contentType: "image/webp",
         });
-        const { data } = await supabase.storage.from("case-images").getPublicUrl(path);
+        const { data } = await supabase.storage
+          .from("case-images")
+          .getPublicUrl(path);
         return data.publicUrl!;
       };
       imageUrl = await uploadFile(image);
@@ -529,7 +553,9 @@ async function detectAndTranslate(text: string) {
   const p1 = new URLSearchParams({ auth_key: apiKey, text, target_lang: "EN" });
   const r1 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p1 });
   if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-  const { translations: [first] } = await r1.json() as {
+  const {
+    translations: [first],
+  } = (await r1.json()) as {
     translations: { text: string; detected_source_language: string }[];
   };
 
@@ -537,10 +563,16 @@ async function detectAndTranslate(text: string) {
   let translated = first.text;
 
   if (sourceLang === "en") {
-    const p2 = new URLSearchParams({ auth_key: apiKey, text, target_lang: "DA" });
+    const p2 = new URLSearchParams({
+      auth_key: apiKey,
+      text,
+      target_lang: "DA",
+    });
     const r2 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p2 });
     if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-    const { translations: [second] } = await r2.json() as {
+    const {
+      translations: [second],
+    } = (await r2.json()) as {
       translations: { text: string }[];
     };
     translated = second.text;
@@ -826,5 +858,45 @@ export async function deleteRequestNote(noteId: string): Promise<void> {
   } catch (error) {
     console.error("Error in deleteRequestNote:", error);
     throw error;
+  }
+}
+
+export async function getPackages() {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data, error } = await supabase
+      .from("packages")
+      .select("*")
+      .order("price", { ascending: true });
+
+    if (error) {
+      throw new Error(`Failed to fetch packs: ${error.message}`);
+    }
+
+    return { packs: data || [] };
+  } catch (err) {
+    console.error("Unexpected error during fetching packs:", err);
+    throw err;
+  }
+}
+
+export async function getServices() {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data, error } = await supabase
+      .from("services")
+      .select("*")
+      .order("label", { ascending: true });
+
+    if (error) {
+      throw new Error(`Failed to fetch services: ${error.message}`);
+    }
+
+    return { services: data || [] };
+  } catch (err) {
+    console.error("Unexpected error during fetching services:", err);
+    throw err;
   }
 }

@@ -11,7 +11,7 @@ interface ReviewRow {
   desc: string;
   city: string;
   desc_translated: string | null;
-  source_lang: string;        // e.g. "en" or "da"
+  source_lang: string;
   rate: number;
   companyName: string;
   contactPerson: string;
@@ -46,7 +46,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ reviews: transformed, total }, { status: 200 });
   } catch (err: unknown) {
     console.error("API GET /api/reviews error:", err);
-    const message = err instanceof Error ? err.message : "Unknown error occurred";
+    const message =
+      err instanceof Error ? err.message : "Unknown error occurred";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -58,7 +59,8 @@ export async function DELETE(request: Request) {
     return new NextResponse(null, { status: 204 });
   } catch (err: unknown) {
     console.error("API DELETE /api/reviews error:", err);
-    const message = err instanceof Error ? err.message : "Unknown error occurred";
+    const message =
+      err instanceof Error ? err.message : "Unknown error occurred";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
