@@ -157,5 +157,22 @@
   "delete_confirmation": "Bekræft sletning",
   "delete_choosings": "Slet valgte",
   "days_left": "Antal dage tilbage",
-  "time_expired": "Tiden er udløbet"
+  "time_expired": "Tiden er udløbet",
+
+  "PriceEstimator": {
+    "title": "Prisberegner",
+    "loading": "Indlæser tjenester…",
+    "error": "Fejl: {{message}}",
+    "noVAT": "Ingen moms",
+    "choosePack": "Vælg en startpakke:",
+    "packLabel": "€{{price}} – {{label}}",
+    "countryForVAT": "Land for moms:",
+    "addServices": "Tilføj ekstra tjenester:",
+    "serviceLabel": "€{{price}} – {{label}}",
+    "subtotal": "Subtotal",
+    "vat": "Moms ({{name}} - {{rate}}%)",
+    "totalInclVAT": "Total inkl. moms",
+    "getInTouch": "Kontakt os",
+    "disclaimer": "Ansvarsfraskrivelse: Prisen er kun et estimat og kan variere. Endelig pris bekræftes ved konsultation."
+  }
 }

@@ -157,5 +157,22 @@
   "delete_confirmation": "Confirm Deletion",
   "delete_choosings": "Delete choosings",
   "days_left": "Days Left",
-  "time_expired": "Time has expired"
+  "time_expired": "Time has expired",
+
+  "PriceEstimator": {
+    "title": "Price Estimator",
+    "loading": "Loading services…",
+    "error": "Error: {{message}}",
+    "noVAT": "No VAT",
+    "choosePack": "Choose a starter pack:",
+    "packLabel": "€{{price}} – {{label}}",
+    "countryForVAT": "Country for VAT:",
+    "addServices": "Add extra services:",
+    "serviceLabel": "€{{price}} – {{label}}",
+    "subtotal": "Subtotal",
+    "vat": "VAT ({{name}} - {{rate}}%)",
+    "totalInclVAT": "Total incl. VAT",
+    "getInTouch": "Get in Touch",
+    "disclaimer": "Disclaimer: The price shown is only an estimation and may vary. Final pricing will be confirmed upon consultation."
+  }
 }
