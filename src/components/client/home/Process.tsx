@@ -1,15 +1,26 @@
+"use client";
+
 import React from "react";
 import { FaCaretRight } from "react-icons/fa6";
+import { useRive } from "@rive-app/react-canvas";
 
 type ProcessProps = {
   isSticky: boolean;
 };
 
 const Process = ({ isSticky }: ProcessProps) => {
+  const { RiveComponent } = useRive({
+    src: "/rive/design.riv",
+    autoplay: true,
+  });
+
   return (
     <div className={`${isSticky ? "pt-[112px]" : ""}`}>
       <section id="discovery-strategy" className="h-[700px] w-full ">
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+            Discovery & Strategy
+          </h3>
           <h4 className="text-4xl font-extralight">
             Understanding Your Vision
           </h4>
@@ -43,7 +54,10 @@ const Process = ({ isSticky }: ProcessProps) => {
         className="h-[700px] w-full flex justify-center"
       >
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+            Design & Experience
+          </h3>
           <h4 className="text-4xl font-extralight">
             Crafting Engaging Experiences
           </h4>
@@ -71,13 +85,19 @@ const Process = ({ isSticky }: ProcessProps) => {
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[40%]">
-          <div className="w-full h-auto"></div>
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[45%]">
+          <div className="w-full h-full">
+            {" "}
+            <RiveComponent />
+          </div>
         </div>
       </section>
       <section id="development-integration" className="h-[700px] w-full">
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[60%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+            Development & Integration
+          </h3>
           <h4 className="text-4xl font-extralight">
             Building Solid Foundations
           </h4>
@@ -105,10 +125,40 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
       </section>
-      <section
-        id="launch-support"
-        className="h-[700px] w-full flex items-center justify-center"
-      ></section>
+      <section id="launch-support" className="h-[700px] w-full">
+        {" "}
+        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+            Launch & Support
+          </h3>
+          <h4 className="text-4xl font-extralight">
+            Bringing It to Life – and Beyond
+          </h4>
+          <p>
+            Launching is just the beginning. We make sure your website goes live
+            without a hitch – and we stay with you to ensure it continues to
+            perform, evolve, and support your business goals.
+          </p>
+          <ul className="flex flex-col gap-4">
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Smooth and
+              secure go-live process
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" />
+              Continuous support and updates
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Performance
+              tracking and improvements
+            </li>
+            <li className="flex gap-2 items-center">
+              <FaCaretRight className="text-secondary text-xl" /> Scalable
+              solutions for future needs
+            </li>
+          </ul>
+        </div>
+      </section>
     </div>
   );
 };

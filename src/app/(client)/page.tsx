@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <>
       <SplashScreen />
-      <section className="h-[700px]">
+      <section className="h-96 md:h-[700px]">
         <Hero />
       </section>
       <section className="h-[2000px] lg:h-[750px] mb-40">
