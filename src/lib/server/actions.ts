@@ -900,3 +900,24 @@ export async function getServices() {
     throw err;
   }
 }
+
+export async function updatePackage(
+  packageId: string,
+  data: { label?: string; price?: number }
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { error } = await supabase
+      .from("packages")
+      .update(data)
+      .eq("id", packageId);
+
+    if (error) {
+      throw new Error(`Failed to update package: ${error.message}`);
+    }
+  } catch (error) {
+    console.error("Error in updatePackage:", error);
+    throw error;
+  }
+}

@@ -9,14 +9,22 @@ type ProcessProps = {
 };
 
 const Process = ({ isSticky }: ProcessProps) => {
-  const { RiveComponent } = useRive({
+  const { RiveComponent: DesignRive } = useRive({
     src: "/rive/design.riv",
+    autoplay: true,
+  });
+
+  const { RiveComponent: StrategyRive } = useRive({
+    src: "/rive/strategy.riv",
     autoplay: true,
   });
 
   return (
     <div className={`${isSticky ? "pt-[112px]" : ""}`}>
-      <section id="discovery-strategy" className="h-[700px] w-full ">
+      <section
+        id="discovery-strategy"
+        className="h-[700px] w-full flex justify-center"
+      >
         <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
             Discovery & Strategy
@@ -47,6 +55,11 @@ const Process = ({ isSticky }: ProcessProps) => {
               scope and timeline definition
             </li>
           </ul>
+        </div>
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[45%]">
+          <div className="w-full h-full max-h-96">
+            <StrategyRive />
+          </div>
         </div>
       </section>
       <section
@@ -86,9 +99,9 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
         <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[45%]">
-          <div className="w-full h-full">
+          <div className="w-full h-full max-h-[420px]">
             {" "}
-            <RiveComponent />
+            <DesignRive />
           </div>
         </div>
       </section>

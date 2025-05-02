@@ -3,7 +3,7 @@ import React from "react";
 
 const PriceCalculator = () => {
   return (
-    <main className="min-h-screen bg-base-100 py-12">
+    <main className="min-h-screen bg-base-100 py-12 px-4 md:px-7 ">
       <PriceEstimator />
     </main>
   );
