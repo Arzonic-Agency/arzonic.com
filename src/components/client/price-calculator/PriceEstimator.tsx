@@ -20,6 +20,20 @@ const VAT_RATES: Record<string, { name: string; rate: number }> = {
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+// Define types for packs and services
+interface Pack {
+  id: string;
+  price: number;
+  label: string;
+}
+
+interface Service {
+  id: string;
+  price: number;
+  label: string;
+  description: string;
+}
+
 const PriceEstimator = () => {
   const { t } = useTranslation();
   const { RiveComponent } = useRive({
@@ -84,7 +98,7 @@ const PriceEstimator = () => {
               {t("PriceEstimator.choosePack")}
             </span>
             <div className="flex flex-col space-y-2">
-              {packs.map((p: any) => (
+              {packs.map((p: Pack) => (
                 <label key={p.id} className="flex items-center space-x-2">
                   <input
                     type="radio"
@@ -131,7 +145,7 @@ const PriceEstimator = () => {
                   {t("PriceEstimator.addServices")}
                 </span>
                 <div className="flex flex-wrap gap-4">
-                  {services.map((s: any) => (
+                  {services.map((s: Service) => (
                     <label
                       key={s.id}
                       className="tooltip tooltip-primary flex items-center space-x-2"

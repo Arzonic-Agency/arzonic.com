@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { updatePackage } from "@/lib/server/actions";
 
-const SetupPackagesEdit = ({ packageData, onClose, onSave }) => {
+const SetupPackagesEdit = ({ packageData, onSave }) => {
   const [label, setLabel] = useState(packageData.label);
   const [price, setPrice] = useState(packageData.price);
 
   const handleSave = async () => {
     try {
       await updatePackage(packageData.id, { label, price });
-      onSave(); // Callback to refresh the list or handle success
+      onSave();
     } catch (error) {
       console.error("Failed to update package:", error);
     }

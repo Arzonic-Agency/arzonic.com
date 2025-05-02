@@ -17,7 +17,6 @@ const Setup = () => {
   const handleSave = () => {
     setIsEditing(false);
     setSelectedPackage(null);
-    // Optionally refresh the package list or perform other actions
   };
 
   return (
@@ -33,7 +32,6 @@ const Setup = () => {
           </button>
           <SetupPackagesEdit
             packageData={selectedPackage}
-            onClose={() => handleEditToggle(null)}
             onSave={handleSave}
           />
         </div>
