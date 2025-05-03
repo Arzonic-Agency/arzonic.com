@@ -1,3 +1,4 @@
+// arzonic/src/components/client/price-calculator/PriceEstimator.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -70,7 +71,6 @@ export default function PriceEstimator() {
   const [error, setError]                 = useState<string | null>(null);
   const [success, setSuccess]             = useState(false);
 
-  // Reset selections when question changes
   useEffect(() => {
     setCurrentSelections([]);
   }, [step]);
@@ -121,9 +121,10 @@ export default function PriceEstimator() {
       console.log('Created request:', requestId);
 
       setSuccess(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message);
+      const messageError = err instanceof Error ? err.message : String(err);
+      setError(messageError);
     } finally {
       setLoading(false);
     }
