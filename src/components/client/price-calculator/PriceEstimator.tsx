@@ -1,207 +1,233 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import useSWR from "swr";
-import { useTranslation } from "react-i18next";
-import Link from "next/link";
-import { useRive } from "@rive-app/react-canvas";
+'use client';
 
-const VAT_RATES: Record<string, { name: string; rate: number }> = {
-  NONE: { name: "No VAT", rate: 0 },
-  DK: { name: "Denmark", rate: 0.25 },
-  DE: { name: "Germany", rate: 0.19 },
-  FR: { name: "France", rate: 0.2 },
-  ES: { name: "Spain", rate: 0.21 },
-  IT: { name: "Italy", rate: 0.22 },
-  NL: { name: "Netherlands", rate: 0.21 },
-  BE: { name: "Belgium", rate: 0.21 },
-  SE: { name: "Sweden", rate: 0.25 },
-  GB: { name: "United Kingdom", rate: 0.2 },
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { createContactRequest } from '@/lib/server/actions';
+
+type Question = {
+  id: number;
+  text: string;
+  options: string[];
+  type: 'single' | 'multiple';
 };
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const questions: Question[] = [
+  {
+    id: 1,
+    text: 'How many people are in your company?',
+    options: ['Solo / Freelance', '2-5 People', '6-15 People', '15+ People'],
+    type: 'single',
+  },
+  {
+    id: 2,
+    text: 'What should we help with?',
+    options: [
+      'Development of a webapp',
+      'An advanced Dashboard for customers or a team',
+      'An interactive 3D presentation',
+      'A solution that can be modified by you or your team',
+    ],
+    type: 'single',
+  },
+  {
+    id: 3,
+    text: 'What should it be able to do?',
+    options: [
+      'Users with login feature',
+      'Data presentation in a dashboard',
+      'Option for 3D visualization',
+      'Editable content via CMS',
+      'Integration to own systems / API',
+    ],
+    type: 'multiple',
+  },
+  {
+    id: 4,
+    text: 'How far are you in the process?',
+    options: [
+      'Starting from scratch',
+      'We have a solution that needs improvement',
+      'We have an idea and needs to start',
+      'We have everything ready and needs counseling',
+    ],
+    type: 'single',
+  },
+];
 
-// Define types for packs and services
-interface Pack {
-  id: string;
-  price: number;
-  label: string;
-}
+const slideVariants = {
+  enter:  { x: 300, opacity: 0 },
+  center: { x:   0, opacity: 1 },
+  exit:   { x:-300, opacity: 0 },
+};
 
-interface Service {
-  id: string;
-  price: number;
-  label: string;
-  description: string;
-}
+export default function PriceEstimator() {
+  const [step, setStep]                   = useState(0);
+  const [answers, setAnswers]             = useState<string[][]>([]);
+  const [currentSelections, setCurrentSelections] = useState<string[]>([]);
+  const [name, setName]                   = useState('');
+  const [email, setEmail]                 = useState('');
+  const [loading, setLoading]             = useState(false);
+  const [error, setError]                 = useState<string | null>(null);
+  const [success, setSuccess]             = useState(false);
 
-const PriceEstimator = () => {
-  const { t } = useTranslation();
-  const { RiveComponent } = useRive({
-    src: "/rive/design.riv",
-    autoplay: true,
-  });
-
-  const {
-    data: packsData,
-    error: packsError,
-    isLoading: loadingPacks,
-  } = useSWR("/api/packages", fetcher);
-  const {
-    data: servicesData,
-    error: servicesError,
-    isLoading: loadingServices,
-  } = useSWR("/api/services", fetcher);
-
-  const [selectedPackId, setSelectedPackId] = useState<string | null>(null);
-  const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<string>("DK");
-
+  // Reset selections when question changes
   useEffect(() => {
-    const locale = navigator.language;
-    const country = locale.split("-")[1]?.toUpperCase() ?? "DK";
-    if (VAT_RATES[country]) setSelectedCountry(country);
-  }, []);
+    setCurrentSelections([]);
+  }, [step]);
 
-  const toggleService = (id: string) =>
-    setSelectedServiceIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  const toggleOption = (opt: string) => {
+    if (questions[step].type === 'single') {
+      setCurrentSelections([opt]);
+    } else {
+      setCurrentSelections(sel =>
+        sel.includes(opt)
+          ? sel.filter(s => s !== opt)
+          : [...sel, opt]
+      );
+    }
+  };
+
+  const handleNext = () => {
+    setAnswers(prev => [...prev, currentSelections]);
+    setStep(prev => prev + 1);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const messageArray = questions.map(
+      (q, i) => `${q.text}: ${answers[i].join(', ')}`
     );
+    const messageString = messageArray.join('\n');
 
-  if (loadingPacks || loadingServices) return <p>{t("loading")}</p>;
-  if (packsError || servicesError) return <p>{t("error_loading_data")}</p>;
+    try {
+      const res = await fetch('/api/contact', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ name, email, message: messageString }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Error sending contact email.');
+      }
 
-  const packs = packsData?.packs || [];
-  const services = servicesData?.services || [];
+      const { requestId } = await createContactRequest(
+        name,
+        email,
+        messageArray
+      );
+      console.log('Created request:', requestId);
 
-  const chosenPack = packs.find((p) => p.id === selectedPackId);
-  const packPrice = chosenPack?.price ?? 0;
+      setSuccess(true);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const extrasTotal = selectedServiceIds
-    .map((id) => services.find((s) => s.id === id)?.price ?? 0)
-    .reduce((a, b) => a + b, 0);
-
-  const subtotal = packPrice + extrasTotal;
-  const vatInfo = VAT_RATES[selectedCountry] || { name: "No VAT", rate: 0 };
-  const vatAmount = Math.round(subtotal * vatInfo.rate * 100) / 100;
-  const total = Math.round((subtotal + vatAmount) * 100) / 100;
+  if (success) {
+    return (
+      <div className="w-full card bg-base-200 p-6 rounded-2xl shadow-lg text-center">
+        <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
+        <p>We’ve received your request and will get back to you soon.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex items-center justify-evenly">
-      <div className="w-[50%]">
-        <div className="p-6 max-w-md mx-auto bg-base-200 rounded-2xl shadow-lg">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            {t("PriceEstimator.title")}
-          </h2>
-
-          <div className="form-control mb-6">
-            <span className="label-text font-medium block mb-2">
-              {t("PriceEstimator.choosePack")}
-            </span>
-            <div className="flex flex-col space-y-2">
-              {packs.map((p: Pack) => (
-                <label key={p.id} className="flex items-center space-x-2">
+    <div className="w-full">
+      <AnimatePresence initial={false} mode="wait">
+        {step < questions.length ? (
+          <motion.div
+            key={questions[step].id}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4 }}
+            className="card bg-base-200 p-6 rounded-2xl shadow-lg"
+          >
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              {questions[step].text}
+            </h2>
+            <div className="flex flex-col space-y-3 mb-6">
+              {questions[step].options.map(opt => (
+                <label
+                  key={opt}
+                  className="flex items-center space-x-2 cursor-pointer"
+                >
                   <input
-                    type="radio"
-                    name="pack"
-                    className="radio radio-primary"
-                    value={p.id}
-                    checked={selectedPackId === p.id}
-                    onChange={() => setSelectedPackId(p.id)}
+                    type={
+                      questions[step].type === 'single'
+                        ? 'radio'
+                        : 'checkbox'
+                    }
+                    name={`q${questions[step].id}`}
+                    checked={currentSelections.includes(opt)}
+                    onChange={() => toggleOption(opt)}
+                    className={
+                      questions[step].type === 'single'
+                        ? 'radio radio-primary'
+                        : 'checkbox checkbox-primary'
+                    }
                   />
-                  <span className="label-text">
-                    {t("PriceEstimator.packLabel", {
-                      price: p.price,
-                      label: p.label,
-                    })}
-                  </span>
+                  <span>{opt}</span>
                 </label>
               ))}
             </div>
-          </div>
-
-          {selectedPackId && (
-            <>
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text font-medium">
-                    {t("PriceEstimator.countryForVAT")}
-                  </span>
-                </label>
-                <select
-                  className="select select-bordered w-full"
-                  value={selectedCountry}
-                  onChange={(e) => setSelectedCountry(e.target.value)}
-                >
-                  {Object.entries(VAT_RATES).map(([code, info]) => (
-                    <option key={code} value={code}>
-                      {info.name} ({info.rate * 100}%)
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-control mb-6">
-                <span className="label-text font-medium block mb-2">
-                  {t("PriceEstimator.addServices")}
-                </span>
-                <div className="flex flex-wrap gap-4">
-                  {services.map((s: Service) => (
-                    <label
-                      key={s.id}
-                      className="tooltip tooltip-primary flex items-center space-x-2"
-                      data-tip={s.description}
-                    >
-                      <input
-                        type="checkbox"
-                        className="checkbox checkbox-primary"
-                        checked={selectedServiceIds.includes(s.id)}
-                        onChange={() => toggleService(s.id)}
-                      />
-                      <span className="label-text">
-                        {t("PriceEstimator.serviceLabel", {
-                          price: s.price,
-                          label: s.label,
-                        })}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-
-          <div className="divider" />
-          <div className="text-lg mb-1">
-            {t("PriceEstimator.subtotal")}:{" "}
-            <span className="font-semibold">€{subtotal}</span>
-          </div>
-          <div className="text-lg mb-1">
-            {t("PriceEstimator.vat", {
-              name: vatInfo.name,
-              rate: vatInfo.rate * 100,
-            })}
-            : <span className="font-semibold">€{vatAmount}</span>
-          </div>
-          <div className="text-2xl font-bold mb-4">
-            {t("PriceEstimator.totalInclVAT")}: <span>€{total}</span>
-          </div>
-
-          <Link href="/contact" className="btn btn-primary w-full">
-            {t("PriceEstimator.getInTouch")}
-          </Link>
-
-          <p className="text-sm italic text-gray-500 mt-4">
-            {t("PriceEstimator.disclaimer")}
-          </p>
-        </div>
-      </div>
-      <div className=" flex items-center justify-center w-[50%]  lg:block">
-        <div className="h-[500px] w-full">
-          <RiveComponent />
-        </div>
-      </div>
+            <button
+              onClick={handleNext}
+              disabled={currentSelections.length === 0}
+              className="btn btn-primary w-full"
+            >
+              Next
+            </button>
+          </motion.div>
+        ) : (
+          <motion.form
+            key="contact"
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.4 }}
+            onSubmit={handleSubmit}
+            className="card bg-base-200 p-6 rounded-2xl shadow-lg space-y-4"
+          >
+            <h2 className="text-2xl font-bold text-center">Almost done!</h2>
+            {error && <p className="text-red-500 text-center">{error}</p>}
+            <input
+              type="text"
+              placeholder="Your name"
+              required
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="input input-bordered w-full"
+            />
+            <input
+              type="email"
+              placeholder="Your email"
+              required
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="input input-bordered w-full"
+            />
+            <button
+              type="submit"
+              className={`btn btn-primary w-full ${
+                loading ? 'loading' : ''
+              }`}
+              disabled={loading}
+            >
+              Submit
+            </button>
+          </motion.form>
+        )}
+      </AnimatePresence>
     </div>
   );
-};
-
-export default PriceEstimator;
+}

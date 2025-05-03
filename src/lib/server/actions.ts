@@ -746,7 +746,7 @@ export async function updateRequest(
     category?: string;
     mobile?: string;
     mail?: string;
-    massage?: string;
+    message?: string;
     address?: string;
     city?: string;
   }
@@ -920,4 +920,29 @@ export async function updatePackage(
     console.error("Error in updatePackage:", error);
     throw error;
   }
+}
+
+export async function createContactRequest(
+  name: string,
+  email: string,
+  message: string[]
+): Promise<{ requestId: string }> {
+  const supabase = await createServerClientInstance();
+
+  const { data: request, error } = await supabase
+    .from("requests")
+    .insert({
+      name,
+      mail: email,
+      message,
+    })
+    .select("id")
+    .single();
+
+  if (error || !request) {
+    console.error("Failed to create request:", error);
+    throw new Error("Failed to save request: " + error?.message);
+  }
+
+  return { requestId: request.id };
 }
