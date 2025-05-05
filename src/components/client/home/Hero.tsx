@@ -22,8 +22,8 @@ const Hero = () => {
             <div>
               <p className="text-sm sm:text-base ">
                 We specialize in building high-performance websites and
-                immersive 3D experiences using modern, custom-built technology —
-                no templates, no WordPress.
+                immersive 3D experiences using modern, custom-built technology{" "}
+                <span className="font-mono">— no templates, no WordPress.</span>
               </p>
             </div>
             <div className="flex gap-2 items-center text-sm sm:text-lg ">
