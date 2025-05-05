@@ -20,13 +20,10 @@ const Home = () => {
         <div className="background-fade-bottom" />
         <Hero />
       </section>
-      <section className="h-[2000px] lg:h-[700px] z-10 mb-40">
+      <section className="h-[2000px] lg:h-[700px] z-10">
         <Present />
       </section>
-      <section className="h-[1000px]">
-        <Preview />
-      </section>
-      <section className="h-[2000px] lg:h-[750px]">
+      <section className="h-[2000px] lg:h-[750px] mb-40">
         <Prices />
       </section>
       <section className="h-full">
@@ -34,6 +31,9 @@ const Home = () => {
       </section>
       <section id="Process" className="h-[2800px]">
         <Process isSticky={isSticky} />
+      </section>
+      <section className="h-[1000px]">
+        <Preview />
       </section>
     </>
   );

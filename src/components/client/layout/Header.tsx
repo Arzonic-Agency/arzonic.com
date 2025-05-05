@@ -68,9 +68,6 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Theme />
-          </li>
-          <li>
             <Language />
           </li>
         </ul>

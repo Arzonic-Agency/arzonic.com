@@ -26,7 +26,7 @@ const Hero = () => {
                 <span className="font-mono">— no templates, no WordPress.</span>
               </p>
             </div>
-            <div className="flex gap-2 items-center text-sm sm:text-lg ">
+            <div className="flex gap-3 items-center text-sm sm:text-lg lg:text-xl  font-semibold tracking-wide">
               <span>Custom Websites</span>
               &#10140;
               <span>3D Design</span>
