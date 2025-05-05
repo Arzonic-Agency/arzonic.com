@@ -19,12 +19,7 @@ const questions: Question[] = [
   {
     id: 1,
     text: "How many people are in your company?",
-    options: [
-      "Solo / Freelance",
-      "2-5 People",
-      "6-15 People",
-      "15+ People",
-    ],
+    options: ["Solo / Freelance", "2-5 People", "6-15 People", "15+ People"],
     type: "single",
   },
   {
@@ -98,15 +93,13 @@ export default function PriceEstimator() {
 
   useEffect(() => {
     if (step >= 0 && step < slides) {
-      setGroupSel(
-        Array.from({ length: currentQs.length }, () => [])
-      );
+      setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
   }, [step, currentQs.length]);
 
   const toggleOption = (idx: number, option: string) => {
-    setGroupSel(prev => {
-      const next = prev.map(arr => [...arr]);
+    setGroupSel((prev) => {
+      const next = prev.map((arr) => [...arr]);
       const qType = currentQs[idx].type;
 
       if (qType === "single") {
@@ -114,7 +107,7 @@ export default function PriceEstimator() {
       } else {
         const selections = next[idx];
         next[idx] = selections.includes(option)
-          ? selections.filter(s => s !== option)
+          ? selections.filter((s) => s !== option)
           : [...selections, option];
       }
 
@@ -123,9 +116,9 @@ export default function PriceEstimator() {
   };
 
   const goNext = () => {
-    setAnswers(prev => [...prev, ...groupSel]);
+    setAnswers((prev) => [...prev, ...groupSel]);
     setDirection(1);
-    setStep(prev => prev + 1);
+    setStep((prev) => prev + 1);
   };
 
   const goBack = () => {
@@ -135,8 +128,8 @@ export default function PriceEstimator() {
       setAnswers([]);
     } else if (step > 0) {
       setDirection(-1);
-      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
-      setStep(prev => prev - 1);
+      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
+      setStep((prev) => prev - 1);
     }
   };
 
@@ -174,7 +167,6 @@ export default function PriceEstimator() {
   return (
     <div className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
-
         {/* Intro Screen */}
         {step === -1 && !success && (
           <motion.div
@@ -188,7 +180,10 @@ export default function PriceEstimator() {
             className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center"
           >
             <h2 className="text-2xl font-bold">Welcome to Our Estimator</h2>
-            <p>Answer a few questions to get a custom estimate. It only takes a minute!</p>
+            <p>
+              Answer a few questions to get a custom estimate. It only takes a
+              minute!
+            </p>
             <button onClick={goNext} className="btn btn-primary w-full">
               Begin
             </button>
@@ -211,7 +206,7 @@ export default function PriceEstimator() {
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map(option => (
+                  {q.options.map((option) => (
                     <label
                       key={option}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -221,7 +216,9 @@ export default function PriceEstimator() {
                         checked={groupSel[idx]?.includes(option) ?? false}
                         onChange={() => toggleOption(idx, option)}
                         className={`${
-                          q.type === "single" ? "radio radio-primary" : "checkbox checkbox-primary"
+                          q.type === "single"
+                            ? "radio radio-primary"
+                            : "checkbox checkbox-primary"
                         }`}
                       />
                       <span>{option}</span>
@@ -232,12 +229,12 @@ export default function PriceEstimator() {
             ))}
 
             <div className="flex gap-3">
-              <button onClick={goBack} className="btn btn-outline">
-                <FaAngleLeft />
+              <button onClick={goBack} className="btn">
+                <FaAngleLeft size={20} />
               </button>
               <button
                 onClick={goNext}
-                disabled={!groupSel.every(sel => sel.length > 0)}
+                disabled={!groupSel.every((sel) => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -266,7 +263,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -274,11 +271,15 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
             <div className="flex gap-3">
-              <button onClick={goBack} type="button" className="btn btn-outline">
+              <button
+                onClick={goBack}
+                type="button"
+                className="btn btn-outline"
+              >
                 <FaAngleLeft />
               </button>
               <button

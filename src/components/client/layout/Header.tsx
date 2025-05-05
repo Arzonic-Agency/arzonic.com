@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 import { FaBars, FaFacebook, FaInstagram, FaXmark } from "react-icons/fa6";
-import Theme from "./Theme";
 import Image from "next/image";
 import Language from "./Language";
 
