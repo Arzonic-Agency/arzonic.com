@@ -59,12 +59,7 @@ const Header = () => {
             <Link href="/cases">Cases</Link>
           </li>
           <li>
-            <Link
-              href="/contact"
-              className="btn btn-outline text-base-content hover:btn-secondary"
-            >
-              Contact
-            </Link>
+            <Link href="/contact">Contact</Link>
           </li>
           <li>
             <Language />

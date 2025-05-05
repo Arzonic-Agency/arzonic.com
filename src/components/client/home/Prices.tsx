@@ -46,7 +46,7 @@ const Prices = () => {
             <span className="text-3xl font-semibold tracking-wide">€950</span>
           </div>
         </div>
-        <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-10  border-secondary border-b-5 shadow-zinc-800">
+        <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-10  border-primary border-b-5 shadow-zinc-800">
           <div className="flex flex-col gap-5">
             <h3 className="text-2xl font-bold">Web Application</h3>
             <p className="text-sm">
@@ -138,7 +138,7 @@ const Prices = () => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
-        <h3 className="text-lg">Get your custom quote in seconds</h3>
+        <h3 className="text-lg">Get your custom quote in few seconds</h3>
         <Link href="/price-calculator" className="btn btn-primary">
           Get a Quote
         </Link>

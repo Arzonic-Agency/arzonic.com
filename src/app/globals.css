@@ -86,7 +86,7 @@
 }
 
 .progress-bar-container {
-  @apply bg-transparent h-[6px] mt-2 rounded-full overflow-hidden;
+  @apply bg-transparent h-[6px] mt-2 rounded-full;
 }
 
 .progress-bar-fill {

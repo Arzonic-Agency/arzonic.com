@@ -34,7 +34,7 @@ const Hero = () => {
               <span>Web Applications</span>
             </div>
             <div className="mt-5">
-              <button className="btn btn-outline text-base-content">
+              <button className="btn btn-primary btn-outline text-base-content">
                 See More
               </button>
             </div>

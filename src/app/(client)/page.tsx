@@ -20,10 +20,10 @@ const Home = () => {
         <div className="background-fade-bottom" />
         <Hero />
       </section>
-      <section className="h-[2000px] lg:h-[700px] z-10">
+      <section className="h-[2000px] lg:h-[800px]">
         <Present />
       </section>
-      <section className="h-[2000px] lg:h-[750px] mb-40">
+      <section className="h-[2000px] lg:h-[800px] mb-40">
         <Prices />
       </section>
       <section className="h-full">
