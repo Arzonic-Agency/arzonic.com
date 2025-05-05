@@ -19,7 +19,12 @@ const questions: Question[] = [
   {
     id: 1,
     text: "How many people are in your company?",
-    options: ["Solo / Freelance", "2-5 People", "6-15 People", "15+ People"],
+    options: [
+      "Solo / Freelance",
+      "2-5 People",
+      "6-15 People",
+      "15+ People",
+    ],
     type: "single",
   },
   {
@@ -51,90 +56,88 @@ const questions: Question[] = [
     options: [
       "Starting from scratch",
       "We have a solution that needs improvement",
-      "We have an idea and needs to start",
-      "We have everything ready and needs counseling",
+      "We have an idea and need to start",
+      "We have everything ready and need counseling",
     ],
     type: "single",
   },
 ];
 
 const slideVariants = {
-  enter:  { x: 300, opacity: 0 },
-  center: { x:   0, opacity: 1 },
-  exit:   { x: -300, opacity: 0 },
+  enter: (direction: number) => ({
+    x: direction > 0 ? 300 : -300,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    x: direction > 0 ? -300 : 300,
+    opacity: 0,
+  }),
 };
 
 export default function PriceEstimator() {
-  const [started, setStarted] = useState(false);
-  const [step, setStep] = useState(0);
-  const totalSteps = Math.ceil(questions.length / QUESTIONS_PER_SLIDE);
+  const slides = Math.ceil(questions.length / QUESTIONS_PER_SLIDE);
+  const [step, setStep] = useState<number>(-1);
+  const [direction, setDirection] = useState<number>(0);
+  const [answers, setAnswers] = useState<string[][]>([]);
+  const [groupSel, setGroupSel] = useState<string[][]>([]);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const startIdx = step * QUESTIONS_PER_SLIDE;
-  const groupQuestions = questions.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE);
-
-  const [answers, setAnswers] = useState<string[][]>([]);
-  const [currentGroup, setCurrentGroup] = useState<string[][]>(
-    () => Array.from({ length: groupQuestions.length }, () => [])
-  );
-
-  const [name, setName]     = useState("");
-  const [email, setEmail]   = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const currentQs =
+    step >= 0 && step < slides
+      ? questions.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
+      : [];
 
   useEffect(() => {
-    setCurrentGroup(Array.from({ length: groupQuestions.length }, () => []));
-  }, [step, groupQuestions.length]);
+    if (step >= 0 && step < slides) {
+      setGroupSel(
+        Array.from({ length: currentQs.length }, () => [])
+      );
+    }
+  }, [step, currentQs.length]);
 
-  if (!started && !success) {
-    return (
-      <div className="w-full card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center">
-        <h2 className="text-2xl font-bold">Welcome to Our Estimator</h2>
-        <p>Answer a few questions to get a custom estimate. It only takes a minute!</p>
-        <button
-          onClick={() => setStarted(true)}
-          className="btn btn-primary w-full"
-        >
-          Begin
-        </button>
-      </div>
-    );
-  }
-
-  if (success) {
-    return (
-      <div className="w-full card bg-base-200 p-6 rounded-2xl shadow-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
-        <p>We’ve received your request and will get back to you soon.</p>
-      </div>
-    );
-  }
-
-  const toggleOption = (idx: number, opt: string) => {
-    setCurrentGroup(prev => {
+  const toggleOption = (idx: number, option: string) => {
+    setGroupSel(prev => {
       const next = prev.map(arr => [...arr]);
-      const { type } = groupQuestions[idx];
-      if (type === "single") {
-        next[idx] = [opt];
+      const qType = currentQs[idx].type;
+
+      if (qType === "single") {
+        next[idx] = [option];
       } else {
-        const sel = next[idx];
-        next[idx] = sel.includes(opt)
-          ? sel.filter(s => s !== opt)
-          : [...sel, opt];
+        const selections = next[idx];
+        next[idx] = selections.includes(option)
+          ? selections.filter(s => s !== option)
+          : [...selections, option];
       }
+
       return next;
     });
   };
 
-  const handleNext = () => {
-    setAnswers(prev => [...prev, ...currentGroup]);
+  const goNext = () => {
+    setAnswers(prev => [...prev, ...groupSel]);
+    setDirection(1);
     setStep(prev => prev + 1);
   };
 
-  const handleBack = () => {
-    setAnswers(prev => prev.slice(0, prev.length - groupQuestions.length));
-    setStep(prev => prev - 1);
+  const goBack = () => {
+    if (step === 0) {
+      setDirection(-1);
+      setStep(-1);
+      setAnswers([]);
+    } else if (step > 0) {
+      setDirection(-1);
+      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
+      setStep(prev => prev - 1);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -145,28 +148,23 @@ export default function PriceEstimator() {
     const messageArray = questions.map(
       (q, i) => `${q.text}: ${answers[i].join(", ")}`
     );
-    const messageString = messageArray.join("\n");
+    const messageText = messageArray.join("\n");
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message: messageString }),
+        body: JSON.stringify({ name, email, message: messageText }),
       });
+
       const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.error || "Error sending contact email.");
+      if (!res.ok) throw new Error(data.error || "Error sending email");
 
-      const { requestId } = await createContactRequest(
-        name,
-        email,
-        messageArray
-      );
-      console.log("Created request:", requestId);
+      await createContactRequest(name, email, messageArray);
 
+      setDirection(1);
       setSuccess(true);
     } catch (err: unknown) {
-      console.error(err);
       setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
@@ -175,38 +173,58 @@ export default function PriceEstimator() {
 
   return (
     <div className="w-full">
-      <AnimatePresence initial={false} mode="wait">
-        {step < totalSteps ? (
+      <AnimatePresence initial={false} custom={direction} mode="wait">
+
+        {/* Intro Screen */}
+        {step === -1 && !success && (
           <motion.div
-            key={step}
+            key="intro"
             variants={slideVariants}
             initial="enter"
             animate="center"
             exit="exit"
+            custom={direction}
+            transition={{ duration: 0.4 }}
+            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center"
+          >
+            <h2 className="text-2xl font-bold">Welcome to Our Estimator</h2>
+            <p>Answer a few questions to get a custom estimate. It only takes a minute!</p>
+            <button onClick={goNext} className="btn btn-primary w-full">
+              Begin
+            </button>
+          </motion.div>
+        )}
+
+        {/* Question Slides */}
+        {step >= 0 && step < slides && (
+          <motion.div
+            key={`slide-${step}`}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            custom={direction}
             transition={{ duration: 0.4 }}
             className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-7"
           >
-            {groupQuestions.map((q, idx) => (
+            {currentQs.map((q, idx) => (
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map(opt => (
+                  {q.options.map(option => (
                     <label
-                      key={opt}
+                      key={option}
                       className="flex items-center space-x-2 cursor-pointer"
                     >
                       <input
                         type={q.type === "single" ? "radio" : "checkbox"}
-                        name={`q${q.id}`}
-                        checked={currentGroup[idx].includes(opt)}
-                        onChange={() => toggleOption(idx, opt)}
-                        className={
-                          q.type === "single"
-                            ? "radio radio-primary"
-                            : "checkbox checkbox-primary"
-                        }
+                        checked={groupSel[idx]?.includes(option) ?? false}
+                        onChange={() => toggleOption(idx, option)}
+                        className={`${
+                          q.type === "single" ? "radio radio-primary" : "checkbox checkbox-primary"
+                        }`}
                       />
-                      <span>{opt}</span>
+                      <span>{option}</span>
                     </label>
                   ))}
                 </div>
@@ -214,29 +232,29 @@ export default function PriceEstimator() {
             ))}
 
             <div className="flex gap-3">
-              <button
-                onClick={handleBack}
-                disabled={step === 0}
-                className="btn btn-outline"
-              >
+              <button onClick={goBack} className="btn btn-outline">
                 <FaAngleLeft />
               </button>
               <button
-                onClick={handleNext}
-                disabled={currentGroup.some(sel => sel.length === 0)}
+                onClick={goNext}
+                disabled={!groupSel.every(sel => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
               </button>
             </div>
           </motion.div>
-        ) : (
+        )}
+
+        {/* Final Contact Form */}
+        {step === slides && !success && (
           <motion.form
-            key="contact"
+            key="form"
             variants={slideVariants}
             initial="enter"
             animate="center"
             exit="exit"
+            custom={direction}
             transition={{ duration: 0.4 }}
             onSubmit={handleSubmit}
             className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-3"
@@ -259,16 +277,36 @@ export default function PriceEstimator() {
               onChange={e => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
-            <button
-              type="submit"
-              className={`btn btn-primary w-full ${
-                loading ? "loading" : ""
-              }`}
-              disabled={loading}
-            >
-              Submit
-            </button>
+            <div className="flex gap-3">
+              <button onClick={goBack} type="button" className="btn btn-outline">
+                <FaAngleLeft />
+              </button>
+              <button
+                type="submit"
+                className={`btn btn-primary flex-1 ${loading ? "loading" : ""}`}
+                disabled={loading}
+              >
+                Submit
+              </button>
+            </div>
           </motion.form>
+        )}
+
+        {/* Thank You */}
+        {success && (
+          <motion.div
+            key="thanks"
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            custom={direction}
+            transition={{ duration: 0.4 }}
+            className="card bg-base-200 p-6 rounded-2xl shadow-lg text-center"
+          >
+            <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
+            <p>We’ve received your request and will get back to you soon.</p>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
