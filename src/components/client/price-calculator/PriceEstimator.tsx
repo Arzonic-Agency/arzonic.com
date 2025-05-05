@@ -1,5 +1,5 @@
 // arzonic/src/components/client/price-calculator/PriceEstimator.tsx
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,6 +11,8 @@ type Question = {
   options: string[];
   type: "single" | "multiple";
 };
+
+const QUESTIONS_PER_SLIDE = 2;
 
 const questions: Question[] = [
   {
@@ -56,38 +58,57 @@ const questions: Question[] = [
 ];
 
 const slideVariants = {
-  enter: { x: 300, opacity: 0 },
-  center: { x: 0, opacity: 1 },
-  exit: { x: -300, opacity: 0 },
+  enter:  { x: 300, opacity: 0 },
+  center: { x:   0, opacity: 1 },
+  exit:   { x: -300, opacity: 0 },
 };
 
 export default function PriceEstimator() {
   const [step, setStep] = useState(0);
+  const totalSteps = Math.ceil(questions.length / QUESTIONS_PER_SLIDE);
+
+  const startIdx = step * QUESTIONS_PER_SLIDE;
+  const groupQuestions = questions.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE);
+
   const [answers, setAnswers] = useState<string[][]>([]);
-  const [currentSelections, setCurrentSelections] = useState<string[]>([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [currentGroup, setCurrentGroup] = useState<string[][]>(
+    () => Array.from({ length: groupQuestions.length }, () => [])
+  );
+
+  const [name, setName]     = useState("");
+  const [email, setEmail]   = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    setCurrentSelections([]);
-  }, [step]);
+    setCurrentGroup(Array.from({ length: groupQuestions.length }, () => []));
+  }, [step, groupQuestions.length]);
 
-  const toggleOption = (opt: string) => {
-    if (questions[step].type === "single") {
-      setCurrentSelections([opt]);
-    } else {
-      setCurrentSelections((sel) =>
-        sel.includes(opt) ? sel.filter((s) => s !== opt) : [...sel, opt]
-      );
-    }
+  const toggleOption = (idx: number, opt: string) => {
+    setCurrentGroup(prev => {
+      const next = prev.map(arr => [...arr]);
+      const { type } = groupQuestions[idx];
+      if (type === "single") {
+        next[idx] = [opt];
+      } else {
+        const sel = next[idx];
+        next[idx] = sel.includes(opt)
+          ? sel.filter(s => s !== opt)
+          : [...sel, opt];
+      }
+      return next;
+    });
   };
 
   const handleNext = () => {
-    setAnswers((prev) => [...prev, currentSelections]);
-    setStep((prev) => prev + 1);
+    setAnswers(prev => [...prev, ...currentGroup]);
+    setStep(prev => prev + 1);
+  };
+
+  const handleBack = () => {
+    setAnswers(prev => prev.slice(0, prev.length - groupQuestions.length));
+    setStep(prev => prev - 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -107,22 +128,15 @@ export default function PriceEstimator() {
         body: JSON.stringify({ name, email, message: messageString }),
       });
       const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Error sending contact email.");
-      }
+      if (!res.ok) throw new Error(data.error || "Error sending contact email.");
 
-      const { requestId } = await createContactRequest(
-        name,
-        email,
-        messageArray
-      );
+      const { requestId } = await createContactRequest(name, email, messageArray);
       console.log("Created request:", requestId);
 
       setSuccess(true);
     } catch (err: unknown) {
       console.error(err);
-      const messageError = err instanceof Error ? err.message : String(err);
-      setError(messageError);
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -140,9 +154,9 @@ export default function PriceEstimator() {
   return (
     <div className="w-full">
       <AnimatePresence initial={false} mode="wait">
-        {step < questions.length ? (
+        {step < totalSteps ? (
           <motion.div
-            key={questions[step].id}
+            key={step}
             variants={slideVariants}
             initial="enter"
             animate="center"
@@ -150,39 +164,51 @@ export default function PriceEstimator() {
             transition={{ duration: 0.4 }}
             className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-7"
           >
-            <h2 className="text-lg md:text-2xl font-bold text-center">
-              {questions[step].text}
-            </h2>
-            <div className="flex flex-col space-y-3 mb-6">
-              {questions[step].options.map((opt) => (
-                <label
-                  key={opt}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <input
-                    type={
-                      questions[step].type === "single" ? "radio" : "checkbox"
-                    }
-                    name={`q${questions[step].id}`}
-                    checked={currentSelections.includes(opt)}
-                    onChange={() => toggleOption(opt)}
-                    className={
-                      questions[step].type === "single"
-                        ? "radio radio-primary"
-                        : "checkbox checkbox-primary"
-                    }
-                  />
-                  <span>{opt}</span>
-                </label>
-              ))}
+            {groupQuestions.map((q, idx) => (
+              <div key={q.id} className="flex flex-col gap-3">
+                <h2 className="text-lg md:text-2xl font-bold text-center">
+                  {q.text}
+                </h2>
+                <div className="flex flex-col space-y-3">
+                  {q.options.map(opt => (
+                    <label
+                      key={opt}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
+                      <input
+                        type={q.type === "single" ? "radio" : "checkbox"}
+                        name={`q${q.id}`}
+                        checked={currentGroup[idx].includes(opt)}
+                        onChange={() => toggleOption(idx, opt)}
+                        className={
+                          q.type === "single"
+                            ? "radio radio-primary"
+                            : "checkbox checkbox-primary"
+                        }
+                      />
+                      <span>{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="flex space-x-2">
+              <button
+                onClick={handleBack}
+                disabled={step === 0}
+                className="btn btn-outline"
+              >
+                Back
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={currentGroup.some(sel => sel.length === 0)}
+                className="btn btn-primary flex-1"
+              >
+                Next
+              </button>
             </div>
-            <button
-              onClick={handleNext}
-              disabled={currentSelections.length === 0}
-              className="btn btn-primary w-full"
-            >
-              Next
-            </button>
           </motion.div>
         ) : (
           <motion.form
@@ -202,7 +228,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -210,18 +236,16 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
-            <div>
-              <button
-                type="submit"
-                className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
-                disabled={loading}
-              >
-                Submit
-              </button>
-            </div>
+            <button
+              type="submit"
+              className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
+              disabled={loading}
+            >
+              Submit
+            </button>
           </motion.form>
         )}
       </AnimatePresence>
