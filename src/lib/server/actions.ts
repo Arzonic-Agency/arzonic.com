@@ -946,3 +946,30 @@ export async function createContactRequest(
 
   return { requestId: request.id };
 }
+
+export type EstimatorQuestion = {
+  id:      number;
+  text:    string;
+  options: string[];
+  type:    "single" | "multiple";
+};
+
+export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
+  const supabase = await createServerClientInstance();
+  const { data, error } = await supabase
+    .from("questions")
+    .select("id, text, type, options(text)")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("Failed to fetch estimator questions:", error.message);
+    throw new Error("Failed to fetch questions: " + error.message);
+  }
+
+  return data.map((q: any) => ({
+    id:      q.id,
+    text:    q.text,
+    type:    q.type as "single" | "multiple",
+    options: (q.options || []).map((o: any) => o.text),
+  }));
+}

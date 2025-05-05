@@ -3,15 +3,12 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createContactRequest } from "@/lib/server/actions";
+import {
+  getEstimatorQuestions,
+  EstimatorQuestion,
+  createContactRequest,
+} from "@/lib/server/actions";
 import { FaAngleLeft } from "react-icons/fa6";
-
-type Question = {
-  id: number;
-  text: string;
-  options: string[];
-  type: "single" | "multiple";
-};
 
 const QUESTIONS_PER_SLIDE = 2;
 
@@ -59,26 +56,30 @@ const questions: Question[] = [
 ];
 
 const slideVariants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
-    opacity: 0,
-  }),
-  center: {
-    x: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => ({
-    x: direction > 0 ? -300 : 300,
-    opacity: 0,
-  }),
+  enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
 };
 
 export default function PriceEstimator() {
-  const slides = Math.ceil(questions.length / QUESTIONS_PER_SLIDE);
+  const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const qs = await getEstimatorQuestions();
+        setQuestionsState(qs);
+      } catch (err) {
+        console.error("Error loading questions:", err);
+      }
+    })();
+  }, []);
+
+  const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
   const [step, setStep] = useState<number>(-1);
   const [direction, setDirection] = useState<number>(0);
-  const [answers, setAnswers] = useState<string[][]>([]);
   const [groupSel, setGroupSel] = useState<string[][]>([]);
+  const [answers, setAnswers] = useState<string[][]>([]);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -88,7 +89,7 @@ export default function PriceEstimator() {
   const startIdx = step * QUESTIONS_PER_SLIDE;
   const currentQs =
     step >= 0 && step < slides
-      ? questions.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
+      ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
   useEffect(() => {
@@ -110,7 +111,6 @@ export default function PriceEstimator() {
           ? selections.filter((s) => s !== option)
           : [...selections, option];
       }
-
       return next;
     });
   };
@@ -120,7 +120,6 @@ export default function PriceEstimator() {
     setDirection(1);
     setStep((prev) => prev + 1);
   };
-
   const goBack = () => {
     if (step === 0) {
       setDirection(-1);
@@ -138,23 +137,19 @@ export default function PriceEstimator() {
     setLoading(true);
     setError(null);
 
-    const messageArray = questions.map(
+    const msgArr = questionsState.map(
       (q, i) => `${q.text}: ${answers[i].join(", ")}`
     );
-    const messageText = messageArray.join("\n");
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message: messageText }),
+        body: JSON.stringify({ name, email, message: msgArr.join("\n") }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error sending email");
 
-      await createContactRequest(name, email, messageArray);
-
+      await createContactRequest(name, email, msgArr);
       setDirection(1);
       setSuccess(true);
     } catch (err: unknown) {
@@ -189,8 +184,7 @@ export default function PriceEstimator() {
             </button>
           </motion.div>
         )}
-
-        {/* Question Slides */}
+        {/* Slides */}
         {step >= 0 && step < slides && (
           <motion.div
             key={`slide-${step}`}
@@ -221,13 +215,12 @@ export default function PriceEstimator() {
                             : "checkbox checkbox-primary"
                         }`}
                       />
-                      <span>{option}</span>
+                      <span>{opt}</span>
                     </label>
                   ))}
                 </div>
               </div>
             ))}
-
             <div className="flex gap-3">
               <button onClick={goBack} className="btn">
                 <FaAngleLeft size={20} />
@@ -242,8 +235,7 @@ export default function PriceEstimator() {
             </div>
           </motion.div>
         )}
-
-        {/* Final Contact Form */}
+        {/* Form */}
         {step === slides && !success && (
           <motion.form
             key="form"
@@ -292,7 +284,6 @@ export default function PriceEstimator() {
             </div>
           </motion.form>
         )}
-
         {/* Thank You */}
         {success && (
           <motion.div
