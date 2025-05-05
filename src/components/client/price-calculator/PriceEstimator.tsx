@@ -59,46 +59,68 @@ const questions: Question[] = [
 ];
 
 const slideVariants = {
-  enter: { x: 300, opacity: 0 },
-  center: { x: 0, opacity: 1 },
-  exit: { x: -300, opacity: 0 },
+  enter:  { x: 300, opacity: 0 },
+  center: { x:   0, opacity: 1 },
+  exit:   { x: -300, opacity: 0 },
 };
 
 export default function PriceEstimator() {
+  const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const totalSteps = Math.ceil(questions.length / QUESTIONS_PER_SLIDE);
 
   const startIdx = step * QUESTIONS_PER_SLIDE;
-  const groupQuestions = questions.slice(
-    startIdx,
-    startIdx + QUESTIONS_PER_SLIDE
-  );
+  const groupQuestions = questions.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE);
 
   const [answers, setAnswers] = useState<string[][]>([]);
-  const [currentGroup, setCurrentGroup] = useState<string[][]>(() =>
-    Array.from({ length: groupQuestions.length }, () => [])
+  const [currentGroup, setCurrentGroup] = useState<string[][]>(
+    () => Array.from({ length: groupQuestions.length }, () => [])
   );
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName]     = useState("");
+  const [email, setEmail]   = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]     = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setCurrentGroup(Array.from({ length: groupQuestions.length }, () => []));
   }, [step, groupQuestions.length]);
 
+  if (!started && !success) {
+    return (
+      <div className="w-full card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center">
+        <h2 className="text-2xl font-bold">Welcome to Our Estimator</h2>
+        <p>Answer a few questions to get a custom estimate. It only takes a minute!</p>
+        <button
+          onClick={() => setStarted(true)}
+          className="btn btn-primary w-full"
+        >
+          Begin
+        </button>
+      </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <div className="w-full card bg-base-200 p-6 rounded-2xl shadow-lg text-center">
+        <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
+        <p>We’ve received your request and will get back to you soon.</p>
+      </div>
+    );
+  }
+
   const toggleOption = (idx: number, opt: string) => {
-    setCurrentGroup((prev) => {
-      const next = prev.map((arr) => [...arr]);
+    setCurrentGroup(prev => {
+      const next = prev.map(arr => [...arr]);
       const { type } = groupQuestions[idx];
       if (type === "single") {
         next[idx] = [opt];
       } else {
         const sel = next[idx];
         next[idx] = sel.includes(opt)
-          ? sel.filter((s) => s !== opt)
+          ? sel.filter(s => s !== opt)
           : [...sel, opt];
       }
       return next;
@@ -106,13 +128,13 @@ export default function PriceEstimator() {
   };
 
   const handleNext = () => {
-    setAnswers((prev) => [...prev, ...currentGroup]);
-    setStep((prev) => prev + 1);
+    setAnswers(prev => [...prev, ...currentGroup]);
+    setStep(prev => prev + 1);
   };
 
   const handleBack = () => {
-    setAnswers((prev) => prev.slice(0, prev.length - groupQuestions.length));
-    setStep((prev) => prev - 1);
+    setAnswers(prev => prev.slice(0, prev.length - groupQuestions.length));
+    setStep(prev => prev - 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -151,15 +173,6 @@ export default function PriceEstimator() {
     }
   };
 
-  if (success) {
-    return (
-      <div className="w-full card bg-base-200 p-6 rounded-2xl shadow-lg text-center">
-        <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
-        <p>We’ve received your request and will get back to you soon.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full">
       <AnimatePresence initial={false} mode="wait">
@@ -177,7 +190,7 @@ export default function PriceEstimator() {
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map((opt) => (
+                  {q.options.map(opt => (
                     <label
                       key={opt}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -210,7 +223,7 @@ export default function PriceEstimator() {
               </button>
               <button
                 onClick={handleNext}
-                disabled={currentGroup.some((sel) => sel.length === 0)}
+                disabled={currentGroup.some(sel => sel.length === 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -235,7 +248,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -243,12 +256,14 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
             <button
               type="submit"
-              className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
+              className={`btn btn-primary w-full ${
+                loading ? "loading" : ""
+              }`}
               disabled={loading}
             >
               Submit
