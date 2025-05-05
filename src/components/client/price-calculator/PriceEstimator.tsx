@@ -1,95 +1,93 @@
 // arzonic/src/components/client/price-calculator/PriceEstimator.tsx
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { createContactRequest } from '@/lib/server/actions';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { createContactRequest } from "@/lib/server/actions";
 
 type Question = {
   id: number;
   text: string;
   options: string[];
-  type: 'single' | 'multiple';
+  type: "single" | "multiple";
 };
 
 const questions: Question[] = [
   {
     id: 1,
-    text: 'How many people are in your company?',
-    options: ['Solo / Freelance', '2-5 People', '6-15 People', '15+ People'],
-    type: 'single',
+    text: "How many people are in your company?",
+    options: ["Solo / Freelance", "2-5 People", "6-15 People", "15+ People"],
+    type: "single",
   },
   {
     id: 2,
-    text: 'What should we help with?',
+    text: "What should we help with?",
     options: [
-      'Development of a webapp',
-      'An advanced Dashboard for customers or a team',
-      'An interactive 3D presentation',
-      'A solution that can be modified by you or your team',
+      "Development of a webapp",
+      "An advanced Dashboard for customers or a team",
+      "An interactive 3D presentation",
+      "A solution that can be modified by you or your team",
     ],
-    type: 'single',
+    type: "single",
   },
   {
     id: 3,
-    text: 'What should it be able to do?',
+    text: "What should it be able to do?",
     options: [
-      'Users with login feature',
-      'Data presentation in a dashboard',
-      'Option for 3D visualization',
-      'Editable content via CMS',
-      'Integration to own systems / API',
+      "Users with login feature",
+      "Data presentation in a dashboard",
+      "Option for 3D visualization",
+      "Editable content via CMS",
+      "Integration to own systems / API",
     ],
-    type: 'multiple',
+    type: "multiple",
   },
   {
     id: 4,
-    text: 'How far are you in the process?',
+    text: "How far are you in the process?",
     options: [
-      'Starting from scratch',
-      'We have a solution that needs improvement',
-      'We have an idea and needs to start',
-      'We have everything ready and needs counseling',
+      "Starting from scratch",
+      "We have a solution that needs improvement",
+      "We have an idea and needs to start",
+      "We have everything ready and needs counseling",
     ],
-    type: 'single',
+    type: "single",
   },
 ];
 
 const slideVariants = {
-  enter:  { x: 300, opacity: 0 },
-  center: { x:   0, opacity: 1 },
-  exit:   { x:-300, opacity: 0 },
+  enter: { x: 300, opacity: 0 },
+  center: { x: 0, opacity: 1 },
+  exit: { x: -300, opacity: 0 },
 };
 
 export default function PriceEstimator() {
-  const [step, setStep]                   = useState(0);
-  const [answers, setAnswers]             = useState<string[][]>([]);
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<string[][]>([]);
   const [currentSelections, setCurrentSelections] = useState<string[]>([]);
-  const [name, setName]                   = useState('');
-  const [email, setEmail]                 = useState('');
-  const [loading, setLoading]             = useState(false);
-  const [error, setError]                 = useState<string | null>(null);
-  const [success, setSuccess]             = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setCurrentSelections([]);
   }, [step]);
 
   const toggleOption = (opt: string) => {
-    if (questions[step].type === 'single') {
+    if (questions[step].type === "single") {
       setCurrentSelections([opt]);
     } else {
-      setCurrentSelections(sel =>
-        sel.includes(opt)
-          ? sel.filter(s => s !== opt)
-          : [...sel, opt]
+      setCurrentSelections((sel) =>
+        sel.includes(opt) ? sel.filter((s) => s !== opt) : [...sel, opt]
       );
     }
   };
 
   const handleNext = () => {
-    setAnswers(prev => [...prev, currentSelections]);
-    setStep(prev => prev + 1);
+    setAnswers((prev) => [...prev, currentSelections]);
+    setStep((prev) => prev + 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,19 +96,19 @@ export default function PriceEstimator() {
     setError(null);
 
     const messageArray = questions.map(
-      (q, i) => `${q.text}: ${answers[i].join(', ')}`
+      (q, i) => `${q.text}: ${answers[i].join(", ")}`
     );
-    const messageString = messageArray.join('\n');
+    const messageString = messageArray.join("\n");
 
     try {
-      const res = await fetch('/api/contact', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ name, email, message: messageString }),
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message: messageString }),
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Error sending contact email.');
+        throw new Error(data.error || "Error sending contact email.");
       }
 
       const { requestId } = await createContactRequest(
@@ -118,7 +116,7 @@ export default function PriceEstimator() {
         email,
         messageArray
       );
-      console.log('Created request:', requestId);
+      console.log("Created request:", requestId);
 
       setSuccess(true);
     } catch (err: unknown) {
@@ -150,30 +148,28 @@ export default function PriceEstimator() {
             animate="center"
             exit="exit"
             transition={{ duration: 0.4 }}
-            className="card bg-base-200 p-6 rounded-2xl shadow-lg"
+            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-7"
           >
-            <h2 className="text-2xl font-bold mb-4 text-center">
+            <h2 className="text-lg md:text-2xl font-bold text-center">
               {questions[step].text}
             </h2>
             <div className="flex flex-col space-y-3 mb-6">
-              {questions[step].options.map(opt => (
+              {questions[step].options.map((opt) => (
                 <label
                   key={opt}
                   className="flex items-center space-x-2 cursor-pointer"
                 >
                   <input
                     type={
-                      questions[step].type === 'single'
-                        ? 'radio'
-                        : 'checkbox'
+                      questions[step].type === "single" ? "radio" : "checkbox"
                     }
                     name={`q${questions[step].id}`}
                     checked={currentSelections.includes(opt)}
                     onChange={() => toggleOption(opt)}
                     className={
-                      questions[step].type === 'single'
-                        ? 'radio radio-primary'
-                        : 'checkbox checkbox-primary'
+                      questions[step].type === "single"
+                        ? "radio radio-primary"
+                        : "checkbox checkbox-primary"
                     }
                   />
                   <span>{opt}</span>
@@ -197,7 +193,7 @@ export default function PriceEstimator() {
             exit="exit"
             transition={{ duration: 0.4 }}
             onSubmit={handleSubmit}
-            className="card bg-base-200 p-6 rounded-2xl shadow-lg space-y-4"
+            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-3"
           >
             <h2 className="text-2xl font-bold text-center">Almost done!</h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
@@ -206,7 +202,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -214,18 +210,18 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
-            <button
-              type="submit"
-              className={`btn btn-primary w-full ${
-                loading ? 'loading' : ''
-              }`}
-              disabled={loading}
-            >
-              Submit
-            </button>
+            <div>
+              <button
+                type="submit"
+                className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
+                disabled={loading}
+              >
+                Submit
+              </button>
+            </div>
           </motion.form>
         )}
       </AnimatePresence>

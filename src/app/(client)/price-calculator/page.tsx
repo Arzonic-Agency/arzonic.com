@@ -12,7 +12,7 @@ export default function PriceCalculatorPage() {
   });
 
   return (
-    <div className="p-20 md:p-0 md:min-h-screen flex items-center justify-center bg-base-100 flex-col md:flex-row">
+    <div className="py-20 md:py-0 md:min-h-screen flex items-center justify-center bg-base-100 flex-col md:flex-row">
       {/* LEFT: sliding form */}
       <div className="h-full md:w-1/2 p-8 ">
         <PriceEstimator />
