@@ -93,7 +93,9 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
             }
           });
 
-          setActiveStep(currentActiveStep);
+          if (currentActiveStep !== activeStep) {
+            setActiveStep(currentActiveStep);
+          }
 
           // Smooth progress bar
           if (processSection) {
@@ -120,9 +122,13 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
                     (maxProgress - startOffset)
                 : startOffset;
 
-            setProgress(
-              Math.min(Math.max(sectionProgress, startOffset), maxProgress)
+            const newProgress = Math.min(
+              Math.max(sectionProgress, startOffset),
+              maxProgress
             );
+            if (newProgress !== progress) {
+              setProgress(newProgress);
+            }
           }
 
           ticking = false;
@@ -152,10 +158,10 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
     <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-3">
-        <h3 className="text-3xl font-bold">
-          This is how our customer process looks like
+        <h3 className="text-lg md:text-3xl font-light">
+          This is how our customer process looks like!
         </h3>
-        <p className="text-sm text-center mt-2">
+        <p className="text-sm text-center mt-2 p-5">
           <u>We guide you</u> through every step with clarity, creativity, and
           care.
         </p>
@@ -176,13 +182,13 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
         style={positionState === "fixed" ? { top: `${fixedTop}px` } : {}}
       >
         <div className="nav-process-content">
-          <div className="flex justify-center px-3 pb-5 pt-10 ">
+          <div className="flex justify-center px-5 pb-5 pt-10 ">
             <ul className="flex gap-7 justify-evenly w-full">
               {steps.map((step, index) => (
                 <li
                   key={index}
                   onClick={() => handleClick(step)}
-                  className={`cursor-pointer font-semibold transition-all duration-300 xl:text-lg ${
+                  className={`cursor-pointer font-semibold transition-all duration-300 text-xs md:text-base xl:text-lg ${
                     activeStep === index
                       ? "text-secondary"
                       : "text-gray-500 hover:text-neutral-content"
@@ -195,7 +201,7 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
           </div>
 
           {/* Progress bar */}
-          <div className="progress-bar-container px-10">
+          <div className="progress-bar-container px-5 md:px-10">
             <motion.div
               className="progress-bar-fill"
               initial={{ width: "0%" }}

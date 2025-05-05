@@ -18,45 +18,50 @@ const Process = ({ isSticky }: ProcessProps) => {
     src: "/rive/strategy.riv",
     autoplay: true,
   });
+  const { RiveComponent: CodingRive } = useRive({
+    src: "/rive/coding.riv",
+    autoplay: true,
+  });
 
   return (
     <div className={`${isSticky ? "pt-[112px]" : ""}`}>
       <section
         id="discovery-strategy"
-        className="h-[700px] w-full flex justify-center"
+        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
             Discovery & Strategy
           </h3>
-          <h4 className="text-4xl font-extralight">
-            Understanding Your Vision
+          <h4 className="text-xl md:text-4xl font-extralight">
+            From Vision to Roadmap
           </h4>
-          <p>
-            We start by truly understanding your business, your goals, and the
-            people you want to reach. This gives us the right foundation for
-            everything that follows.
+          <p className="tracking-[0.022em] text-sm md:text-base">
+            Just like any great expedition, your project begins with a clear
+            destination and a solid route. We explore your goals, understand
+            your market, and build a step-by-step plan to reach your digital
+            summit.
           </p>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-4 text-sm md:text-base">
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> Deep dive into
-              your goals and needs
+              <FaCaretRight className="text-secondary text-xl" /> Clarify your
+              destination (vision & purpose)
             </li>
             <li className="flex gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />
-              Research of your market and target audience
+              Understand your audience and terrain
             </li>
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> Strategic
-              roadmap planning
+              <FaCaretRight className="text-secondary text-xl" /> Create a
+              strategic map with key checkpoints
             </li>
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> Clear project
-              scope and timeline definition
+              <FaCaretRight className="text-secondary text-xl" /> Set clear
+              scope and timeframes for the journey
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[45%]">
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 md:w-[45%]">
           <div className="w-full h-full max-h-96">
             <StrategyRive />
           </div>
@@ -64,61 +69,64 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="design-experience"
-        className="h-[700px] w-full flex justify-center"
+        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
       >
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
             Design & Experience
           </h3>
-          <h4 className="text-4xl font-extralight">
-            Crafting Engaging Experiences
+          <h4 className="text-xl md:text-4xl font-extralight">
+            Shaping the Experience
           </h4>
-          <p>
-            We design intuitive and beautiful user experiences that not only
-            look amazing but also guide your audience smoothly towards your
-            goals.
+          <p className="tracking-[0.022em] text-sm md:text-base">
+            With the journey mapped, we bring it to life. Starting with
+            wireframes, we layer in clarity, emotion, and interaction—designing
+            every screen to feel effortless and aligned with your goals.
           </p>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-4 text-sm md:text-base">
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> Wireframing
-              and user journey mapping
+              <FaCaretRight className="text-secondary text-xl" /> Map the user
+              journey with intent
             </li>
             <li className="flex gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />
-              Visual design focused on clarity and impact
+              Transform ideas into structured wireframes
             </li>
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> Responsive
-              design for all devices
+              <FaCaretRight className="text-secondary text-xl" /> Design
+              responsive layouts across all devices
             </li>
             <li className="flex gap-2 items-center">
-              <FaCaretRight className="text-secondary text-xl" /> User-centered
-              experience optimization
+              <FaCaretRight className="text-secondary text-xl" /> Focus
+              relentlessly on user needs and simplicity
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 w-[45%]">
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 md:w-[45%]">
           <div className="w-full h-full max-h-[420px]">
             {" "}
             <DesignRive />
           </div>
         </div>
       </section>
-      <section id="development-integration" className="h-[700px] w-full">
+      <section
+        id="development-integration"
+        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
+      >
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
             Development & Integration
           </h3>
-          <h4 className="text-4xl font-extralight">
+          <h4 className="text-xl md:text-4xl font-extralight">
             Building Solid Foundations
           </h4>
-          <p>
+          <p className="tracking-[0.022em] text-sm md:text-base">
             We turn designs into powerful, scalable, and future-proof digital
             solutions — ready to grow with your business needs.
           </p>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-4 text-sm md:text-base">
             <li className="flex gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" /> Frontend and
               backend development
@@ -137,22 +145,31 @@ const Process = ({ isSticky }: ProcessProps) => {
             </li>
           </ul>
         </div>
+        <div className="flex flex-col justify-center items-center gap-5 h-full p-5 md:p-10 md:w-[45%]">
+          <div className="w-full h-full max-h-[420px]">
+            {" "}
+            <CodingRive />
+          </div>
+        </div>
       </section>
-      <section id="launch-support" className="h-[700px] w-full">
+      <section
+        id="launch-support"
+        className="h-[700px] w-full flex-col md:flex-row"
+      >
         {" "}
-        <div className="flex flex-col justify-center gap-5 h-full p-10 w-[55%]">
+        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
             Launch & Support
           </h3>
-          <h4 className="text-4xl font-extralight">
+          <h4 className="text-xl md:text-4xl font-extralight">
             Bringing It to Life – and Beyond
           </h4>
-          <p>
+          <p className="tracking-[0.022em] text-sm md:text-base">
             Launching is just the beginning. We make sure your website goes live
             without a hitch – and we stay with you to ensure it continues to
             perform, evolve, and support your business goals.
           </p>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-4 text-sm md:text-base">
             <li className="flex gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" /> Smooth and
               secure go-live process

@@ -11,6 +11,8 @@ const outfitSans = Outfit({
 export const metadata: Metadata = {
   title: "Arzonic Agency",
   description: "Danish Modern Web Agency",
+  viewport:
+    "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 };
 
 export default function RootLayout({

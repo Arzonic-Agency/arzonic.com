@@ -3,6 +3,7 @@
 import Header from "@/components/client/layout/Header";
 import { FaAngleUp } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import Footer from "@/components/client/layout/Footer";
 
 export default function ClientLayout({
   children,
@@ -30,14 +31,16 @@ export default function ClientLayout({
         <header>
           <Header />
         </header>
-        <main className="">{children}</main>
-        <footer></footer>
+        <main>{children}</main>
+        <footer>
+          <Footer />
+        </footer>
         {showScroll && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-16 right-4 p-3 bg-secondary text-white rounded-full shadow-lg z-50 block"
+            className="fixed bottom-10 right-4 p-2 bg-base-100 ring-2 ring-secondary text-secondary rounded-full shadow-lg z-50 block"
           >
-            <FaAngleUp />
+            <FaAngleUp size={22} />
           </button>
         )}
       </div>
