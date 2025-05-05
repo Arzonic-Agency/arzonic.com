@@ -18,26 +18,22 @@ const Home = () => {
       <section className="h-96 md:h-[700px]">
         <div className="background-animation-layer " />
         <div className="background-fade-bottom" />
-
         <Hero />
       </section>
       <section className="h-[2000px] lg:h-[700px] z-10 mb-40">
         <Present />
       </section>
-      <section className="h-full">
-        {/* Send onStickyChange som prop */}
-        <NavProcess onStickyChange={setIsSticky} />
-      </section>
-      <section id="Process" className="h-[2800px]">
-        {/* Send isSticky som prop */}
-
-        <Process isSticky={isSticky} />
+      <section className="h-[1000px]">
+        <Preview />
       </section>
       <section className="h-[2000px] lg:h-[750px]">
         <Prices />
       </section>
-      <section className="h-[2000px]">
-        <Preview />
+      <section className="h-full">
+        <NavProcess onStickyChange={setIsSticky} />
+      </section>
+      <section id="Process" className="h-[2800px]">
+        <Process isSticky={isSticky} />
       </section>
     </>
   );

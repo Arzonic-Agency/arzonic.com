@@ -2,9 +2,9 @@ import React from "react";
 
 const Present = () => {
   return (
-    <div className="flex items-center justify-center h-full w-full">
+    <div className="flex items-center justify-center h-full w-full ">
       <div className="max-w-5xl flex flex-col gap-7">
-        <h2 className="text-3xl font-light text-center z-20">
+        <h2 className="text-3xl font-light text-center z-20 m-7">
           Superfast websites – built fo﻿r performance and growth
         </h2>
         <div className="flex gap-7 relative">
