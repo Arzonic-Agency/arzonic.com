@@ -1,4 +1,3 @@
-// arzonic/src/components/client/price-calculator/PriceEstimator.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -11,67 +10,15 @@ import {
 import { FaAngleLeft } from "react-icons/fa6";
 
 const QUESTIONS_PER_SLIDE = 2;
-
-// Define the Question type
-type Question = {
-  id: number;
-  text: string;
-  options: string[];
-  type: "single" | "multiple";
-};
-
-const questions: Question[] = [
-  {
-    id: 1,
-    text: "How many people are in your company?",
-    options: ["Solo / Freelance", "2-5 People", "6-15 People", "15+ People"],
-    type: "single",
-  },
-  {
-    id: 2,
-    text: "What should we help with?",
-    options: [
-      "Development of a webapp",
-      "An advanced Dashboard for customers or a team",
-      "An interactive 3D presentation",
-      "A solution that can be modified by you or your team",
-    ],
-    type: "single",
-  },
-  {
-    id: 3,
-    text: "What should it be able to do?",
-    options: [
-      "Users with login feature",
-      "Data presentation in a dashboard",
-      "Option for 3D visualization",
-      "Editable content via CMS",
-      "Integration to own systems / API",
-    ],
-    type: "multiple",
-  },
-  {
-    id: 4,
-    text: "How far are you in the process?",
-    options: [
-      "Starting from scratch",
-      "We have a solution that needs improvement",
-      "We have an idea and need to start",
-      "We have everything ready and need counseling",
-    ],
-    type: "single",
-  },
-];
-
 const slideVariants = {
-  enter: (direction: number) => ({ x: direction > 0 ? 300 : -300, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (direction: number) => ({ x: direction > 0 ? -300 : 300, opacity: 0 }),
+  exit:  (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
 };
 
 export default function PriceEstimator() {
+  // 1) Fetch questions (with option IDs)
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
-
   useEffect(() => {
     (async () => {
       try {
@@ -83,50 +30,58 @@ export default function PriceEstimator() {
     })();
   }, []);
 
+  // 2) Pagination state
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
-  const [step, setStep] = useState<number>(-1);
-  const [direction, setDirection] = useState<number>(0);
-  const [groupSel, setGroupSel] = useState<string[][]>([]);
-  const [answers, setAnswers] = useState<string[][]>([]);
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<boolean>(false);
+  const [step, setStep]         = useState(-1); // -1 == intro screen
+  const [direction, setDirection] = useState(0);
 
+  // 3) Track selected option IDs
+  const [groupSel, setGroupSel] = useState<number[][]>([]);
+  const [answers, setAnswers]   = useState<number[][]>([]);
+
+  // 4) Contact form state
+  const [name, setName]       = useState("");
+  const [email, setEmail]     = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string|null>(null);
+  const [success, setSuccess] = useState(false);
+
+  // derive current questions slice
   const startIdx = step * QUESTIONS_PER_SLIDE;
   const currentQs =
     step >= 0 && step < slides
       ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
+  // reset per‐slide selections on slide change
   useEffect(() => {
     if (step >= 0 && step < slides) {
       setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
   }, [step, currentQs.length]);
 
-  const toggleOption = (idx: number, option: string) => {
-    setGroupSel((prev) => {
-      const next = prev.map((arr) => [...arr]);
-      const qType = currentQs[idx].type;
-
-      if (qType === "single") {
-        next[idx] = [option];
+  // toggle option by its numeric ID
+  const toggleOption = (qIdx: number, optId: number) => {
+    setGroupSel(prev => {
+      const next = prev.map(arr => [...arr]);
+      const isSingle = currentQs[qIdx].type === "single";
+      if (isSingle) {
+        next[qIdx] = [optId];
       } else {
-        const selections = next[idx];
-        next[idx] = selections.includes(option)
-          ? selections.filter((s) => s !== option)
-          : [...selections, option];
+        const sel = next[qIdx];
+        next[qIdx] = sel.includes(optId)
+          ? sel.filter(i => i !== optId)
+          : [...sel, optId];
       }
       return next;
     });
   };
 
+  // navigation handlers
   const goNext = () => {
-    setAnswers((prev) => [...prev, ...groupSel]);
+    setAnswers(prev => [...prev, ...groupSel]);
     setDirection(1);
-    setStep((prev) => prev + 1);
+    setStep(s => s + 1);
   };
   const goBack = () => {
     if (step === 0) {
@@ -135,33 +90,42 @@ export default function PriceEstimator() {
       setAnswers([]);
     } else if (step > 0) {
       setDirection(-1);
-      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
-      setStep((prev) => prev - 1);
+      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
+      setStep(s => s - 1);
     }
   };
 
+  // submit everything
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    const msgArr = questionsState.map(
-      (q, i) => `${q.text}: ${answers[i].join(", ")}`
-    );
+    // build payload: [{ questionId, optionIds[] }, ...]
+    const structured = questionsState.map((q, i) => ({
+      questionId: q.id,
+      optionIds:  answers[i] || [],
+    }));
+
     try {
+      // (optional) send user a summary email
+      const msg = questionsState
+        .map((q,i) => `${q.text}: ${answers[i]?.join(", ")}`)
+        .join("\n");
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message: msgArr.join("\n") }),
+        body: JSON.stringify({ name, email, message: msg }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Error sending email");
 
-      await createContactRequest(name, email, msgArr);
+      // persist to `requests` + `responses`
+      await createContactRequest(name, email, structured);
       setDirection(1);
       setSuccess(true);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -170,7 +134,7 @@ export default function PriceEstimator() {
   return (
     <div className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
-        {/* Intro Screen */}
+        {/* Intro */}
         {step === -1 && !success && (
           <motion.div
             key="intro"
@@ -182,17 +146,15 @@ export default function PriceEstimator() {
             transition={{ duration: 0.4 }}
             className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center"
           >
-            <h2 className="text-2xl font-bold">Welcome to Our Estimator</h2>
-            <p>
-              Answer a few questions to get a custom estimate. It only takes a
-              minute!
-            </p>
+            <h2 className="text-2xl font-bold">Welcome!</h2>
+            <p>Answer a few quick questions to get your custom estimate.</p>
             <button onClick={goNext} className="btn btn-primary w-full">
               Begin
             </button>
           </motion.div>
         )}
-        {/* Slides */}
+
+        {/* Question Slides */}
         {step >= 0 && step < slides && (
           <motion.div
             key={`slide-${step}`}
@@ -208,34 +170,35 @@ export default function PriceEstimator() {
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map((option) => (
+                  {q.options.map(opt => (
                     <label
-                      key={option}
+                      key={opt.id}
                       className="flex items-center space-x-2 cursor-pointer"
                     >
                       <input
                         type={q.type === "single" ? "radio" : "checkbox"}
-                        checked={groupSel[idx]?.includes(option) ?? false}
-                        onChange={() => toggleOption(idx, option)}
-                        className={`${
+                        checked={groupSel[idx]?.includes(opt.id) ?? false}
+                        onChange={() => toggleOption(idx, opt.id)}
+                        className={
                           q.type === "single"
                             ? "radio radio-primary"
                             : "checkbox checkbox-primary"
-                        }`}
+                        }
                       />
-                      <span>{option}</span>
+                      <span>{opt.text}</span>
                     </label>
                   ))}
                 </div>
               </div>
             ))}
+
             <div className="flex gap-3">
-              <button onClick={goBack} className="btn">
-                <FaAngleLeft size={20} />
+              <button onClick={goBack} className="btn btn-outline">
+                <FaAngleLeft />
               </button>
               <button
                 onClick={goNext}
-                disabled={!groupSel.every((sel) => sel.length > 0)}
+                disabled={!groupSel.every(sel => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -243,7 +206,8 @@ export default function PriceEstimator() {
             </div>
           </motion.div>
         )}
-        {/* Form */}
+
+        {/* Final Form */}
         {step === slides && !success && (
           <motion.form
             key="form"
@@ -263,7 +227,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -271,15 +235,11 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
             <div className="flex gap-3">
-              <button
-                onClick={goBack}
-                type="button"
-                className="btn btn-outline"
-              >
+              <button onClick={goBack} type="button" className="btn btn-outline">
                 <FaAngleLeft />
               </button>
               <button
@@ -292,6 +252,7 @@ export default function PriceEstimator() {
             </div>
           </motion.form>
         )}
+
         {/* Thank You */}
         {success && (
           <motion.div

@@ -922,43 +922,51 @@ export async function updatePackage(
   }
 }
 
+
 export async function createContactRequest(
   name: string,
   email: string,
-  message: string[]
+  answers: { questionId: number; optionIds: number[] }[]
 ): Promise<{ requestId: string }> {
   const supabase = await createServerClientInstance();
 
-  const { data: request, error } = await supabase
+  // 1) Insert into requests
+  const { data: request, error: reqError } = await supabase
     .from("requests")
-    .insert({
-      name,
-      mail: email,
-      message,
-    })
+    .insert({ name, mail: email })
     .select("id")
     .single();
 
-  if (error || !request) {
-    console.error("Failed to create request:", error);
-    throw new Error("Failed to save request: " + error?.message);
+  if (reqError || !request) {
+    throw new Error("Failed to save request: " + reqError?.message);
+  }
+  const requestId = request.id;
+
+  // 2) Insert one row into responses with full answers JSONB
+  const { error: respError } = await supabase
+    .from("responses")
+    .insert({ request_id: requestId, answers });
+
+  if (respError) {
+    throw new Error("Failed to save responses: " + respError.message);
   }
 
-  return { requestId: request.id };
+  return { requestId };
 }
 
 export type EstimatorQuestion = {
   id:      number;
   text:    string;
-  options: string[];
   type:    "single" | "multiple";
+  options: { id: number; text: string }[];
 };
 
 export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
   const supabase = await createServerClientInstance();
+
   const { data, error } = await supabase
     .from("questions")
-    .select("id, text, type, options(text)")
+    .select("id, text, type, options(id, text)")
     .order("id", { ascending: true });
 
   if (error) {
@@ -966,10 +974,10 @@ export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
     throw new Error("Failed to fetch questions: " + error.message);
   }
 
-  return data.map((q: any) => ({
+  return (data || []).map((q: any) => ({
     id:      q.id,
     text:    q.text,
     type:    q.type as "single" | "multiple",
-    options: (q.options || []).map((o: any) => o.text),
+    options: (q.options || []).map((o: any) => ({ id: o.id, text: o.text })),
   }));
 }
