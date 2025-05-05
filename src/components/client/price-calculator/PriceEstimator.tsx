@@ -12,6 +12,14 @@ import { FaAngleLeft } from "react-icons/fa6";
 
 const QUESTIONS_PER_SLIDE = 2;
 
+// Define the Question type
+type Question = {
+  id: number;
+  text: string;
+  options: string[];
+  type: "single" | "multiple";
+};
+
 const questions: Question[] = [
   {
     id: 1,
@@ -215,7 +223,7 @@ export default function PriceEstimator() {
                             : "checkbox checkbox-primary"
                         }`}
                       />
-                      <span>{opt}</span>
+                      <span>{option}</span>
                     </label>
                   ))}
                 </div>
