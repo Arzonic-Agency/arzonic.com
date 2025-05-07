@@ -124,8 +124,12 @@ export default function PriceEstimator() {
       await createContactRequest(name, email, structured);
       setDirection(1);
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }
