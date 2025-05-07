@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next"; // Import translation hook
 
 interface ContactSelectProps {
   onChange: (value: string) => void;
@@ -8,6 +9,7 @@ interface ContactSelectProps {
 }
 
 const TaskSelect = ({ onChange, isCallForm = false }: ContactSelectProps) => {
+  const { t } = useTranslation(); // Initialize translation hook
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -17,31 +19,31 @@ const TaskSelect = ({ onChange, isCallForm = false }: ContactSelectProps) => {
   };
 
   return (
-    <label className="form-control w-full max-w-xs">
-      <div className="label">
-        <span className="label-text md:text-base">
-          Which task are you interested in?
-        </span>
-      </div>
-      <select
-        className={`select select-bordered ${
-          isCallForm ? "md:select-lg" : "select-md"
-        }`}
-        value={selectedOption}
-        onChange={handleChange}
-        required
-      >
-        <option value="" disabled>
-          Choose Task
-        </option>
-        <option value="Website">Website</option>
-        <option value="Web App">Web App</option>
-        <option value="3D Visualization">3D Visualization</option>
-        <option value="Branding">Branding</option>
-        <option value="Social Media Content">Social Media Content</option>
-        <option value="Other">Other</option>
-      </select>
-    </label>
+    <fieldset className="fieldset">
+      <legend className="fieldset-legend">{t("TaskSelect.legend")}</legend>
+      <label className="form-control w-full max-w-xs">
+        <select
+          className={`select select-bordered ${
+            isCallForm ? "md:select-lg" : "select-md"
+          }`}
+          value={selectedOption}
+          onChange={handleChange}
+          required
+        >
+          <option value="" disabled>
+            {t("TaskSelect.placeholder")}
+          </option>
+          <option value="Website">{t("TaskSelect.options.website")}</option>
+          <option value="Web App">{t("TaskSelect.options.webApp")}</option>
+          <option value="3D Visualization">
+            {t("TaskSelect.options.visualization")}
+          </option>
+          <option value="Branding">{t("TaskSelect.options.branding")}</option>
+          <option value="Marketing">{t("TaskSelect.options.marketing")}</option>
+          <option value="Other">{t("TaskSelect.options.other")}</option>
+        </select>
+      </label>
+    </fieldset>
   );
 };
 

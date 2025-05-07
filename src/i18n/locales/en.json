@@ -174,5 +174,214 @@
     "totalInclVAT": "Total incl. VAT",
     "getInTouch": "Get in Touch",
     "disclaimer": "Disclaimer: The price shown is only an estimation and may vary. Final pricing will be confirmed upon consultation."
+  },
+
+  "StarterSite": {
+    "title": "Starter Site",
+    "description": "Perfect for small businesses or personal brands",
+    "features": {
+      "customDesign": "Custom Design",
+      "responsiveFast": "Responsive and fast",
+      "basicSEO": "Basic SEO setup",
+      "simpleCMS": "Simple CMS or static content"
+    }
+  },
+
+  "WebApplication": {
+    "title": "Web Application",
+    "description": "Tailored for digital products and custom functionality",
+    "features": {
+      "bespokeUIUX": "Bespoke UI/UX design",
+      "featureRich": "Feature-rich functionality",
+      "databaseIntegration": "Database integration",
+      "adminDashboard": "Admin dashboard"
+    }
+  },
+  "3DPremium": {
+    "title": "3D Premium",
+    "description": "Elegant visuals, smooth animations, and depth",
+    "features": {
+      "sleekLayout": "Sleek, animated layout",
+      "parallaxEffects": "Subtle parallax & motion effects",
+      "integrated3D": "Integrated 3D elements",
+      "performance": "Built for performance"
+    }
+  },
+
+  "startingFrom": "Starting from",
+  "customQuotePrompt": "Get your custom quote in few seconds",
+  "getQuote": "Get a Quote",
+
+  "Header": {
+    "brandName": "Arzonic",
+    "solutions": "Solutions",
+    "cases": "Cases",
+    "contact": "Contact",
+    "getStarted": "Get Started",
+    "followUs": "Follow us",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "dropdown": {
+      "customWebsites": "Custom Websites",
+      "webApplications": "Web Applications",
+      "visualization": "3D Visualization",
+      "designAnimation": "Design & Animation",
+      "marketing": "Marketing"
+    }
+  },
+
+  "Hero": {
+    "title": "MODERN WEB AGENCY",
+    "description": "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
+    "noTemplates": "— no templates, no WordPress.",
+    "customWebsites": "Custom Websites",
+    "visualization": "3D Visualization",
+    "webApplications": "Web Applications",
+    "seeMore": "See more"
+  },
+
+  "Present": {
+    "title": "Superfast websites – built for performance and growth",
+    "customDesign": {
+      "title": "Custom design that reflects you",
+      "description": "No templates. No compromises. We design every pixel to match your brand and make you stand out."
+    },
+    "easyToManage": {
+      "title": "Easy to manage",
+      "description": "Update your content in seconds. Our built-in dashboard gives you full control."
+    },
+    "blazingFast": {
+      "title": "Blazing fast, everywhere",
+      "description": "No more sluggish load times. Your site is built for speed – on mobile, desktop and all between."
+    },
+    "builtToGrow": {
+      "title": "Built to grow with your business",
+      "description": "From small team to full-scale operation. Your website is flexible, future-proof, and ready to scale with you."
+    }
+  },
+
+  "NavProcess": {
+    "header": {
+      "title": "This is how our customer process looks like!",
+      "description-first": "We guide you ",
+      "description-second": "through every step with clarity, creativity, and care."
+    },
+    "steps": {
+      "discoveryStrategy": "Discovery & Strategy",
+      "designExperience": "Design & Experience",
+      "developmentIntegration": "Development & Integration",
+      "launchSupport": "Launch & Support"
+    }
+  },
+
+  "Process": {
+    "discoveryStrategy": {
+      "title": "Discovery & Strategy",
+      "subtitle": "From Vision to Roadmap",
+      "description": "Just like any great expedition, your project begins with a clear destination and a solid route. We explore your goals, understand your market, and build a step-by-step plan to reach your digital summit.",
+      "steps": [
+        "Clarify your destination (vision & purpose)",
+        "Understand your audience and terrain",
+        "Create a strategic map with key checkpoints",
+        "Set clear scope and timeframes for the journey"
+      ]
+    },
+    "designExperience": {
+      "title": "Design & Experience",
+      "subtitle": "Shaping the Experience",
+      "description": "With the journey mapped, we bring it to life. Starting with wireframes, we layer in clarity, emotion, and interaction—designing every screen to feel effortless and aligned with your goals.",
+      "steps": [
+        "Map the user journey with intent",
+        "Transform ideas into structured wireframes",
+        "Design responsive layouts across all devices",
+        "Focus relentlessly on user needs and simplicity"
+      ]
+    },
+    "developmentIntegration": {
+      "title": "Development & Integration",
+      "subtitle": "Building Solid Foundations",
+      "description": "We turn designs into powerful, scalable, and future-proof digital solutions — ready to grow with your business needs.",
+      "steps": [
+        "Frontend and backend development",
+        "Clean, scalable, and efficient code",
+        "API and third-party system integrations",
+        "Ongoing testing for quality assurance"
+      ]
+    },
+    "launchSupport": {
+      "title": "Launch & Support",
+      "subtitle": "Bringing It to Life – and Beyond",
+      "description": "Launching is just the beginning. We make sure your website goes live without a hitch – and we stay with you to ensure it continues to perform, evolve, and support your business goals.",
+      "steps": [
+        "Smooth and secure go-live process",
+        "Continuous support and updates",
+        "Performance tracking and improvements",
+        "Scalable solutions for future needs"
+      ]
+    }
+  },
+
+  "OfferForm": {
+    "title": "Request a Quote",
+    "fields": {
+      "name": {
+        "label": "Name",
+        "placeholder": "Enter your name"
+      },
+      "email": {
+        "label": "Email Address",
+        "placeholder": "Enter your email"
+      },
+      "phone": {
+        "label": "Phone Number",
+        "placeholder": "Enter your phone number"
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Describe your needs, preferred time, address, etc."
+      },
+      "consent": {
+        "label": "I accept the storage of my information for up to 30 days",
+        "readMore": "Read more"
+      }
+    },
+    "buttons": {
+      "submit": "Send Request",
+      "sending": "Sending..."
+    },
+    "success": {
+      "title": "Thank you for your request!",
+      "message": "We will get back to you as soon as possible.",
+      "closeButton": "Close"
+    },
+    "errors": {
+      "invalidPhone": "Invalid phone number.",
+      "consentRequired": "You must accept storage of your information.",
+      "generic": "Something went wrong. Please try again later."
+    }
+  },
+
+  "TaskSelect": {
+    "legend": "Which task are you interested in?",
+    "placeholder": "Choose Task",
+    "options": {
+      "website": "Website",
+      "webApp": "Web App",
+      "visualization": "3D Visualization",
+      "branding": "Branding",
+      "marketing": "Marketing",
+      "other": "Other"
+    }
+  },
+
+  "ContactPage": {
+    "title": "Start the dialogue",
+    "subtitle": "- completely non-binding",
+    "readyTitle": "Ready to get started?",
+    "contactPrompt": "Contact us today – we will quickly get back to you with an estimate or a discussion about the solution.",
+    "ambitionMessage": "We love ambitious ideas and are happy to help make them a reality.",
+    "callPrompt": "Call us at",
+    "phoneNumber": "+45 22 50 17 03",
+    "imageAlt": "hero"
   }
 }

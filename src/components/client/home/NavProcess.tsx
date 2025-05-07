@@ -2,19 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const steps = [
-  "Discovery & Strategy",
-  "Design & Experience",
-  "Development & Integration",
-  "Launch & Support",
-];
-
-type NavProcessProps = {
+const NavProcess = ({
+  onStickyChange,
+}: {
   onStickyChange?: (sticky: boolean) => void;
-};
+}) => {
+  const { t } = useTranslation();
+  const steps = [
+    t("NavProcess.steps.discoveryStrategy"),
+    t("NavProcess.steps.designExperience"),
+    t("NavProcess.steps.developmentIntegration"),
+    t("NavProcess.steps.launchSupport"),
+  ];
 
-const NavProcess = ({ onStickyChange }: NavProcessProps) => {
   const navRef = useRef<HTMLDivElement | null>(null);
   const originalOffsetRef = useRef<number>(0);
 
@@ -22,7 +24,6 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
     "normal" | "sticky" | "fixed"
   >("normal");
   const [fixedTop, setFixedTop] = useState<number>(0);
-
   const [progress, setProgress] = useState<number>(0);
   const [showNav, setShowNav] = useState<boolean>(true);
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -158,12 +159,14 @@ const NavProcess = ({ onStickyChange }: NavProcessProps) => {
     <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-3">
-        <h3 className="text-lg md:text-3xl font-light">
-          This is how our customer process looks like!
+        <h3 className="text-lg md:text-4xl font-light">
+          {t("NavProcess.header.title")}
         </h3>
-        <p className="text-sm text-center mt-2 p-5">
-          <u>We guide you</u> through every step with clarity, creativity, and
-          care.
+        <p className="text-sm md:text-lg text-center mt-2 p-5">
+          <u className="underline-offset-2 decoration-secondary decoration-2">
+            {t("NavProcess.header.description-first")}
+          </u>
+          {t("NavProcess.header.description-second")}
         </p>
       </div>
 

@@ -1,52 +1,55 @@
 import React from "react";
-import { FaArrowUpRightDots, FaPaintbrush, FaPalette } from "react-icons/fa6";
+import { FaArrowUpRightDots, FaPalette } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
 const Present = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="flex items-center justify-center h-full w-full ">
-      <div className="max-w-5xl flex flex-col gap-7">
-        <h2 className="text-3xl font-light text-center z-20 mb-10">
-          Superfast websites – built fo﻿r performance and growth
+    <div className="flex items-center justify-center h-full w-full p-3">
+      <div className="max-w-5xl flex flex-col gap-7 ">
+        <h2 className="text-xl md:text-3xl font-light text-center z-20 mb-10  max-w-xs md:max-w-full mx-auto">
+          {t("Present.title")}
         </h2>
-        <div className="flex gap-7 relative">
-          <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg  relative ">
-            <h3 className="text-2xl font-bold shadow-xl">
-              Custom design that reflects you
+        <div className="flex gap-7 relative md:flex-row flex-col">
+          <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg relative">
+            <h3 className="text-lg md:text-2xl font-bold shadow-xl">
+              {t("Present.customDesign.title")}
             </h3>
-            <p className="w-4/5 text-zinc-400 font-light">
-              No templates. No compromises. We design every pixel to match your
-              brand and make you stand out.
+            <p className="text-sm md:text-base  w-4/5 text-zinc-400 font-light">
+              {t("Present.customDesign.description")}
             </p>
             <div className="absolute bottom-4 right-4 text-secondary">
-              <FaPalette size={50} />
+              <FaPalette className="text-4xl md:text-5xl" />
             </div>
           </div>
           <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg bg-two">
-            <h3 className="text-2xl font-bold">Easy to manage</h3>
-            <p className="text-zinc-400 font-light">
-              Update your content in seconds. Our built-in dashboard gives you
-              full control
+            <h3 className="text-lg md:text-2xl font-bold">
+              {t("Present.easyToManage.title")}
+            </h3>
+            <p className="text-sm md:text-base text-zinc-400 font-light">
+              {t("Present.easyToManage.description")}
             </p>
           </div>
         </div>
-        <div className="flex gap-7">
+        <div className="flex gap-7 md:flex-row flex-col-reverse">
           <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg bg-one">
-            <h3 className="text-2xl font-bold">Blazing fast, everywhere</h3>
-            <p className="text-zinc-400 font-light">
-              Your website is flexible, future-proof, and ready to scale with
-              you.
+            <h3 className="text-lg md:text-2xl font-bold">
+              {t("Present.blazingFast.title")}
+            </h3>
+            <p className="text-sm md:text-base text-zinc-400 font-light">
+              {t("Present.blazingFast.description")}
             </p>
           </div>
           <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg electric-border border-present relative">
-            <h3 className="text-2xl font-bold shadow-xl">
-              Built to grow with your business
+            <h3 className="text-lg md:text-2xl font-bold shadow-xl">
+              {t("Present.builtToGrow.title")}
             </h3>
-            <p className="w-4/5 text-zinc-400 font-light">
-              From small team to full-scale operation. Your website is flexible,
-              future-proof, and ready to scale with you.
+            <p className="text-sm md:text-base w-6/7 md:w-4/5 text-zinc-400 font-light">
+              {t("Present.builtToGrow.description")}
             </p>
             <div className="absolute bottom-4 right-4 text-secondary">
-              <FaArrowUpRightDots size={50} />
+              <FaArrowUpRightDots className="text-4xl md:text-5xl" />
             </div>
           </div>
         </div>

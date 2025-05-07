@@ -1,11 +1,10 @@
-// arzonic/src/app/(client)/price-calculator/page.tsx
 "use client";
 
 import React from "react";
-import PriceEstimator from "@/components/client/price-calculator/PriceEstimator";
+import PriceEstimator from "@/components/client/get-started/PriceEstimator";
 import { useRive } from "@rive-app/react-canvas";
 
-export default function PriceCalculatorPage() {
+const GetStarted = () => {
   const { RiveComponent } = useRive({
     src: "/rive/design.riv",
     autoplay: true,
@@ -24,4 +23,6 @@ export default function PriceCalculatorPage() {
       </div>
     </div>
   );
-}
+};
+
+export default GetStarted;

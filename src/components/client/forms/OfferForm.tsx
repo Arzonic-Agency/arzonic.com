@@ -4,8 +4,11 @@ import React, { useState, FormEvent } from "react";
 import { createRequest } from "@/lib/client/actions";
 import TaskSelect from "./TaskSelect";
 import ConsentModal from "../modal/ConsentModal";
+import { useTranslation } from "react-i18next"; // Import translation hook
 
 const OfferForm = () => {
+  const { t } = useTranslation(); // Initialize translation hook
+
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [mail, setMail] = useState("");
@@ -28,11 +31,11 @@ const OfferForm = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validatePhoneNumber(mobile)) {
-      setErrorText("Invalid phone number.");
+      setErrorText(t("OfferForm.errors.invalidPhone"));
       return;
     }
     if (!isChecked) {
-      setErrorText("You must accept storage of your information.");
+      setErrorText(t("OfferForm.errors.consentRequired"));
       return;
     }
 
@@ -66,15 +69,13 @@ const OfferForm = () => {
       }
 
       setIsSuccess(true);
-      setSuccessText("Your request has been sent.");
+      setSuccessText(t("OfferForm.success.requestSent"));
     } catch (err: unknown) {
       console.error("Submit error:", err);
       if (err instanceof Error) {
-        setErrorText(
-          err.message || "Something went wrong. Please try again later."
-        );
+        setErrorText(err.message || t("OfferForm.errors.generic"));
       } else {
-        setErrorText("Something went wrong. Please try again later.");
+        setErrorText(t("OfferForm.errors.generic"));
       }
     } finally {
       setIsLoading(false);
@@ -106,94 +107,109 @@ const OfferForm = () => {
     <div className="lg:max-w-2xl max-w-md w-full">
       {isSuccess ? (
         <div className="flex flex-col gap-4 bg-base-100 p-10 h-[600px]">
-          <h2 className="text-xl font-bold">Thank you for your request!</h2>
-          <p>We will get back to you as soon as possible.</p>
+          <h2 className="text-xl font-bold">{t("OfferForm.success.title")}</h2>
+          <p>{t("OfferForm.success.message")}</p>
           <button onClick={handleClose} className="btn btn-primary mt-5">
-            Close
+            {t("OfferForm.success.closeButton")}
           </button>
         </div>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 bg-base-100 rounded-lg shadow-md p-8 md:p-10"
+          className="flex flex-col gap-5 bg-base-100 ring-2 ring-base-200 rounded-lg shadow-md p-8 md:p-10"
         >
-          <h2 className="text-xl font-bold">Request a Quote</h2>
+          <h2 className="text-xl font-bold">{t("OfferForm.title")}</h2>
 
           {/* Name / Email / Phone */}
           <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
             <div className="flex-1 flex flex-col gap-3">
-              {/* Name */}
-              <label htmlFor="name" className="form-control w-full max-w-xs">
-                <span className="label-text md:text-base">Name</span>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Enter your name"
-                  className="input input-bordered w-full max-w-xs"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </label>
-              {/* Email */}
-              <label htmlFor="mail" className="form-control w-full max-w-xs">
-                <span className="label-text md:text-base">Email Address</span>
-                <input
-                  id="mail"
-                  name="mail"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Enter your email"
-                  className="input input-bordered w-full max-w-xs"
-                  value={mail}
-                  onChange={(e) => setMail(e.target.value)}
-                  required
-                />
-              </label>
-              {/* Phone */}
-              <label htmlFor="phone" className="form-control w-full max-w-xs">
-                <span className="label-text md:text-base">Phone Number</span>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="Enter your phone number"
-                  className="input input-bordered w-full max-w-xs"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  required
-                />
-              </label>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  {t("OfferForm.fields.name.label")}
+                </legend>
+                <label htmlFor="name" className="form-control w-full max-w-xs">
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder={t("OfferForm.fields.name.placeholder")}
+                    className="input input-bordered w-full max-w-xs"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </label>
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  {t("OfferForm.fields.email.label")}
+                </legend>
+                <label htmlFor="mail" className="form-control w-full max-w-xs">
+                  <input
+                    id="mail"
+                    name="mail"
+                    type="email"
+                    autoComplete="email"
+                    placeholder={t("OfferForm.fields.email.placeholder")}
+                    className="input input-bordered w-full max-w-xs"
+                    value={mail}
+                    onChange={(e) => setMail(e.target.value)}
+                    required
+                  />
+                </label>
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  {t("OfferForm.fields.phone.label")}
+                </legend>
+                <label htmlFor="phone" className="form-control w-full max-w-xs">
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder={t("OfferForm.fields.phone.placeholder")}
+                    className="input input-bordered w-full max-w-xs"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    required
+                  />
+                </label>
+              </fieldset>
             </div>
 
             {/* Category & Message */}
             <div className="flex-1 flex flex-col gap-3">
-              <TaskSelect onChange={setCategory} />
-              <label
-                htmlFor="message"
-                className="form-control w-full max-w-xs relative"
-              >
-                <span className="label-text md:text-base">Message</span>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Describe your needs, preferred time, address, etc."
-                  className="textarea textarea-bordered textarea-md text-base w-full max-w-xs resize-none"
-                  value={message}
-                  onChange={handleMessageChange}
-                  maxLength={charLimit}
-                  required
-                />
-                {hasTyped && (
-                  <div className="text-right text-xs text-gray-500 absolute -bottom-5 right-0">
-                    {charCount}/{charLimit}
-                  </div>
-                )}
-              </label>
+              <fieldset className="fieldset">
+                <TaskSelect onChange={setCategory} />
+              </fieldset>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">
+                  {t("OfferForm.fields.message.label")}
+                </legend>
+                <label
+                  htmlFor="message"
+                  className="form-control w-full max-w-xs relative"
+                >
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    placeholder={t("OfferForm.fields.message.placeholder")}
+                    className="textarea textarea-bordered textarea-md text-base w-full max-w-xs resize-none"
+                    value={message}
+                    onChange={handleMessageChange}
+                    maxLength={charLimit}
+                    required
+                  />
+                  {hasTyped && (
+                    <div className="text-right text-xs text-gray-500 absolute -bottom-5 right-0">
+                      {charCount}/{charLimit}
+                    </div>
+                  )}
+                </label>
+              </fieldset>
             </div>
           </div>
 
@@ -208,8 +224,11 @@ const OfferForm = () => {
               required
             />
             <label htmlFor="consent" className="label-text text-xs max-w-60">
-              I accept the storage of my information for up to 30 days 
-              <ConsentModal buttonText="Read more" variant="primary" />
+              {t("OfferForm.fields.consent.label")}{" "}
+              <ConsentModal
+                buttonText={t("OfferForm.fields.consent.readMore")}
+                variant="primary"
+              />
             </label>
           </div>
 
@@ -221,7 +240,9 @@ const OfferForm = () => {
             className="btn btn-primary mt-5"
             disabled={isLoading}
           >
-            {isLoading ? "Sending..." : "Send Request"}
+            {isLoading
+              ? t("OfferForm.buttons.sending")
+              : t("OfferForm.buttons.submit")}
           </button>
         </form>
       )}

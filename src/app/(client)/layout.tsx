@@ -38,9 +38,9 @@ export default function ClientLayout({
         {showScroll && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-10 right-4 p-2 bg-base-100 ring-2 ring-secondary text-secondary rounded-full shadow-lg z-50 block"
+            className="fixed bottom-10 right-10 p-2 bg-base-100 ring-2 ring-secondary text-secondary rounded-lg shadow-lg z-50 block cursor-pointer"
           >
-            <FaAngleUp size={22} />
+            <FaAngleUp size={17} />
           </button>
         )}
       </div>

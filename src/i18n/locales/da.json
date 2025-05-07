@@ -174,5 +174,211 @@
     "totalInclVAT": "Total inkl. moms",
     "getInTouch": "Kontakt os",
     "disclaimer": "Ansvarsfraskrivelse: Prisen er kun et estimat og kan variere. Endelig pris bekræftes ved konsultation."
+  },
+
+  "StarterSite": {
+    "title": "Startside",
+    "description": "Perfekt til små virksomheder eller personlige brands",
+    "features": {
+      "customDesign": "Tilpasset design",
+      "responsiveFast": "Responsiv og hurtig",
+      "basicSEO": "Grundlæggende SEO-opsætning",
+      "simpleCMS": "Simpelt CMS eller statisk indhold"
+    }
+  },
+  "WebApplication": {
+    "title": "Webapplikation",
+    "description": "Skræddersyet til digitale produkter og tilpasset funktionalitet",
+    "features": {
+      "bespokeUIUX": "Skræddersyet UI/UX design",
+      "featureRich": "Funktionalitet med mange funktioner",
+      "databaseIntegration": "Databaseintegration",
+      "adminDashboard": "Admin dashboard"
+    }
+  },
+  "3DPremium": {
+    "title": "3D Premium",
+    "description": "Elegante visuals, glatte animationer og dybde",
+    "features": {
+      "sleekLayout": "Elegant, animeret layout",
+      "parallaxEffects": "Subtile parallax- og bevægelseseffekter",
+      "integrated3D": "Integrerede 3D-elementer",
+      "performance": "Bygget til ydeevne"
+    }
+  },
+  "startingFrom": "Starter fra",
+  "customQuotePrompt": "Få dit tilpassede tilbud på få sekunder",
+  "getQuote": "Få et tilbud",
+
+  "Header": {
+    "brandName": "Arzonic",
+    "solutions": "Løsninger",
+    "cases": "Cases",
+    "contact": "Kontakt",
+    "getStarted": "Få tilbud",
+    "followUs": "Følg os",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "dropdown": {
+      "customWebsites": "Tilpassede hjemmesider",
+      "webApplications": "Webapplikationer",
+      "visualization": "3D-visualisering",
+      "designAnimation": "Design & Animation",
+      "marketing": "Marketing"
+    }
+  },
+
+  "Hero": {
+    "title": "MODERNE WEBBUREAU",
+    "description": "Vi specialiserer os i at bygge højtydende hjemmesider og fordybende 3D-oplevelser ved hjælp af moderne, skræddersyet teknologi",
+    "noTemplates": "— ingen skabeloner, ingen WordPress.",
+    "customWebsites": "Tilpassede hjemmesider",
+    "visualization": "3D-visualisering",
+    "webApplications": "Webapplikationer",
+    "seeMore": "Se mere"
+  },
+
+  "Present": {
+    "title": "Superhurtige hjemmesider – bygget til ydeevne og vækst",
+    "customDesign": {
+      "title": "Tilpasset design, der afspejler dig",
+      "description": "Ingen skabeloner. Ingen kompromiser. Vi designer hver pixel, så den matcher dit brand og får dig til at skille dig ud."
+    },
+    "easyToManage": {
+      "title": "Nem at administrere",
+      "description": "Opdater dit indhold på få sekunder. Vores indbyggede dashboard giver dig fuld kontrol."
+    },
+    "blazingFast": {
+      "title": "Lynhurtig, overalt",
+      "description": "Ingen flere langsomme indlæsningstider. Din side er bygget til hastighed – på mobil, desktop og alt derimellem."
+    },
+    "builtToGrow": {
+      "title": "Bygget til at vokse med din virksomhed",
+      "description": "Fra lille team til fuldskala operation. Din hjemmeside er fleksibel, fremtidssikret og klar til at skalere med dig."
+    }
+  },
+
+  "NavProcess": {
+    "header": {
+      "title": "Sådan forløber et samarbejde hos os",
+      "description-first": "Vi guider dig",
+      "description-second": "gennem hvert trin – effektivt og målrettet"
+    },
+    "steps": {
+      "discoveryStrategy": "Opdagelse & Strategi",
+      "designExperience": "Design & Oplevelse",
+      "developmentIntegration": "Udvikling & Integration",
+      "launchSupport": "Lancering & Support"
+    }
+  },
+  "Process": {
+    "discoveryStrategy": {
+      "title": "Discovery & Strategi",
+      "subtitle": "Fra vision til konkret plan",
+      "description": "Ligesom enhver vellykket ekspedition starter dit projekt med en tydelig destination og en solid rute. Vi undersøger dine mål, analyserer markedet og skaber en trin-for-trin-plan mod dit digitale højdepunt.",
+      "steps": [
+        "Definér din destination (vision og formål)",
+        "Forstå målgruppen og landskabet",
+        "Udarbejd en strategisk køreplan med nøglepunkter",
+        "Fastlæg rammer og tidslinjer for forløbet"
+      ]
+    },
+    "designExperience": {
+      "title": "Design & Oplevelse",
+      "subtitle": "Designet til mennesker og mål",
+      "description": "Med ruten klar bringer vi din vision til live. Vi starter med wireframes og tilføjer lag af klarhed, følelse og interaktion – og designer hver skærm, så den føles intuitiv og målrettet.",
+      "steps": [
+        "Kortlæg brugerrejsen med formål",
+        "Omsæt idéer til strukturerede wireframes",
+        "Design responsive layouts til alle enheder",
+        "Fokusér kompromisløst på brugervenlighed og enkelhed"
+      ]
+    },
+    "developmentIntegration": {
+      "title": "Udvikling & Integration",
+      "subtitle": "Vi bygger det solide fundament",
+      "description": "Vi omsætter designet til stærke, skalerbare og fremtidssikrede digitale løsninger – klar til at vokse med din forretning.",
+      "steps": [
+        "Frontend- og backend-udvikling",
+        "Ren, effektiv og skalerbar kode",
+        "Integration af API'er og tredjepartssystemer",
+        "Løbende tests og kvalitetssikring"
+      ]
+    },
+    "launchSupport": {
+      "title": "Lancering & Support",
+      "subtitle": "Stabil lancering og videre drift",
+      "description": "Lanceringen er kun begyndelsen. Vi sørger for en problemfri go-live og bliver ved din side for at sikre, at løsningen fortsætter med at præstere, udvikle sig og støtte dine forretningsmål.",
+      "steps": [
+        "Problemfri og sikker lancering",
+        "Løbende support og opdateringer",
+        "Performanceovervågning og løbende forbedringer",
+        "Skalerbare løsninger til fremtidige behov"
+      ]
+    }
+  },
+
+  "OfferForm": {
+    "title": "Anmod om et tilbud",
+    "fields": {
+      "name": {
+        "label": "Navn",
+        "placeholder": "Indtast dit navn"
+      },
+      "email": {
+        "label": "E-mailadresse",
+        "placeholder": "Indtast din e-mail"
+      },
+      "phone": {
+        "label": "Telefonnummer",
+        "placeholder": "Indtast dit telefonnummer"
+      },
+      "message": {
+        "label": "Besked",
+        "placeholder": "Beskriv dine behov, foretrukne tid, adresse osv."
+      },
+      "consent": {
+        "label": "Jeg accepterer opbevaring af mine oplysninger i op til 30 dage",
+        "readMore": "Læs mere"
+      }
+    },
+    "buttons": {
+      "submit": "Send anmodning",
+      "sending": "Sender..."
+    },
+    "success": {
+      "title": "Tak for din anmodning!",
+      "message": "Vi vender tilbage til dig hurtigst muligt.",
+      "closeButton": "Luk"
+    },
+    "errors": {
+      "invalidPhone": "Ugyldigt telefonnummer.",
+      "consentRequired": "Du skal acceptere opbevaring af dine oplysninger.",
+      "generic": "Noget gik galt. Prøv venligst igen senere."
+    }
+  },
+
+  "TaskSelect": {
+    "legend": "Hvilken opgave er du interesseret i?",
+    "placeholder": "Vælg opgave",
+    "options": {
+      "website": "Hjemmeside",
+      "webApp": "Webapplikation",
+      "visualization": "3D-visualisering",
+      "branding": "Branding",
+      "marketing": "Marketing",
+      "other": "Andet"
+    }
+  },
+
+  "ContactPage": {
+    "title": "Start dialogen",
+    "subtitle": "- helt uforpligtende",
+    "readyTitle": "Klar til at komme i gang?",
+    "contactPrompt": "Kontakt os i dag – vi vender hurtigt tilbage med et estimat eller en snak om løsningen.",
+    "ambitionMessage": "Vi elsker ambitiøse idéer og hjælper gerne med at gøre dem til virkelighed.",
+    "callPrompt": "Ring til os på",
+    "phoneNumber": "+45 22 50 17 03",
+    "imageAlt": "hero"
   }
 }
