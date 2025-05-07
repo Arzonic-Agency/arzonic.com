@@ -13,7 +13,7 @@ const QUESTIONS_PER_SLIDE = 2;
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit:  (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
+  exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
 };
 
 export default function PriceEstimator() {
@@ -32,18 +32,18 @@ export default function PriceEstimator() {
 
   // 2) Pagination state
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
-  const [step, setStep]         = useState(-1); // -1 == intro screen
+  const [step, setStep] = useState(-1); // -1 == intro screen
   const [direction, setDirection] = useState(0);
 
   // 3) Track selected option IDs
   const [groupSel, setGroupSel] = useState<number[][]>([]);
-  const [answers, setAnswers]   = useState<number[][]>([]);
+  const [answers, setAnswers] = useState<number[][]>([]);
 
   // 4) Contact form state
-  const [name, setName]       = useState("");
-  const [email, setEmail]     = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState<string|null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
   // derive current questions slice
@@ -58,19 +58,19 @@ export default function PriceEstimator() {
     if (step >= 0 && step < slides) {
       setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
-  }, [step, currentQs.length]);
+  }, [step, currentQs.length, slides]);
 
   // toggle option by its numeric ID
   const toggleOption = (qIdx: number, optId: number) => {
-    setGroupSel(prev => {
-      const next = prev.map(arr => [...arr]);
+    setGroupSel((prev) => {
+      const next = prev.map((arr) => [...arr]);
       const isSingle = currentQs[qIdx].type === "single";
       if (isSingle) {
         next[qIdx] = [optId];
       } else {
         const sel = next[qIdx];
         next[qIdx] = sel.includes(optId)
-          ? sel.filter(i => i !== optId)
+          ? sel.filter((i) => i !== optId)
           : [...sel, optId];
       }
       return next;
@@ -79,9 +79,9 @@ export default function PriceEstimator() {
 
   // navigation handlers
   const goNext = () => {
-    setAnswers(prev => [...prev, ...groupSel]);
+    setAnswers((prev) => [...prev, ...groupSel]);
     setDirection(1);
-    setStep(s => s + 1);
+    setStep((s) => s + 1);
   };
   const goBack = () => {
     if (step === 0) {
@@ -90,8 +90,8 @@ export default function PriceEstimator() {
       setAnswers([]);
     } else if (step > 0) {
       setDirection(-1);
-      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
-      setStep(s => s - 1);
+      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
+      setStep((s) => s - 1);
     }
   };
 
@@ -104,13 +104,13 @@ export default function PriceEstimator() {
     // build payload: [{ questionId, optionIds[] }, ...]
     const structured = questionsState.map((q, i) => ({
       questionId: q.id,
-      optionIds:  answers[i] || [],
+      optionIds: answers[i] || [],
     }));
 
     try {
       // (optional) send user a summary email
       const msg = questionsState
-        .map((q,i) => `${q.text}: ${answers[i]?.join(", ")}`)
+        .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
         .join("\n");
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -170,7 +170,7 @@ export default function PriceEstimator() {
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map(opt => (
+                  {q.options.map((opt) => (
                     <label
                       key={opt.id}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -198,7 +198,7 @@ export default function PriceEstimator() {
               </button>
               <button
                 onClick={goNext}
-                disabled={!groupSel.every(sel => sel.length > 0)}
+                disabled={!groupSel.every((sel) => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -227,7 +227,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="input input-bordered w-full"
             />
             <input
@@ -235,11 +235,15 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
             <div className="flex gap-3">
-              <button onClick={goBack} type="button" className="btn btn-outline">
+              <button
+                onClick={goBack}
+                type="button"
+                className="btn btn-outline"
+              >
                 <FaAngleLeft />
               </button>
               <button

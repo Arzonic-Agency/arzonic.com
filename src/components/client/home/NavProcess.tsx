@@ -140,7 +140,7 @@ const NavProcess = ({
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [positionState, activeStep, onStickyChange]);
+  }, [positionState, activeStep, onStickyChange, progress, steps.length]);
 
   if (!showNav) return null;
 

@@ -922,7 +922,6 @@ export async function updatePackage(
   }
 }
 
-
 export async function createContactRequest(
   name: string,
   email: string,
@@ -955,9 +954,9 @@ export async function createContactRequest(
 }
 
 export type EstimatorQuestion = {
-  id:      number;
-  text:    string;
-  type:    "single" | "multiple";
+  id: number;
+  text: string;
+  type: "single" | "multiple";
   options: { id: number; text: string }[];
 };
 
@@ -974,10 +973,20 @@ export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
     throw new Error("Failed to fetch questions: " + error.message);
   }
 
-  return (data || []).map((q: any) => ({
-    id:      q.id,
-    text:    q.text,
-    type:    q.type as "single" | "multiple",
-    options: (q.options || []).map((o: any) => ({ id: o.id, text: o.text })),
-  }));
+  return (data || []).map(
+    (q: {
+      id: number;
+      text: string;
+      type: string;
+      options: { id: number; text: string }[];
+    }) => ({
+      id: q.id,
+      text: q.text,
+      type: q.type as "single" | "multiple",
+      options: q.options.map((o: { id: number; text: string }) => ({
+        id: o.id,
+        text: o.text,
+      })),
+    })
+  );
 }
