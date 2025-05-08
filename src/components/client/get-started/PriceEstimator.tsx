@@ -135,24 +135,25 @@ const PriceEstimator = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
+    // 1) Build the payload of questionId + optionIds
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
-    }))
+    }));
 
-    const selectedCountry =
-      countries.find((c) => c.dial === phonePrefix)?.code ?? ""
-    const fullPhone = `${phonePrefix}${phoneNumber}`
-
+    // 2) Reconstruct the "details" string for your email/logging
     const details = questionsState
       .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
-      .join("\n")
+      .join("\n");
 
-    const estimate = calculateEstimateFromAnswers(answers)
+    // 3) Phone/Country as before
+    const selectedCountry =
+      countries.find((c) => c.dial === phonePrefix)?.code ?? "";
+    const fullPhone = `${phonePrefix}${phoneNumber}`;
 
     try {
       const res = await fetch("/api/estimator", {
@@ -163,23 +164,21 @@ const PriceEstimator = () => {
           email,
           country: selectedCountry,
           phone: fullPhone,
-          estimate,
           details,
           answers: payload,
         }),
-      })
-      const body = await res.json()
-      if (!res.ok) throw new Error(body.error || "Estimate request failed")
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || "Estimate request failed");
 
-      setDirection(1)
-      setSuccess(true)
+      setSuccess(true);
     } catch (err: any) {
-      console.error(err)
-      setError(err.message)
+      console.error(err);
+      setError(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="w-full">
