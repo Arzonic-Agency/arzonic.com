@@ -17,7 +17,7 @@ type Country = {
   flag: string;
 };
 
-const QUESTIONS_PER_SLIDE = 2;
+const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
   center: { x: 0, opacity: 1 },
