@@ -56,22 +56,32 @@ export async function sendContactEmail(
   });
 }
 
+// src/lib/server/contact.ts  (or wherever you keep sendEstimatorEmail)
+
 export async function sendEstimatorEmail(
   name: string,
   email: string,
-  estimate: string,    
-  details: string      // optional breakdown or summary
+  estimate: string,
+  details: string,      // optional breakdown or summary
+  packageLabel: string  // ← new!
 ): Promise<void> {
   // 1) Notify admin 
   await transporter.sendMail({
     from: `"Estimator" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
     subject: `New estimate request from ${name}`,
-    text: `Estimate request details:\n\nName: ${name}\nEmail: ${email}\nEstimated Price: ${estimate}\n\n${details}`,
+    text: `Estimate request details:
+Name: ${name}
+Email: ${email}
+Selected package: ${packageLabel}
+Estimated Price: ${estimate}
+
+${details}`,
     html: `
       <h2>New Estimate Request</h2>
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Selected package:</strong> ${packageLabel}</p>
       <p><strong>Estimated Price:</strong> ${estimate}</p>
       <hr/>
       <p>${details.replace(/\n/g, "<br/>")}</p>
@@ -83,10 +93,20 @@ export async function sendEstimatorEmail(
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
     subject: `Your custom estimate is here, ${name}!`,
-    text: `Hi ${name},\n\nThank you for using our estimator! Your estimated price is ${estimate}.\n\nWe’ll follow up shortly with more details.\n\n– Arzonic Agency`,
+    text: `Hi ${name},
+
+Thank you for using our estimator!
+Selected package: ${packageLabel}
+Your estimated price is ${estimate}.
+
+We’ll follow up shortly with more details.
+
+– Arzonic Agency`,
     html: `
       <p>Hi ${name},</p>
-      <p>Thank you for using our estimator! Your estimated price is <strong>${estimate}</strong>.</p>
+      <p>Thank you for using our estimator!</p>
+      <p><strong>Package:</strong> ${packageLabel}</p>
+      <p><strong>Estimated Price:</strong> ${estimate}</p>
       <p>We’ll follow up shortly with more details.</p>
       <br/>
       <p>– Arzonic Agency</p>
