@@ -9,6 +9,7 @@ import {
 } from "@/lib/server/actions";
 import { FaAngleLeft } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
+import { FaAngleDown } from "react-icons/fa6";
 
 type Country = {
   name: string;
@@ -45,18 +46,18 @@ export default function PriceEstimator() {
 
   // 3) track per-slide selections
   const [groupSel, setGroupSel] = useState<number[][]>([]);
-  const [answers, setAnswers]   = useState<number[][]>([]);
+  const [answers, setAnswers] = useState<number[][]>([]);
 
   // 4) contact, phone & consent
-  const [name, setName]               = useState("");
-  const [email, setEmail]             = useState("");
-  const [countries, setCountries]     = useState<Country[]>([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [countries, setCountries] = useState<Country[]>([]);
   const [phonePrefix, setPhonePrefix] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [consentChecked, setConsentChecked] = useState(false);
-  const [loading, setLoading]         = useState(false);
-  const [error, setError]             = useState<string | null>(null);
-  const [success, setSuccess]         = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   // fetch + sort countries once
   useEffect(() => {
@@ -66,9 +67,9 @@ export default function PriceEstimator() {
         const data = await res.json();
         const list: Country[] = data
           .map((c: any) => {
-            const root   = c.idd?.root || "";
+            const root = c.idd?.root || "";
             const suffix = c.idd?.suffixes?.[0] || "";
-            const dial   = suffix ? `${root}${suffix}` : root;
+            const dial = suffix ? `${root}${suffix}` : root;
             if (!dial) return null;
             const code = c.cca2 as string;
             const name = c.name.common as string;
@@ -84,7 +85,7 @@ export default function PriceEstimator() {
 
         // pick user’s region or fallback
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
-        const match  = list.find(c => c.code === region) ?? list[0];
+        const match = list.find(c => c.code === region) ?? list[0];
 
         setCountries(list);
         setPhonePrefix(match.dial);
@@ -147,12 +148,12 @@ export default function PriceEstimator() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
     }));
-  
+
     try {
       const msg = questionsState
         .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
@@ -169,12 +170,12 @@ export default function PriceEstimator() {
       });
       const body = await resp.json();
       if (!resp.ok) throw new Error(body.error || "Error sending email");
-  
+
       const selectedCountry =
         countries.find((c) => c.dial === phonePrefix)?.code ?? "";
-  
+
       const fullPhone = `${phonePrefix}${phoneNumber}`;
-  
+
       await createContactRequest(
         name,
         email,
@@ -182,7 +183,7 @@ export default function PriceEstimator() {
         fullPhone,
         payload
       );
-  
+
       setDirection(1);
       setSuccess(true);
     } catch (err: any) {
@@ -190,7 +191,7 @@ export default function PriceEstimator() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <div className="w-full">
@@ -302,26 +303,60 @@ export default function PriceEstimator() {
               className="input input-bordered w-full"
             />
 
-            {/* Phone with dropdown prefix */}
-            <div className="flex gap-2">
-              <select
-                value={phonePrefix}
-                onChange={e => setPhonePrefix(e.target.value)}
-                className="select select-bordered w-28"
-                required
-              >
-                {countries.map(cn => (
-                  <option key={cn.code} value={cn.dial}>
-                    {cn.flag} {cn.name} ({cn.dial})
-                  </option>
-                ))}
-              </select>
+            <div className="flex gap-2 items-center">
+              <div className="dropdown">
+                <label
+                  tabIndex={0}
+                  className="btn btn-outline w-28 justify-between flex items-center"
+                >
+                  {(() => {
+                    const sel = countries.find((c) => c.dial === phonePrefix);
+                    return (
+                      <>
+                        {sel?.flag} {sel?.dial}
+                      </>
+                    );
+                  })()}
+                  <FaAngleDown className="ml-2" />
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="
+                              dropdown-content
+                              p-1
+                              shadow
+                              bg-base-100
+                              rounded-box
+                              w-56
+                              max-h-60
+                              overflow-y-auto
+                              flex
+                              flex-col
+                              z-50
+                            "
+                >
+                  {countries.map((cn) => (
+                    <li key={cn.code}>
+                      <button
+                        onClick={() => setPhonePrefix(cn.dial)}
+                        className="flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded"
+                      >
+                        <span className="flex-1 mr-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
+                          {cn.flag} {cn.name}
+                        </span>
+                        <span className="opacity-70">{cn.dial}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
               <input
                 type="tel"
                 placeholder="Phone number"
                 required
                 value={phoneNumber}
-                onChange={e => setPhoneNumber(e.target.value)}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 className="input input-bordered flex-1"
               />
             </div>
