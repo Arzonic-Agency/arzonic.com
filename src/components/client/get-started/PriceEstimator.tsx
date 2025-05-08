@@ -7,9 +7,8 @@ import {
   EstimatorQuestion,
   createContactRequest,
 } from "@/lib/server/actions";
-import { FaAngleLeft } from "react-icons/fa6";
+import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
-import { FaAngleDown } from "react-icons/fa6";
 
 type Country = {
   name: string;
@@ -25,7 +24,7 @@ const slideVariants = {
   exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
 };
 
-export default function PriceEstimator() {
+const PriceEstimator = () => {
   // 1) load questions
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
@@ -305,7 +304,6 @@ export default function PriceEstimator() {
               className="input input-bordered w-full"
             />
 
-<<<<<<< Updated upstream
             <div className="flex gap-2 items-center">
               <div className="dropdown">
                 <label
@@ -354,22 +352,6 @@ export default function PriceEstimator() {
                 </ul>
               </div>
 
-=======
-            {/* Phone with dropdown prefix */}
-            <div className="flex gap-2">
-              <select
-                value={phonePrefix}
-                onChange={(e) => setPhonePrefix(e.target.value)}
-                className="select select-bordered w-28"
-                required
-              >
-                {countries.map((cn) => (
-                  <option key={cn.code} value={cn.dial}>
-                    {cn.flag} {cn.name} ({cn.dial})
-                  </option>
-                ))}
-              </select>
->>>>>>> Stashed changes
               <input
                 type="tel"
                 placeholder="Phone number"
@@ -435,4 +417,6 @@ export default function PriceEstimator() {
       </AnimatePresence>
     </div>
   );
-}
+};
+
+export default PriceEstimator;
