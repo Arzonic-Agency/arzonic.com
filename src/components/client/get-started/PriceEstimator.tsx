@@ -13,6 +13,12 @@ type Country = {
   flag: string;
 };
 
+type RestCountry = {
+  cca2: string;
+  name: { common: string };
+  idd?: { root?: string; suffixes?: string[] };
+};
+
 const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
   enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
@@ -57,9 +63,9 @@ const PriceEstimator = () => {
     (async () => {
       try {
         const res = await fetch("https://restcountries.com/v3.1/all");
-        const data = await res.json();
+        const data: RestCountry[] = await res.json(); // Specify the type here
         const list: Country[] = data
-          .map((c: any) => {
+          .map((c) => {
             const root = c.idd?.root || "";
             const suffix = c.idd?.suffixes?.[0] || "";
             const dial = suffix ? `${root}${suffix}` : root;
