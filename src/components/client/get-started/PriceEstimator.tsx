@@ -8,6 +8,14 @@ import {
   createContactRequest,
 } from "@/lib/server/actions";
 import { FaAngleLeft } from "react-icons/fa6";
+import ConsentModal from "../modal/ConsentModal";
+
+type Country = {
+  name: string;
+  code: string;
+  dial: string;
+  flag: string;
+};
 
 const QUESTIONS_PER_SLIDE = 2;
 const slideVariants = {
@@ -17,7 +25,7 @@ const slideVariants = {
 };
 
 export default function PriceEstimator() {
-  // 1) Fetch questions (with option IDs)
+  // 1) load questions
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
     (async () => {
@@ -30,21 +38,61 @@ export default function PriceEstimator() {
     })();
   }, []);
 
-  // 2) Pagination state
+  // 2) slider state
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
-  const [step, setStep] = useState(-1); // -1 == intro screen
+  const [step, setStep] = useState(-1); // -1 = intro
   const [direction, setDirection] = useState(0);
 
-  // 3) Track selected option IDs
+  // 3) track per-slide selections
   const [groupSel, setGroupSel] = useState<number[][]>([]);
-  const [answers, setAnswers] = useState<number[][]>([]);
+  const [answers, setAnswers]   = useState<number[][]>([]);
 
-  // 4) Contact form state
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  // 4) contact, phone & consent
+  const [name, setName]               = useState("");
+  const [email, setEmail]             = useState("");
+  const [countries, setCountries]     = useState<Country[]>([]);
+  const [phonePrefix, setPhonePrefix] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [consentChecked, setConsentChecked] = useState(false);
+  const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState<string | null>(null);
+  const [success, setSuccess]         = useState(false);
+
+  // fetch + sort countries once
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("https://restcountries.com/v3.1/all");
+        const data = await res.json();
+        const list: Country[] = data
+          .map((c: any) => {
+            const root   = c.idd?.root || "";
+            const suffix = c.idd?.suffixes?.[0] || "";
+            const dial   = suffix ? `${root}${suffix}` : root;
+            if (!dial) return null;
+            const code = c.cca2 as string;
+            const name = c.name.common as string;
+            const flag = code
+              .toUpperCase()
+              .replace(/./g, ch =>
+                String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65)
+              );
+            return { name, code, dial, flag };
+          })
+          .filter((c): c is Country => !!c)
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        // pick user’s region or fallback
+        const region = navigator.language.split("-")[1]?.toUpperCase() || "";
+        const match  = list.find(c => c.code === region) ?? list[0];
+
+        setCountries(list);
+        setPhonePrefix(match.dial);
+      } catch (e) {
+        console.error("Failed to load countries", e);
+      }
+    })();
+  }, []);
 
   // derive current questions slice
   const startIdx = step * QUESTIONS_PER_SLIDE;
@@ -53,24 +101,24 @@ export default function PriceEstimator() {
       ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
-  // reset per‐slide selections on slide change
+  // reset per-slide selections on slide change
   useEffect(() => {
     if (step >= 0 && step < slides) {
       setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
-  }, [step, currentQs.length, slides]);
+  }, [step, currentQs.length]);
 
-  // toggle option by its numeric ID
+  // toggle one or multiple options
   const toggleOption = (qIdx: number, optId: number) => {
-    setGroupSel((prev) => {
-      const next = prev.map((arr) => [...arr]);
-      const isSingle = currentQs[qIdx].type === "single";
-      if (isSingle) {
+    setGroupSel(prev => {
+      const next = prev.map(arr => [...arr]);
+      const single = currentQs[qIdx].type === "single";
+      if (single) {
         next[qIdx] = [optId];
       } else {
         const sel = next[qIdx];
         next[qIdx] = sel.includes(optId)
-          ? sel.filter((i) => i !== optId)
+          ? sel.filter(i => i !== optId)
           : [...sel, optId];
       }
       return next;
@@ -79,9 +127,9 @@ export default function PriceEstimator() {
 
   // navigation handlers
   const goNext = () => {
-    setAnswers((prev) => [...prev, ...groupSel]);
+    setAnswers(prev => [...prev, ...groupSel]);
     setDirection(1);
-    setStep((s) => s + 1);
+    setStep(s => s + 1);
   };
   const goBack = () => {
     if (step === 0) {
@@ -90,54 +138,64 @@ export default function PriceEstimator() {
       setAnswers([]);
     } else if (step > 0) {
       setDirection(-1);
-      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
-      setStep((s) => s - 1);
+      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
+      setStep(s => s - 1);
     }
   };
 
-  // submit everything
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    // build payload: [{ questionId, optionIds[] }, ...]
-    const structured = questionsState.map((q, i) => ({
+  
+    const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
     }));
-
+  
     try {
-      // (optional) send user a summary email
       const msg = questionsState
         .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
         .join("\n");
-      const res = await fetch("/api/contact", {
+      const resp = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message: msg }),
+        body: JSON.stringify({
+          name,
+          email,
+          phone: `${phonePrefix}${phoneNumber}`,
+          message: msg,
+        }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Error sending email");
-
-      // persist to `requests` + `responses`
-      await createContactRequest(name, email, structured);
+      const body = await resp.json();
+      if (!resp.ok) throw new Error(body.error || "Error sending email");
+  
+      const selectedCountry =
+        countries.find((c) => c.dial === phonePrefix)?.code ?? "";
+  
+      const fullPhone = `${phonePrefix}${phoneNumber}`;
+  
+      await createContactRequest(
+        name,
+        email,
+        selectedCountry,
+        fullPhone,
+        payload
+      );
+  
       setDirection(1);
       setSuccess(true);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred.");
-      }
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  };  
 
   return (
     <div className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
+
         {/* Intro */}
         {step === -1 && !success && (
           <motion.div
@@ -174,7 +232,7 @@ export default function PriceEstimator() {
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map((opt) => (
+                  {q.options.map(opt => (
                     <label
                       key={opt.id}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -195,14 +253,13 @@ export default function PriceEstimator() {
                 </div>
               </div>
             ))}
-
             <div className="flex gap-3">
               <button onClick={goBack} className="btn btn-outline">
                 <FaAngleLeft />
               </button>
               <button
                 onClick={goNext}
-                disabled={!groupSel.every((sel) => sel.length > 0)}
+                disabled={!groupSel.every(sel => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -222,38 +279,78 @@ export default function PriceEstimator() {
             custom={direction}
             transition={{ duration: 0.4 }}
             onSubmit={handleSubmit}
-            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-3"
+            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-4"
           >
             <h2 className="text-2xl font-bold text-center">Almost done!</h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
+
             <input
               type="text"
               placeholder="Your name"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               className="input input-bordered w-full"
             />
+
             <input
               type="email"
               placeholder="Your email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
-            <div className="flex gap-3">
-              <button
-                onClick={goBack}
-                type="button"
-                className="btn btn-outline"
+
+            {/* Phone with dropdown prefix */}
+            <div className="flex gap-2">
+              <select
+                value={phonePrefix}
+                onChange={e => setPhonePrefix(e.target.value)}
+                className="select select-bordered w-28"
+                required
               >
+                {countries.map(cn => (
+                  <option key={cn.code} value={cn.dial}>
+                    {cn.flag} {cn.name} ({cn.dial})
+                  </option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                placeholder="Phone number"
+                required
+                value={phoneNumber}
+                onChange={e => setPhoneNumber(e.target.value)}
+                className="input input-bordered flex-1"
+              />
+            </div>
+
+            {/* Consent */}
+            <div className="flex items-center gap-3">
+              <input
+                id="consent"
+                type="checkbox"
+                className="checkbox checkbox-md checkbox-primary"
+                checked={consentChecked}
+                onChange={e => setConsentChecked(e.target.checked)}
+                required
+              />
+              <label htmlFor="consent" className="label-text text-xs">
+                I agree to the{" "}
+                <ConsentModal buttonText="Privacy Policy" variant="hover" />
+                {" "}and data processing.
+              </label>
+            </div>
+
+            <div className="flex gap-3">
+              <button onClick={goBack} type="button" className="btn btn-outline">
                 <FaAngleLeft />
               </button>
               <button
                 type="submit"
                 className={`btn btn-primary flex-1 ${loading ? "loading" : ""}`}
-                disabled={loading}
+                disabled={loading || !consentChecked}
               >
                 Submit
               </button>
