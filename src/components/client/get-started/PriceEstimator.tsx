@@ -7,6 +7,7 @@ import {
   EstimatorQuestion,
   createContactRequest,
 } from "@/lib/server/actions";
+import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
 import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 
@@ -142,55 +143,55 @@ const PriceEstimator = () => {
       setStep((s) => s - 1);
     }
   };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+  
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
-    }));
-
+    }))
+  
+    const selectedCountry =
+      countries.find((c) => c.dial === phonePrefix)?.code ?? ""
+    const fullPhone = `${phonePrefix}${phoneNumber}`
+  
+    const details = questionsState
+      .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
+      .join("\n")
+  
+    const estimate = calculateEstimateFromAnswers(answers)
+  
     try {
-      const msg = questionsState
-        .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
-        .join("\n");
-      const resp = await fetch("/api/contact", {
+      const res = await fetch("/api/estimator", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           email,
-          phone: `${phonePrefix}${phoneNumber}`,
-          message: msg,
+          country: selectedCountry,
+          phone: fullPhone,
+          estimate,
+          details,
+          answers: payload,
         }),
-      });
-      const body = await resp.json();
-      if (!resp.ok) throw new Error(body.error || "Error sending email");
-
-      const selectedCountry =
-        countries.find((c) => c.dial === phonePrefix)?.code ?? "";
-
-      const fullPhone = `${phonePrefix}${phoneNumber}`;
-
-      await createContactRequest(
-        name,
-        email,
-        selectedCountry,
-        fullPhone,
-        payload
-      );
-
-      setDirection(1);
-      setSuccess(true);
+      })
+      const body = await res.json()
+      if (!res.ok) throw new Error(body.error || "Estimate request failed")
+  
+      setDirection(1)
+      setSuccess(true)
     } catch (err: any) {
-      setError(err.message);
+      console.error(err)
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+  
+
 
   return (
     <div className="w-full">
