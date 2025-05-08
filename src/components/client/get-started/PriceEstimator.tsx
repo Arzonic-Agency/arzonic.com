@@ -86,7 +86,11 @@ export default function PriceEstimator() {
         // pick user’s region or fallback
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         const match = list.find(c => c.code === region) ?? list[0];
+=======
+        const match = list.find((c) => c.code === region) ?? list[0];
+>>>>>>> Stashed changes
 =======
         const match = list.find((c) => c.code === region) ?? list[0];
 >>>>>>> Stashed changes
