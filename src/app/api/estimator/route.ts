@@ -6,21 +6,15 @@ import { createContactRequest } from "@/lib/server/actions";
 import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
 
 export async function POST(req: Request) {
-  const {
-    name,
-    email,
-    country,
-    phone,
-    details,
-    answers,
-  } = (await req.json()) as {
-    name: string;
-    email: string;
-    country: string;
-    phone: string;
-    details: string;
-    answers: { questionId: number; optionIds: number[] }[];
-  };
+  const { name, email, country, phone, details, answers } =
+    (await req.json()) as {
+      name: string;
+      email: string;
+      country: string;
+      phone: string;
+      details: string;
+      answers: { questionId: number; optionIds: number[] }[];
+    };
 
   if (!name || !email || !answers?.length) {
     return NextResponse.json(
@@ -34,10 +28,17 @@ export async function POST(req: Request) {
   let estimate: string;
   try {
     estimate = await calculateEstimateFromAnswers(nestedAnswers);
-  } catch (err: any) {
-    console.error("Estimate computation failed:", err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("Estimate computation failed:", err);
+      return NextResponse.json(
+        { error: "Failed to compute estimate: " + err.message },
+        { status: 500 }
+      );
+    }
+    console.error("Unknown error during estimate computation:", err);
     return NextResponse.json(
-      { error: "Failed to compute estimate: " + err.message },
+      { error: "Failed to compute estimate due to an unknown error" },
       { status: 500 }
     );
   }
@@ -81,10 +82,17 @@ export async function POST(req: Request) {
     await sendEstimatorEmail(name, email, estimate, details, packageLabel);
 
     return NextResponse.json({ success: true, requestId, estimate });
-  } catch (err: any) {
-    console.error("Estimator route error:", err);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error("Estimator route error:", err);
+      return NextResponse.json(
+        { error: err.message || "Internal error" },
+        { status: 500 }
+      );
+    }
+    console.error("Unknown error in estimator route:", err);
     return NextResponse.json(
-      { error: err.message || "Internal error" },
+      { error: "Internal error due to an unknown issue" },
       { status: 500 }
     );
   }

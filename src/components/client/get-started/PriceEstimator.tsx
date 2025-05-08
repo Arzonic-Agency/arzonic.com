@@ -2,12 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  getEstimatorQuestions,
-  EstimatorQuestion,
-  createContactRequest,
-} from "@/lib/server/actions";
-import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
+import { getEstimatorQuestions, EstimatorQuestion } from "@/lib/server/actions";
 import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 
@@ -32,8 +27,12 @@ const PriceEstimator = () => {
       try {
         const qs = await getEstimatorQuestions();
         setQuestionsState(qs);
-      } catch (err) {
-        console.error("Error loading questions:", err);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.error("Error loading questions:", err);
+        } else {
+          console.error("Unknown error loading questions:", err);
+        }
       }
     })();
   }, []);
@@ -83,8 +82,12 @@ const PriceEstimator = () => {
 
         setCountries(list);
         setPhonePrefix(match.dial);
-      } catch (e) {
-        console.error("Failed to load countries", e);
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.error("Failed to load countries", e);
+        } else {
+          console.error("Unknown error loading countries", e);
+        }
       }
     })();
   }, []);
@@ -99,7 +102,7 @@ const PriceEstimator = () => {
     if (step >= 0 && step < slides) {
       setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
-  }, [step, currentQs.length]);
+  }, [slides, step, currentQs.length]);
 
   const toggleOption = (qIdx: number, optId: number) => {
     setGroupSel((prev) => {
@@ -172,9 +175,14 @@ const PriceEstimator = () => {
       if (!res.ok) throw new Error(body.error || "Estimate request failed");
 
       setSuccess(true);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error(err);
+        setError(err.message);
+      } else {
+        console.error("Unknown error during submission", err);
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }

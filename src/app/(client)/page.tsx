@@ -8,8 +8,6 @@ import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
 import SplashScreen from "@/components/client/layout/SplashScreen";
 import Present from "@/components/client/home/Present";
-import OfferForm from "@/components/client/forms/OfferForm";
-import CallMeForm from "@/components/client/forms/CallMeForm";
 import CallToAction from "@/components/client/home/CallToAction";
 
 const Home = () => {

@@ -11,7 +11,7 @@ const SetupPackagesList = ({ onEdit }) => {
     async function fetchPackages() {
       try {
         const { packs } = await getPackages();
-        setPackages(packs.slice(0, 3)); // Display only the first 3 packages
+        setPackages(packs.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch packages:", error);
       }
@@ -26,7 +26,7 @@ const SetupPackagesList = ({ onEdit }) => {
           <div>
             <div className="font-bold">{pkg.label}</div>{" "}
             {/* Display package label */}
-            <div className="text-sm text-gray-500">{pkg.price} EUR</div>{" "}
+            <div className="text-sm text-gray-500">{pkg.priceEUR} EUR</div>{" "}
             {/* Display package price */}
           </div>
           <div>

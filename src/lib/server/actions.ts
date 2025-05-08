@@ -868,7 +868,7 @@ export async function getPackages() {
     const { data, error } = await supabase
       .from("packages")
       .select("*")
-      .order("price", { ascending: true });
+      .order("priceEUR", { ascending: true });
 
     if (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
@@ -929,30 +929,29 @@ export async function createContactRequest(
   mobile: string,
   answers: { questionId: number; optionIds: number[] }[]
 ): Promise<{ requestId: string }> {
-  const supabase = await createServerClientInstance()
+  const supabase = await createServerClientInstance();
 
   const { data: request, error: reqErr } = await supabase
     .from("requests")
     .insert({ name, mail: email, country, mobile })
     .select("id")
-    .single()
+    .single();
 
   if (reqErr || !request) {
-    throw new Error("Failed to create request: " + reqErr?.message)
+    throw new Error("Failed to create request: " + reqErr?.message);
   }
-  const requestId = request.id
+  const requestId = request.id;
 
   const { error: respErr } = await supabase
     .from("responses")
-    .insert({ request_id: requestId, answers })
+    .insert({ request_id: requestId, answers });
 
   if (respErr) {
-    throw new Error("Failed to save responses: " + respErr.message)
+    throw new Error("Failed to save responses: " + respErr.message);
   }
 
-  return { requestId }
+  return { requestId };
 }
-
 
 export type EstimatorQuestion = {
   id: number;

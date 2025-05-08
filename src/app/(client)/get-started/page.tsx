@@ -16,8 +16,8 @@ const GetStarted = () => {
     <div className="py-20 md:py-0 md:min-h-screen flex items-center justify-center bg-base-100 flex-col ">
       <div className="max-w-md md:max-w-xl">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
-          Estimate your project
-          <span className="text-primary"> – in under a minute</span>
+          {t("GetStarted.title")}
+          <span className="text-primary"> {t("GetStarted.subtitle")}</span>
         </h1>
       </div>
       <div className="flex flex-col md:flex-row items-center">
