@@ -89,10 +89,7 @@ const CallMeForm = () => {
           className="flex flex-col gap-4 bg-base-100 p-8 md:p-10 rounded-lg  relative"
         >
           <h2 className="text-2xl font-bold">Bliv ringet op</h2>
-          <TaskSelect
-            onChange={(value) => setCategory(value)}
-            isCallForm={true}
-          />
+          <TaskSelect onChange={(value) => setCategory(value)} />
           <label htmlFor="name" className="form-control w-full max-w-xs">
             <div className="label">
               <span className="label-text md:text-base">Navn</span>
@@ -103,7 +100,7 @@ const CallMeForm = () => {
               autoComplete="name"
               type="text"
               placeholder="Skriv dit navn"
-              className="input input-bordered input-md md:input-lg w-full max-w-xs"
+              className="input input-bordered input-md  w-full max-w-xs"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -118,7 +115,7 @@ const CallMeForm = () => {
               id="phone"
               type="tel"
               placeholder="Skriv dit mobilnummer"
-              className="input input-bordered input-md md:input-lg w-full"
+              className="input input-bordered input-md  w-full"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
               required
@@ -128,13 +125,13 @@ const CallMeForm = () => {
             <label className="cursor-pointer flex items-center justify-start gap-3">
               <input
                 type="checkbox"
-                className="checkbox checkbox-md md:checkbox-lg checkbox-primary"
+                className="checkbox checkbox-md  checkbox-primary"
                 checked={isChecked}
                 onChange={(e) => setIsChecked(e.target.checked)}
                 required
               />
             </label>
-            <span className="label-text text-xs md:text-sm max-w-60">
+            <span className="label-text text-xs max-w-60">
               Jeg giver samtykke til opbevaring af mine oplysninger. &nbsp;
               <ConsentModal buttonText="Læs mere" variant="primary" />
             </span>
@@ -148,7 +145,7 @@ const CallMeForm = () => {
           </div>
           <button
             type="submit"
-            className="btn btn-primary mt-10"
+            className="btn btn-primary mt-5"
             disabled={isLoading}
           >
             {isLoading ? "Sender..." : "Bliv kontaktet"}

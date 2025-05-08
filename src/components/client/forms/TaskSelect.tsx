@@ -5,11 +5,10 @@ import { useTranslation } from "react-i18next"; // Import translation hook
 
 interface ContactSelectProps {
   onChange: (value: string) => void;
-  isCallForm?: boolean;
 }
 
-const TaskSelect = ({ onChange, isCallForm = false }: ContactSelectProps) => {
-  const { t } = useTranslation(); // Initialize translation hook
+const TaskSelect = ({ onChange }: ContactSelectProps) => {
+  const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -23,9 +22,7 @@ const TaskSelect = ({ onChange, isCallForm = false }: ContactSelectProps) => {
       <legend className="fieldset-legend">{t("TaskSelect.legend")}</legend>
       <label className="form-control w-full max-w-xs">
         <select
-          className={`select select-bordered ${
-            isCallForm ? "md:select-lg" : "select-md"
-          }`}
+          className="select select-bordered select-md"
           value={selectedOption}
           onChange={handleChange}
           required
