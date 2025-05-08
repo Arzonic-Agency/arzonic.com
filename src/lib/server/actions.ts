@@ -924,9 +924,9 @@ export async function updatePackage(
 
 export async function createContactRequest(
   name: string,
-  email: string,
+  mail: string,
   country: string,
-  phone: string,
+  mobile: string,
   answers: { questionId: number; optionIds: number[] }[]
 ): Promise<{ requestId: string }> {
   const supabase = await createServerClientInstance();
@@ -936,9 +936,9 @@ export async function createContactRequest(
     .from("requests")
     .insert({
       name,
-      mail: email,
+      mail,
       country,
-      phone,
+      mobile,
     })
     .select("id")
     .single();
@@ -947,12 +947,10 @@ export async function createContactRequest(
     throw new Error("Failed to save request: " + reqError?.message);
   }
 
-  const { error: respError } = await supabase
-    .from("responses")
-    .insert({
-      request_id: request.id,
-      answers,
-    });
+  const { error: respError } = await supabase.from("responses").insert({
+    request_id: request.id,
+    answers,
+  });
 
   if (respError) {
     throw new Error("Failed to save responses: " + respError.message);

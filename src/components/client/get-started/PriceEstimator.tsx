@@ -75,7 +75,7 @@ export default function PriceEstimator() {
             const name = c.name.common as string;
             const flag = code
               .toUpperCase()
-              .replace(/./g, ch =>
+              .replace(/./g, (ch) =>
                 String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65)
               );
             return { name, code, dial, flag };
@@ -85,7 +85,11 @@ export default function PriceEstimator() {
 
         // pick user’s region or fallback
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
+<<<<<<< Updated upstream
         const match = list.find(c => c.code === region) ?? list[0];
+=======
+        const match = list.find((c) => c.code === region) ?? list[0];
+>>>>>>> Stashed changes
 
         setCountries(list);
         setPhonePrefix(match.dial);
@@ -111,15 +115,15 @@ export default function PriceEstimator() {
 
   // toggle one or multiple options
   const toggleOption = (qIdx: number, optId: number) => {
-    setGroupSel(prev => {
-      const next = prev.map(arr => [...arr]);
+    setGroupSel((prev) => {
+      const next = prev.map((arr) => [...arr]);
       const single = currentQs[qIdx].type === "single";
       if (single) {
         next[qIdx] = [optId];
       } else {
         const sel = next[qIdx];
         next[qIdx] = sel.includes(optId)
-          ? sel.filter(i => i !== optId)
+          ? sel.filter((i) => i !== optId)
           : [...sel, optId];
       }
       return next;
@@ -128,9 +132,9 @@ export default function PriceEstimator() {
 
   // navigation handlers
   const goNext = () => {
-    setAnswers(prev => [...prev, ...groupSel]);
+    setAnswers((prev) => [...prev, ...groupSel]);
     setDirection(1);
-    setStep(s => s + 1);
+    setStep((s) => s + 1);
   };
   const goBack = () => {
     if (step === 0) {
@@ -139,8 +143,8 @@ export default function PriceEstimator() {
       setAnswers([]);
     } else if (step > 0) {
       setDirection(-1);
-      setAnswers(prev => prev.slice(0, prev.length - groupSel.length));
-      setStep(s => s - 1);
+      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
+      setStep((s) => s - 1);
     }
   };
 
@@ -196,7 +200,6 @@ export default function PriceEstimator() {
   return (
     <div className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
-
         {/* Intro */}
         {step === -1 && !success && (
           <motion.div
@@ -207,12 +210,15 @@ export default function PriceEstimator() {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-6 text-center"
+            className=" p-7 rounded-2xl shadow-lg flex flex-col justify-center gap-6 text-center h-[550px]"
           >
-            <h2 className="text-2xl font-bold">Welcome!</h2>
-            <p>Answer a few quick questions to get your custom estimate.</p>
-            <button onClick={goNext} className="btn btn-primary w-full">
-              Begin
+            <h2 className="text-2xl font-bold">Let’s find your price</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              4 simple questions. 1 minute. A clear estimate for your project –
+              100% non-binding.
+            </p>
+            <button onClick={goNext} className="btn btn-primary w-full mt-4">
+              Start the estimate
             </button>
           </motion.div>
         )}
@@ -227,13 +233,13 @@ export default function PriceEstimator() {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-7"
+            className=" p-7 rounded-2xl shadow-lg flex flex-col gap-7"
           >
             {currentQs.map((q, idx) => (
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
                 <div className="flex flex-col gap-3 mb-5">
-                  {q.options.map(opt => (
+                  {q.options.map((opt) => (
                     <label
                       key={opt.id}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -260,7 +266,7 @@ export default function PriceEstimator() {
               </button>
               <button
                 onClick={goNext}
-                disabled={!groupSel.every(sel => sel.length > 0)}
+                disabled={!groupSel.every((sel) => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
                 Next
@@ -280,7 +286,7 @@ export default function PriceEstimator() {
             custom={direction}
             transition={{ duration: 0.4 }}
             onSubmit={handleSubmit}
-            className="card bg-base-200 p-7 rounded-2xl shadow-lg flex flex-col gap-4"
+            className=" p-7 rounded-2xl shadow-lg flex flex-col gap-4"
           >
             <h2 className="text-2xl font-bold text-center">Almost done!</h2>
             {error && <p className="text-red-500 text-center">{error}</p>}
@@ -290,7 +296,7 @@ export default function PriceEstimator() {
               placeholder="Your name"
               required
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="input input-bordered w-full"
             />
 
@@ -299,10 +305,11 @@ export default function PriceEstimator() {
               placeholder="Your email"
               required
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               className="input input-bordered w-full"
             />
 
+<<<<<<< Updated upstream
             <div className="flex gap-2 items-center">
               <div className="dropdown">
                 <label
@@ -351,6 +358,22 @@ export default function PriceEstimator() {
                 </ul>
               </div>
 
+=======
+            {/* Phone with dropdown prefix */}
+            <div className="flex gap-2">
+              <select
+                value={phonePrefix}
+                onChange={(e) => setPhonePrefix(e.target.value)}
+                className="select select-bordered w-28"
+                required
+              >
+                {countries.map((cn) => (
+                  <option key={cn.code} value={cn.dial}>
+                    {cn.flag} {cn.name} ({cn.dial})
+                  </option>
+                ))}
+              </select>
+>>>>>>> Stashed changes
               <input
                 type="tel"
                 placeholder="Phone number"
@@ -368,18 +391,22 @@ export default function PriceEstimator() {
                 type="checkbox"
                 className="checkbox checkbox-md checkbox-primary"
                 checked={consentChecked}
-                onChange={e => setConsentChecked(e.target.checked)}
+                onChange={(e) => setConsentChecked(e.target.checked)}
                 required
               />
               <label htmlFor="consent" className="label-text text-xs">
                 I agree to the{" "}
-                <ConsentModal buttonText="Privacy Policy" variant="hover" />
-                {" "}and data processing.
+                <ConsentModal buttonText="Privacy Policy" variant="hover" /> and
+                data processing.
               </label>
             </div>
 
             <div className="flex gap-3">
-              <button onClick={goBack} type="button" className="btn btn-outline">
+              <button
+                onClick={goBack}
+                type="button"
+                className="btn btn-outline"
+              >
                 <FaAngleLeft />
               </button>
               <button
@@ -403,7 +430,7 @@ export default function PriceEstimator() {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="card bg-base-200 p-6 rounded-2xl shadow-lg text-center"
+            className=" p-6 rounded-2xl shadow-lg text-center"
           >
             <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
             <p>We’ve received your request and will get back to you soon.</p>
