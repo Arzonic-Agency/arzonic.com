@@ -924,40 +924,35 @@ export async function updatePackage(
 
 export async function createContactRequest(
   name: string,
-  mail: string,
+  email: string,
   country: string,
   mobile: string,
   answers: { questionId: number; optionIds: number[] }[]
 ): Promise<{ requestId: string }> {
-  const supabase = await createServerClientInstance();
+  const supabase = await createServerClientInstance()
 
-  // 1) Insert into requests with both country and full phone
-  const { data: request, error: reqError } = await supabase
+  const { data: request, error: reqErr } = await supabase
     .from("requests")
-    .insert({
-      name,
-      mail,
-      country,
-      mobile,
-    })
+    .insert({ name, mail: email, country, mobile })
     .select("id")
-    .single();
+    .single()
 
-  if (reqError || !request) {
-    throw new Error("Failed to save request: " + reqError?.message);
+  if (reqErr || !request) {
+    throw new Error("Failed to create request: " + reqErr?.message)
+  }
+  const requestId = request.id
+
+  const { error: respErr } = await supabase
+    .from("responses")
+    .insert({ request_id: requestId, answers })
+
+  if (respErr) {
+    throw new Error("Failed to save responses: " + respErr.message)
   }
 
-  const { error: respError } = await supabase.from("responses").insert({
-    request_id: request.id,
-    answers,
-  });
-
-  if (respError) {
-    throw new Error("Failed to save responses: " + respError.message);
-  }
-
-  return { requestId: request.id };
+  return { requestId }
 }
+
 
 export type EstimatorQuestion = {
   id: number;
