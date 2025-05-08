@@ -383,5 +383,59 @@
     "callPrompt": "Call us at",
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
+  },
+
+  "ConsentModal": {
+    "title": "Consent & Privacy Policy",
+    "section1": {
+      "title": "1. Collection and Processing of Personal Data",
+      "description": "When you use our price calculator or fill out a contact form on Arzonic Agency's website, we collect and process the following information:",
+      "list": {
+        "name": "Name",
+        "phone": "Phone number",
+        "email": "Email address",
+        "details": "Any details you provide in your message or request"
+      },
+      "note": "This information is used solely to respond to your inquiry, prepare a quote, and follow up if necessary."
+    },
+    "section2": {
+      "title": "2. Data Retention and Deletion",
+      "description": "Your data is stored securely and confidentially.",
+      "list": {
+        "noCustomer": "If no customer relationship is established, your data will be automatically deleted after 30 days.",
+        "customer": "If you become a customer, we will retain your data only as long as necessary to provide our services or comply with legal obligations."
+      },
+      "note": "You may request early deletion by contacting us at mail@arzonic.com."
+    },
+    "section3": {
+      "title": "3. Disclosure of Information",
+      "description": "We do not share your information with third parties unless it is necessary to fulfill your request (e.g., a subcontractor). If this is the case, it will only be done with your prior consent."
+    },
+    "section4": {
+      "title": "4. Your Rights",
+      "description": "You have the right to:",
+      "list": {
+        "access": "Access the data we hold about you",
+        "correct": "Correct inaccurate or outdated information",
+        "delete": "Request deletion of your data (unless retention is required by law)",
+        "withdraw": "Withdraw your consent to data processing"
+      },
+      "note": "To exercise your rights, contact us at mail@arzonic.com."
+    },
+    "section5": {
+      "title": "5. Consent",
+      "description1": "By submitting your information through our website, you consent to the processing of your data as described above.",
+      "description2": "You may withdraw your consent at any time by contacting us. If there is no legal reason to retain your data, it will be deleted upon request."
+    },
+    "section6": {
+      "title": "6. Data Security",
+      "description": "We implement appropriate technical and organizational measures to protect your data against unauthorized access, misuse, or disclosure."
+    },
+    "section7": {
+      "title": "7. Updates to This Policy",
+      "description": "We reserve the right to update this Consent & Privacy Policy. The most recent version will always be available on our website."
+    },
+    "lastUpdated": "Last updated: May 7, 2025",
+    "closeButton": "Close"
   }
 }

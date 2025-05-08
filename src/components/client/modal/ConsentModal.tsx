@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ConsentModalProps {
   buttonText: string;
@@ -8,6 +9,7 @@ interface ConsentModalProps {
 
 const ConsentModal = ({ buttonText, variant = "hover" }: ConsentModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -24,86 +26,40 @@ const ConsentModal = ({ buttonText, variant = "hover" }: ConsentModalProps) => {
       {/* Modal */}
       {isOpen && (
         <div className="modal modal-open fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="modal-box max-w-2xl p-6 bg-white rounded-lg shadow-lg">
+          <div className="modal-box max-w-2xl p-6 bg-base-100 rounded-lg shadow-lg">
             <h3 className="font-bold text-xl md:text-2xl py-2">
-              Consent & Privacy Policy
+              {t("ConsentModal.title")}
             </h3>
 
             <div className="py-4 text-sm max-h-96 overflow-y-auto flex flex-col gap-5">
               <div>
                 <h4 className="font-semibold md:text-base mb-2">
-                  1. Collection and Processing of Personal Data
+                  {t("ConsentModal.section1.title")}
                 </h4>
-                <p>
-                  When you fill out a form on our website to request a quote or
-                  make contact, Halsnæs Haveservice collects and processes the
-                  following information:
-                </p>
+                <p>{t("ConsentModal.section1.description")}</p>
                 <ul className="list-disc pl-5 my-2">
-                  <li>Name</li>
-                  <li>Phone number</li>
-                  <li>Email address</li>
-                  <li>Any information you provide in the message field</li>
+                  <li>{t("ConsentModal.section1.list.name")}</li>
+                  <li>{t("ConsentModal.section1.list.phone")}</li>
+                  <li>{t("ConsentModal.section1.list.email")}</li>
+                  <li>{t("ConsentModal.section1.list.details")}</li>
+                </ul>
+                <p>{t("ConsentModal.section1.note")}</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold md:text-base mb-2">
+                  {t("ConsentModal.section2.title")}
+                </h4>
+                <p>{t("ConsentModal.section2.description")}</p>
+                <ul className="list-disc pl-5 my-2">
+                  <li>{t("ConsentModal.section2.list.noCustomer")}</li>
+                  <li>{t("ConsentModal.section2.list.customer")}</li>
                 </ul>
                 <p>
-                  This data is used solely to handle your inquiry, provide the
-                  requested service, and follow up on your request.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold md:text-base mb-2">
-                  2. Data Retention and Deletion
-                </h4>
-                <p>
-                  We store your data securely and confidentially. Your
-                  information will automatically be deleted after 30 days unless
-                  a customer agreement is established, in which case the data
-                  may be kept for a longer period.
-                </p>
-                <p>
-                  If you wish to have your data deleted before the 30-day period
-                  ends, you can contact us at{" "}
+                  {t("ConsentModal.section2.note")}{" "}
                   <strong>
-                    <a href="mailto:hhs@hhservice.dk" target="_blank">
-                      hhs@hhservice.dk
-                    </a>
-                  </strong>
-                  , and we will delete it within a reasonable timeframe.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold md:text-base mb-2">
-                  3. Disclosure of Information
-                </h4>
-                <p>
-                  We <strong>do not</strong> share your information with third
-                  parties unless it is necessary to fulfill your request (e.g.,
-                  a subcontractor). In such cases, it will only happen with your
-                  consent.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-semibold md:text-base mb-2">
-                  4. Your Rights
-                </h4>
-                <p>You have the right to:</p>
-                <ul className="list-disc pl-5 my-2">
-                  <li>Access the data we have registered about you</li>
-                  <li>Correct any incorrect information</li>
-                  <li>
-                    Request deletion of your data (unless retention is required
-                    by law)
-                  </li>
-                  <li>Withdraw your consent to the storage of your data</li>
-                </ul>
-                <p>
-                  To exercise your rights, you can contact us at{" "}
-                  <strong>
-                    <a href="mailto:hhs@hhservice.dk" target="_blank">
-                      hhs@hhservice.dk
+                    <a href="mailto:mail@arzonic.com" target="_blank">
+                      mail@arzonic.com
                     </a>
                   </strong>
                   .
@@ -111,41 +67,57 @@ const ConsentModal = ({ buttonText, variant = "hover" }: ConsentModalProps) => {
               </div>
 
               <div>
-                <h4 className="font-semibold md:text-base mb-2">5. Consent</h4>
+                <h4 className="font-semibold md:text-base mb-2">
+                  {t("ConsentModal.section3.title")}
+                </h4>
+                <p>{t("ConsentModal.section3.description")}</p>
+              </div>
+
+              <div>
+                <h4 className="font-semibold md:text-base mb-2">
+                  {t("ConsentModal.section4.title")}
+                </h4>
+                <p>{t("ConsentModal.section4.description")}</p>
+                <ul className="list-disc pl-5 my-2">
+                  <li>{t("ConsentModal.section4.list.access")}</li>
+                  <li>{t("ConsentModal.section4.list.correct")}</li>
+                  <li>{t("ConsentModal.section4.list.delete")}</li>
+                  <li>{t("ConsentModal.section4.list.withdraw")}</li>
+                </ul>
                 <p>
-                  By submitting your information via our website, you give your
-                  consent to us processing your data as described above.
-                </p>
-                <p>
-                  You can withdraw your consent at any time by contacting us,
-                  and we will delete your information unless there is a legal
-                  basis for continued storage.
+                  {t("ConsentModal.section4.note")}{" "}
+                  <strong>
+                    <a href="mailto:mail@arzonic.com" target="_blank">
+                      mail@arzonic.com
+                    </a>
+                  </strong>
+                  .
                 </p>
               </div>
 
               <div>
                 <h4 className="font-semibold md:text-base mb-2">
-                  6. Data Security
+                  {t("ConsentModal.section5.title")}
                 </h4>
-                <p>
-                  We protect your information through appropriate technical and
-                  organizational security measures to prevent misuse or
-                  unauthorized access.
-                </p>
+                <p>{t("ConsentModal.section5.description1")}</p>
+                <p>{t("ConsentModal.section5.description2")}</p>
               </div>
 
               <div>
                 <h4 className="font-semibold md:text-base mb-2">
-                  7. Changes to Consent and Privacy Policy
+                  {t("ConsentModal.section6.title")}
                 </h4>
-                <p>
-                  We reserve the right to update this consent and privacy
-                  policy. The latest version will always be available on our
-                  website.
-                </p>
+                <p>{t("ConsentModal.section6.description")}</p>
               </div>
 
-              <p className="mt-2 text-xs">Last updated: February 5, 2025</p>
+              <div>
+                <h4 className="font-semibold md:text-base mb-2">
+                  {t("ConsentModal.section7.title")}
+                </h4>
+                <p>{t("ConsentModal.section7.description")}</p>
+              </div>
+
+              <p className="mt-2 text-xs">{t("ConsentModal.lastUpdated")}</p>
             </div>
 
             <div className="modal-action">
@@ -153,7 +125,7 @@ const ConsentModal = ({ buttonText, variant = "hover" }: ConsentModalProps) => {
                 className="btn btn-primary"
                 onClick={() => setIsOpen(false)}
               >
-                Close
+                {t("ConsentModal.closeButton")}
               </button>
             </div>
           </div>

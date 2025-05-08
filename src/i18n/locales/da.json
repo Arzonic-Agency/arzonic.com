@@ -265,7 +265,7 @@
       "description-second": "gennem hvert trin – effektivt og målrettet"
     },
     "steps": {
-      "discoveryStrategy": "Opdagelse & Strategi",
+      "discoveryStrategy": "Indsigt & Strategi",
       "designExperience": "Design & Oplevelse",
       "developmentIntegration": "Udvikling & Integration",
       "launchSupport": "Lancering & Support"
@@ -273,9 +273,9 @@
   },
   "Process": {
     "discoveryStrategy": {
-      "title": "Discovery & Strategi",
+      "title": "Indsigt & Strategi",
       "subtitle": "Fra vision til konkret plan",
-      "description": "Ligesom enhver vellykket ekspedition starter dit projekt med en tydelig destination og en solid rute. Vi undersøger dine mål, analyserer markedet og skaber en trin-for-trin-plan mod dit digitale højdepunt.",
+      "description": "Ligesom enhver succesfuld ekspedition begynder din digitale rejse med indsigt og en gennemtænkt strategi. Vi dykker ned i dine forretningsmål, analyserer markedet og udstikker en klar kurs, der leder dig mod dit digitale højdepunkt – trin for trin",
       "steps": [
         "Definér din destination (vision og formål)",
         "Forstå målgruppen og landskabet",
@@ -286,7 +286,7 @@
     "designExperience": {
       "title": "Design & Oplevelse",
       "subtitle": "Designet til mennesker og mål",
-      "description": "Med ruten klar bringer vi din vision til live. Vi starter med wireframes og tilføjer lag af klarhed, følelse og interaktion – og designer hver skærm, så den føles intuitiv og målrettet.",
+      "description": "Med ruten klar bringer vi din vision til live. Vi starter med wireframes og tilføjer lag af klarhed, følelse og interaktion – og designer hver skærm, så den føles intuitiv og målrettet",
       "steps": [
         "Kortlæg brugerrejsen med formål",
         "Omsæt idéer til strukturerede wireframes",
@@ -297,7 +297,7 @@
     "developmentIntegration": {
       "title": "Udvikling & Integration",
       "subtitle": "Vi bygger det solide fundament",
-      "description": "Vi omsætter designet til stærke, skalerbare og fremtidssikrede digitale løsninger – klar til at vokse med din forretning.",
+      "description": "Vi omsætter designet til stærke, skalerbare og fremtidssikrede digitale løsninger – klar til at vokse med din forretning",
       "steps": [
         "Frontend- og backend-udvikling",
         "Ren, effektiv og skalerbar kode",
@@ -308,7 +308,7 @@
     "launchSupport": {
       "title": "Lancering & Support",
       "subtitle": "Stabil lancering og videre drift",
-      "description": "Lanceringen er kun begyndelsen. Vi sørger for en problemfri go-live og bliver ved din side for at sikre, at løsningen fortsætter med at præstere, udvikle sig og støtte dine forretningsmål.",
+      "description": "Lanceringen er kun begyndelsen. Vi sørger for en problemfri go-live og bliver ved din side for at sikre, at løsningen fortsætter med at præstere, udvikle sig og støtte dine forretningsmål",
       "steps": [
         "Problemfri og sikker lancering",
         "Løbende support og opdateringer",
@@ -380,5 +380,59 @@
     "callPrompt": "Ring til os på",
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
+  },
+
+  "ConsentModal": {
+    "title": "Samtykke & Privatlivspolitik",
+    "section1": {
+      "title": "1. Indsamling og Behandling af Personoplysninger",
+      "description": "Når du bruger vores prisberegner eller udfylder en kontaktformular på Arzonic Agencys hjemmeside, indsamler og behandler vi følgende oplysninger:",
+      "list": {
+        "name": "Navn",
+        "phone": "Telefonnummer",
+        "email": "E-mailadresse",
+        "details": "Eventuelle detaljer, du angiver i din besked eller forespørgsel"
+      },
+      "note": "Disse oplysninger bruges udelukkende til at besvare din forespørgsel, udarbejde et tilbud og følge op, hvis nødvendigt."
+    },
+    "section2": {
+      "title": "2. Opbevaring og Sletning af Data",
+      "description": "Dine data opbevares sikkert og fortroligt.",
+      "list": {
+        "noCustomer": "Hvis du ikke bliver kunde, slettes dine oplysninger automatisk efter 30 dage.",
+        "customer": "Hvis du bliver kunde, opbevarer vi dine oplysninger kun så længe, det er nødvendigt for at levere vores ydelser eller overholde lovgivningen."
+      },
+      "note": "Du kan anmode om tidligere sletning ved at kontakte os på mail@arzonic.com."
+    },
+    "section3": {
+      "title": "3. Videregivelse af Oplysninger",
+      "description": "Vi deler ikke dine oplysninger med tredjeparter, medmindre det er nødvendigt for at behandle din forespørgsel (f.eks. med en underleverandør). I så fald sker det kun med dit forudgående samtykke."
+    },
+    "section4": {
+      "title": "4. Dine Rettigheder",
+      "description": "Du har til enhver tid ret til at:",
+      "list": {
+        "access": "Få adgang til de oplysninger, vi har om dig",
+        "correct": "Få rettet forkerte eller forældede oplysninger",
+        "delete": "Anmode om sletning af dine data (medmindre lovgivningen kræver opbevaring)",
+        "withdraw": "Trække dit samtykke tilbage"
+      },
+      "note": "Kontakt os venligst på mail@arzonic.com for at gøre brug af dine rettigheder."
+    },
+    "section5": {
+      "title": "5. Samtykke",
+      "description1": "Ved at indsende dine oplysninger via vores hjemmeside giver du samtykke til, at vi må behandle dine data som beskrevet ovenfor.",
+      "description2": "Du kan til enhver tid trække dit samtykke tilbage ved at kontakte os. Hvis der ikke er nogen lovmæssig grund til at gemme dine data, bliver de slettet."
+    },
+    "section6": {
+      "title": "6. Datasikkerhed",
+      "description": "Vi benytter passende tekniske og organisatoriske foranstaltninger for at beskytte dine data mod uautoriseret adgang, misbrug eller offentliggørelse."
+    },
+    "section7": {
+      "title": "7. Ændringer i Denne Politik",
+      "description": "Vi forbeholder os retten til at opdatere denne samtykke- og privatlivspolitik. Den nyeste version vil altid være tilgængelig på vores hjemmeside."
+    },
+    "lastUpdated": "Sidst opdateret: 7. maj 2025",
+    "closeButton": "Luk"
   }
 }

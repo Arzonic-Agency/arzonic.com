@@ -31,7 +31,7 @@ const Footer = () => {
         </nav>
       </footer>
       <footer className="footer bg-base-100 text-base-content  px-10 py-4">
-        <aside className="grid-flow-col items-center">
+        <aside className=" items-center">
           <FaHashtag className="text-3xl -rotate-12 text-secondary" />
           <p>
             Arzonic Agency
