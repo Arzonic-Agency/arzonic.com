@@ -26,7 +26,6 @@ const slideVariants = {
 };
 
 const PriceEstimator = () => {
-  // 1) load questions
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
     (async () => {
@@ -39,16 +38,11 @@ const PriceEstimator = () => {
     })();
   }, []);
 
-  // 2) slider state
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
   const [step, setStep] = useState(-1); // -1 = intro
   const [direction, setDirection] = useState(0);
-
-  // 3) track per-slide selections
   const [groupSel, setGroupSel] = useState<number[][]>([]);
   const [answers, setAnswers] = useState<number[][]>([]);
-
-  // 4) contact, phone & consent
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [countries, setCountries] = useState<Country[]>([]);
@@ -95,21 +89,18 @@ const PriceEstimator = () => {
     })();
   }, []);
 
-  // derive current questions slice
   const startIdx = step * QUESTIONS_PER_SLIDE;
   const currentQs =
     step >= 0 && step < slides
       ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
-  // reset per-slide selections on slide change
   useEffect(() => {
     if (step >= 0 && step < slides) {
       setGroupSel(Array.from({ length: currentQs.length }, () => []));
     }
   }, [step, currentQs.length]);
 
-  // toggle one or multiple options
   const toggleOption = (qIdx: number, optId: number) => {
     setGroupSel((prev) => {
       const next = prev.map((arr) => [...arr]);
@@ -126,7 +117,6 @@ const PriceEstimator = () => {
     });
   };
 
-  // navigation handlers
   const goNext = () => {
     setAnswers((prev) => [...prev, ...groupSel]);
     setDirection(1);
@@ -143,27 +133,27 @@ const PriceEstimator = () => {
       setStep((s) => s - 1);
     }
   };
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
-  
+
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
     }))
-  
+
     const selectedCountry =
       countries.find((c) => c.dial === phonePrefix)?.code ?? ""
     const fullPhone = `${phonePrefix}${phoneNumber}`
-  
+
     const details = questionsState
       .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
       .join("\n")
-  
+
     const estimate = calculateEstimateFromAnswers(answers)
-  
+
     try {
       const res = await fetch("/api/estimator", {
         method: "POST",
@@ -180,7 +170,7 @@ const PriceEstimator = () => {
       })
       const body = await res.json()
       if (!res.ok) throw new Error(body.error || "Estimate request failed")
-  
+
       setDirection(1)
       setSuccess(true)
     } catch (err: any) {
@@ -190,8 +180,6 @@ const PriceEstimator = () => {
       setLoading(false)
     }
   }
-  
-
 
   return (
     <div className="w-full">
