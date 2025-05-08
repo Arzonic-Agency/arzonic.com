@@ -23,10 +23,21 @@ export async function sendContactEmail(
     subject: `New contact form submission from ${name}`,
     text: `You’ve received a new message:\n\nName: ${name}\nEmail: ${email}\n\n${message}`,
     html: `
-      <h2>New contact form submission</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p>${message.replace(/\n/g, "<br/>")}</p>
+      <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 24px; border-radius: 8px; font-family: Arial, sans-serif; color: #333333;">
+  
+        <div style="text-align: center; margin-bottom: 20px;">
+          <img src="https://arzonic.com/arzonic-logo.png" width="100" alt="Arzonic Logo" style="display: block; margin: 0 auto;">
+        </div>
+  
+        <h2 style="text-align: center; font-size: 20px; margin: 0 0 24px;">Ny besked fra kontaktformularen</h2>
+  
+        <div style="text-align: center;">
+          <a href="https://arzonic.com/admin/messages"
+            style="display: inline-block; background-color: #048179; color: #ffffff; padding: 14px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px;">
+            Gå til beskeder
+          </a>
+        </div>
+      </div>
     `,
   });
 
