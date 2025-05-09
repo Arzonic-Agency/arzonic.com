@@ -19,7 +19,9 @@ const slideVariants = {
 const PriceEstimator = () => {
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
-    getEstimatorQuestions()
+    const raw = localStorage.getItem("i18nextLng") || "en";
+    const lang = raw.split("-")[0] === "da" ? "da" : "en";
+    getEstimatorQuestions(lang)
       .then(setQuestionsState)
       .catch((err) => console.error("Error loading questions:", err));
   }, []);

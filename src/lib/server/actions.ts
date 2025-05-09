@@ -953,19 +953,37 @@ export async function createContactRequest(
   return { requestId };
 }
 
+export type Option = { id: number; text: string };
 export type EstimatorQuestion = {
   id: number;
   text: string;
   type: "single" | "multiple";
-  options: { id: number; text: string }[];
+  options: Option[];
 };
 
-export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
+/**
+ * Fetches estimator questions and answer-options,
+ * choosing the right language in JS.
+ */
+export async function getEstimatorQuestions(
+  lang: "en" | "da" = "en"
+): Promise<EstimatorQuestion[]> {
   const supabase = await createServerClientInstance();
 
+  // grab both cols
   const { data, error } = await supabase
     .from("questions")
-    .select("id, text, type, options(id, text)")
+    .select(`
+      id,
+      text,
+      text_translated,
+      type,
+      options (
+        id,
+        text,
+        text_translated
+      )
+    `)
     .order("id", { ascending: true });
 
   if (error) {
@@ -973,20 +991,20 @@ export async function getEstimatorQuestions(): Promise<EstimatorQuestion[]> {
     throw new Error("Failed to fetch questions: " + error.message);
   }
 
-  return (data || []).map(
-    (q: {
-      id: number;
-      text: string;
-      type: string;
-      options: { id: number; text: string }[];
-    }) => ({
-      id: q.id,
-      text: q.text,
-      type: q.type as "single" | "multiple",
-      options: q.options.map((o: { id: number; text: string }) => ({
-        id: o.id,
-        text: o.text,
-      })),
-    })
-  );
+  return (data || []).map((q: any) => ({
+    id: q.id,
+    // pick Danish if requested and exists, else fallback to English
+    text:
+      lang === "da" && q.text_translated
+        ? q.text_translated
+        : q.text,
+    type: q.type as "single" | "multiple",
+    options: q.options.map((o: any) => ({
+      id: o.id,
+      text:
+        lang === "da" && o.text_translated
+          ? o.text_translated
+          : o.text,
+    })),
+  }));
 }
