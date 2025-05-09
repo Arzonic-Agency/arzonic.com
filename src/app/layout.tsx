@@ -25,7 +25,6 @@ export default function RootLayout({
         <meta name="robots" content="noindex, nofollow" />
       </head>
       <body className={outfitSans.className}>
-        {" "}
         <I18nProvider>{children}</I18nProvider>
       </body>
     </html>

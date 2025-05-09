@@ -477,5 +477,14 @@
       "h1": "Design & Animation That Captivates",
       "intro": "We create stunning visuals and motion graphics that elevate your brand and engage your audience."
     }
+  },
+
+  "CasesPage": {
+    "title": "See what we have",
+    "highlight": "created for others",
+    "emptyState": {
+      "title": "No cases found",
+      "description": "We are working on adding more cases. Check back soon!"
+    }
   }
 }

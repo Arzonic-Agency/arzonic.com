@@ -2,39 +2,41 @@
 
 import { createClient } from "@/utils/supabase/client";
 
-export async function getAllNews(page: number = 1, limit: number = 3) {
+export async function getAllCases(page: number = 1, limit: number = 3) {
   const supabase = createClient();
   const offset = (page - 1) * limit;
 
   try {
     const { data, count, error } = await supabase
-      .from("news")
+      .from("cases")
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (error) {
-      throw new Error(`Failed to fetch news: ${error.message}`);
+      throw new Error(`Failed to fetch cases: ${error.message}`);
     }
 
-    return { news: data, total: count || 0 };
+    return { cases: data, total: count || 0 };
   } catch (err) {
-    console.error("Unexpected error during fetching news:", err);
+    console.error("Unexpected error during fetching cases:", err);
     throw err;
   }
 }
 
-export async function getLatestNews() {
+export async function getLatestCases() {
   const supabase = createClient();
 
   const { data, error } = await supabase
-    .from("news")
+    .from("cases")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(5);
+
   if (error) {
-    throw new Error("Failed to fetch latest news: " + error.message);
+    throw new Error("Failed to fetch latest cases: " + error.message);
   }
+
   return data;
 }
 
