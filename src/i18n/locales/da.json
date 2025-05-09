@@ -474,5 +474,14 @@
       "h1": "Design og animation der fanger",
       "intro": "Vi leverer visuelt stærkt design og motion graphics, der styrker dit brand og engagerer dine kunder."
     }
+  },
+
+  "CasesPage": {
+    "title": "Se hvad vi har",
+    "highlight": "skabt for andre",
+    "emptyState": {
+      "title": "Ingen cases fundet",
+      "description": "Vi arbejder på at tilføje flere cases. Kom snart tilbage!"
+    }
   }
 }

@@ -1,20 +1,28 @@
-import React from "react";
+"use client";
 
-const Cases = () => {
+import Cases from "@/components/client/cases/Cases";
+import CasesFilter from "@/components/client/cases/CasesFilter";
+
+import React from "react";
+import { useTranslation } from "react-i18next";
+
+const CasesPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="p-5 sm:p-7 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20">
       <div className="max-w-md md:max-w-lg">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
-          Se hvad vi har
-          <span className="text-primary"> skabt for andre </span>
+          {t("CasesPage.title")}
+          <span className="text-primary"> {t("CasesPage.highlight")} </span>
         </h1>
       </div>
-      <div className="flex flex-col md:flex-row gap-10 md:gap-16">
-        <div className="flex-initial md:w-3/5 flex justify-center"></div>
-        <div className="flex-1 md:w-2/5 relative"></div>
+
+      <div className="flex-1 relative">
+        <Cases />
       </div>
     </div>
   );
 };
 
-export default Cases;
+export default CasesPage;

@@ -41,7 +41,7 @@ const Footer = () => {
         </nav>
       </footer>
       <footer className="footer bg-base-100 text-base-content px-10 py-4">
-        <aside className="items-center">
+        <aside className="flex items-center">
           <FaHashtag className="text-3xl -rotate-12 text-secondary" />
           <p>
             {t("Footer.brandName", "Arzonic Agency")}
