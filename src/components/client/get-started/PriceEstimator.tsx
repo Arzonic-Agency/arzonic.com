@@ -154,6 +154,10 @@ const PriceEstimator = () => {
       countries.find((c) => c.dial === phonePrefix)?.code ?? "";
     const fullPhone = `${phonePrefix}${phoneNumber}`;
 
+    // read the current site-lang from i18next
+    const rawLang = localStorage.getItem("i18nextLng") || "en";
+    const lang = rawLang.split("-")[0] === "da" ? "da" : "en";
+
     try {
       const res = await fetch("/api/estimator", {
         method: "POST",
@@ -165,6 +169,7 @@ const PriceEstimator = () => {
           phone: fullPhone,
           details,
           answers: payload,
+          lang,
         }),
       });
       const body = await res.json();

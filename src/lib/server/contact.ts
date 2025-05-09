@@ -55,92 +55,97 @@ export async function sendContactEmail(
   });
 }
 
-// src/lib/server/contact.ts  (or wherever you keep sendEstimatorEmail)
+import { translate } from "./deepl";
 
+/**
+ * Sends estimate emails to admin and user, translating content via DeepL if needed.
+ * @param name - recipient name
+ * @param email - user email address
+ * @param estimate - formatted estimate string
+ * @param details - breakdown or summary details
+ * @param packageLabel - human-readable package name
+ * @param lang - target language code (e.g. 'en' or 'da')
+ */
 export async function sendEstimatorEmail(
   name: string,
   email: string,
   estimate: string,
-  details: string, // optional breakdown or summary
-  packageLabel: string // ← new!
+  details: string,
+  packageLabel: string,
+  lang: 'en' | 'da' = 'en'
 ): Promise<void> {
-  // 1) Notify admin
+  // 1) Build English templates
+  const adminText = `Estimate request details:
+Name: ${name}
+Email: ${email}
+Selected package: ${packageLabel}
+Estimated Price: ${estimate}
+
+${details}`;
+  const adminHtml = `<h2>New Estimate Request</h2>
+<p><strong>Name:</strong> ${name}</p>
+<p><strong>Email:</strong> ${email}</p>
+<p><strong>Selected package:</strong> ${packageLabel}</p>
+<p><strong>Estimated Price:</strong> ${estimate}</p>
+<hr/>
+<p>${details.replace(/\n/g, '<br/>')}</p>`;
+
+  const userText = `Hi ${name},
+
+Thanks for using our project estimator – we're excited to learn more about your vision!
+
+Selected package: ${packageLabel}
+Estimated price: ${estimate}
+
+This is a non-binding, preliminary estimate based on the details you provided.
+We’ll be in touch shortly to discuss your project further.
+
+If you have any questions, ideas, or just want to chat, reply directly to this email.
+
+Best,
+The Arzonic Team`;
+  const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
+  <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://arzonic.com/arzonic-logo.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
+  </div>
+  <p>Hi ${name},</p>
+  <p>Thanks for using our project estimator – we’re excited to learn more about your vision!</p>
+  <p><strong>Selected package:</strong> ${packageLabel}<br/>
+     <strong>Estimated price:</strong> ${estimate}</p>
+  <p style="font-size:12px; background:#f9f9f9; padding:8px; border-radius:4px;">Please note this is a <strong>non-binding estimate</strong> based on your details.</p>
+  <p>We’ll be in touch shortly to explore your project in more detail.</p>
+  <p>In the meantime, feel free to reply or <a href="mailto:mail@arzonic.com">contact us</a>.</p>
+  <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
+</div>`;
+
+  // 2) Translate if not English
+  const [adminTextTr, adminHtmlTr, userTextTr, userHtmlTr] = await Promise.all([
+    translate(adminText, lang),
+    translate(adminHtml, lang),
+    translate(userText, lang),
+    translate(userHtml, lang),
+  ]);
+
+  // 3) Admin notification (subject localized)
   await transporter.sendMail({
     from: `"New Client - Price Estimator" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
-    subject: `New estimate request from ${name}`,
-    text: `Estimate request details:
-      Name: ${name}
-      Email: ${email}
-      Selected package: ${packageLabel}
-      Estimated Price: ${estimate}
-
-${details}`,
-    html: `
-      <h2>New Estimate Request</h2>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Selected package:</strong> ${packageLabel}</p>
-      <p><strong>Estimated Price:</strong> ${estimate}</p>
-      <hr/>
-      <p>${details.replace(/\n/g, "<br/>")}</p>
-    `,
+    subject: lang === 'da'
+      ? `Ny tilbudsanmodning fra ${name}`
+      : `New estimate request from ${name}`,
+    text: adminTextTr,
+    html: adminHtmlTr,
   });
 
-  // 2) Send the user their custom estimate
+  // 4) User email (subject localized)
   await transporter.sendMail({
     from: `"Arzonic - Danish Modern Web Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
-    subject: `Your project estimate is ready, ${name}`,
-    text: `Hi ${name},
-  
-      Thanks for using our project estimator – we're excited to learn more about your vision!
-      
-      Here’s a quick summary of what you selected:
-      Package: ${packageLabel}
-      Estimated price: ${estimate}
-      
-      This is a non-binding, preliminary estimate based on the details you provided.
-      We’ll be in touch shortly to discuss your project further.
-      
-      If you have any questions, ideas, or just want to chat about possibilities, feel free to reply directly to this email.
-      
-      Looking forward to connecting!
-      
-      Best,  
-       The Arzonic Team`,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
-  
-        <div style="text-align: center; margin-bottom: 24px;">
-          <img src="https://arzonic.com/arzonic-logo.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;">
-        </div>
-
-        <p style="font-size: 16px; margin-bottom: 16px;">Hi ${name},</p>
-
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          Thanks for using our project estimator – we’re excited to learn more about your vision!
-        </p>
-
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          <strong>Selected package:</strong> ${packageLabel}<br/>
-          <strong>Estimated price:</strong> ${estimate}
-        </p>
-
-        <p style="font-size: 12px; margin-bottom: 16px; padding:2px 8px; background-color: #f9f9f9; border-radius: 4px;">
-          Please note that this is a <strong>non-binding, approximate estimate</strong> based on the details you provided.
-        </p>
-
-        <p style="font-size: 16px; margin-bottom: 16px;">
-          We’ll be in touch shortly to explore your project in more detail and find the best path forward.
-        </p>
-
-        <p style="font-size: 16px; margin-bottom: 24px;">
-          In the meantime, feel free to reply to this email or <a href="mailto:mail@arzonic.com" style="color: #048179; text-decoration: underline;">contact us directly</a> if you have any questions or ideas.
-        </p>
-
-        <p style="font-size: 16px; margin-bottom: 5px;">Best regards,<br/><strong>The Arzonic Team</strong></p>
-      </div>
-    `,
+    subject: lang === 'da'
+      ? `Dit forslag er klar, ${name}!`
+      : `Your project estimate is ready, ${name}`,
+    text: userTextTr,
+    html: userHtmlTr,
   });
 }
+

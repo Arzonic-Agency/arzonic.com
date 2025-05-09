@@ -6,15 +6,23 @@ import { createContactRequest } from "@/lib/server/actions";
 import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
 
 export async function POST(req: Request) {
-  const { name, email, country, phone, details, answers } =
-    (await req.json()) as {
-      name: string;
-      email: string;
-      country: string;
-      phone: string;
-      details: string;
-      answers: { questionId: number; optionIds: number[] }[];
-    };
+  const {
+    name,
+    email,
+    country,
+    phone,
+    details,
+    answers,
+    lang = "en",
+  } = (await req.json()) as {
+    name: string;
+    email: string;
+    country: string;
+    phone: string;
+    details: string;
+    answers: { questionId: number; optionIds: number[] }[];
+    lang?: "en" | "da";
+  };
 
   if (!name || !email || !answers?.length) {
     return NextResponse.json(
@@ -78,8 +86,15 @@ export async function POST(req: Request) {
       answers
     );
 
-    // 4) Send the email, now including the packageLabel
-    await sendEstimatorEmail(name, email, estimate, details, packageLabel);
+    // 4) Send the email
+    await sendEstimatorEmail(
+      name,
+      email,
+      estimate,
+      details,
+      packageLabel,
+      lang                
+    );
 
     return NextResponse.json({ success: true, requestId, estimate });
   } catch (err: unknown) {
