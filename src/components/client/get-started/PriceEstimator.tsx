@@ -57,13 +57,34 @@ const PriceEstimator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [packageLabel, setPackageLabel] = useState("");
 
-  // fetch + sort countries once
+  // fetch package label
+  useEffect(() => {
+    const pkgOptId = answers[1]?.[0];
+    if (step === slides && pkgOptId) {
+      (async () => {
+        try {
+          const res = await fetch("/api/package-label", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ optionId: pkgOptId }),
+          });
+          const { label } = await res.json();
+          setPackageLabel(label || "");
+        } catch (e) {
+          console.error("Failed to load package label", e);
+        }
+      })();
+    }
+  }, [step, slides, answers]);
+
+  // fetch + sort countries
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch("https://restcountries.com/v3.1/all");
-        const data: RestCountry[] = await res.json(); // Specify the type here
+        const data: RestCountry[] = await res.json();
         const list: Country[] = data
           .map((c) => {
             const root = c.idd?.root || "";
@@ -82,7 +103,6 @@ const PriceEstimator = () => {
           .filter((c): c is Country => !!c)
           .sort((a, b) => a.name.localeCompare(b.name));
 
-        // pick user’s region or fallback
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
         const match = list.find((c) => c.code === region) ?? list[0];
 
@@ -148,18 +168,15 @@ const PriceEstimator = () => {
     setLoading(true);
     setError(null);
 
-    // 1) Build the payload of questionId + optionIds
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
     }));
 
-    // 2) Reconstruct the "details" string for your email/logging
     const details = questionsState
       .map((q, i) => `${q.text}: ${answers[i]?.join(", ")}`)
       .join("\n");
 
-    // 3) Phone/Country as before
     const selectedCountry =
       countries.find((c) => c.dial === phonePrefix)?.code ?? "";
     const fullPhone = `${phonePrefix}${phoneNumber}`;
@@ -274,130 +291,142 @@ const PriceEstimator = () => {
 
         {/* Final Form */}
         {step === slides && !success && (
-          <motion.form
-            key="form"
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            custom={direction}
-            transition={{ duration: 0.4 }}
-            onSubmit={handleSubmit}
-            className=" p-7 rounded-2xl shadow-lg flex flex-col gap-4"
-          >
-            <h2 className="text-2xl font-bold text-center">Almost done!</h2>
-            {error && <p className="text-red-500 text-center">{error}</p>}
+          <>
+            {/* Display the fetched package label above the form */}
+            {packageLabel && (
+              <div className="mb-4 text-center">
+                <h3 className="text-xl font-semibold">{packageLabel}</h3>
+              </div>
+            )}
 
-            <input
-              type="text"
-              placeholder="Your name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="input input-bordered w-full"
-            />
+            <motion.form
+              key="form"
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              custom={direction}
+              transition={{ duration: 0.4 }}
+              onSubmit={handleSubmit}
+              className="p-7 rounded-2xl shadow-lg flex flex-col gap-4"
+            >
+              <h2 className="text-2xl font-bold text-center">Almost done!</h2>
+              {error && <p className="text-red-500 text-center">{error}</p>}
 
-            <input
-              type="email"
-              placeholder="Your email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input input-bordered w-full"
-            />
+              <input
+                type="text"
+                placeholder="Your name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input input-bordered w-full"
+              />
 
-            <div className="flex gap-2 items-center">
-              <div className="dropdown">
-                <label
-                  tabIndex={0}
-                  className="btn btn-outline w-28 justify-between flex items-center"
-                >
-                  {(() => {
-                    const sel = countries.find((c) => c.dial === phonePrefix);
-                    return (
-                      <>
-                        {sel?.flag} {sel?.dial}
-                      </>
-                    );
-                  })()}
-                  <FaAngleDown className="ml-2" />
-                </label>
-                <ul
-                  tabIndex={0}
-                  className="
-                              dropdown-content
-                              p-1
-                              shadow
-                              bg-base-100
-                              rounded-box
-                              w-56
-                              max-h-60
-                              overflow-y-auto
-                              flex
-                              flex-col
-                              z-50
-                            "
-                >
-                  {countries.map((cn) => (
-                    <li key={cn.code}>
-                      <button
-                        onClick={() => setPhonePrefix(cn.dial)}
-                        className="flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded"
-                      >
-                        <span className="flex-1 mr-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
-                          {cn.flag} {cn.name}
-                        </span>
-                        <span className="opacity-70">{cn.dial}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+              <input
+                type="email"
+                placeholder="Your email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input input-bordered w-full"
+              />
+
+              <div className="flex gap-2 items-center">
+                <div className="dropdown">
+                  <label
+                    tabIndex={0}
+                    className="btn btn-outline w-28 justify-between flex items-center"
+                  >
+                    {(() => {
+                      const sel = countries.find(
+                        (c) => c.dial === phonePrefix
+                      );
+                      return (
+                        <>
+                          {sel?.flag} {sel?.dial}
+                        </>
+                      );
+                    })()}
+                    <FaAngleDown className="ml-2" />
+                  </label>
+                  <ul
+                    tabIndex={0}
+                    className="
+                      dropdown-content
+                      p-1
+                      shadow
+                      bg-base-100
+                      rounded-box
+                      w-56
+                      max-h-60
+                      overflow-y-auto
+                      flex
+                      flex-col
+                      z-50
+                    "
+                  >
+                    {countries.map((cn) => (
+                      <li key={cn.code}>
+                        <button
+                          onClick={() => setPhonePrefix(cn.dial)}
+                          className="flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded"
+                        >
+                          <span className="flex-1 mr-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
+                            {cn.flag} {cn.name}
+                          </span>
+                          <span className="opacity-70">{cn.dial}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <input
+                  type="tel"
+                  placeholder="Phone number"
+                  required
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="input input-bordered flex-1"
+                />
               </div>
 
-              <input
-                type="tel"
-                placeholder="Phone number"
-                required
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="input input-bordered flex-1"
-              />
-            </div>
+              {/* Consent */}
+              <div className="flex items-center gap-3">
+                <input
+                  id="consent"
+                  type="checkbox"
+                  className="checkbox checkbox-md checkbox-primary"
+                  checked={consentChecked}
+                  onChange={(e) => setConsentChecked(e.target.checked)}
+                  required
+                />
+                <label htmlFor="consent" className="label-text text-xs">
+                  I agree to the{" "}
+                  <ConsentModal buttonText="Privacy Policy" variant="hover" /> and
+                  data processing.
+                </label>
+              </div>
 
-            {/* Consent */}
-            <div className="flex items-center gap-3">
-              <input
-                id="consent"
-                type="checkbox"
-                className="checkbox checkbox-md checkbox-primary"
-                checked={consentChecked}
-                onChange={(e) => setConsentChecked(e.target.checked)}
-                required
-              />
-              <label htmlFor="consent" className="label-text text-xs">
-                I agree to the{" "}
-                <ConsentModal buttonText="Privacy Policy" variant="hover" /> and
-                data processing.
-              </label>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={goBack}
-                type="button"
-                className="btn btn-outline"
-              >
-                <FaAngleLeft />
-              </button>
-              <button
-                type="submit"
-                className={`btn btn-primary flex-1 ${loading ? "loading" : ""}`}
-                disabled={loading || !consentChecked}
-              >
-                Submit
-              </button>
-            </div>
-          </motion.form>
+              <div className="flex gap-3">
+                <button
+                  onClick={goBack}
+                  type="button"
+                  className="btn btn-outline"
+                >
+                  <FaAngleLeft />
+                </button>
+                <button
+                  type="submit"
+                  className={`btn btn-primary flex-1 ${loading ? "loading" : ""
+                    }`}
+                  disabled={loading || !consentChecked}
+                >
+                  Submit
+                </button>
+              </div>
+            </motion.form>
+          </>
         )}
 
         {/* Thank You */}
