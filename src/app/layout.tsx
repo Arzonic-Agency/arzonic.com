@@ -11,8 +11,6 @@ const outfitSans = Outfit({
 export const metadata: Metadata = {
   title: "Arzonic Agency",
   description: "Danish Modern Web Agency",
-  viewport:
-    "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 };
 
 export default function RootLayout({
@@ -24,7 +22,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/logo-arzonic.png" />
-        {/* SLET DENNE UNDER, NÅR FÆRDIG, DET LUKKER FOR SEO  */}
         <meta name="robots" content="noindex, nofollow" />
       </head>
       <body className={outfitSans.className}>

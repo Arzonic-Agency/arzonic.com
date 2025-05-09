@@ -35,15 +35,16 @@ const CallToAction = () => {
           />
         </div>
       </div>
-      <div className="flex items-center flex-col gap-7 ">
+      <div className="flex items-center gap-7 max-w-2xl">
         <EuropeMap />
-        <h1 className="text-xl md:text-3xl">Vi rækker længere end grænserne</h1>
-        <p>
-          Hos Arzonic samarbejder vi med ambitiøse virksomheder i hele Europa.{" "}
-          <br />
-          Uanset hvor du er, står vi klar til at løfte din digitale
-          tilstedeværelse!
-        </p>
+        <div>
+          <h1 className="text-lg text-zinc-400 ">
+            {t("CallToAction.reachingBeyondBorders")}
+          </h1>
+          <p className="text-sm tracking-wide text-zinc-500">
+            {t("CallToAction.collaborationMessage")}
+          </p>
+        </div>
       </div>
     </div>
   );

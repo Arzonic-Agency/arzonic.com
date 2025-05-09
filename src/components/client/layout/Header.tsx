@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaBars, FaFacebook, FaInstagram, FaXmark } from "react-icons/fa6";
 import Image from "next/image";
@@ -10,8 +10,25 @@ import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const pathname = usePathname();
-  const detailsRef = useRef<HTMLDetailsElement>(null);
   const { t } = useTranslation();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    setDropdownOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.getElementById("solutions-dropdown");
+      if (dropdown && !dropdown.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleCloseDrawer = () => {
     const drawerCheckbox = document.getElementById(
@@ -21,27 +38,6 @@ const Header = () => {
       drawerCheckbox.checked = false;
     }
   };
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      detailsRef.current &&
-      !detailsRef.current.contains(event.target as Node)
-    ) {
-      detailsRef.current.open = false;
-    }
-  };
-
-  useEffect(() => {
-    handleCloseDrawer();
-    if (detailsRef.current) {
-      detailsRef.current.open = false;
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [pathname]);
 
   return (
     <div className="navbar absolute top-0 bg-ghost inset-x-0 z-50 max-w-[1536px] mx-auto py-5 flex justify-between items-center">
@@ -54,38 +50,56 @@ const Header = () => {
             height={60}
             className="h-10 w-10 md:h-14 md:w-14 rounded-full"
           />
-          <span className=" font-bold text-2xl md:text-3xl tracking-wider">
+          <span className="font-bold text-2xl md:text-3xl tracking-wider">
             {t("Header.brandName")}
           </span>
         </Link>
       </div>
       <nav className="flex-none">
         <ul className="menu w-full text-lg menu-horizontal font-bold md:font-medium gap-3 md:gap-5 items-center hidden md:flex">
-          <li>
-            <div className="dropdown dropdown-center">
-              <div tabIndex={0} role="button">
-                <Link href="/solutions">{t("Header.solutions")}</Link>
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu bg-base-100 rounded-box z-10 w-56 p-20 shadow-sm flex flex-row ring-1 ring-base-200"
-              >
-                <div className="flex flex-col gap-2">
-                  <li className="p-2">
-                    <a>{t("Header.dropdown.customWebsites")}</a>
-                  </li>
-                  <li className="p-2">
-                    <a>{t("Header.dropdown.webApplications")}</a>
-                  </li>
-                  <li className="p-2">
-                    <a>{t("Header.dropdown.visualization")}</a>
-                  </li>
-                  <li className="p-2">
-                    <a>{t("Header.dropdown.designAnimation")}</a>
-                  </li>
-                </div>
+          <li className="relative" id="solutions-dropdown">
+            <button
+              onClick={() => setDropdownOpen((prev) => !prev)}
+              className="cursor-pointer"
+            >
+              {t("Header.solutions")}
+            </button>
+            {dropdownOpen && (
+              <ul className="absolute top-10 left-0 ml-0 mt-2 bg-base-100 ring-1 ring-base-200 w-50 px-2 py-3 z-30 flex flex-col text-[15px] items-start gap-3 rounded-xl">
+                <li className="w-full">
+                  <Link
+                    href="/solutions/custom-websites"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    {t("Header.dropdown.customWebsites")}
+                  </Link>
+                </li>
+                <li className="w-full">
+                  <Link
+                    href="/solutions/web-applications"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    {t("Header.dropdown.webApplications")}
+                  </Link>
+                </li>
+                <li className="w-full">
+                  <Link
+                    href="/solutions/3d-visualization"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    {t("Header.dropdown.visualization")}
+                  </Link>
+                </li>
+                <li className="w-full">
+                  <Link
+                    href="/solutions/design-animation"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    {t("Header.dropdown.designAnimation")}
+                  </Link>
+                </li>
               </ul>
-            </div>
+            )}
           </li>
           <li>
             <Link href="/cases">{t("Header.cases")}</Link>
@@ -102,6 +116,8 @@ const Header = () => {
             <Language />
           </li>
         </ul>
+
+        {/* Mobile menu */}
         <div className="drawer drawer-end flex md:hidden">
           <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
@@ -119,7 +135,7 @@ const Header = () => {
               className="drawer-overlay"
             ></label>
             <ul className="menu menu-lg bg-base-100 text-base-content min-h-full w-96 p-4 pt-20 gap-2 items-center relative">
-              <li className="absolute top-1 right-1">
+              <li className="absolute top-6 right-3">
                 <label htmlFor="my-drawer-4">
                   <FaXmark size={30} />
                 </label>

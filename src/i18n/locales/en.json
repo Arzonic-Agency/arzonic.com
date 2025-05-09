@@ -442,5 +442,40 @@
   "GetStarted": {
     "title": "Estimate your project",
     "subtitle": "– in under a minute"
+  },
+
+  "Footer": {
+    "aboutUs": "About Us",
+    "services": "Services",
+    "contactUs": "Contact Us",
+    "followUs": "Follow Us",
+    "newsletter": "Subscribe to our newsletter",
+    "newsletterPlaceholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "rightsReserved": "All rights reserved."
+  },
+
+  "CallToAction": {
+    "reachingBeyondBorders": "We reach beyond borders",
+    "collaborationMessage": "At Arzonic, we collaborate with ambitious companies across Europe. No matter where you are, we are ready to elevate your digital presence!"
+  },
+
+  "solutionsPage": {
+    "custom-websites": {
+      "h1": "Custom Websites That Convert",
+      "intro": "We design and develop lightning-fast websites focused on performance, UX, and business results."
+    },
+    "web-applications": {
+      "h1": "Scalable Web Applications for Growth",
+      "intro": "Robust web applications tailored to your goals, designed with modern frameworks and clean UI."
+    },
+    "3d-visualization": {
+      "h1": "Bring Your Ideas to Life in 3D",
+      "intro": "From architectural renders to animated product showcases, we craft high-impact 3D visuals."
+    },
+    "design-animation": {
+      "h1": "Design & Animation That Captivates",
+      "intro": "We create stunning visuals and motion graphics that elevate your brand and engage your audience."
+    }
   }
 }

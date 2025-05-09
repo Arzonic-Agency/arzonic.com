@@ -439,5 +439,40 @@
   "GetStarted": {
     "title": "Beregn dit projekt",
     "subtitle": "– på under et minut"
+  },
+
+  "Footer": {
+    "aboutUs": "Om os",
+    "services": "Tjenester",
+    "contactUs": "Kontakt os",
+    "followUs": "Følg os",
+    "newsletter": "Tilmeld dig vores nyhedsbrev",
+    "newsletterPlaceholder": "Indtast din e-mail",
+    "subscribe": "Tilmeld",
+    "rightsReserved": "Alle rettigheder forbeholdes."
+  },
+
+  "CallToAction": {
+    "reachingBeyondBorders": "Vi rækker længere end grænserne",
+    "collaborationMessage": "Hos Arzonic samarbejder vi med ambitiøse virksomheder i hele Europa. Uanset hvor du er, står vi klar til at løfte din digitale tilstedeværelse!"
+  },
+
+  "solutionsPage": {
+    "custom-websites": {
+      "h1": "Skræddersyede hjemmesider der konverterer",
+      "intro": "Vi designer og udvikler lynhurtige hjemmesider med fokus på performance, brugeroplevelse og resultater."
+    },
+    "web-applications": {
+      "h1": "Skalerbare webapplikationer til vækst",
+      "intro": "Robuste webapplikationer skræddersyet til dine mål, bygget med moderne frameworks og et rent design."
+    },
+    "3d-visualization": {
+      "h1": "Få dine idéer til live i 3D",
+      "intro": "Fra arkitektoniske visualiseringer til produktanimationer – vi skaber 3D-indhold med høj visuel effekt."
+    },
+    "design-animation": {
+      "h1": "Design og animation der fanger",
+      "intro": "Vi leverer visuelt stærkt design og motion graphics, der styrker dit brand og engagerer dine kunder."
+    }
   }
 }
