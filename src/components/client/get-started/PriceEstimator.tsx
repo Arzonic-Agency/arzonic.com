@@ -6,18 +6,8 @@ import { getEstimatorQuestions, EstimatorQuestion } from "@/lib/server/actions";
 import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 
-type Country = {
-  name: string;
-  code: string;
-  dial: string;
-  flag: string;
-};
-
-type RestCountry = {
-  cca2: string;
-  name: { common: string };
-  idd?: { root?: string; suffixes?: string[] };
-};
+type Country = { name: string; code: string; dial: string; flag: string; };
+type RestCountry = { cca2: string; name: { common: string }; idd?: { root?: string; suffixes?: string[] } };
 
 const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
@@ -29,18 +19,9 @@ const slideVariants = {
 const PriceEstimator = () => {
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
-    (async () => {
-      try {
-        const qs = await getEstimatorQuestions();
-        setQuestionsState(qs);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          console.error("Error loading questions:", err);
-        } else {
-          console.error("Unknown error loading questions:", err);
-        }
-      }
-    })();
+    getEstimatorQuestions()
+      .then(setQuestionsState)
+      .catch((err) => console.error("Error loading questions:", err));
   }, []);
 
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
@@ -59,40 +40,34 @@ const PriceEstimator = () => {
   const [success, setSuccess] = useState(false);
   const [packageLabel, setPackageLabel] = useState("");
 
-  // fetch package label
+  // fetch package label on final slide
   useEffect(() => {
     const pkgOptId = answers[1]?.[0];
     if (step === slides && pkgOptId) {
-      (async () => {
-        try {
-          const res = await fetch("/api/package-label", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ optionId: pkgOptId }),
-          });
-          const { label } = await res.json();
-          setPackageLabel(label || "");
-        } catch (e) {
-          console.error("Failed to load package label", e);
-        }
-      })();
+      fetch("/api/package-label", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ optionId: pkgOptId }),
+      })
+        .then((r) => r.json())
+        .then(({ label }) => setPackageLabel(label || ""))
+        .catch((e) => console.error("Failed to load package label", e));
     }
   }, [step, slides, answers]);
 
   // fetch + sort countries
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("https://restcountries.com/v3.1/all");
-        const data: RestCountry[] = await res.json();
-        const list: Country[] = data
+    fetch("https://restcountries.com/v3.1/all")
+      .then((r) => r.json())
+      .then((data: RestCountry[]) => {
+        const list = data
           .map((c) => {
             const root = c.idd?.root || "";
             const suffix = c.idd?.suffixes?.[0] || "";
             const dial = suffix ? `${root}${suffix}` : root;
             if (!dial) return null;
-            const code = c.cca2 as string;
-            const name = c.name.common as string;
+            const code = c.cca2;
+            const name = c.name.common;
             const flag = code
               .toUpperCase()
               .replace(/./g, (ch) =>
@@ -102,42 +77,37 @@ const PriceEstimator = () => {
           })
           .filter((c): c is Country => !!c)
           .sort((a, b) => a.name.localeCompare(b.name));
-
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
         const match = list.find((c) => c.code === region) ?? list[0];
-
         setCountries(list);
         setPhonePrefix(match.dial);
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          console.error("Failed to load countries", e);
-        } else {
-          console.error("Unknown error loading countries", e);
-        }
-      }
-    })();
+      })
+      .catch((e) => console.error("Failed to load countries", e));
   }, []);
 
+  // current questions for this slide
   const startIdx = step * QUESTIONS_PER_SLIDE;
   const currentQs =
     step >= 0 && step < slides
       ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
+  // restore previous selections when step changes
   useEffect(() => {
     if (step >= 0 && step < slides) {
-      setGroupSel(Array.from({ length: currentQs.length }, () => []));
+      const saved = answers[step] || [];
+      setGroupSel([saved]);
     }
-  }, [slides, step, currentQs.length]);
+  }, [step, answers]);
 
   const toggleOption = (qIdx: number, optId: number) => {
     setGroupSel((prev) => {
-      const next = prev.map((arr) => [...arr]);
+      const next = [...prev];
       const single = currentQs[qIdx].type === "single";
       if (single) {
         next[qIdx] = [optId];
       } else {
-        const sel = next[qIdx];
+        const sel = next[qIdx] || [];
         next[qIdx] = sel.includes(optId)
           ? sel.filter((i) => i !== optId)
           : [...sel, optId];
@@ -147,18 +117,21 @@ const PriceEstimator = () => {
   };
 
   const goNext = () => {
-    setAnswers((prev) => [...prev, ...groupSel]);
+    setAnswers((prev) => {
+      const next = [...prev];
+      next[step] = groupSel[0];
+      return next;
+    });
     setDirection(1);
     setStep((s) => s + 1);
   };
+
   const goBack = () => {
+    setDirection(-1);
     if (step === 0) {
-      setDirection(-1);
       setStep(-1);
       setAnswers([]);
-    } else if (step > 0) {
-      setDirection(-1);
-      setAnswers((prev) => prev.slice(0, prev.length - groupSel.length));
+    } else {
       setStep((s) => s - 1);
     }
   };

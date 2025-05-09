@@ -52,15 +52,3 @@ export async function GET(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
-  try {
-    const { reviewId } = (await request.json()) as { reviewId: number };
-    await supaDeleteReview(reviewId);
-    return new NextResponse(null, { status: 204 });
-  } catch (err: unknown) {
-    console.error("API DELETE /api/reviews error:", err);
-    const message =
-      err instanceof Error ? err.message : "Unknown error occurred";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
