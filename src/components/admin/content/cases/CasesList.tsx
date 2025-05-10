@@ -62,7 +62,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const handleDelete = async () => {
     if (deletingCaseId == null) return;
     try {
-      await deleteCase(deletingCaseId); // Use deleteCase function
+      await deleteCase(deletingCaseId);
       setDeletingCaseId(null);
       setIsModalOpen(false);
       fetchCases();

@@ -2,29 +2,25 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { FaLocationDot } from "react-icons/fa6";
 
 interface CasesListProps {
-  cases: any[];
   page: number;
   setTotal: React.Dispatch<React.SetStateAction<number>>;
-  onEditCase: (caseId: number) => void;
 }
 
 interface CaseItem {
   id: number;
   companyName: string;
   description: string;
-  image: string | null;
+  image?: string;
+  city: string;
+  created_at: string;
 }
 
 const FALLBACK_IMAGE = "/demo.jpg";
 
-const CasesList: React.FC<CasesListProps> = ({
-  cases,
-  page,
-  setTotal,
-  onEditCase,
-}) => {
+const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [caseItems, setCaseItems] = useState<CaseItem[]>([]);
@@ -50,8 +46,14 @@ const CasesList: React.FC<CasesListProps> = ({
     fetchCases();
   }, [fetchCases]);
 
-  const truncate = (text: string, max: number) =>
-    text.length > max ? text.slice(0, max) + "…" : text;
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("da-DK", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(date);
+  };
 
   if (loading) {
     return (
@@ -71,28 +73,37 @@ const CasesList: React.FC<CasesListProps> = ({
   }
 
   return (
-    <div className="w-full">
-      <div className="flex flex-col gap-5 w-full">
-        {caseItems.map((item) => (
-          <div
-            key={item.id}
-            className="card card-compact shadow-xl bg-base-200 rounded-md"
-          >
-            <figure className="relative aspect-[4/3] overflow-hidden">
+    <div className="md:max-w-lg lg:max-w-3xl xl:max-w-4xl flex flex-col gap-10 md:gap-16 p-1 md:p-0">
+      {caseItems.map((item) => (
+        <div
+          key={item.id}
+          className="card lg:card-side bg-base-100 shadow-md rounded-xl sm:rounded-lg lg:h-72 xl:h-[330px]"
+        >
+          <figure className="relative w-full lg:w-1/2 h-56 lg:h-full">
+            <div className="relative w-full h-full">
               <Image
                 src={item.image || FALLBACK_IMAGE}
                 alt={item.companyName}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
               />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title text-lg">{item.companyName}</h2>
-              <p className="text-xs">{truncate(item.description, 100)}</p>
+            </div>
+          </figure>
+          <div className="card-body w-full lg:w-1/2 gap-5">
+            <h2 className="card-title">{item.companyName}</h2>
+            <p className="text-[15px] md:text-base">{item.description}</p>
+            <div className="font-semibold flex items-center justify-between w-full">
+              <span className="font-medium text-gray-500">
+                {formatDate(item.created_at)}
+              </span>
+              <span className="flex items-center gap-1">
+                <FaLocationDot /> {item.city}
+              </span>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 };

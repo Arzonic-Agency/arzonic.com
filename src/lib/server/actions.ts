@@ -973,7 +973,8 @@ export async function getEstimatorQuestions(
   // grab both cols
   const { data, error } = await supabase
     .from("questions")
-    .select(`
+    .select(
+      `
       id,
       text,
       text_translated,
@@ -983,7 +984,8 @@ export async function getEstimatorQuestions(
         text,
         text_translated
       )
-    `)
+    `
+    )
     .order("id", { ascending: true });
 
   if (error) {
@@ -991,20 +993,28 @@ export async function getEstimatorQuestions(
     throw new Error("Failed to fetch questions: " + error.message);
   }
 
-  return (data || []).map((q: any) => ({
-    id: q.id,
-    // pick Danish if requested and exists, else fallback to English
-    text:
-      lang === "da" && q.text_translated
-        ? q.text_translated
-        : q.text,
-    type: q.type as "single" | "multiple",
-    options: q.options.map((o: any) => ({
-      id: o.id,
-      text:
-        lang === "da" && o.text_translated
-          ? o.text_translated
-          : o.text,
-    })),
-  }));
+  return (data || []).map(
+    (q: {
+      id: number;
+      text: string;
+      text_translated?: string;
+      type: "single" | "multiple";
+      options: {
+        id: number;
+        text: string;
+        text_translated?: string;
+      }[];
+    }) => ({
+      id: q.id,
+      // pick Danish if requested and exists, else fallback to English
+      text: lang === "da" && q.text_translated ? q.text_translated : q.text,
+      type: q.type,
+      options: q.options.map(
+        (o: { id: number; text: string; text_translated?: string }) => ({
+          id: o.id,
+          text: lang === "da" && o.text_translated ? o.text_translated : o.text,
+        })
+      ),
+    })
+  );
 }

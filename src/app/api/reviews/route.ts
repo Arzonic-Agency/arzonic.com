@@ -1,9 +1,6 @@
 // src/app/api/reviews/route.ts
 import { NextResponse } from "next/server";
-import {
-  getAllReviews,
-  deleteReview as supaDeleteReview,
-} from "@/lib/server/actions";
+import { getAllReviews } from "@/lib/server/actions";
 
 interface ReviewRow {
   id: number;
@@ -51,4 +48,3 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

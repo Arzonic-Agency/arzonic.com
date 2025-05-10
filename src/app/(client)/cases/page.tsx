@@ -1,8 +1,6 @@
 "use client";
 
 import Cases from "@/components/client/cases/Cases";
-import CasesFilter from "@/components/client/cases/CasesFilter";
-
 import React from "react";
 import { useTranslation } from "react-i18next";
 

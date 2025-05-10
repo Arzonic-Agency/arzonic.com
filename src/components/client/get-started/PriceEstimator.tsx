@@ -7,8 +7,12 @@ import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 import { useTranslation } from "react-i18next";
 
-type Country = { name: string; code: string; dial: string; flag: string; };
-type RestCountry = { cca2: string; name: { common: string }; idd?: { root?: string; suffixes?: string[] } };
+type Country = { name: string; code: string; dial: string; flag: string };
+type RestCountry = {
+  cca2: string;
+  name: { common: string };
+  idd?: { root?: string; suffixes?: string[] };
+};
 
 const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
@@ -326,9 +330,7 @@ const PriceEstimator = () => {
                     className="btn btn-outline w-28 justify-between flex items-center"
                   >
                     {(() => {
-                      const sel = countries.find(
-                        (c) => c.dial === phonePrefix
-                      );
+                      const sel = countries.find((c) => c.dial === phonePrefix);
                       return (
                         <>
                           {sel?.flag} {sel?.dial}
@@ -409,8 +411,9 @@ const PriceEstimator = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`btn btn-primary flex-1 ${loading ? "loading" : ""
-                    }`}
+                  className={`btn btn-primary flex-1 ${
+                    loading ? "loading" : ""
+                  }`}
                   disabled={loading || !consentChecked}
                 >
                   {t("form.submitButton", "Submit")}
@@ -435,7 +438,12 @@ const PriceEstimator = () => {
             <h2 className="text-2xl font-bold mb-4">
               {t("thanks.title", "Thank you!")}
             </h2>
-            <p>{t("thanks.message", "We’ve received your request and will get back to you soon.")}</p>
+            <p>
+              {t(
+                "thanks.message",
+                "We’ve received your request and will get back to you soon."
+              )}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>

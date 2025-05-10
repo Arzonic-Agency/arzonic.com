@@ -3,8 +3,11 @@ import fetch from "node-fetch";
 
 const DEEPL_KEY = process.env.DEEPL_API_KEY!;
 
-export async function translate(text: string, targetLang: string): Promise<string> {
-  if (targetLang === "en") return text;        // no-op for English
+export async function translate(
+  text: string,
+  targetLang: string
+): Promise<string> {
+  if (targetLang === "en") return text;
   const params = new URLSearchParams({
     auth_key: DEEPL_KEY,
     text,
@@ -14,6 +17,6 @@ export async function translate(text: string, targetLang: string): Promise<strin
     method: "POST",
     body: params,
   });
-  const json = await res.json() as { translations: { text: string }[] };
+  const json = (await res.json()) as { translations: { text: string }[] };
   return json.translations.map((t) => t.text).join("\n\n");
 }
