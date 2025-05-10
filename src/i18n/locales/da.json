@@ -13,7 +13,6 @@
   "light": "Lys",
   "dark": "Mørk",
   "new": "new",
-
   "write_company_name": "Skriv virksomhedsnavn...",
   "write_contact_person": "Skriv en kontaktperson...",
   "write_desc": "Skriv en beskrivelse...",
@@ -36,7 +35,6 @@
   "message": "Besked",
   "no_message": "Ingen besked",
   "chars": "tegn",
-
   "company_name_required": "Titel er påkrævet",
   "desc_required": "Beskrivelse er påkrævet",
   "city_required": "By er påkrævet",
@@ -48,7 +46,6 @@
   "invalid_date": "Ugyldig dato",
   "invalid_days": "Ugyldigt antal dage",
   "registration_error": "Fejl ved registrering, prøv igen",
-
   "case": "Case",
   "cases": "Cases",
   "review": "Anmeldelse",
@@ -74,7 +71,6 @@
   "review_creation": "Oprettelse af Anmeldelse",
   "case_editing": "Redigering af Case",
   "review_editing": "Redigering af Anmeldelse",
-
   "customer": "kunde",
   "customers": "Kunder",
   "customer_details_updated": "Kundedetaljer opdateret",
@@ -90,7 +86,6 @@
   "consent_status": "Status for samtykke",
   "consent_given": "Samtykke givet",
   "consent_missing": "Samtykke mangler",
-
   "user": "bruger",
   "user_created": "Bruger oprettet",
   "user_updated": "Bruger opdateret",
@@ -107,7 +102,6 @@
   "select_access_level": "Vælg adgangsniveau",
   "editor": "Redaktør",
   "admin": "Admin",
-
   "loading_cases": "Indlæser cases...",
   "loading_reviews": "Indlæser anmeldelser...",
   "loading_request": "Indlæser henvendelser...",
@@ -116,14 +110,12 @@
   "no_cases": "Ingen sager fundet",
   "no_reviews": "Ingen anmeldelser fundet",
   "no_requests": "Ingen henvendelser fundet",
-
   "overview": "Overblik",
   "content": "Indhold",
   "settings": "Indstillinger",
   "site": "Side",
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
-
   "image_upload": {
     "change_image": "Skift billede",
     "select_image_type": "Vælg billede type",
@@ -137,7 +129,6 @@
     "warning": "Advarsel: Det gamle billede kan ikke genskabes",
     "cancel": "Annuller"
   },
-
   "solutions": "Løsninger",
   "about": "Om os",
   "contact": "Kontakt",
@@ -147,7 +138,6 @@
   "list": "Liste",
   "from_reviews": "fra",
   "logout": "Log ud",
-
   "date": "Dato",
   "time": "Tid",
   "created_by": "Oprettet af",
@@ -158,7 +148,6 @@
   "delete_choosings": "Slet valgte",
   "days_left": "Antal dage tilbage",
   "time_expired": "Tiden er udløbet",
-
   "PriceEstimator": {
     "title": "Prisberegner",
     "loading": "Indlæser tjenester…",
@@ -175,7 +164,6 @@
     "getInTouch": "Kontakt os",
     "disclaimer": "Ansvarsfraskrivelse: Prisen er kun et estimat og kan variere. Endelig pris bekræftes ved konsultation."
   },
-
   "StarterSite": {
     "title": "Startside",
     "description": "Perfekt til små virksomheder eller personlige brands",
@@ -209,7 +197,6 @@
   "startingFrom": "Starter fra",
   "customQuotePrompt": "Få dit tilpassede tilbud på få sekunder",
   "getQuote": "Få et tilbud",
-
   "Header": {
     "brandName": "Arzonic",
     "solutions": "Løsninger",
@@ -227,7 +214,6 @@
       "marketing": "Marketing"
     }
   },
-
   "Hero": {
     "title": "MODERNE WEBBUREAU",
     "description": "Vi specialiserer os i at bygge højtydende hjemmesider og fordybende 3D-oplevelser ved hjælp af moderne, skræddersyet teknologi",
@@ -237,7 +223,6 @@
     "webApplications": "Webapplikationer",
     "seeMore": "Se mere"
   },
-
   "Present": {
     "title": "Superhurtige hjemmesider – bygget til ydeevne og vækst",
     "customDesign": {
@@ -257,7 +242,6 @@
       "description": "Fra lille team til fuldskala operation. Din hjemmeside er fleksibel, fremtidssikret og klar til at skalere med dig."
     }
   },
-
   "NavProcess": {
     "header": {
       "title": "Sådan forløber et samarbejde hos os",
@@ -317,7 +301,6 @@
       ]
     }
   },
-
   "OfferForm": {
     "title": "Anmod om et tilbud",
     "fields": {
@@ -357,7 +340,6 @@
       "generic": "Noget gik galt. Prøv venligst igen senere."
     }
   },
-
   "TaskSelect": {
     "legend": "Hvilken opgave er du interesseret i?",
     "placeholder": "Vælg opgave",
@@ -370,7 +352,6 @@
       "other": "Andet"
     }
   },
-
   "ContactPage": {
     "title": "Start dialogen",
     "subtitle": "- helt uforpligtende",
@@ -381,7 +362,6 @@
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
   },
-
   "ConsentModal": {
     "title": "Samtykke & Privatlivspolitik",
     "section1": {
@@ -435,12 +415,10 @@
     "lastUpdated": "Sidst opdateret: 7. maj 2025",
     "closeButton": "Luk"
   },
-
   "GetStarted": {
     "title": "Beregn dit projekt",
     "subtitle": "– på under et minut"
   },
-
   "Footer": {
     "aboutUs": "Om os",
     "services": "Tjenester",
@@ -451,12 +429,10 @@
     "subscribe": "Tilmeld",
     "rightsReserved": "Alle rettigheder forbeholdes."
   },
-
   "CallToAction": {
     "reachingBeyondBorders": "Vi rækker længere end grænserne",
     "collaborationMessage": "Hos Arzonic samarbejder vi med ambitiøse virksomheder i hele Europa. Uanset hvor du er, står vi klar til at løfte din digitale tilstedeværelse!"
   },
-
   "solutionsPage": {
     "custom-websites": {
       "h1": "Skræddersyede hjemmesider der konverterer",
@@ -475,7 +451,6 @@
       "intro": "Vi leverer visuelt stærkt design og motion graphics, der styrker dit brand og engagerer dine kunder."
     }
   },
-
   "CasesPage": {
     "title": "Se hvad vi har",
     "highlight": "skabt for andre",
@@ -483,5 +458,30 @@
       "title": "Ingen cases fundet",
       "description": "Vi arbejder på at tilføje flere cases. Kom snart tilbage!"
     }
+  },
+  "intro": {
+    "title": "Lad os finde din pris",
+    "subtitle": "4 enkle spørgsmål. 1 minut. En klar beregning til dit projekt – 100 % uforpligtende.",
+    "startButton": "Start beregningen"
+  },
+  "form": {
+    "title": "Næsten færdig!",
+    "nextButton": "Næste",
+    "namePlaceholder": "Dit navn",
+    "emailPlaceholder": "Din e-mail",
+    "phonePlaceholder": "Telefonnummer",
+    "submitButton": "Indsend"
+  },
+  "consent": {
+    "agree": "Jeg accepterer",
+    "privacyPolicy": "Privatlivspolitik",
+    "and": "og databehandling."
+  },
+  "thanks": {
+    "title": "Tak!",
+    "message": "Vi har modtaget din forespørgsel og vender tilbage til dig hurtigst muligt."
+  },
+  "error": {
+    "loadingQuestions": "Fejl ved indlæsning af spørgsmål:"
   }
 }

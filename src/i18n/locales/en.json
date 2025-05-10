@@ -13,7 +13,6 @@
   "light": "Light",
   "dark": "Dark",
   "new": "new",
-
   "write_company_name": "Write company name...",
   "write_contact_person": "Write contact person...",
   "write_desc": "Write a description...",
@@ -36,7 +35,6 @@
   "message": "Message",
   "no_message": "No Message",
   "chars": "characters",
-
   "company_name_required": "Title is required",
   "desc_required": "Description is required",
   "city_required": "City is required",
@@ -48,7 +46,6 @@
   "invalid_date": "Invalid Date",
   "invalid_days": "Invalid number of days",
   "registration_error": "Error during registration, please try again",
-
   "case": "Case",
   "cases": "Cases",
   "review": "Review",
@@ -74,7 +71,6 @@
   "review_creation": "Review creation",
   "case_editing": "Case editing",
   "review_editing": "Review editing",
-
   "customer": "Customer",
   "customers": "Customers",
   "customer_details_updated": "Customer details updated",
@@ -90,7 +86,6 @@
   "consent_status": "Consent Status",
   "consent_given": "Consent Given",
   "consent_missing": "Consent Missing",
-
   "user": "user",
   "user_created": "User created",
   "user_updated": "User updated",
@@ -107,7 +102,6 @@
   "select_access_level": "Select Access Level",
   "editor": "Editor",
   "admin": "Admin",
-
   "loading_cases": "Loading Cases...",
   "loading_reviews": "Loading Reviews...",
   "loading_request": "Loading Requests...",
@@ -116,14 +110,12 @@
   "no_cases": "No cases available",
   "no_reviews": "No reviews available",
   "no_requests": "No requests available",
-
   "overview": "Overview",
   "content": "Content",
   "settings": "Settings",
   "site": "Site",
   "site_setup": "Site Setup",
   "layout_settings": "Layout Settings",
-
   "image_upload": {
     "change_image": "Change Image",
     "select_image_type": "Select image type",
@@ -137,7 +129,6 @@
     "warning": "Warning: The old image cannot be restored",
     "cancel": "Cancel"
   },
-
   "solutions": "Solutions",
   "about": "About",
   "contact": "Contact",
@@ -147,7 +138,6 @@
   "list": "List",
   "from_reviews": "from",
   "logout": "Logout",
-
   "date": "Date",
   "time": "Time",
   "created_by": "Created By",
@@ -158,7 +148,6 @@
   "delete_choosings": "Delete choosings",
   "days_left": "Days Left",
   "time_expired": "Time has expired",
-
   "PriceEstimator": {
     "title": "Price Estimator",
     "loading": "Loading services…",
@@ -175,7 +164,6 @@
     "getInTouch": "Get in Touch",
     "disclaimer": "Disclaimer: The price shown is only an estimation and may vary. Final pricing will be confirmed upon consultation."
   },
-
   "StarterSite": {
     "title": "Starter Site",
     "description": "Perfect for small businesses or personal brands",
@@ -186,7 +174,6 @@
       "simpleCMS": "Simple CMS or static content"
     }
   },
-
   "WebApplication": {
     "title": "Web Application",
     "description": "Tailored for digital products and custom functionality",
@@ -207,11 +194,9 @@
       "performance": "Built for performance"
     }
   },
-
   "startingFrom": "Starting from",
   "customQuotePrompt": "Get your custom quote in few seconds",
   "getQuote": "Get a Quote",
-
   "Header": {
     "brandName": "Arzonic",
     "solutions": "Solutions",
@@ -229,7 +214,6 @@
       "marketing": "Marketing"
     }
   },
-
   "Hero": {
     "title": "MODERN WEB AGENCY",
     "description": "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
@@ -239,7 +223,6 @@
     "webApplications": "Web Applications",
     "seeMore": "See more"
   },
-
   "Present": {
     "title": "Superfast websites – built for performance and growth",
     "customDesign": {
@@ -259,7 +242,6 @@
       "description": "From small team to full-scale operation. Your website is flexible, future-proof, and ready to scale with you."
     }
   },
-
   "NavProcess": {
     "header": {
       "title": "This is how our customer process looks like!",
@@ -273,7 +255,6 @@
       "launchSupport": "Launch & Support"
     }
   },
-
   "Process": {
     "discoveryStrategy": {
       "title": "Discovery & Strategy",
@@ -320,7 +301,6 @@
       ]
     }
   },
-
   "OfferForm": {
     "title": "Request a Quote",
     "fields": {
@@ -360,7 +340,6 @@
       "generic": "Something went wrong. Please try again later."
     }
   },
-
   "TaskSelect": {
     "legend": "Which task are you interested in?",
     "placeholder": "Choose Task",
@@ -373,7 +352,6 @@
       "other": "Other"
     }
   },
-
   "ContactPage": {
     "title": "Start the dialogue",
     "subtitle": "- completely non-binding",
@@ -384,7 +362,6 @@
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
   },
-
   "ConsentModal": {
     "title": "Consent & Privacy Policy",
     "section1": {
@@ -438,12 +415,10 @@
     "lastUpdated": "Last updated: May 7, 2025",
     "closeButton": "Close"
   },
-
   "GetStarted": {
     "title": "Estimate your project",
     "subtitle": "– in under a minute"
   },
-
   "Footer": {
     "aboutUs": "About Us",
     "services": "Services",
@@ -454,12 +429,10 @@
     "subscribe": "Subscribe",
     "rightsReserved": "All rights reserved."
   },
-
   "CallToAction": {
     "reachingBeyondBorders": "We reach beyond borders",
     "collaborationMessage": "At Arzonic, we collaborate with ambitious companies across Europe. No matter where you are, we are ready to elevate your digital presence!"
   },
-
   "solutionsPage": {
     "custom-websites": {
       "h1": "Custom Websites That Convert",
@@ -478,7 +451,6 @@
       "intro": "We create stunning visuals and motion graphics that elevate your brand and engage your audience."
     }
   },
-
   "CasesPage": {
     "title": "See what we have",
     "highlight": "created for others",
@@ -486,5 +458,30 @@
       "title": "No cases found",
       "description": "We are working on adding more cases. Check back soon!"
     }
+  },
+  "intro": {
+    "title": "Let’s find your price",
+    "subtitle": "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding.",
+    "startButton": "Start the estimate"
+  },
+  "form": {
+    "title": "Almost done!",
+    "nextButton": "Next",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "Your email",
+    "phonePlaceholder": "Phone number",
+    "submitButton": "Submit"
+  },
+  "consent": {
+    "agree": "I agree to the",
+    "privacyPolicy": "Privacy Policy",
+    "and": "and data processing."
+  },
+  "thanks": {
+    "title": "Thank you!",
+    "message": "We’ve received your request and will get back to you soon."
+  },
+  "error": {
+    "loadingQuestions": "Error loading questions:"
   }
 }

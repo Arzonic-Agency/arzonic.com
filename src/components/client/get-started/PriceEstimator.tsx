@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getEstimatorQuestions, EstimatorQuestion } from "@/lib/server/actions";
 import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
+import { useTranslation } from "react-i18next";
 
 type Country = { name: string; code: string; dial: string; flag: string; };
 type RestCountry = { cca2: string; name: { common: string }; idd?: { root?: string; suffixes?: string[] } };
@@ -17,6 +18,7 @@ const slideVariants = {
 };
 
 const PriceEstimator = () => {
+  const { t } = useTranslation();
   const [questionsState, setQuestionsState] = useState<EstimatorQuestion[]>([]);
   useEffect(() => {
     const raw = localStorage.getItem("i18nextLng") || "en";
@@ -206,13 +208,17 @@ const PriceEstimator = () => {
             transition={{ duration: 0.4 }}
             className=" p-7 rounded-2xl shadow-lg flex flex-col justify-center gap-6 text-center h-[550px]"
           >
-            <h2 className="text-2xl font-bold">Let’s find your price</h2>
+            <h2 className="text-2xl font-bold">
+              {t("intro.title", "Let’s find your price")}
+            </h2>
             <p className="mt-2 text-sm text-gray-600">
-              4 simple questions. 1 minute. A clear estimate for your project –
-              100% non-binding.
+              {t(
+                "intro.subtitle",
+                "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding."
+              )}
             </p>
             <button onClick={goNext} className="btn btn-primary w-full mt-4">
-              Start the estimate
+              {t("intro.startButton", "Start the estimate")}
             </button>
           </motion.div>
         )}
@@ -263,7 +269,7 @@ const PriceEstimator = () => {
                 disabled={!groupSel.every((sel) => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
-                Next
+                {t("form.nextButton", "Next")}
               </button>
             </div>
           </motion.div>
@@ -290,12 +296,14 @@ const PriceEstimator = () => {
               onSubmit={handleSubmit}
               className="p-7 rounded-2xl shadow-lg flex flex-col gap-4"
             >
-              <h2 className="text-2xl font-bold text-center">Almost done!</h2>
+              <h2 className="text-2xl font-bold text-center">
+                {t("form.title", "Almost done!")}
+              </h2>
               {error && <p className="text-red-500 text-center">{error}</p>}
 
               <input
                 type="text"
-                placeholder="Your name"
+                placeholder={t("form.namePlaceholder", "Your name")}
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -304,7 +312,7 @@ const PriceEstimator = () => {
 
               <input
                 type="email"
-                placeholder="Your email"
+                placeholder={t("form.emailPlaceholder", "Your email")}
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -363,7 +371,7 @@ const PriceEstimator = () => {
 
                 <input
                   type="tel"
-                  placeholder="Phone number"
+                  placeholder={t("form.phonePlaceholder", "Phone number")}
                   required
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -382,9 +390,12 @@ const PriceEstimator = () => {
                   required
                 />
                 <label htmlFor="consent" className="label-text text-xs">
-                  I agree to the{" "}
-                  <ConsentModal buttonText="Privacy Policy" variant="hover" /> and
-                  data processing.
+                  {t("consent.agree", "I agree to the")}{" "}
+                  <ConsentModal
+                    buttonText={t("consent.privacyPolicy", "Privacy Policy")}
+                    variant="hover"
+                  />{" "}
+                  {t("consent.and", "and data processing.")}
                 </label>
               </div>
 
@@ -402,7 +413,7 @@ const PriceEstimator = () => {
                     }`}
                   disabled={loading || !consentChecked}
                 >
-                  Submit
+                  {t("form.submitButton", "Submit")}
                 </button>
               </div>
             </motion.form>
@@ -421,8 +432,10 @@ const PriceEstimator = () => {
             transition={{ duration: 0.4 }}
             className=" p-6 rounded-2xl shadow-lg text-center"
           >
-            <h2 className="text-2xl font-bold mb-4">Thank you!</h2>
-            <p>We’ve received your request and will get back to you soon.</p>
+            <h2 className="text-2xl font-bold mb-4">
+              {t("thanks.title", "Thank you!")}
+            </h2>
+            <p>{t("thanks.message", "We’ve received your request and will get back to you soon.")}</p>
           </motion.div>
         )}
       </AnimatePresence>
