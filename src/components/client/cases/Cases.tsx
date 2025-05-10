@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import CasesList from "./CasesList";
-import { useTranslation } from "react-i18next";
 import { getAllCases } from "@/lib/client/actions";
 import CasesPagination from "./CasesPagination";
 import CasesFilter from "./CasesFilter";
@@ -14,7 +13,7 @@ const Cases = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const { cases, total } = await getAllCases(page);
+        const { total } = await getAllCases(page);
         setTotal(total);
       } catch (error) {
         console.error("Failed to fetch cases:", error);

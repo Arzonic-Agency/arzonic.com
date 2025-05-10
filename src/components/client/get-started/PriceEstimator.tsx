@@ -50,8 +50,9 @@ const PriceEstimator = () => {
 
   // fetch package label on final slide
   useEffect(() => {
+    const totalSlides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
     const pkgOptId = answers[1]?.[0];
-    if (step === slides && pkgOptId) {
+    if (step === totalSlides && pkgOptId) {
       fetch("/api/package-label", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -61,7 +62,7 @@ const PriceEstimator = () => {
         .then(({ label }) => setPackageLabel(label || ""))
         .catch((e) => console.error("Failed to load package label", e));
     }
-  }, [step, slides, answers]);
+  }, [step, answers, questionsState]);
 
   // fetch + sort countries
   useEffect(() => {
