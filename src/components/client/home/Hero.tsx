@@ -28,7 +28,7 @@ const Hero = () => {
                 <span className="font-mono">{t("Hero.noTemplates")}</span>
               </p>
             </div>
-            <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-xl  font-semibold tracking-wide">
+            <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
               <span>{t("Hero.customWebsites")}</span>
               <span className="text-secondary hidden sm:block">&#10140;</span>
               <span>{t("Hero.visualization")}</span>

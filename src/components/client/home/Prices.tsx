@@ -2,13 +2,14 @@ import Link from "next/link";
 import React from "react";
 import { FaCheck, FaPlus } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 const Prices = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full ">
-      <div className="flex flex-col lg:flex-row items-center justify-evenly gap-4 w-full h-full ">
+    <div className="flex flex-col items-center justify-center h-full w-full relative">
+      <div className="flex flex-col lg:flex-row items-center justify-evenly gap-4 w-full h-full z-10">
         <div className="relative">
           <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-10  shadow-zinc-800 bg-base-100 border-zinc-400 border-b-5">
             <div className="flex flex-col gap-5">

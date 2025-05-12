@@ -14,7 +14,7 @@ export default function ClientLayout({
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScroll(window.scrollY > 300);
+      setShowScroll(window.scrollY > 400);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -38,7 +38,7 @@ export default function ClientLayout({
         {showScroll && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-10 right-10 p-2 bg-base-100 ring-2 ring-secondary text-secondary rounded-lg shadow-lg z-50 block cursor-pointer"
+            className="fixed bottom-9 right-8 p-2 bg-base-100 ring-2 ring-secondary text-secondary rounded-lg shadow-lg z-50  cursor-pointer block md:hidden"
           >
             <FaAngleUp size={17} />
           </button>

@@ -27,7 +27,7 @@ const Process = ({ isSticky }: ProcessProps) => {
   });
 
   return (
-    <div className={`${isSticky ? "pt-[112px]" : ""}`}>
+    <div className={`px-5 ${isSticky ? "pt-[112px]" : ""}`}>
       <section
         id="discovery-strategy"
         className="h-[650px] w-full flex flex-col md:flex-row justify-center"

@@ -141,7 +141,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
           ))}
         </div>
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col gap-5">
           {caseItems.map((item) => (
             <li key={item.id}>
               <div className="flex justify-between items-center">
@@ -181,7 +181,6 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                   </button>
                 </div>
               </div>
-              <p className="text-xs mt-1">{truncate(item.description, 80)}</p>
             </li>
           ))}
         </ul>

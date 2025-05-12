@@ -56,7 +56,7 @@ const Footer = () => {
             {t("Footer.reliableTech", "Providing reliable tech since 2024")}
           </p>
         </aside>
-        <nav className="md:place-self-center md:justify-self-end">
+        <nav className="md:place-self-center md:justify-self-end mb-5">
           <div className="grid grid-flow-col gap-4 text-3xl">
             <a>
               <FaLinkedin />
