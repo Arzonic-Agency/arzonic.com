@@ -196,7 +196,7 @@
   },
   "startingFrom": "Starter fra",
   "customQuotePrompt": "Få dit tilpassede tilbud på få sekunder",
-  "getQuote": "Få et tilbud",
+  "getQuote": "Tag vores prisberegner",
   "Header": {
     "brandName": "Arzonic",
     "solutions": "Løsninger",
@@ -216,10 +216,10 @@
   },
   "Hero": {
     "title": "MODERNE WEBBUREAU",
-    "description": "Vi specialiserer os i at bygge højtydende hjemmesider og fordybende 3D-oplevelser ved hjælp af moderne, skræddersyet teknologi",
-    "noTemplates": "— ingen skabeloner, ingen WordPress.",
-    "customWebsites": "Tilpassede hjemmesider",
-    "visualization": "3D-visualisering",
+    "description": "Vi bygger lynhurtige hjemmesider og engagerende oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov.",
+    "noTemplates": "— ingen skabeloner, ingen WordPress",
+    "customWebsites": "Tilpasset Hjemmesider",
+    "visualization": "3D Design",
     "webApplications": "Webapplikationer",
     "seeMore": "Se mere"
   },
@@ -241,6 +241,10 @@
       "title": "Bygget til at vokse med din virksomhed",
       "description": "Fra lille team til fuldskala operation. Din hjemmeside er fleksibel, fremtidssikret og klar til at skalere med dig."
     }
+  },
+  "Preview": {
+    "title": "Dit Dashboard, Din Måde",
+    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasses dig"
   },
   "NavProcess": {
     "header": {
@@ -300,6 +304,10 @@
         "Skalerbare løsninger til fremtidige behov"
       ]
     }
+  },
+  "Pricing": {
+    "title": "Fleksible Pakker, Gennemsigtige Priser",
+    "subtitle": "Vælg en løsning der passer til dine behov og dit budget – ingen overraskelser, kun resultater"
   },
   "OfferForm": {
     "title": "Få et skræddersyet tilbud",

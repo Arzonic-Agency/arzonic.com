@@ -22,13 +22,11 @@ const Hero = () => {
               </div>
               <h1 className="text-2xl md:text-4xl">{t("Hero.title")}</h1>
             </div>
-            <div className="max-w-2xl">
-              <p className="text-sm sm:text-base">
-                {t("Hero.description")}{" "}
-                <span className="font-mono">{t("Hero.noTemplates")}</span>
-              </p>
+            <div className="max-w-xl">
+              <p className="text-sm sm:text-base">{t("Hero.description")} </p>
+              <span className="font-mono">{t("Hero.noTemplates")}</span>
             </div>
-            <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
+            <div className="flex gap-2 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
               <span>{t("Hero.customWebsites")}</span>
               <span className="text-secondary hidden sm:block">&#10140;</span>
               <span>{t("Hero.visualization")}</span>

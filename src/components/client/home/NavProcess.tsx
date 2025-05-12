@@ -1,8 +1,17 @@
+// File: components/NavProcess.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { FaBrush, FaCode, FaMap, FaRocket } from "react-icons/fa6";
+import type { ReactElement } from "react";
+
+interface Step {
+  id: string;
+  label: string;
+  icon: ReactElement;
+}
 
 const NavProcess = ({
   onStickyChange,
@@ -10,11 +19,28 @@ const NavProcess = ({
   onStickyChange?: (sticky: boolean) => void;
 }) => {
   const { t } = useTranslation();
-  const steps = [
-    t("NavProcess.steps.discoveryStrategy"),
-    t("NavProcess.steps.designExperience"),
-    t("NavProcess.steps.developmentIntegration"),
-    t("NavProcess.steps.launchSupport"),
+
+  const steps: Step[] = [
+    {
+      id: "discovery-strategy",
+      label: t("NavProcess.steps.discoveryStrategy"),
+      icon: <FaMap />,
+    },
+    {
+      id: "design-experience",
+      label: t("NavProcess.steps.designExperience"),
+      icon: <FaBrush />,
+    },
+    {
+      id: "development-integration",
+      label: t("NavProcess.steps.developmentIntegration"),
+      icon: <FaCode />,
+    },
+    {
+      id: "launch-support",
+      label: t("NavProcess.steps.launchSupport"),
+      icon: <FaRocket />,
+    },
   ];
 
   const navRef = useRef<HTMLDivElement | null>(null);
@@ -29,140 +55,119 @@ const NavProcess = ({
   const [activeStep, setActiveStep] = useState<number>(0);
 
   useEffect(() => {
-    let ticking = false;
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (navRef.current && originalOffsetRef.current === 0) {
-            originalOffsetRef.current =
+      const scrollY = window.scrollY;
+      const viewportMid = window.innerHeight / 2;
+      const proc = document.getElementById("Process");
+      const navHeight = navRef.current?.offsetHeight ?? 0;
+
+      if (proc && navRef.current) {
+        const top = proc.offsetTop;
+        const bottom = top + proc.offsetHeight;
+        if (scrollY < originalOffsetRef.current) {
+          if (positionState !== "normal") {
+            setPositionState("normal");
+            onStickyChange?.(false);
+          }
+        } else if (scrollY < bottom - navHeight) {
+          if (positionState !== "sticky") {
+            setPositionState("sticky");
+            onStickyChange?.(true);
+          }
+        } else {
+          if (positionState !== "fixed") {
+            const navAbs =
               navRef.current.getBoundingClientRect().top + window.scrollY;
+            setFixedTop(navAbs);
+            setPositionState("fixed");
+            onStickyChange?.(false);
           }
+        }
+        setShowNav(true);
+      }
 
-          const currentScrollY = window.scrollY;
-          const processSection = document.getElementById("Process");
-          const navHeight = navRef.current?.offsetHeight || 102;
-
-          if (processSection) {
-            const processBottom =
-              processSection.offsetTop + processSection.offsetHeight;
-
-            if (currentScrollY < originalOffsetRef.current) {
-              setPositionState("normal");
-              setShowNav(true);
-              onStickyChange?.(false);
-            } else if (
-              currentScrollY >= originalOffsetRef.current &&
-              currentScrollY < processBottom - navHeight
-            ) {
-              if (positionState !== "sticky") {
-                setPositionState("sticky");
-                onStickyChange?.(true);
-              }
-              setShowNav(true);
-            } else if (currentScrollY >= processBottom - navHeight) {
-              if (positionState !== "fixed") {
-                const navCurrentTop =
-                  navRef.current.getBoundingClientRect().top + window.scrollY;
-                setFixedTop(navCurrentTop);
-                setPositionState("fixed");
-                onStickyChange?.(false);
-              }
-              setShowNav(true);
-            }
-          }
-
-          // Aktivt step
-          const stepElements = [
-            document.getElementById("discovery-strategy"),
-            document.getElementById("design-experience"),
-            document.getElementById("development-integration"),
-            document.getElementById("launch-support"),
-          ];
-
-          let currentActiveStep = activeStep;
-
-          stepElements.forEach((el, index) => {
-            if (el) {
-              const rect = el.getBoundingClientRect();
-              const sectionHeight = rect.height || 650;
-              const triggerPoint = sectionHeight * 0.6;
-
-              if (rect.top <= triggerPoint && rect.bottom >= triggerPoint) {
-                currentActiveStep = index;
-              }
-            }
-          });
-
-          if (currentActiveStep !== activeStep) {
-            setActiveStep(currentActiveStep);
-          }
-
-          // Smooth progress bar
-          if (processSection) {
-            const { top, height } = processSection.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            const scrollableHeight = height - windowHeight;
-            const scrolled = -top;
-
-            const startOffset = 10;
-            const maxProgress = 100;
-            const stepCount = steps.length;
-            const stepHeight = scrollableHeight / stepCount;
-            const correction = stepHeight * 0.5;
-
-            const clampedScrolled = Math.max(
-              0,
-              Math.min(scrolled - correction, scrollableHeight)
-            );
-
-            const sectionProgress =
-              scrollableHeight > 0
-                ? startOffset +
-                  (clampedScrolled / scrollableHeight) *
-                    (maxProgress - startOffset)
-                : startOffset;
-
-            const newProgress = Math.min(
-              Math.max(sectionProgress, startOffset),
-              maxProgress
-            );
-            if (newProgress !== progress) {
-              setProgress(newProgress);
-            }
-          }
-
-          ticking = false;
+      let newActive = activeStep;
+      steps.forEach((step, idx) => {
+        const el = document.getElementById(step.id);
+        if (!el) return;
+        const { top, bottom } = el.getBoundingClientRect();
+        if (top <= viewportMid && bottom >= viewportMid) newActive = idx;
+      });
+      if (newActive !== activeStep) setActiveStep(newActive);
+      if (proc) {
+        const activationYs = steps.map((step) => {
+          const el = document.getElementById(step.id)!;
+          const rect = el.getBoundingClientRect();
+          const docTop = window.scrollY + rect.top;
+          return docTop - viewportMid;
         });
-        ticking = true;
+
+        const procRect = proc.getBoundingClientRect();
+        const procDocTop = window.scrollY + procRect.top;
+        activationYs.push(procDocTop + procRect.height - viewportMid);
+
+        const segments = activationYs.length - 1;
+        let newProgress = 0;
+
+        if (scrollY < activationYs[0]) {
+          newProgress = 0;
+        } else if (scrollY >= activationYs[segments]) {
+          newProgress = 100;
+        } else {
+          let i = 0;
+          for (; i < segments; i++) {
+            if (scrollY >= activationYs[i] && scrollY < activationYs[i + 1])
+              break;
+          }
+          const startY = activationYs[i];
+          const endY = activationYs[i + 1];
+          const within = (scrollY - startY) / (endY - startY);
+          newProgress = ((i + within) / segments) * 100;
+        }
+
+        if (Math.abs(newProgress - progress) > 0.5) {
+          setProgress(newProgress);
+        }
       }
     };
 
+    const handleResize = () => {
+      if (navRef.current) {
+        originalOffsetRef.current =
+          navRef.current.getBoundingClientRect().top + window.scrollY;
+      }
+      handleScroll();
+    };
+
+    // Initial måling + første kald
+    if (navRef.current && originalOffsetRef.current === 0) {
+      originalOffsetRef.current =
+        navRef.current.getBoundingClientRect().top + window.scrollY;
+    }
+    setTimeout(handleScroll, 0);
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [positionState, activeStep, onStickyChange, progress, steps.length]);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [activeStep, positionState, progress, onStickyChange, steps]);
 
   if (!showNav) return null;
 
-  const getIdFromStep = (step: string) =>
-    step.toLowerCase().replace(/ & /g, "-").replace(/\s+/g, "-");
-
-  const handleClick = (step: string) => {
-    const id = getIdFromStep(step);
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
+  const handleClick = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-3">
-        <h3 className="text-lg md:text-4xl font-light">
+        <h3 className="text-lg md:text-4xl font-bold md:font-extralight">
           {t("NavProcess.header.title")}
         </h3>
-        <p className="text-sm md:text-lg text-center mt-2 p-5">
+        <p className="text-sm md:text-lg text-center mt-2 p-5 max-w-xs md:max-w-2xl">
           <u className="underline-offset-2 decoration-secondary decoration-2">
             {t("NavProcess.header.description-first")}
           </u>
@@ -170,46 +175,55 @@ const NavProcess = ({
         </p>
       </div>
 
-      {/* Sticky / Fixed Nav */}
+      {/* Nav */}
       <div
         ref={navRef}
-        className={`nav-process w-full ${
-          positionState === "sticky"
-            ? "sticky top-0 left-0 right-0 mx-auto"
-            : ""
-        } ${
-          positionState === "fixed"
-            ? "absolute left-1/2 transform -translate-x-1/2"
-            : ""
-        }`}
+        className={`
+          nav-process w-full bg-base-100 z-10
+          ${
+            positionState === "sticky"
+              ? "sticky top-0 left-0 right-0 mx-auto shadow-md"
+              : ""
+          }
+          ${
+            positionState === "fixed"
+              ? "absolute left-1/2 transform -translate-x-1/2"
+              : ""
+          }
+        `}
         style={positionState === "fixed" ? { top: `${fixedTop}px` } : {}}
       >
-        <div className="nav-process-content">
-          <div className="flex justify-center px-5 pb-5 pt-10 ">
+        <div className="nav-process-content px-5 md:px-10">
+          <div className="flex justify-center pb-5 pt-10">
             <ul className="flex gap-7 justify-evenly w-full">
-              {steps.map((step, index) => (
-                <li
-                  key={index}
-                  onClick={() => handleClick(step)}
-                  className={`cursor-pointer font-semibold transition-all duration-300 text-xs md:text-base xl:text-lg ${
-                    activeStep === index
-                      ? "text-secondary"
-                      : "text-gray-500 hover:text-neutral-content"
-                  }`}
-                >
-                  {step}
-                </li>
-              ))}
+              {steps.map((step, idx) => {
+                const isActive = activeStep === idx;
+                const colorClass = isActive
+                  ? "text-secondary"
+                  : "text-gray-500 hover:text-neutral-content";
+                return (
+                  <li
+                    key={step.id}
+                    onClick={() => handleClick(step.id)}
+                    className="cursor-pointer font-semibold transition-all duration-200 text-xs md:text-base xl:text-lg flex flex-col items-center"
+                  >
+                    <span className={`block md:hidden text-2xl ${colorClass}`}>
+                      {step.icon}
+                    </span>
+                    <span className={`hidden md:block ${colorClass}`}>
+                      {step.label}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
-
-          {/* Progress bar */}
-          <div className="progress-bar-container px-5 md:px-10">
+          <div className="progress-bar-container">
             <motion.div
               className="progress-bar-fill"
               initial={{ width: "0%" }}
               animate={{ width: `${progress}%` }}
-              transition={{ type: "tween", ease: "easeOut", duration: 0.4 }}
+              transition={{ type: "tween", ease: "easeOut", duration: 0.2 }}
             />
           </div>
         </div>

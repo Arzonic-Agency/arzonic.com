@@ -3,14 +3,14 @@
 import React from "react";
 import { FaCaretRight } from "react-icons/fa6";
 import { useRive } from "@rive-app/react-canvas";
-import { useTranslation } from "react-i18next"; // Import translation hook
+import { useTranslation } from "react-i18next";
 
 type ProcessProps = {
   isSticky: boolean;
 };
 
 const Process = ({ isSticky }: ProcessProps) => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
 
   const { RiveComponent: DesignRive } = useRive({
     src: "/rive/design.riv",
@@ -27,13 +27,13 @@ const Process = ({ isSticky }: ProcessProps) => {
   });
 
   return (
-    <div className={`px-5 ${isSticky ? "pt-[112px]" : ""}`}>
+    <div className={`md:px-5 ${isSticky ? "pt-[112px]" : ""}`}>
       <section
         id="discovery-strategy"
-        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
+        className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+        <div className="flex flex-col justify-center gap-5 md:h-full p-5 md:p-10 md:w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-85">
             {t("Process.discoveryStrategy.title")}
           </h3>
           <h4 className="text-xl md:text-4xl font-extralight">
@@ -61,18 +61,18 @@ const Process = ({ isSticky }: ProcessProps) => {
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 md:w-[45%]">
-          <div className="w-full h-full max-h-96">
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
+          <div className="md:w-full w-60 h-full max-h-60 md:max-h-96">
             <StrategyRive />
           </div>
         </div>
       </section>
       <section
         id="design-experience"
-        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
+        className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+        <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-85">
             {t("Process.designExperience.title")}
           </h3>
           <h4 className="text-xl md:text-4xl font-extralight">
@@ -100,18 +100,18 @@ const Process = ({ isSticky }: ProcessProps) => {
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-10 md:w-[45%]">
-          <div className="w-full h-full max-h-[420px]">
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full  px-10 md:p-10 md:w-[45%]">
+          <div className="md:w-full w-60 h-full max-h-64 md:max-h-96">
             <DesignRive />
           </div>
         </div>
       </section>
       <section
         id="development-integration"
-        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
+        className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+        <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-85">
             {t("Process.developmentIntegration.title")}
           </h3>
           <h4 className="text-xl md:text-4xl font-extralight">
@@ -139,18 +139,18 @@ const Process = ({ isSticky }: ProcessProps) => {
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-center items-center gap-5 h-full p-5 md:p-10 md:w-[45%]">
-          <div className="w-full h-full max-h-[440px]">
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full  px-10 md:p-10 md:w-[45%]">
+          <div className="md:w-full w-60 h-full max-h-64 md:max-h-80">
             <CodingRive />
           </div>
         </div>
       </section>
       <section
         id="launch-support"
-        className="h-[650px] w-full flex-col md:flex-row"
+        className="md:h-[650px] h-[750px] w-full flex-col md:flex-row"
       >
-        <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-70">
+        <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
+          <h3 className="text-lg tracking-widest text-secondary opacity-85">
             {t("Process.launchSupport.title")}
           </h3>
           <h4 className="text-xl md:text-4xl font-extralight">

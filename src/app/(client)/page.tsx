@@ -45,13 +45,13 @@ const Home = () => {
       <section className="h-full">
         <NavProcess onStickyChange={setIsSticky} />
       </section>
-      <section className="h-[2800px]" id="Process">
+      <section className="h-[3000px] md:h-[2600px]" id="Process">
         <Process isSticky={isSticky} />
       </section>
-      <section className="h-[2000px] lg:h-[800px] mb-40">
+      <section className=" lg:h-[850px] my-40 hidden lg:block">
         <Prices />
       </section>
-      <section className="h-[850px] relative">
+      <section className="h-full md:h-[850px] relative mb-16">
         <div className="absolute w-full h-full opacity-55">
           <Image
             src="/backgrounds/lines.svg"

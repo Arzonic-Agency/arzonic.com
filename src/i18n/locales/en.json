@@ -242,6 +242,10 @@
       "description": "From small team to full-scale operation. Your website is flexible, future-proof, and ready to scale with you."
     }
   },
+  "Preview": {
+    "title": "Your Dashboard, Your Way",
+    "subtitle": "Stay in control with a dashboard built around you"
+  },
   "NavProcess": {
     "header": {
       "title": "This is how our customer process looks like!",
@@ -300,6 +304,10 @@
         "Scalable solutions for future needs"
       ]
     }
+  },
+  "Pricing": {
+    "title": "Flexible Packages, Clear Pricing",
+    "subtitle": "Choose a solution that fits your needs and budget – no surprises, just results"
   },
   "OfferForm": {
     "title": "Request a custom quote",

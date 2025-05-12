@@ -104,7 +104,7 @@ const OfferForm = () => {
   };
 
   return (
-    <div className="lg:max-w-2xl max-w-md w-full">
+    <div className="md:max-w-2xl max-w-md w-full">
       {isSuccess ? (
         <div className="flex flex-col gap-4 bg-base-100 p-10 h-[600px]">
           <h2 className="text-xl font-bold">{t("OfferForm.success.title")}</h2>
@@ -116,25 +116,25 @@ const OfferForm = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 bg-base-100 ring-2 ring-base-200 rounded-lg shadow-md p-8 md:p-10"
+          className="flex flex-col gap-5 bg-base-100 md:ring-2 md:ring-base-200 rounded-lg shadow-md p-8 md:p-10"
         >
           <h2 className="text-xl font-bold">{t("OfferForm.title")}</h2>
 
           {/* Name / Email / Phone */}
-          <div className="flex flex-col lg:flex-row gap-3 lg:gap-10">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-10">
             <div className="flex-1 flex flex-col gap-3">
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">
                   {t("OfferForm.fields.name.label")}
                 </legend>
-                <label htmlFor="name" className="form-control w-full max-w-xs">
+                <label htmlFor="name" className="form-control w-full">
                   <input
                     id="name"
                     name="name"
                     type="text"
                     autoComplete="name"
                     placeholder={t("OfferForm.fields.name.placeholder")}
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full md:max-w-xs"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -145,14 +145,14 @@ const OfferForm = () => {
                 <legend className="fieldset-legend">
                   {t("OfferForm.fields.email.label")}
                 </legend>
-                <label htmlFor="mail" className="form-control w-full max-w-xs">
+                <label htmlFor="mail" className="form-control w-full">
                   <input
                     id="mail"
                     name="mail"
                     type="email"
                     autoComplete="email"
                     placeholder={t("OfferForm.fields.email.placeholder")}
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full md:max-w-xs"
                     value={mail}
                     onChange={(e) => setMail(e.target.value)}
                     required
@@ -163,14 +163,14 @@ const OfferForm = () => {
                 <legend className="fieldset-legend">
                   {t("OfferForm.fields.phone.label")}
                 </legend>
-                <label htmlFor="phone" className="form-control w-full max-w-xs">
+                <label htmlFor="phone" className="form-control w-full ">
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     autoComplete="tel"
                     placeholder={t("OfferForm.fields.phone.placeholder")}
-                    className="input input-bordered w-full max-w-xs"
+                    className="input input-bordered w-full md:max-w-xs"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
                     required
@@ -190,14 +190,14 @@ const OfferForm = () => {
                 </legend>
                 <label
                   htmlFor="message"
-                  className="form-control w-full max-w-xs relative"
+                  className="form-control w-full relative"
                 >
                   <textarea
                     id="message"
                     name="message"
                     rows={5}
                     placeholder={t("OfferForm.fields.message.placeholder")}
-                    className="textarea textarea-bordered textarea-md text-base w-full max-w-xs resize-none"
+                    className="textarea textarea-bordered textarea-md text-base w-full md:max-w-xs resize-none"
                     value={message}
                     onChange={handleMessageChange}
                     maxLength={charLimit}

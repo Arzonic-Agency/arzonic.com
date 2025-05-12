@@ -85,8 +85,9 @@
   @apply container mx-auto text-center;
 }
 
+/* læg overflow-hidden så fill ikke stikker udenfor */
 .progress-bar-container {
-  @apply bg-transparent h-[6px] mt-2 rounded-full;
+  @apply w-full bg-base-200 h-[6px] mt-2 rounded-full overflow-hidden;
 }
 
 .progress-bar-fill {
