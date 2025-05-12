@@ -274,7 +274,7 @@ const PriceEstimator = () => {
                 disabled={!groupSel.every((sel) => sel.length > 0)}
                 className="btn btn-primary flex-1"
               >
-                {t("form.nextButton", "Next")}
+                {t("estimator.form.nextButton", "Next")}
               </button>
             </div>
           </motion.div>
@@ -302,13 +302,13 @@ const PriceEstimator = () => {
               className="p-7 rounded-2xl shadow-lg flex flex-col gap-4"
             >
               <h2 className="text-2xl font-bold text-center">
-                {t("form.title", "Almost done!")}
+                {t("estimator.form.title", "Almost done!")}
               </h2>
               {error && <p className="text-red-500 text-center">{error}</p>}
 
               <input
                 type="text"
-                placeholder={t("form.namePlaceholder", "Your name")}
+                placeholder={t("estimator.form.namePlaceholder", "Your name")}
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -317,7 +317,7 @@ const PriceEstimator = () => {
 
               <input
                 type="email"
-                placeholder={t("form.emailPlaceholder", "Your email")}
+                placeholder={t("estimator.form.emailPlaceholder", "Your email")}
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -374,7 +374,10 @@ const PriceEstimator = () => {
 
                 <input
                   type="tel"
-                  placeholder={t("form.phonePlaceholder", "Phone number")}
+                  placeholder={t(
+                    "estimator.form.phonePlaceholder",
+                    "Phone number"
+                  )}
                   required
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -393,12 +396,15 @@ const PriceEstimator = () => {
                   required
                 />
                 <label htmlFor="consent" className="label-text text-xs">
-                  {t("consent.agree", "I agree to the")}{" "}
+                  {t("estimator.consent.agree", "I agree to the")}{" "}
                   <ConsentModal
-                    buttonText={t("consent.privacyPolicy", "Privacy Policy")}
+                    buttonText={t(
+                      "estimator.consent.privacyPolicy",
+                      "Privacy Policy"
+                    )}
                     variant="hover"
                   />{" "}
-                  {t("consent.and", "and data processing.")}
+                  {t("estimator.consent.and", "and data processing.")}
                 </label>
               </div>
 
@@ -417,7 +423,7 @@ const PriceEstimator = () => {
                   }`}
                   disabled={loading || !consentChecked}
                 >
-                  {t("form.submitButton", "Submit")}
+                  {t("estimator.form.submitButton", "Submit")}
                 </button>
               </div>
             </motion.form>
@@ -437,11 +443,11 @@ const PriceEstimator = () => {
             className=" p-6 rounded-2xl shadow-lg text-center"
           >
             <h2 className="text-2xl font-bold mb-4">
-              {t("thanks.title", "Thank you!")}
+              {t("estimator.thanks.title", "Thank you!")}
             </h2>
             <p>
               {t(
-                "thanks.message",
+                "estimator.thanks.message",
                 "We’ve received your request and will get back to you soon."
               )}
             </p>
