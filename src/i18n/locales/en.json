@@ -575,5 +575,12 @@
         "image": "/team/sebastian.png"
       }
     ]
+  },
+    "notFound": {
+    "title": "404",
+    "message": "Oops! The page you are looking for does not exist.",
+    "home": "Go to homepage",
+    "contact": "Get in touch"
   }
 }
+

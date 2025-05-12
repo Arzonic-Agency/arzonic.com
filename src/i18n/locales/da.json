@@ -575,5 +575,11 @@
         "image": "/team/sebastian.png"
       }
     ]
+  },
+    "notFound": {
+    "title": "404",
+    "message": "Ups! Siden du leder efter findes ikke.",
+    "home": "Gå til forsiden",
+    "contact": "Kontakt os"
   }
 }

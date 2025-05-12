@@ -24,10 +24,10 @@ const SetupPackagesList = ({ onEdit }) => {
       {packages.map((pkg) => (
         <li key={pkg.id} className="list-row">
           <div>
-            <div className="font-bold">{pkg.label}</div>{" "}
-            {/* Display package label */}
-            <div className="text-sm text-gray-500">{pkg.priceEUR} EUR</div>{" "}
-            {/* Display package price */}
+            <div className="font-bold">{pkg.label}</div>
+            <div className="text-sm text-gray-500">
+              {pkg.price_eur} EUR&nbsp;/&nbsp;{pkg.price_dkk} DKK
+            </div>
           </div>
           <div>
             <div className="text-xs uppercase font-semibold opacity-60">
