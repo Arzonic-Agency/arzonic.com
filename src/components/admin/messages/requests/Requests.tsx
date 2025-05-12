@@ -4,6 +4,7 @@ import RequestsList, { Request } from "./RequestsList";
 import RequestsDetails from "./RequestsDetails";
 import { FaAngleLeft } from "react-icons/fa6";
 import { deleteRequest, updateRequest } from "@/lib/server/actions";
+import RequestsPagination from "./RequestsPagination"; // Import the pagination component
 
 import { useTranslation } from "react-i18next";
 
@@ -144,6 +145,7 @@ const Requests = () => {
             setSelectedRequests={setSelectedRequests}
             handleCheckboxChange={handleCheckboxChange}
           />
+          <RequestsPagination page={page} setPage={setPage} total={total} />
         </>
       )}
       {showToast && (

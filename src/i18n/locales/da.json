@@ -302,7 +302,7 @@
     }
   },
   "OfferForm": {
-    "title": "Anmod om et tilbud",
+    "title": "Få et skræddersyet tilbud",
     "fields": {
       "name": {
         "label": "Navn",
@@ -435,53 +435,137 @@
   },
   "solutionsPage": {
     "custom-websites": {
-      "h1": "Skræddersyede hjemmesider der konverterer",
-      "intro": "Vi designer og udvikler lynhurtige hjemmesider med fokus på performance, brugeroplevelse og resultater."
+      "titleStart": "Tilpassede",
+      "titleEnd": "Hjemmesider",
+      "hero": "Unikke hjemmesider der afspejler din identitet – ingen skabeloner, kun skræddersyede løsninger.",
+      "body": "Dit website er ofte det første indtryk – og det skal ramme plet.\nVi bygger fra bunden med blik for dit brand, dine mål og din målgruppe. Det betyder lynhurtige sider, mobilvenligt design og fleksibel struktur, så du altid er klar til at vækste.",
+      "process": [
+        "Workshops og strategi",
+        "Wireframes og design",
+        "Udvikling og integration",
+        "Performanceoptimering og SEO"
+      ],
+      "cta": "👉 Klar til at stå stærkere online?"
     },
     "web-applications": {
-      "h1": "Skalerbare webapplikationer til vækst",
-      "intro": "Robuste webapplikationer skræddersyet til dine mål, bygget med moderne frameworks og et rent design."
+      "titleStart": "Skalerbare",
+      "titleEnd": "Webapplikationer",
+      "hero": "Fra idé til interaktiv oplevelse – vi bygger webapps der arbejder for dig.",
+      "body": "En god webapp kombinerer brugervenlighed, funktionalitet og performance.\nVi udvikler alt fra interne dashboards og kundeværktøjer til komplekse platforms-løsninger – altid med fokus på hastighed, skalerbarhed og sikkerhed.",
+      "process": [
+        "Analyse og flow-mapping",
+        "Prototyping og UI/UX",
+        "Full-stack udvikling (React, Supabase m.fl.)",
+        "Test, lancering og support"
+      ],
+      "cta": "👉 Har du en digital løsning i tankerne? Vi gør den virkelig."
     },
     "3d-visualization": {
-      "h1": "Få dine idéer til live i 3D",
-      "intro": "Fra arkitektoniske visualiseringer til produktanimationer – vi skaber 3D-indhold med høj visuel effekt."
+      "titleStart": "3D",
+      "titleEnd": "Visualisering",
+      "hero": "Skab wow-effekt med 3D – fra produktvisualisering til interaktive oplevelser.",
+      "body": "3D giver dybde, realisme og følelsen af noget større.\nVi laver alt fra arkitektur og produktpræsentationer til interaktive 3D-elementer på din hjemmeside – med styr på æstetik, teknik og performance.",
+      "process": [
+        "3D-modellering & teksturering",
+        "Rendering og animation",
+        "WebGL-integration (Three.js, Rive, Spline)",
+        "Letvægtsoptimering til web"
+      ],
+      "cta": "👉 Klar til at gøre indtryk i 3 dimensioner?"
     },
     "design-animation": {
-      "h1": "Design og animation der fanger",
-      "intro": "Vi leverer visuelt stærkt design og motion graphics, der styrker dit brand og engagerer dine kunder."
+      "titleStart": "Design &",
+      "titleEnd": "Animation",
+      "hero": "Visuel identitet med kant – og bevægelse, der skaber engagement.",
+      "body": "Godt design handler ikke bare om pæne flader – det handler om at få mennesker til at føle noget. Vi udvikler visuelle identiteter, grafiske elementer og animationer der løfter din kommunikation og gør dit brand mindeværdigt.",
+      "process": [
+        "Branddesign og stilretning",
+        "Illustration og grafiske komponenter",
+        "UI-animerede elementer og mikrointeraktioner",
+        "Lottie, GSAP og motion-integration"
+      ],
+      "cta": "👉 Skal dit brand bevæge sig?"
     }
   },
+  "countries": {
+    "denmark": "Danmark",
+    "sweden": "Sverige",
+    "norway": "Norge",
+    "finland": "Finland",
+    "germany": "Tyskland",
+    "netherlands": "Holland",
+    "belgium": "Belgien",
+    "france": "Frankrig",
+    "spain": "Spanien",
+    "italy": "Italien",
+    "austria": "Østrig",
+    "ireland": "Irland",
+    "portugal": "Portugal",
+    "switzerland": "Schweiz",
+    "estonia": "Estland",
+    "latvia": "Letland",
+    "lithuania": "Litauen",
+    "czechia": "Tjekkiet",
+    "hungary": "Ungarn",
+    "poland": "Polen"
+  },
   "CasesPage": {
-    "title": "Se hvad vi har",
+    "title": "Hvad vi har",
     "highlight": "skabt for andre",
     "emptyState": {
       "title": "Ingen cases fundet",
       "description": "Vi arbejder på at tilføje flere cases. Kom snart tilbage!"
     }
   },
-  "intro": {
-    "title": "Lad os finde din pris",
-    "subtitle": "4 enkle spørgsmål. 1 minut. En klar beregning til dit projekt – 100 % uforpligtende.",
-    "startButton": "Start beregningen"
+  "estimator": {
+    "intro": {
+      "title": "Lad os finde din pris",
+      "subtitle": "4 enkle spørgsmål. 1 minut. En klar beregning til dit projekt – 100 % uforpligtende.",
+      "startButton": "Start beregningen"
+    },
+    "form": {
+      "title": "Næsten færdig!",
+      "nextButton": "Næste",
+      "namePlaceholder": "Dit navn",
+      "emailPlaceholder": "Din e-mail",
+      "phonePlaceholder": "Telefonnummer",
+      "submitButton": "Indsend"
+    },
+    "consent": {
+      "agree": "Jeg accepterer",
+      "privacyPolicy": "Privatlivspolitik",
+      "and": "og databehandling."
+    },
+    "thanks": {
+      "title": "Tak!",
+      "message": "Vi har modtaget din forespørgsel og vender tilbage til dig hurtigst muligt."
+    },
+    "error": {
+      "loadingQuestions": "Fejl ved indlæsning af spørgsmål:"
+    }
   },
-  "form": {
-    "title": "Næsten færdig!",
-    "nextButton": "Næste",
-    "namePlaceholder": "Dit navn",
-    "emailPlaceholder": "Din e-mail",
-    "phonePlaceholder": "Telefonnummer",
-    "submitButton": "Indsend"
-  },
-  "consent": {
-    "agree": "Jeg accepterer",
-    "privacyPolicy": "Privatlivspolitik",
-    "and": "og databehandling."
-  },
-  "thanks": {
-    "title": "Tak!",
-    "message": "Vi har modtaget din forespørgsel og vender tilbage til dig hurtigst muligt."
-  },
-  "error": {
-    "loadingQuestions": "Fejl ved indlæsning af spørgsmål:"
+  "aboutPage": {
+    "titleStart": "Om os",
+    "titleEnd": " – Vores rejse og værdier",
+    "metaDescription": "Vi er Arzonic – et moderne webbureau med fokus på digitale løsninger, 3D og brugeroplevelse.",
+    "textOne": "Arzonic er et kreativt digitalt bureau drevet af passion, nysgerrighed og en fælles kærlighed til godt håndværk. Vi er et sammensat team af specialister og nyuddannede ildsjæle, der brænder for hver vores felt – fra webudvikling og UI/UX til 3D-visualisering og animation.",
+    "textTwo": "Vores tilgang er frisk og løsningsorienteret. Vi tænker ikke i standardpakker, men i muligheder. Med rødder i hobbyprojekter og en konstant trang til at lære nyt, skaber vi digitale løsninger, der både performer og begejstrer.",
+    "team": [
+      {
+        "name": "Marc Møller",
+        "role": "PM & Frontend udvikler",
+        "image": "/team/marc2.png"
+      },
+      {
+        "name": "Mikkel Toft",
+        "role": "3D Artist & UX Designer",
+        "image": "/team/mikkel.png"
+      },
+      {
+        "name": "Sebatian Porsche",
+        "role": "API & Backend udvikler",
+        "image": "/team/sebastian.png"
+      }
+    ]
   }
 }

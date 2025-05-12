@@ -17,7 +17,7 @@ const Home = () => {
     <>
       <SplashScreen />
       <section className="h-96 md:h-[700px] relative md:static">
-        <div className="background-animation-layer " />
+        <div className="background-animation-layer" />
         <div className="background-fade-bottom" />
         <Hero />
       </section>
@@ -30,7 +30,7 @@ const Home = () => {
       <section className="h-full">
         <NavProcess onStickyChange={setIsSticky} />
       </section>
-      <section id="Process" className="h-[2800px]">
+      <section className="h-[2800px]" id="Process">
         <Process isSticky={isSticky} />
       </section>
       <section className="h-[1000px]">

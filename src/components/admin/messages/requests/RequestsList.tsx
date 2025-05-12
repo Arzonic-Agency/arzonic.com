@@ -50,9 +50,9 @@ const RequestsList = ({
     const fetchRequests = async () => {
       try {
         setLoading(true);
-        const { requests, total } = await getAllRequests(page);
-        setRequests(requests);
-        setTotal(total);
+        const { requests, total } = await getAllRequests(page, 6); // Fetch 6 requests per page
+        setRequests(requests); // Update the requests state
+        setTotal(total); // Update the total count for pagination
       } catch (error) {
         console.error("Failed to fetch requests:", error);
       } finally {
@@ -61,7 +61,7 @@ const RequestsList = ({
     };
 
     fetchRequests();
-  }, [page, setRequests, setTotal]);
+  }, [page, setRequests, setTotal]); // Refetch when the page changes
 
   useEffect(() => {
     setLocalRequests(

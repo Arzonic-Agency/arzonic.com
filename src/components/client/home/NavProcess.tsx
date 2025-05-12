@@ -85,7 +85,7 @@ const NavProcess = ({
           stepElements.forEach((el, index) => {
             if (el) {
               const rect = el.getBoundingClientRect();
-              const sectionHeight = rect.height || 700;
+              const sectionHeight = rect.height || 650;
               const triggerPoint = sectionHeight * 0.6;
 
               if (rect.top <= triggerPoint && rect.bottom >= triggerPoint) {

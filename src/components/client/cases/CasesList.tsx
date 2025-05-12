@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
 
 interface CasesListProps {
@@ -58,8 +59,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   if (loading) {
     return (
       <div className="flex justify-center gap-3 items-center w-full">
-        <span className="loading loading-spinner loading-md h-40" />
-        {t("loading_cases")}
+        <span className="loading loading-dots loading-xl text-secondary h-96" />
       </div>
     );
   }
@@ -73,36 +73,37 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="md:max-w-lg lg:max-w-3xl xl:max-w-4xl flex flex-col gap-10 md:gap-16 p-1 md:p-0">
-      {caseItems.map((item) => (
-        <div
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 p-1 md:p-4">
+      {caseItems.map((item, index) => (
+        <motion.div
           key={item.id}
-          className="card lg:card-side bg-base-100 shadow-md rounded-xl sm:rounded-lg lg:h-72 xl:h-[330px]"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.4 }}
+          className="rounded-lg overflow-hidden bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-300"
         >
-          <figure className="relative w-full lg:w-1/2 h-56 lg:h-full">
-            <div className="relative w-full h-full">
-              <Image
-                src={item.image || FALLBACK_IMAGE}
-                alt={item.companyName}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-              />
-            </div>
-          </figure>
-          <div className="card-body w-full lg:w-1/2 gap-5">
-            <h2 className="card-title">{item.companyName}</h2>
-            <p className="text-[15px] md:text-base">{item.description}</p>
-            <div className="font-semibold flex items-center justify-between w-full">
-              <span className="font-medium text-gray-500">
-                {formatDate(item.created_at)}
-              </span>
+          <div className="relative h-60">
+            <Image
+              src={item.image || FALLBACK_IMAGE}
+              alt={item.companyName}
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div className="p-5 flex flex-col justify-between h-52">
+            <h3 className="text-lg font-bold">{item.companyName}</h3>
+            <p className="text-sm text-zinc-600 line-clamp-3">
+              {item.description}
+            </p>
+            <div className="text-xs text-zinc-500 flex justify-between pt-4">
+              <span>{formatDate(item.created_at)}</span>
               <span className="flex items-center gap-1">
-                <FaLocationDot /> {item.city}
+                <FaLocationDot className="text-zinc-400" />
+                {item.city}
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );

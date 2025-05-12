@@ -179,7 +179,7 @@ const Prices = () => {
       </div>
       <div className="flex flex-col items-center justify-center gap-5">
         <h3 className="text-lg">{t("customQuotePrompt")}</h3>
-        <Link href="/price-calculator" className="btn btn-primary">
+        <Link href="/get-started" className="btn btn-primary">
           {t("getQuote")}
         </Link>
       </div>

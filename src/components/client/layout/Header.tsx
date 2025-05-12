@@ -7,6 +7,7 @@ import { FaBars, FaFacebook, FaInstagram, FaXmark } from "react-icons/fa6";
 import Image from "next/image";
 import Language from "./Language";
 import { useTranslation } from "react-i18next";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Header = () => {
   const pathname = usePathname();
@@ -57,49 +58,46 @@ const Header = () => {
       </div>
       <nav className="flex-none">
         <ul className="menu w-full text-lg menu-horizontal font-bold md:font-medium gap-3 md:gap-5 items-center hidden md:flex">
-          <li className="relative" id="solutions-dropdown">
-            <button
-              onClick={() => setDropdownOpen((prev) => !prev)}
-              className="cursor-pointer"
-            >
-              {t("Header.solutions")}
-            </button>
-            {dropdownOpen && (
-              <ul className="absolute top-10 left-0 ml-0 mt-2 bg-base-100 ring-1 ring-base-200 w-50 px-2 py-3 z-30 flex flex-col text-[15px] items-start gap-3 rounded-xl">
-                <li className="w-full">
-                  <Link
-                    href="/solutions/custom-websites"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    {t("Header.dropdown.customWebsites")}
-                  </Link>
-                </li>
-                <li className="w-full">
-                  <Link
-                    href="/solutions/web-applications"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    {t("Header.dropdown.webApplications")}
-                  </Link>
-                </li>
-                <li className="w-full">
-                  <Link
-                    href="/solutions/3d-visualization"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    {t("Header.dropdown.visualization")}
-                  </Link>
-                </li>
-                <li className="w-full">
-                  <Link
-                    href="/solutions/design-animation"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    {t("Header.dropdown.designAnimation")}
-                  </Link>
-                </li>
-              </ul>
-            )}
+          <li
+            className="relative"
+            id="solutions-dropdown"
+            onMouseEnter={() => setDropdownOpen(true)}
+            onMouseLeave={() => setDropdownOpen(false)}
+          >
+            <button className="cursor-pointer">{t("Header.solutions")}</button>
+
+            <AnimatePresence>
+              {dropdownOpen && (
+                <motion.ul
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-10 left-0 ml-0 bg-base-100 shadow-xl w-52 px-2 py-3 z-30 flex flex-col text-[15px] items-start gap-3 rounded-xl menu menu-vertical"
+                >
+                  <li className="w-full">
+                    <Link href="/solutions/custom-websites">
+                      {t("Header.dropdown.customWebsites")}
+                    </Link>
+                  </li>
+                  <li className="w-full">
+                    <Link href="/solutions/web-applications">
+                      {t("Header.dropdown.webApplications")}
+                    </Link>
+                  </li>
+                  <li className="w-full">
+                    <Link href="/solutions/3d-visualization">
+                      {t("Header.dropdown.visualization")}
+                    </Link>
+                  </li>
+                  <li className="w-full">
+                    <Link href="/solutions/design-animation">
+                      {t("Header.dropdown.designAnimation")}
+                    </Link>
+                  </li>
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </li>
           <li>
             <Link href="/cases">{t("Header.cases")}</Link>

@@ -13,7 +13,7 @@ const RequestsPagination = ({
   setPage,
   total,
 }: RequestsPaginationProps) => {
-  const totalPages = Math.ceil(total / 6);
+  const totalPages = Math.ceil(total / 6); // Calculate total pages based on 6 items per page
   const { t } = useTranslation();
 
   if (total <= 6) {
@@ -33,19 +33,19 @@ const RequestsPagination = ({
   };
 
   return (
-    <div className="join bg-base-100">
+    <div className="join w-full flex justify-center">
       <button
-        className="join-item btn bg-base-100"
+        className="join-item btn "
         onClick={handlePrevious}
         disabled={page === 1}
       >
         <FaAngleLeft />
       </button>
-      <span className="join-item btn bg-base-100">
-        {t("site")} {page}
+      <span className="join-item btn text-zinc-400">
+        {t("site")} {page} / {totalPages}{" "}
       </span>
       <button
-        className="join-item btn bg-base-100"
+        className="join-item btn"
         onClick={handleNext}
         disabled={page >= totalPages}
       >

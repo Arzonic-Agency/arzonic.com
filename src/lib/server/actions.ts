@@ -700,20 +700,22 @@ export async function getReviewById(reviewId: number) {
 
 export async function getAllRequests(page: number = 1, limit: number = 6) {
   const supabase = await createServerClientInstance();
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * limit; // Calculate offset for pagination
 
   try {
     const { data, count, error } = await supabase
       .from("requests")
-      .select("*", { count: "exact" })
+      .select("*", { count: "exact" }) // Include total count for pagination
       .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(offset, offset + limit - 1); // Fetch only the range for the current page
 
     if (error) {
-      throw new Error(`Failed to fetch requests: ${error.message}`);
+      throw new Error(
+        `Failed to fetch requests: ${error.message || "Unknown error"}`
+      );
     }
 
-    return { requests: data, total: count || 0 };
+    return { requests: data || [], total: count || 0 }; // Return requests and total count
   } catch (err) {
     console.error("Unexpected error during fetching requests:", err);
     throw err;

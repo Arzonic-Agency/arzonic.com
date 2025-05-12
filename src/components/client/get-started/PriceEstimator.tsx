@@ -214,16 +214,16 @@ const PriceEstimator = () => {
             className=" p-7 rounded-2xl shadow-lg flex flex-col justify-center gap-6 text-center h-[550px]"
           >
             <h2 className="text-2xl font-bold">
-              {t("intro.title", "Let’s find your price")}
+              {t("estimator.intro.title", "Let’s find your price")}
             </h2>
             <p className="mt-2 text-sm text-gray-600">
               {t(
-                "intro.subtitle",
+                "estimator.intro.subtitle",
                 "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding."
               )}
             </p>
             <button onClick={goNext} className="btn btn-primary w-full mt-4">
-              {t("intro.startButton", "Start the estimate")}
+              {t("estimator.intro.startButton", "Start the estimate")}
             </button>
           </motion.div>
         )}

@@ -302,7 +302,7 @@
     }
   },
   "OfferForm": {
-    "title": "Request a Quote",
+    "title": "Request a custom quote",
     "fields": {
       "name": {
         "label": "Name",
@@ -435,53 +435,137 @@
   },
   "solutionsPage": {
     "custom-websites": {
-      "h1": "Custom Websites That Convert",
-      "intro": "We design and develop lightning-fast websites focused on performance, UX, and business results."
+      "titleStart": "Custom",
+      "titleEnd": "Websites",
+      "hero": "Unique websites that reflect your identity – no templates, just tailored solutions.",
+      "body": "Your website is often the first impression – and it has to land right.\nWe build from scratch with attention to your brand, goals, and audience. That means blazing-fast pages, mobile-first design, and a flexible structure that’s ready to grow.",
+      "process": [
+        "Workshops and strategy",
+        "Wireframes and design",
+        "Development and integration",
+        "Performance optimization and SEO"
+      ],
+      "cta": "👉 Ready to make a stronger impact online?"
     },
     "web-applications": {
-      "h1": "Scalable Web Applications for Growth",
-      "intro": "Robust web applications tailored to your goals, designed with modern frameworks and clean UI."
+      "titleStart": "Scalable",
+      "titleEnd": "Web Applications",
+      "hero": "From idea to interactive experience – we build webapps that work for you.",
+      "body": "A great webapp combines usability, functionality, and performance.\nWe create everything from internal dashboards and customer tools to full-scale platforms – always with speed, scalability, and security in mind.",
+      "process": [
+        "Analysis and flow mapping",
+        "Prototyping and UI/UX",
+        "Full-stack development (React, Supabase, etc.)",
+        "Testing, launch, and support"
+      ],
+      "cta": "👉 Got a digital idea? Let’s make it real."
     },
     "3d-visualization": {
-      "h1": "Bring Your Ideas to Life in 3D",
-      "intro": "From architectural renders to animated product showcases, we craft high-impact 3D visuals."
+      "titleStart": "3D",
+      "titleEnd": "Visualization",
+      "hero": "Create wow-effect with 3D – from product renders to interactive experiences.",
+      "body": "3D brings depth, realism, and a sense of scale.\nWe create everything from architectural visualizations and product animations to interactive 3D elements for your website – balancing aesthetics, technique, and performance.",
+      "process": [
+        "3D modeling & texturing",
+        "Rendering and animation",
+        "WebGL integration (Three.js, Rive, Spline)",
+        "Lightweight optimization for web"
+      ],
+      "cta": "👉 Ready to impress in 3 dimensions?"
     },
     "design-animation": {
-      "h1": "Design & Animation That Captivates",
-      "intro": "We create stunning visuals and motion graphics that elevate your brand and engage your audience."
+      "titleStart": "Design &",
+      "titleEnd": "Animation",
+      "hero": "Visual identity with edge – and movement that engages.",
+      "body": "Good design isn’t just about pretty surfaces – it’s about evoking feeling. We craft visual identities, graphic elements, and animations that elevate your communication and make your brand memorable.",
+      "process": [
+        "Brand design and visual direction",
+        "Illustrations and graphic components",
+        "UI animated elements and microinteractions",
+        "Lottie, GSAP, and motion integration"
+      ],
+      "cta": "👉 Want your brand to move?"
     }
   },
+  "countries": {
+    "denmark": "Denmark",
+    "sweden": "Sweden",
+    "norway": "Norway",
+    "finland": "Finland",
+    "germany": "Germany",
+    "netherlands": "Netherlands",
+    "belgium": "Belgium",
+    "france": "France",
+    "spain": "Spain",
+    "italy": "Italy",
+    "austria": "Austria",
+    "ireland": "Ireland",
+    "portugal": "Portugal",
+    "switzerland": "Switzerland",
+    "estonia": "Estonia",
+    "latvia": "Latvia",
+    "lithuania": "Lithuania",
+    "czechia": "Czech Republic",
+    "hungary": "Hungary",
+    "poland": "Poland"
+  },
   "CasesPage": {
-    "title": "See what we have",
+    "title": "What we have",
     "highlight": "created for others",
     "emptyState": {
       "title": "No cases found",
       "description": "We are working on adding more cases. Check back soon!"
     }
   },
-  "intro": {
-    "title": "Let’s find your price",
-    "subtitle": "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding.",
-    "startButton": "Start the estimate"
+  "estimator": {
+    "intro": {
+      "title": "Let’s find your price",
+      "subtitle": "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding.",
+      "startButton": "Start the estimate"
+    },
+    "form": {
+      "title": "Almost done!",
+      "nextButton": "Next",
+      "namePlaceholder": "Your name",
+      "emailPlaceholder": "Your email",
+      "phonePlaceholder": "Phone number",
+      "submitButton": "Submit"
+    },
+    "consent": {
+      "agree": "I agree to the",
+      "privacyPolicy": "Privacy Policy",
+      "and": "and data processing."
+    },
+    "thanks": {
+      "title": "Thank you!",
+      "message": "We’ve received your request and will get back to you soon."
+    },
+    "error": {
+      "loadingQuestions": "Error loading questions:"
+    }
   },
-  "form": {
-    "title": "Almost done!",
-    "nextButton": "Next",
-    "namePlaceholder": "Your name",
-    "emailPlaceholder": "Your email",
-    "phonePlaceholder": "Phone number",
-    "submitButton": "Submit"
-  },
-  "consent": {
-    "agree": "I agree to the",
-    "privacyPolicy": "Privacy Policy",
-    "and": "and data processing."
-  },
-  "thanks": {
-    "title": "Thank you!",
-    "message": "We’ve received your request and will get back to you soon."
-  },
-  "error": {
-    "loadingQuestions": "Error loading questions:"
+  "aboutPage": {
+    "titleStart": "About us",
+    "titleEnd": " – Our journey and values",
+    "metaDescription": "We are Arzonic – a modern digital agency focused on web solutions, 3D, and user experience.",
+    "textOne": "Arzonic is a creative digital agency built on passion, curiosity, and a shared love for craftsmanship. We're a diverse team of specialists and newly graduated talents, each deeply engaged in our craft – from web development and UI/UX to 3D visualization and animation.",
+    "textTwo": "Our mindset is fresh and solution-driven. We don’t do cookie-cutter work – we explore what’s possible. Rooted in hobby projects and driven by a constant desire to learn, we create digital experiences that both perform and inspire.",
+    "team": [
+      {
+        "name": "Marc Møller",
+        "role": "PM & Frontend Developer",
+        "image": "/team/marc2.png"
+      },
+      {
+        "name": "Mikkel Toft",
+        "role": "3D Artist & UX Designer",
+        "image": "/team/mikkel.png"
+      },
+      {
+        "name": "Sebatian Porsche",
+        "role": "API & Backend Developer",
+        "image": "/team/sebastian.png"
+      }
+    ]
   }
 }

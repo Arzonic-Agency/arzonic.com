@@ -1,16 +1,25 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { solutionSEO } from "@/lib/data/seoData";
 import SolutionClient from "./SolutionClient";
 
+const allowedSlugs = [
+  "custom-websites",
+  "web-applications",
+  "3d-visualization",
+  "design-animation",
+] as const;
+
+type SolutionSlug = (typeof allowedSlugs)[number];
+
 const SolutionClientWrapper = () => {
-  const { slug } = useParams() as { slug: string };
-  const seo = solutionSEO[slug]?.default;
+  const { slug } = useParams() as { slug?: string };
 
-  if (!seo) return <div>Not found</div>;
+  if (!slug || !allowedSlugs.includes(slug as SolutionSlug)) {
+    return <div>Not found</div>;
+  }
 
-  return <SolutionClient slug={slug} countryName="Europe" />;
+  return <SolutionClient slug={slug as SolutionSlug} countryName="default" />;
 };
 
 export default SolutionClientWrapper;

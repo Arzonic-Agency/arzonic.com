@@ -30,7 +30,7 @@ const Process = ({ isSticky }: ProcessProps) => {
     <div className={`${isSticky ? "pt-[112px]" : ""}`}>
       <section
         id="discovery-strategy"
-        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
+        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
@@ -69,7 +69,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="design-experience"
-        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
+        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
@@ -108,7 +108,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="development-integration"
-        className="h-[700px] w-full flex flex-col md:flex-row justify-center"
+        className="h-[650px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">
@@ -147,7 +147,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="launch-support"
-        className="h-[700px] w-full flex-col md:flex-row"
+        className="h-[650px] w-full flex-col md:flex-row"
       >
         <div className="flex flex-col justify-center gap-5 h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-lg tracking-widest text-secondary opacity-70">

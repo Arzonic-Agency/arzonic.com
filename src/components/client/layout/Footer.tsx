@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -30,9 +31,15 @@ const Footer = () => {
         </nav>
         <nav>
           <h6 className="footer-title">{t("Footer.aboutUs")}</h6>
-          <a className="link link-hover">{t("about")}</a>
-          <a className="link link-hover">{t("contact")}</a>
-          <a className="link link-hover">{t("Footer.jobs", "Jobs")}</a>
+          <Link href="/about" className="link link-hover">
+            {t("about")}
+          </Link>
+          <Link href="/contact" className="link link-hover">
+            {t("contact")}
+          </Link>
+          <Link href="/jobs" className="link link-hover">
+            {t("Footer.jobs", "Jobs")}
+          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">{t("Footer.legal", "Legal")}</h6>

@@ -1,21 +1,25 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { solutionSEO, countries } from "@/lib/data/seoData";
 import SolutionClient from "../SolutionClient";
 
+const allowedSlugs = [
+  "custom-websites",
+  "web-applications",
+  "3d-visualization",
+  "design-animation",
+] as const;
+
+type SolutionSlug = (typeof allowedSlugs)[number];
+
 const CountrySolutionsPage = () => {
-  const params = useParams();
-  const { slug, country } = params as { slug: string; country: string };
+  const { slug, country } = useParams() as { slug?: string; country?: string };
 
-  const seo = solutionSEO[slug]?.[country];
-  const countryInfo = countries[country];
-
-  if (!seo || !countryInfo) {
+  if (!slug || !country || !allowedSlugs.includes(slug as SolutionSlug)) {
     return <div>Solution or country not found</div>;
   }
 
-  return <SolutionClient slug={slug} countryName={countryInfo.name} />;
+  return <SolutionClient slug={slug as SolutionSlug} countryName={country} />;
 };
 
 export default CountrySolutionsPage;
