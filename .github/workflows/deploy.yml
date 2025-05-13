@@ -53,7 +53,7 @@ jobs:
           pm2 delete arzonic-app || true
 
           echo "🚀 Starting app with PM2 on port 7000..."
-          PORT=7000 pm2 start npm --name "arzonic-app" -- start
+          PORT=7000 pm2 start .next/standalone/server.js --name "arzonic-app"
           pm2 save
           pm2 list
 
