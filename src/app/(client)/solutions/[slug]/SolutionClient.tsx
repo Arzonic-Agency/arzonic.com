@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
-import { se } from "date-fns/locale";
 
 type Props = {
   slug:
