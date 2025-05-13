@@ -6,6 +6,7 @@ import { getPackages } from "@/lib/server/actions";
 const SetupPackagesList = ({ onEdit }) => {
   const { t } = useTranslation();
   const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPackages() {
@@ -14,10 +15,21 @@ const SetupPackagesList = ({ onEdit }) => {
         setPackages(packs.slice(0, 3));
       } catch (error) {
         console.error("Failed to fetch packages:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchPackages();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center gap-3 items-center">
+        <span className="loading loading-spinner loading-md h-52"></span>
+        {t("loading_packages")}
+      </div>
+    );
+  }
 
   return (
     <ul className="list bg-base-200 rounded-box shadow-md">

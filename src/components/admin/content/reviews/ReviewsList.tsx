@@ -71,9 +71,9 @@ const ReviewsList = ({
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-40">
+      <div className="flex justify-center items-center gap-2 h-40 w-full">
         <span className="loading loading-spinner loading-md" />{" "}
-        {t("loading_reviews")}…
+        {t("loading_reviews")}
       </div>
     );
   }

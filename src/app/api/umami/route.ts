@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request) {
+export async function GET(request: Request) {
   const BASE_URL = process.env.UMAMI_API_URL;
   const WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
   const ACCESS_TOKEN = process.env.UMAMI_ACCESS_TOKEN;
@@ -20,51 +20,39 @@ export async function GET(request) {
       ? endAt - 30 * 24 * 60 * 60 * 1000
       : endAt - 7 * 24 * 60 * 60 * 1000;
 
+  const headers = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    Accept: "application/json",
+  };
+
   try {
-    // Hent statistik (pageviews, visits, visitors)
-    const statsResponse = await fetch(
-      `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
-      {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          Accept: "application/json",
-        },
-      }
-    );
-    const statsData = await statsResponse.json();
+    const [statsRes, pagesRes, devicesRes] = await Promise.all([
+      fetch(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
+        { headers }
+      ),
+      fetch(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
+        { headers }
+      ),
+      fetch(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
+        { headers }
+      ),
+    ]);
 
-    // Hent de mest besøgte sider
-    const pagesResponse = await fetch(
-      `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
-      {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          Accept: "application/json",
-        },
-      }
-    );
-    const pagesData = await pagesResponse.json();
-
-    // Hent enhedsstatistik
-    const devicesResponse = await fetch(
-      `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
-      {
-        headers: {
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-          Accept: "application/json",
-        },
-      }
-    );
-    const devicesData = await devicesResponse.json();
+    const statsData = await statsRes.json();
+    const pagesData = await pagesRes.json();
+    const devicesData = await devicesRes.json();
 
     return NextResponse.json({
       pageviews: statsData?.pageviews?.value ?? 0,
       visitors: statsData?.visitors?.value ?? 0,
       visits: statsData?.visits?.value ?? 0,
-      pages: pagesData?.data ?? [],
-      devices: devicesData?.data ?? [],
+      pages: pagesData || [],
+      devices: devicesData || [],
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("🚨 API Route Error:", error.message);
     return NextResponse.json(
       { error: `Failed to fetch analytics: ${error.message}` },

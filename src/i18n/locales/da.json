@@ -102,10 +102,11 @@
   "select_access_level": "Vælg adgangsniveau",
   "editor": "Redaktør",
   "admin": "Admin",
-  "loading_cases": "Indlæser cases...",
-  "loading_reviews": "Indlæser anmeldelser...",
-  "loading_request": "Indlæser henvendelser...",
-  "loading_users": "Indlæser brugere...",
+  "loading_cases": "Indlæser Cases...",
+  "loading_reviews": "Indlæser Anmeldelser...",
+  "loading_request": "Indlæser Henvendelser...",
+  "loading_users": "Indlæser Brugere...",
+  "loading_packages": "Indlæser Pakker...",
   "no_users": "Ingen brugere fundet",
   "no_cases": "Ingen sager fundet",
   "no_reviews": "Ingen anmeldelser fundet",
@@ -641,5 +642,21 @@
     "message": "Ups! Siden du leder efter findes ikke.",
     "home": "Gå til forsiden",
     "contact": "Kontakt os"
+  },
+  "analytics": {
+    "title": "Statistikker",
+    "last_7_days": "Seneste 7 dage",
+    "last_30_days": "Seneste 30 dage",
+    "visitors": "Besøgende",
+    "pageviews": "Sidevisninger",
+    "visits": "Besøg",
+    "most_visited": "Mest besøgte",
+    "devices": "Enheder",
+    "no_data": "Ingen data",
+    "mobile": "Mobil",
+    "desktop": "Stationær",
+    "laptop": "Bærbar",
+    "tablet": "Tablet",
+    "unknown": "Ukendt"
   }
 }

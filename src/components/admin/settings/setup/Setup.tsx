@@ -38,7 +38,6 @@ const Setup = () => {
       ) : (
         <div className="flex flex-col gap-5">
           <SetupPackages onEdit={handleEditToggle} />
-          <hr className="border-1 border-gray-400 rounded-md" />
         </div>
       )}
     </div>
