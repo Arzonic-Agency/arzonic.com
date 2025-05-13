@@ -18,7 +18,12 @@ const Hero = () => {
           <div className="lg:w-[50%] flex flex-col gap-7">
             <div className="flex gap-3 items-center">
               <div className="flex relative w-10 h-6 md:w-14 md:h-9 ">
-                <Image src="/danmark.png" alt="" fill />
+                <Image
+                  src="/danmark.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
               </div>
               <h1 className="text-2xl md:text-4xl">{t("Hero.title")}</h1>
             </div>

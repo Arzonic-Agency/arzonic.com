@@ -190,7 +190,6 @@ export async function getEstimatorQuestions(
       }[];
     }) => ({
       id: q.id,
-      // pick Danish if requested and exists, else fallback to English
       text: lang === "da" && q.text_translated ? q.text_translated : q.text,
       type: q.type,
       options: q.options.map(

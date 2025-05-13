@@ -4,6 +4,7 @@ import Header from "@/components/client/layout/Header";
 import { FaAngleUp } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
+import Script from "next/script";
 
 export default function ClientLayout({
   children,
@@ -27,6 +28,12 @@ export default function ClientLayout({
 
   return (
     <>
+      <Script
+        async
+        defer
+        src="https://stats.arzonic.com/script.js"
+        data-website-id="3226dc67-1feb-4d8c-9f6d-75f7dd0d23d7"
+      />
       <div className="sm:h-lvh h-dvh max-w-screen-2xl mx-auto pt-[64px] md:pt-[101px] ">
         <header>
           <Header />

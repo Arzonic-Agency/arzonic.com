@@ -1,5 +1,3 @@
-// components/ThreeAnimation.tsx
-
 import React, { useEffect, useRef, Suspense, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
@@ -13,12 +11,7 @@ import {
   PCFSoftShadowMap,
   Group,
 } from "three";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { supabase } from "@/lib/supabase-browser";
 
 interface LaptopModelProps {
   modelUrl: string;
