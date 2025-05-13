@@ -22,7 +22,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/logo-arzonic.png" />
-        <meta name="robots" content="noindex, nofollow" />
       </head>
       <body className={outfitSans.className}>
         <I18nProvider>{children}</I18nProvider>
