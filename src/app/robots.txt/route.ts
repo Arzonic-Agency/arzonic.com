@@ -7,7 +7,8 @@ Disallow: /login/
 Disallow: /dashboard/
 Disallow: /admin/
 
-Sitemap: https://arzonic.com/sitemap.xml`;
+Sitemap: https://arzonic.com/sitemap
+`;
 
   return new NextResponse(content, {
     status: 200,
