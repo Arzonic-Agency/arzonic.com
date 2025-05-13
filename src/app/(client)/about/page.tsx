@@ -42,7 +42,7 @@ const AboutPage = () => {
         </div>
 
         <motion.div
-          className="flex flex-col items-center justify-center gap-20 max-w-3xl"
+          className="flex flex-col items-center justify-center gap-20 max-w-3xl p-5 md:p-0"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
@@ -52,7 +52,7 @@ const AboutPage = () => {
             <p>{t("aboutPage.textTwo")}</p>
           </div>
 
-          <div className="flex flex-col items-center md:flex-row justify-between w-full">
+          <div className="flex flex-col gap-10 items-center md:flex-row justify-between w-full">
             {team.map((member, i) => (
               <div
                 key={i}
