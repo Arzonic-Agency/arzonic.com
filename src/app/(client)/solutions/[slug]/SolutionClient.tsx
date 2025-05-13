@@ -11,9 +11,10 @@ type Props = {
     | "web-applications"
     | "3d-visualization"
     | "design-animation";
+  countryName: string;
 };
 
-const SolutionClient = ({ slug }: Props) => {
+const SolutionClient = ({ slug, countryName }: Props) => {
   const { t } = useTranslation();
 
   const seoTitleStart = t(`solutionsPage.${slug}.titleStart`);
@@ -55,6 +56,8 @@ const SolutionClient = ({ slug }: Props) => {
             {seoTitleStart}
             <span className="text-secondary"> {seoTitleEnd}</span>
           </h1>
+          <p className="text-lg mt-2">{countryName}</p>{" "}
+          {/* Display countryName */}
         </div>
       </section>
 
