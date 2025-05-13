@@ -58,7 +58,6 @@ const PriceEstimator = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // fetch package label on final slide
   useEffect(() => {
     const totalSlides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
     const pkgOptId = answers[1]?.[0];
@@ -69,12 +68,11 @@ const PriceEstimator = () => {
         body: JSON.stringify({ optionId: pkgOptId }),
       })
         .then((r) => r.json())
-        .then(({ label }) => console.log(label || "")) // Removed packageLabel usage
+        .then(({ label }) => console.log(label || ""))
         .catch((e) => console.error("Failed to load package label", e));
     }
-  }, [step, answers, questionsState, slides]); // Added slides to dependencies
+  }, [step, answers, questionsState]);
 
-  // fetch + sort countries
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((r) => r.json())
@@ -104,14 +102,12 @@ const PriceEstimator = () => {
       .catch((e) => console.error("Failed to load countries", e));
   }, []);
 
-  // current questions for this slide
   const startIdx = step * QUESTIONS_PER_SLIDE;
   const currentQs =
     step >= 0 && step < slides
       ? questionsState.slice(startIdx, startIdx + QUESTIONS_PER_SLIDE)
       : [];
 
-  // restore previous selections when step changes
   useEffect(() => {
     if (step >= 0 && step < slides) {
       const saved = answers[step] || [];
@@ -173,7 +169,6 @@ const PriceEstimator = () => {
       countries.find((c) => c.dial === phonePrefix)?.code ?? "";
     const fullPhone = `${phonePrefix}${phoneNumber}`;
 
-    // read the current site-lang from i18next
     const rawLang = localStorage.getItem("i18nextLng") || "en";
     const lang = rawLang.split("-")[0] === "da" ? "da" : "en";
 
