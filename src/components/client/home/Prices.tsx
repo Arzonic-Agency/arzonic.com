@@ -88,8 +88,8 @@ const Prices: React.FC = () => {
         className="flex flex-col lg:flex-row items-center justify-evenly gap-4 w-full h-full z-10"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
         {/* Starter Site */}
         <div className="relative">

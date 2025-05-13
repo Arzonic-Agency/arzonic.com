@@ -65,7 +65,9 @@ const Header = () => {
             onMouseEnter={() => setDropdownOpen(true)}
             onMouseLeave={() => setDropdownOpen(false)}
           >
-            <button className="cursor-pointer">{t("Header.solutions")}</button>
+            <Link href="/solutions" className="cursor-pointer">
+              {t("Header.solutions")}
+            </Link>
 
             <AnimatePresence>
               {dropdownOpen && (

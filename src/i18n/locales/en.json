@@ -575,6 +575,13 @@
       "description": "We are working on adding more cases. Check back soon!"
     }
   },
+  "jobsPage": {
+    "titleStart": "Join our journey at",
+    "titleEnd": "Arzonic",
+    "noOpeningsTitle": "Thank you for your interest",
+    "noOpenings": "We currently have no open positions, but we're always happy to hear from talented and passionate individuals. You're very welcome to send us an unsolicited application.",
+    "contactMail": "You can reach us at:"
+  },
   "estimator": {
     "intro": {
       "title": "Find out your project’s price",
@@ -627,11 +634,10 @@
       }
     ]
   },
-    "notFound": {
+  "notFound": {
     "title": "404",
     "message": "Oops! The page you are looking for does not exist.",
     "home": "Go to homepage",
     "contact": "Get in touch"
   }
 }
-

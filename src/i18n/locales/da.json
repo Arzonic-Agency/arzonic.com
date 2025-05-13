@@ -577,6 +577,13 @@
       "description": "Vi arbejder på at tilføje flere cases. Kom snart tilbage!"
     }
   },
+  "jobsPage": {
+    "titleStart": "Bliv en del af rejsen hos",
+    "titleEnd": "Arzonic",
+    "noOpeningsTitle": "Tak for din interesse",
+    "noOpenings": "Vi har i øjeblikket ingen ledige stillinger, men vi hører altid gerne fra dygtige og passionerede mennesker. Du er meget velkommen til at sende en uopfordret ansøgning til os.",
+    "contactMail": "Du kan skrive til os på:"
+  },
   "estimator": {
     "intro": {
       "title": "Beregn prisen på dit nye projekt",
@@ -629,7 +636,7 @@
       }
     ]
   },
-    "notFound": {
+  "notFound": {
     "title": "404",
     "message": "Ups! Siden du leder efter findes ikke.",
     "home": "Gå til forsiden",
