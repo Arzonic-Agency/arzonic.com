@@ -13,7 +13,7 @@ const Hero = () => {
 
   return (
     <>
-      <div className="relative h-full w-full overflow-visible md:pl-8 lg:pl-14">
+      <div className="relative h-full w-full overflow-visible md:pl-4 lg:pl-8">
         <div className="relative z-10 flex items-center justify-center md:justify-between h-full px-6 pt-20 lg:pt-0">
           <div className="lg:w-[50%] flex flex-col gap-7">
             <div className="flex gap-3 items-center">
@@ -34,20 +34,20 @@ const Hero = () => {
               </span>
             </div>
             <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
-              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+              <span className="badge badge-secondary badge-soft badge-xs md:badge-md">
                 {t("Hero.customWebsites")}
               </span>
 
-              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+              <span className="badge badge-secondary badge-soft badge-xs md:badge-md">
                 {t("Hero.visualization")}
               </span>
 
-              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+              <span className="badge badge-secondary badge-soft badge-xs md:badge-md">
                 {t("Hero.webApplications")}
               </span>
             </div>
             <div className="mt-5">
-              <button className="btn btn-secondary btn-outline">
+              <button className="btn btn-secondary btn-outline text-base-content">
                 {t("Hero.seeMore")}
               </button>
             </div>

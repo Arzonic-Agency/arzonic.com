@@ -32,7 +32,13 @@ const JobsPage = () => {
             mail@arzonic.com
           </a>
         </p>
-        <Image src="/elements/smile.svg" alt="" width={100} height={100} />
+        <Image
+          src="/elements/rocket.png"
+          alt=""
+          className="rotate-45"
+          width={70}
+          height={70}
+        />
       </div>
     </div>
   );

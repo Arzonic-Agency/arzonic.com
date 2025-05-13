@@ -3,7 +3,7 @@
 import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import { FaAnglesRight } from "react-icons/fa6";
+import { FaCaretRight } from "react-icons/fa6";
 
 type Props = {
   slug:
@@ -56,8 +56,9 @@ const SolutionClient = ({ slug, countryName }: Props) => {
             {seoTitleStart}
             <span className="text-secondary"> {seoTitleEnd}</span>
           </h1>
-          <p className="text-lg mt-2">{countryName}</p>{" "}
-          {/* Display countryName */}
+          <p className="text-lg mt-2">
+            {countryName !== "default" ? countryName : ""}
+          </p>
         </div>
       </section>
 
@@ -72,7 +73,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
               <ul className=" list-none space-y-4">
                 {processSteps.map((step, i) => (
                   <li key={i} className="flex gap-2 items-center">
-                    <FaAnglesRight className="text-secondary text-xl" /> {step}
+                    <FaCaretRight className="text-secondary text-xl" /> {step}
                   </li>
                 ))}
               </ul>

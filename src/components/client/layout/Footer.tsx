@@ -1,12 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  FaFacebook,
-  FaHashtag,
-  FaInstagram,
-  FaLinkedin,
-} from "react-icons/fa6";
+import { FaFacebook, FaHashtag, FaInstagram } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 import TermsModal from "../modal/TermsModal";
 
@@ -18,18 +13,18 @@ const Footer = () => {
       <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-10 border-base-300 border-t">
         <nav>
           <h6 className="footer-title">{t("Footer.services")}</h6>
-          <a className="link link-hover">
+          <Link href="/solutions/custom-websites" className="link link-hover">
             {t("Header.dropdown.customWebsites")}
-          </a>
-          <a className="link link-hover">
+          </Link>
+          <Link href="/solutions/web-applications" className="link link-hover">
             {t("Header.dropdown.webApplications")}
-          </a>
-          <a className="link link-hover">
+          </Link>
+          <Link href="/solutions/3d-visualization" className="link link-hover">
             {t("Header.dropdown.visualization")}
-          </a>
-          <a className="link link-hover">
+          </Link>
+          <Link href="/solutions/design-animation" className="link link-hover">
             {t("Header.dropdown.designAnimation")}
-          </a>
+          </Link>
         </nav>
         <nav>
           <h6 className="footer-title">{t("Footer.aboutUs")}</h6>
@@ -60,15 +55,21 @@ const Footer = () => {
         </aside>
         <nav className="md:place-self-center md:justify-self-end mb-5">
           <div className="grid grid-flow-col gap-4 text-3xl">
-            <a>
-              <FaLinkedin />
-            </a>
-            <a>
-              <FaFacebook />
-            </a>
-            <a>
-              <FaInstagram />
-            </a>
+            <Link
+              href="https://www.facebook.com/profile.php?id=61575249251500"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook size={30} />
+            </Link>
+
+            <Link
+              href="https://www.instagram.com/arzonic.agency/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram size={33} />
+            </Link>
           </div>
         </nav>
       </footer>
