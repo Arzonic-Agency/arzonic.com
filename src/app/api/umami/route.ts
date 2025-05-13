@@ -52,10 +52,17 @@ export async function GET(request: Request) {
       pages: pagesData || [],
       devices: devicesData || [],
     });
-  } catch (error: any) {
-    console.error("🚨 API Route Error:", error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("🚨 API Route Error:", error.message);
+      return NextResponse.json(
+        { error: `Failed to fetch analytics: ${error.message}` },
+        { status: 500 }
+      );
+    }
+    console.error("🚨 API Route Error: Unknown error");
     return NextResponse.json(
-      { error: `Failed to fetch analytics: ${error.message}` },
+      { error: "Failed to fetch analytics: Unknown error" },
       { status: 500 }
     );
   }
