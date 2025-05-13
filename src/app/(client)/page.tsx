@@ -68,7 +68,7 @@ const Home = () => {
             className="block md:hidden object-cover"
           />
         </div>
-        <div className="relative z-10 w-full max-w-screen-xl px-6">
+        <div className="relative z-10 w-full max-w-screen-xl">
           <CallToAction />
         </div>
       </section>
