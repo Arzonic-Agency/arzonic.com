@@ -114,6 +114,8 @@
   pointer-events: none;
 }
 
+
+
 @keyframes moveBackground {
   0% {
     background-position: 30% 40%, 20% 70%, 40% 50%;
@@ -155,5 +157,4 @@
 .flash-popular {
   box-shadow: 0px 4px 30px #048179;
   color: #ffffff70;
-
 }

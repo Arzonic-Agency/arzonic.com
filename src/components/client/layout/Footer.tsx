@@ -12,7 +12,7 @@ const Footer = () => {
     <div>
       <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-10 border-base-300 border-t">
         <nav>
-          <h6 className="footer-title">{t("Footer.services")}</h6>
+          <h6 className="footer-title">{t("Footer.solutions")}</h6>
           <Link href="/solutions/custom-websites" className="link link-hover">
             {t("Header.dropdown.customWebsites")}
           </Link>

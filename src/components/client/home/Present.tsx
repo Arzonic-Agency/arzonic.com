@@ -8,12 +8,12 @@ const Present = () => {
   return (
     <div className="flex items-center justify-center h-full w-full p-3">
       <div className="max-w-5xl flex flex-col gap-7 ">
-        <h2 className="text-xl sm:text-xl md:text-3xl font-light text-center z-20 mb-10  max-w-xs sm:max-w-full mx-auto">
+        <h2 className="text-xl sm:text-xl md:text-3xl font-light text-center z-20 mb-10  max-w-xs sm:max-w-full mx-auto hidden md:block">
           {t("Present.title")}
         </h2>
-        <div className="flex gap-7 relative md:flex-row flex-col-reverse">
+        <div className="flex gap-7 relative md:flex-row flex-col">
           <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg relative">
-            <h3 className="text-lg md:text-2xl font-bold shadow-xl">
+            <h3 className="text-base md:text-2xl font-bold shadow-xl">
               {t("Present.customDesign.title")}
             </h3>
             <p className="text-sm md:text-base  w-4/5 text-zinc-400 font-light">
@@ -23,8 +23,8 @@ const Present = () => {
               <FaPalette className="text-4xl md:text-5xl" />
             </div>
           </div>
-          <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg bg-two">
-            <h3 className="text-lg md:text-2xl font-bold">
+          <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-two">
+            <h3 className="text-base  md:text-2xl font-bold">
               {t("Present.easyToManage.title")}
             </h3>
             <p className="text-sm md:text-base text-zinc-400 font-light">
@@ -33,16 +33,16 @@ const Present = () => {
           </div>
         </div>
         <div className="flex gap-7 md:flex-row flex-col">
-          <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg bg-one">
-            <h3 className="text-lg md:text-2xl font-bold">
+          <div className="flex-2/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-one">
+            <h3 className="text-base md:text-2xl font-bold">
               {t("Present.blazingFast.title")}
             </h3>
             <p className="text-sm md:text-base text-zinc-400 font-light">
               {t("Present.blazingFast.description")}
             </p>
           </div>
-          <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg electric-border border-present relative">
-            <h3 className="text-lg md:text-2xl font-bold shadow-xl">
+          <div className="flex-3/5 rounded-xl bg-base-200 ring-2 ring-base-300 h-48 p-7 flex flex-col gap-3 shadow-lg border-present relative">
+            <h3 className="text-base md:text-2xl font-bold shadow-xl">
               {t("Present.builtToGrow.title")}
             </h3>
             <p className="text-sm md:text-base w-6/7 md:w-4/5 text-zinc-400 font-light">

@@ -22,7 +22,7 @@ const Home = () => {
         <div className="background-fade-bottom" />
         <Hero />
       </section>
-      <section className="h-[1000px] md:h-[800px]">
+      <section className="h-[700px] md:h-[800px]">
         <Present />
       </section>
       <section className="relative h-full md:h-[850px] 2xl:h-[1100px] mb-40 overflow-visible xl:grid xl:place-items-center">

@@ -35,7 +35,7 @@ const CallToAction = () => {
           />
         </div>
       </div>
-      <div className="flex items-center gap-7 max-w-2xl ">
+      <div className="flex items-center gap-5 md:gap-7 max-w-2xl ">
         <EuropeMap />
         <div>
           <h1 className="text-lg text-zinc-400 ">

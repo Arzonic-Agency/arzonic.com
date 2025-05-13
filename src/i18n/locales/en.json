@@ -222,7 +222,7 @@
     "customWebsites": "Custom Websites",
     "visualization": "3D Visualization",
     "webApplications": "Web Applications",
-    "seeMore": "See more"
+    "seeMore": "See Solutions"
   },
   "Present": {
     "title": "Superfast websites – built for performance and growth",
@@ -473,7 +473,7 @@
   },
   "Footer": {
     "aboutUs": "About Us",
-    "services": "Services",
+    "solutions": "Solutions",
     "contactUs": "Contact Us",
     "followUs": "Follow Us",
     "newsletter": "Subscribe to our newsletter",
@@ -482,19 +482,20 @@
     "rightsReserved": "All rights reserved."
   },
   "CallToAction": {
-    "reachingBeyondBorders": "We reach beyond borders",
-    "collaborationMessage": "At Arzonic, we collaborate with ambitious companies across Europe. No matter where you are, we are ready to elevate your digital presence!"
+    "reachingBeyondBorders": "Beyond borders",
+    "collaborationMessage": "At Arzonic, we work with ambitious companies across Europe to strengthen their digital presence"
   },
   "solutionsPage": {
     "common": {
-      "countryAllTitle": "Available in these countries:"
+      "countryAllTitle": "Available in these countries:",
+      "btn": "Find your price"
     },
     "custom-websites": {
       "titleStart": "Custom",
       "titleEnd": "Websites",
-      "hero": "Professional, custom websites that put your business in focus.",
+      "hero": "Custom Websites that put your business in focus.",
       "body": "Your website is often your first impression—and it needs to be perfect. We build tailored websites focused on your brand, goals, and target audience. Enjoy lightning-fast loading speeds, mobile-friendly design, and a flexible structure ready to scale.",
-      "processTitle": "The process to make a customized website",
+      "processTitle": "Our process to make a new customized website",
       "process": [
         "Strategy and planning",
         "User-friendly design",
@@ -536,7 +537,7 @@
       "titleEnd": "Animation",
       "hero": "Memorable designs and animations that captivate your audience.",
       "body": "Elevate your brand with powerful graphic designs and engaging animations. From distinctive brand identities to interactive animated content, we create visuals that clearly communicate your message and leave a lasting impression.",
-      "processTitle": "The process of creating graphic design and animation",
+      "processTitle": "Our process of creating graphic design and animation",
       "process": [
         "Brand identity and visual style",
         "Custom graphics and illustrations",
@@ -558,7 +559,6 @@
     "switzerland": "Switzerland",
     "estonia": "Estonia",
     "poland": "Poland",
-    "hungary": "Hungary",
     "czechia": "Czechia",
     "latvia": "Latvia",
     "lithuania": "Lithuania",

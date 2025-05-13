@@ -166,13 +166,13 @@ const NavProcess = ({
     <div className="flex flex-col gap-5">
       {/* Header */}
       <div className="flex flex-col items-center justify-center gap-3">
-        <h3 className="text-lg md:text-4xl font-bold md:font-extralight">
+        <h3 className="text-base md:text-4xl font-bold md:font-extralight">
           {t("NavProcess.header.title")}
         </h3>
-        <p className="text-sm md:text-lg text-center mt-2 p-5 max-w-xs md:max-w-2xl">
-          <u className="underline-offset-2 decoration-secondary decoration-2">
-            {t("NavProcess.header.description-first")}
-          </u>
+        <p className="text-sm md:text-lg text-center mt-2 p-5 max-w-xs md:max-w-2xl tracking-wider hidden md:block">
+          <span className="md:underline-offset-3 md:decoration-secondary md:decoration-2 md:underline">
+            {t("NavProcess.header.description-first")}{" "}
+          </span>
           {t("NavProcess.header.description-second")}
         </p>
       </div>

@@ -473,7 +473,7 @@
   },
   "Footer": {
     "aboutUs": "Om os",
-    "services": "Tjenester",
+    "solutions": "Løsninger",
     "contactUs": "Kontakt os",
     "followUs": "Følg os",
     "newsletter": "Tilmeld dig vores nyhedsbrev",
@@ -482,27 +482,28 @@
     "rightsReserved": "Alle rettigheder forbeholdes."
   },
   "CallToAction": {
-    "reachingBeyondBorders": "Vi rækker længere end grænserne",
-    "collaborationMessage": "Hos Arzonic samarbejder vi med ambitiøse virksomheder i hele Europa. Uanset hvor du er, står vi klar til at løfte din digitale tilstedeværelse!"
+    "reachingBeyondBorders": "Længere end grænserne",
+    "collaborationMessage": "Hos Arzonic hjælper vi ambitiøse virksomheder i Europa med at styrke deres digitale tilstedeværelse"
   },
   "solutionsPage": {
     "common": {
-      "countryAllTitle": "Tilgængelig i disse lande:"
+      "countryAllTitle": "Tilgængelig i disse lande:",
+      "btn": "Find din løsning"
     },
 
     "custom-websites": {
       "titleStart": "Tilpassede",
       "titleEnd": "Hjemmesider",
-      "hero": "Unikke hjemmesider der afspejler din identitet – ingen skabeloner, kun skræddersyede løsninger.",
+      "hero": "Unikke hjemmesider der afspejler din identitet",
       "body": "Dit website er ofte det første indtryk – og det skal ramme plet.\nVi bygger fra bunden med blik for dit brand, dine mål og din målgruppe. Det betyder lynhurtige sider, mobilvenligt design og fleksibel struktur, så du altid er klar til at vækste.",
-      "processTitle": "Processen for at skabe en skræddersyet hjemmeside",
+      "processTitle": "Vores forløb til en ny hjemmeside",
       "process": [
         "Workshops og strategi",
         "Wireframes og design",
         "Udvikling og integration",
         "Performanceoptimering og SEO"
       ],
-      "cta": "👉 Klar til at stå stærkere online?"
+      "cta": "Klar til at stå stærkere online?"
     },
     "web-applications": {
       "titleStart": "Skalerbare",
@@ -516,28 +517,28 @@
         "Full-stack udvikling (React, Supabase m.fl.)",
         "Test, lancering og support"
       ],
-      "cta": "👉 Har du en digital løsning i tankerne? Vi gør den virkelig."
+      "cta": "Har du en digital løsning i tankerne? Vi gør den virkelig."
     },
     "3d-visualization": {
       "titleStart": "3D",
       "titleEnd": "Visualisering",
       "hero": "Skab wow-effekt med 3D – fra produktvisualisering til interaktive oplevelser.",
       "body": "3D giver dybde, realisme og følelsen af noget større.\nVi laver alt fra arkitektur og produktpræsentationer til interaktive 3D-elementer på din hjemmeside – med styr på æstetik, teknik og performance.",
-      "processTitle": "Processen for at skabe 3D-visualisering",
+      "processTitle": "Vores måde at skabe 3D-visualisering",
       "process": [
         "3D-modellering & teksturering",
         "Rendering og animation",
         "WebGL-integration (Three.js, Rive, Spline)",
         "Letvægtsoptimering til web"
       ],
-      "cta": "👉 Klar til at gøre indtryk i 3 dimensioner?"
+      "cta": "Klar til at gøre indtryk i 3 dimensioner?"
     },
     "design-animation": {
       "titleStart": "Design &",
       "titleEnd": "Animation",
       "hero": "Visuel identitet med kant – og bevægelse, der skaber engagement.",
       "body": "Godt design handler ikke bare om pæne flader – det handler om at få mennesker til at føle noget. Vi udvikler visuelle identiteter, grafiske elementer og animationer der løfter din kommunikation og gør dit brand mindeværdigt.",
-      "processTitle": "Processen for at skabe grafisk design og animation",
+      "processTitle": "Måden på vi skaber grafisk design og animation",
       "process": [
         "Branddesign og stilretning",
         "Illustration og grafiske komponenter",
@@ -545,7 +546,7 @@
         "rive og motion-integration"
       ],
 
-      "cta": "👉 Skal dit brand bevæge sig?"
+      "cta": "Skal dit brand bevæge sig?"
     }
   },
   "countries": {
@@ -560,7 +561,6 @@
     "switzerland": "Schweiz",
     "estonia": "Estland",
     "poland": "Polen",
-    "hungary": "Ungarn",
     "czechia": "Tjekkiet",
     "latvia": "Letland",
     "lithuania": "Litauen",

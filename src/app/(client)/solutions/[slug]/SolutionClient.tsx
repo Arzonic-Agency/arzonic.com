@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
+import { se } from "date-fns/locale";
 
 type Props = {
   slug:
@@ -16,11 +17,11 @@ type Props = {
 
 const SolutionClient = ({ slug, countryName }: Props) => {
   const { t } = useTranslation();
-
   const seoTitleStart = t(`solutionsPage.${slug}.titleStart`);
   const seoTitleEnd = t(`solutionsPage.${slug}.titleEnd`);
   const seoProcessTitle = t(`solutionsPage.${slug}.processTitle`);
   const seoHero = t(`solutionsPage.${slug}.hero`);
+  const seoBtn = t(`solutionsPage.common.btn`);
   const seoDescription = t(`solutionsPage.${slug}.body`).replace(/\n/g, " ");
   const seoCountryAllTitle = t(`solutionsPage.common.countryAllTitle`);
   const allCountries = t("countries", { returnObjects: true }) as Record<
@@ -62,14 +63,18 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         </div>
       </section>
 
-      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-7">
-        <p className="text-lg md:text-2xl font-bold">{seoHero}</p>
-        <p className="text-lg mb-6 whitespace-pre-line">{seoDescription}</p>
+      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7">
+        <p className="text-base sm:text-lg md:text-2xl font-bold">{seoHero}</p>
+        <p className="text-sm md:text-lg mb-6 whitespace-pre-line">
+          {seoDescription}
+        </p>
 
         <div className="flex flex-col gap-5">
           <div className="flex justify-between items-center flex-row gap-3">
             <div className="flex flex-col gap-5">
-              <h3 className="text-xl font-semibold ">{seoProcessTitle}</h3>
+              <h3 className="text-base sm:text-lg md:text-xl font-semibold ">
+                {seoProcessTitle}
+              </h3>
               <ul className=" list-none space-y-4">
                 {processSteps.map((step, i) => (
                   <li key={i} className="flex gap-2 items-center">
@@ -84,7 +89,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
           <div className="mt-5 flex flex-col items-start gap-5">
             {cta}
             <Link href="/get-started" className="btn btn-primary">
-              {t("Header.getStarted")}
+              {seoBtn}
             </Link>
           </div>
         </div>

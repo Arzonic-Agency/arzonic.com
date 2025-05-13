@@ -10,7 +10,7 @@ const Preview = () => {
         <h3 className="text-2xl md:text-3xl text-primary font-light">
           {t("Preview.title")}
         </h3>
-        <span className="tracking-wide text-sm md:text-base">
+        <span className="tracking-wide text-xs md:text-base">
           {t("Preview.subtitle")}
         </span>
       </div>

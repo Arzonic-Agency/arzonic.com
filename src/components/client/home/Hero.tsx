@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 const ThreeAnimation = dynamic(() => import("../../animation/threeAnimation"), {
   ssr: false,
@@ -47,9 +48,9 @@ const Hero = () => {
               </span>
             </div>
             <div className="mt-5">
-              <button className="btn btn-secondary btn-outline text-base-content">
+              <Link href="/solutions" className="btn ">
                 {t("Hero.seeMore")}
-              </button>
+              </Link>
             </div>
           </div>
 

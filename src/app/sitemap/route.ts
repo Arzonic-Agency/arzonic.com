@@ -29,7 +29,6 @@ export async function GET() {
     "switzerland",
     "estonia",
     "poland",
-    "hungary",
     "czechia",
     "latvia",
     "lithuania",
