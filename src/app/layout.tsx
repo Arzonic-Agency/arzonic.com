@@ -9,8 +9,41 @@ const outfitSans = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Arzonic Agency",
-  description: "Danish Modern Web Agency",
+  title: {
+    default: "Arzonic Agency",
+    template: "%s | Arzonic",
+  },
+  description: "Custom web apps and 3D-powered websites for modern businesses.",
+  metadataBase: new URL("https://arzonic.com"),
+  openGraph: {
+    title: "Arzonic Agency",
+    description:
+      "Custom web apps and 3D-powered websites for modern businesses.",
+    url: "https://arzonic.com",
+    siteName: "Arzonic",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Arzonic preview image",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arzonic Agency",
+    description:
+      "Custom web apps and 3D-powered websites for modern businesses.",
+    images: ["/opengraph-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  themeColor: "#171717",
 };
 
 export default function RootLayout({
@@ -20,9 +53,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" type="image/png" href="/logo-arzonic.png" />
-      </head>
       <body className={outfitSans.className}>
         <I18nProvider>{children}</I18nProvider>
       </body>
