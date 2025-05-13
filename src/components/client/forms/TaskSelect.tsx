@@ -22,7 +22,7 @@ const TaskSelect = ({ onChange }: ContactSelectProps) => {
       <legend className="fieldset-legend">{t("TaskSelect.legend")}</legend>
       <label className="form-control w-full">
         <select
-          className="select select-bordered select-md w-full md:max-w-xs"
+          className="select select-ghost bg-base-200 select-md w-full md:max-w-xs"
           value={selectedOption}
           onChange={handleChange}
           required

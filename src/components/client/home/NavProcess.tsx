@@ -205,7 +205,7 @@ const NavProcess = ({
                   <li
                     key={step.id}
                     onClick={() => handleClick(step.id)}
-                    className="cursor-pointer font-semibold transition-all duration-200 text-xs md:text-base xl:text-lg flex flex-col items-center"
+                    className="cursor-pointer font-normal transition-all duration-200 text-xs md:text-base xl:text-lg flex flex-col items-center"
                   >
                     <span className={`block md:hidden text-2xl ${colorClass}`}>
                       {step.icon}

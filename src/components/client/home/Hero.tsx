@@ -13,7 +13,7 @@ const Hero = () => {
 
   return (
     <>
-      <div className="relative h-full w-full overflow-visible md:pl-7 ">
+      <div className="relative h-full w-full overflow-visible md:pl-8 lg:pl-14">
         <div className="relative z-10 flex items-center justify-center md:justify-between h-full px-6 pt-20 lg:pt-0">
           <div className="lg:w-[50%] flex flex-col gap-7">
             <div className="flex gap-3 items-center">
@@ -22,19 +22,27 @@ const Hero = () => {
               </div>
               <h1 className="text-2xl md:text-4xl">{t("Hero.title")}</h1>
             </div>
-            <div className="max-w-xl">
+            <div className="max-w-xl flex flex-col gap-3">
               <p className="text-sm sm:text-base">{t("Hero.description")} </p>
-              <span className="font-mono">{t("Hero.noTemplates")}</span>
+              <span className="font-mono text-sm sm:text-base">
+                {t("Hero.noTemplates")}
+              </span>
             </div>
-            <div className="flex gap-2 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
-              <span>{t("Hero.customWebsites")}</span>
-              <span className="text-secondary hidden sm:block">&#10140;</span>
-              <span>{t("Hero.visualization")}</span>
-              <span className="text-secondary hidden sm:block">&#10140;</span>
-              <span>{t("Hero.webApplications")}</span>
+            <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
+              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+                {t("Hero.customWebsites")}
+              </span>
+
+              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+                {t("Hero.visualization")}
+              </span>
+
+              <span className="badge badge-primary badge-soft badge-xs md:badge-md">
+                {t("Hero.webApplications")}
+              </span>
             </div>
             <div className="mt-5">
-              <button className="btn btn-primary btn-outline text-base-content">
+              <button className="btn btn-secondary btn-outline">
                 {t("Hero.seeMore")}
               </button>
             </div>

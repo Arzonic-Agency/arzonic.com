@@ -6,6 +6,7 @@ import { getEstimatorQuestions, EstimatorQuestion } from "@/lib/server/actions";
 import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 import { useTranslation } from "react-i18next";
+import EstimatorContactForm from "../forms/EstimatorForm";
 
 type Country = { name: string; code: string; dial: string; flag: string };
 type RestCountry = {
@@ -16,9 +17,20 @@ type RestCountry = {
 
 const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 300 : -300, opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -300 : 300, opacity: 0 }),
+  enter: (dir: number) => ({
+    x: dir > 0 ? 100 : -100,
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.35, ease: "easeOut" },
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? -100 : 100,
+    opacity: 0,
+    transition: { duration: 0.3, ease: "easeIn" },
+  }),
 };
 
 const PriceEstimator = () => {
@@ -211,18 +223,11 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className=" p-7 rounded-2xl shadow-lg flex flex-col justify-center gap-6 text-center h-[550px]"
+            className="p-5 md:p-7 rounded-2xl flex flex-col justify-center items-start gap-6 h-[488px] md:h-[360px]"
           >
-            <h2 className="text-2xl font-bold">
-              {t("estimator.intro.title", "Let’s find your price")}
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              {t(
-                "estimator.intro.subtitle",
-                "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding."
-              )}
-            </p>
-            <button onClick={goNext} className="btn btn-primary w-full mt-4">
+            <h2 className="text-xl font-bold">{t("estimator.intro.title")}</h2>
+            <p className="text-zinc-400">{t("estimator.intro.subtitle")}</p>
+            <button onClick={goNext} className="btn btn-primary">
               {t("estimator.intro.startButton", "Start the estimate")}
             </button>
           </motion.div>
@@ -238,12 +243,12 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className=" p-7 rounded-2xl shadow-lg flex flex-col gap-7"
+            className="p-0 sm:p-7 flex flex-col justify-center md:justify-start gap-7 h-[488px] md:h-[360px]"
           >
             {currentQs.map((q, idx) => (
               <div key={q.id} className="flex flex-col gap-5">
                 <h2 className="text-lg md:text-xl font-bold">{q.text}</h2>
-                <div className="flex flex-col gap-3 mb-5">
+                <div className="flex flex-col gap-5 md:gap-3 mb-5">
                   {q.options.map((opt) => (
                     <label
                       key={opt.id}
@@ -259,20 +264,20 @@ const PriceEstimator = () => {
                             : "checkbox checkbox-primary"
                         }
                       />
-                      <span>{opt.text}</span>
+                      <span className="text-sm md:text-base">{opt.text}</span>
                     </label>
                   ))}
                 </div>
               </div>
             ))}
-            <div className="flex gap-3">
-              <button onClick={goBack} className="btn btn-outline">
+            <div className="flex gap-10 items-center">
+              <button onClick={goBack} className="btn btn-sm btn-soft">
                 <FaAngleLeft />
               </button>
               <button
                 onClick={goNext}
                 disabled={!groupSel.every((sel) => sel.length > 0)}
-                className="btn btn-primary flex-1"
+                className="btn btn-primary flex-initial w-50"
               >
                 {t("estimator.form.nextButton", "Next")}
               </button>
@@ -282,152 +287,23 @@ const PriceEstimator = () => {
 
         {/* Final Form */}
         {step === slides && !success && (
-          <>
-            {/* Display the fetched package label above the form */}
-            {packageLabel && (
-              <div className="mb-4 text-center">
-                <h3 className="text-xl font-semibold">{packageLabel}</h3>
-              </div>
-            )}
-
-            <motion.form
-              key="form"
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              custom={direction}
-              transition={{ duration: 0.4 }}
-              onSubmit={handleSubmit}
-              className="p-7 rounded-2xl shadow-lg flex flex-col gap-4"
-            >
-              <h2 className="text-2xl font-bold text-center">
-                {t("estimator.form.title", "Almost done!")}
-              </h2>
-              {error && <p className="text-red-500 text-center">{error}</p>}
-
-              <input
-                type="text"
-                placeholder={t("estimator.form.namePlaceholder", "Your name")}
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="input input-bordered w-full"
-              />
-
-              <input
-                type="email"
-                placeholder={t("estimator.form.emailPlaceholder", "Your email")}
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input input-bordered w-full"
-              />
-
-              <div className="flex gap-2 items-center">
-                <div className="dropdown">
-                  <label
-                    tabIndex={0}
-                    className="btn btn-outline w-28 justify-between flex items-center"
-                  >
-                    {(() => {
-                      const sel = countries.find((c) => c.dial === phonePrefix);
-                      return (
-                        <>
-                          {sel?.flag} {sel?.dial}
-                        </>
-                      );
-                    })()}
-                    <FaAngleDown className="ml-2" />
-                  </label>
-                  <ul
-                    tabIndex={0}
-                    className="
-                      dropdown-content
-                      p-1
-                      shadow
-                      bg-base-100
-                      rounded-box
-                      w-56
-                      max-h-60
-                      overflow-y-auto
-                      flex
-                      flex-col
-                      z-50
-                    "
-                  >
-                    {countries.map((cn) => (
-                      <li key={cn.code}>
-                        <button
-                          onClick={() => setPhonePrefix(cn.dial)}
-                          className="flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded"
-                        >
-                          <span className="flex-1 mr-2 whitespace-nowrap overflow-hidden overflow-ellipsis">
-                            {cn.flag} {cn.name}
-                          </span>
-                          <span className="opacity-70">{cn.dial}</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <input
-                  type="tel"
-                  placeholder={t(
-                    "estimator.form.phonePlaceholder",
-                    "Phone number"
-                  )}
-                  required
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="input input-bordered flex-1"
-                />
-              </div>
-
-              {/* Consent */}
-              <div className="flex items-center gap-3">
-                <input
-                  id="consent"
-                  type="checkbox"
-                  className="checkbox checkbox-md checkbox-primary"
-                  checked={consentChecked}
-                  onChange={(e) => setConsentChecked(e.target.checked)}
-                  required
-                />
-                <label htmlFor="consent" className="label-text text-xs">
-                  {t("estimator.consent.agree", "I agree to the")}{" "}
-                  <ConsentModal
-                    buttonText={t(
-                      "estimator.consent.privacyPolicy",
-                      "Privacy Policy"
-                    )}
-                    variant="hover"
-                  />{" "}
-                  {t("estimator.consent.and", "and data processing.")}
-                </label>
-              </div>
-
-              <div className="flex gap-3">
-                <button
-                  onClick={goBack}
-                  type="button"
-                  className="btn btn-outline"
-                >
-                  <FaAngleLeft />
-                </button>
-                <button
-                  type="submit"
-                  className={`btn btn-primary flex-1 ${
-                    loading ? "loading" : ""
-                  }`}
-                  disabled={loading || !consentChecked}
-                >
-                  {t("estimator.form.submitButton", "Submit")}
-                </button>
-              </div>
-            </motion.form>
-          </>
+          <EstimatorContactForm
+            name={name}
+            setName={setName}
+            email={email}
+            setEmail={setEmail}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            phonePrefix={phonePrefix}
+            setPhonePrefix={setPhonePrefix}
+            countries={countries}
+            consentChecked={consentChecked}
+            setConsentChecked={setConsentChecked}
+            loading={loading}
+            error={error}
+            onBack={goBack}
+            onSubmit={handleSubmit}
+          />
         )}
 
         {/* Thank You */}

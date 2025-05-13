@@ -67,7 +67,7 @@ const Cases = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateCase(true)}
-              className="btn btn-primary"
+              className="btn btn-primary "
             >
               {t("create")} Case
             </button>

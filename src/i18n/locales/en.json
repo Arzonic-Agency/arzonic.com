@@ -423,6 +423,49 @@
     "lastUpdated": "Last updated: May 7, 2025",
     "closeButton": "Close"
   },
+  "TermsModal": {
+    "title": "Terms of Service",
+    "closeButton": "Close",
+    "effectiveFrom": "Effective from: May 7, 2025",
+    "lastUpdated": "Last updated: May 7, 2025",
+    "effectiveNote": "These terms apply to all agreements entered into after this date.",
+    "section1": {
+      "title": "1. Introduction",
+      "description": "These terms apply to all services and products provided by Arzonic Agency to our clients. By using our website or services, you agree to these terms."
+    },
+    "section2": {
+      "title": "2. Services",
+      "description": "We provide digital consultancy and ready-made solutions including web development, 3D design, and maintenance. Scope is agreed individually."
+    },
+    "section3": {
+      "title": "3. Payment and Invoicing",
+      "description": "Payment is due upon invoice unless otherwise agreed. Payment terms: 8 days net. Late payments may incur fees and interest according to law."
+    },
+    "section4": {
+      "title": "4. Intellectual Property",
+      "description": "All materials developed by Arzonic remain our property unless otherwise agreed in writing. The client receives a usage license."
+    },
+    "section5": {
+      "title": "5. Liability and Limitations",
+      "description": "We disclaim responsibility for indirect losses, third-party software issues, and force majeure events."
+    },
+    "section6": {
+      "title": "6. Cooperation and Changes",
+      "description": "The client must respond in a timely manner. Changes must be agreed in writing. Lack of cooperation may affect delivery."
+    },
+    "section7": {
+      "title": "7. Termination",
+      "description": "Ongoing agreements can be terminated with one month’s notice. Immediate termination may occur in case of material breach."
+    },
+    "section8": {
+      "title": "8. Governing Law and Jurisdiction",
+      "description": "Disputes are governed by Danish law with jurisdiction in the Court of Hillerød."
+    },
+    "section9": {
+      "title": "9. Changes to Terms",
+      "description": "We reserve the right to modify these terms. The latest version is always available on our website."
+    }
+  },
   "GetStarted": {
     "title": "Estimate your project",
     "subtitle": "– in under a minute"
@@ -442,57 +485,64 @@
     "collaborationMessage": "At Arzonic, we collaborate with ambitious companies across Europe. No matter where you are, we are ready to elevate your digital presence!"
   },
   "solutionsPage": {
+    "common": {
+      "countryAllTitle": "Available in these countries:"
+    },
     "custom-websites": {
       "titleStart": "Custom",
       "titleEnd": "Websites",
-      "hero": "Unique websites that reflect your identity – no templates, just tailored solutions.",
-      "body": "Your website is often the first impression – and it has to land right.\nWe build from scratch with attention to your brand, goals, and audience. That means blazing-fast pages, mobile-first design, and a flexible structure that’s ready to grow.",
+      "hero": "Professional, custom websites that put your business in focus.",
+      "body": "Your website is often your first impression—and it needs to be perfect. We build tailored websites focused on your brand, goals, and target audience. Enjoy lightning-fast loading speeds, mobile-friendly design, and a flexible structure ready to scale.",
+      "processTitle": "The process to make a customized website",
       "process": [
-        "Workshops and strategy",
-        "Wireframes and design",
-        "Development and integration",
-        "Performance optimization and SEO"
+        "Strategy and planning",
+        "User-friendly design",
+        "Custom development",
+        "SEO and performance optimization"
       ],
-      "cta": "👉 Ready to make a stronger impact online?"
+      "cta": "Ready to elevate your business online?"
     },
     "web-applications": {
-      "titleStart": "Scalable",
+      "titleStart": "Effective",
       "titleEnd": "Web Applications",
-      "hero": "From idea to interactive experience – we build webapps that work for you.",
-      "body": "A great webapp combines usability, functionality, and performance.\nWe create everything from internal dashboards and customer tools to full-scale platforms – always with speed, scalability, and security in mind.",
+      "hero": "Digital solutions designed to streamline your operations and boost productivity.",
+      "body": "We create user-friendly web applications tailored to your business needs. Whether it's internal dashboards, customer-facing tools, or complex platforms, our solutions prioritize usability, speed, and security, helping your business grow efficiently.",
+      "processTitle": "Our process making a Web Application",
       "process": [
-        "Analysis and flow mapping",
-        "Prototyping and UI/UX",
-        "Full-stack development (React, Supabase, etc.)",
-        "Testing, launch, and support"
+        "Needs analysis and consultation",
+        "Intuitive UI/UX design",
+        "Full-stack development",
+        "Testing, deployment, and ongoing support"
       ],
-      "cta": "👉 Got a digital idea? Let’s make it real."
+      "cta": "Let’s turn your digital vision into reality."
     },
     "3d-visualization": {
-      "titleStart": "3D",
-      "titleEnd": "Visualization",
-      "hero": "Create wow-effect with 3D – from product renders to interactive experiences.",
-      "body": "3D brings depth, realism, and a sense of scale.\nWe create everything from architectural visualizations and product animations to interactive 3D elements for your website – balancing aesthetics, technique, and performance.",
+      "titleStart": "Professional",
+      "titleEnd": "3D Visualization",
+      "hero": "Stunning 3D visualizations that showcase your products and ideas clearly.",
+      "body": "Bring your products and projects to life with professional 3D visuals. We produce realistic renders and animations perfect for presentations, sales materials, or interactive web experiences, enhancing your brand’s appeal and customer engagement.",
+      "processTitle": "The process of creating 3D visualization",
       "process": [
-        "3D modeling & texturing",
-        "Rendering and animation",
-        "WebGL integration (Three.js, Rive, Spline)",
-        "Lightweight optimization for web"
+        "Detailed 3D modeling",
+        "Realistic renderings and animations",
+        "Interactive web-ready 3D",
+        "Performance optimization for fast loading"
       ],
-      "cta": "👉 Ready to impress in 3 dimensions?"
+      "cta": "Showcase your business with impactful 3D visuals."
     },
     "design-animation": {
-      "titleStart": "Design &",
+      "titleStart": "Graphic Design &",
       "titleEnd": "Animation",
-      "hero": "Visual identity with edge – and movement that engages.",
-      "body": "Good design isn’t just about pretty surfaces – it’s about evoking feeling. We craft visual identities, graphic elements, and animations that elevate your communication and make your brand memorable.",
+      "hero": "Memorable designs and animations that captivate your audience.",
+      "body": "Elevate your brand with powerful graphic designs and engaging animations. From distinctive brand identities to interactive animated content, we create visuals that clearly communicate your message and leave a lasting impression.",
+      "processTitle": "The process of creating graphic design and animation",
       "process": [
-        "Brand design and visual direction",
-        "Illustrations and graphic components",
-        "UI animated elements and microinteractions",
-        "Lottie, GSAP, and motion integration"
+        "Brand identity and visual style",
+        "Custom graphics and illustrations",
+        "Engaging animations",
+        "Integration across digital channels"
       ],
-      "cta": "👉 Want your brand to move?"
+      "cta": "Make your brand unforgettable."
     }
   },
   "countries": {
@@ -527,17 +577,18 @@
   },
   "estimator": {
     "intro": {
-      "title": "Let’s find your price",
-      "subtitle": "4 simple questions. 1 minute. A clear estimate for your project – 100% non-binding.",
-      "startButton": "Start the estimate"
+      "title": "Find out your project’s price",
+      "subtitle": "Answer just 4 quick questions and get a tailored price estimate. 100% free, no strings attached",
+      "startButton": "Start your estimate now"
     },
     "form": {
-      "title": "Almost done!",
+      "title": "Your estimate is ready!",
+      "subtitle": "Fill in your details to receive your custom estimate. We’ll send it directly to your inbox – no spam, no obligation",
       "nextButton": "Next",
       "namePlaceholder": "Your name",
       "emailPlaceholder": "Your email",
       "phonePlaceholder": "Phone number",
-      "submitButton": "Submit"
+      "submitButton": "Get your price"
     },
     "consent": {
       "agree": "I agree to the",

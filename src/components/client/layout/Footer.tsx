@@ -7,6 +7,8 @@ import {
   FaInstagram,
   FaLinkedin,
 } from "react-icons/fa6";
+import ConsentModal from "../modal/ConsentModal";
+import TermsModal from "../modal/TermsModal";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -43,8 +45,8 @@ const Footer = () => {
         </nav>
         <nav>
           <h6 className="footer-title">{t("Footer.legal", "Legal")}</h6>
-          <a className="link link-hover">{t("terms_of_service")}</a>
-          <a className="link link-hover">{t("privacy_policy")}</a>
+          <TermsModal buttonText={t("terms_of_service")} variant="hover" />
+          <ConsentModal buttonText={t("privacy_policy")} variant="hover" />
         </nav>
       </footer>
       <footer className="footer bg-base-100 text-base-content px-10 py-4">

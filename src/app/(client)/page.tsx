@@ -25,22 +25,24 @@ const Home = () => {
       <section className="h-[1000px] md:h-[800px]">
         <Present />
       </section>
-      <section className="h-full md:h-[850px] mb-40 relative overflow-visible">
-        <div className="absolute w-full h-full opacity-55">
+      <section className="relative h-full md:h-[850px] 2xl:h-[1100px] mb-40 overflow-visible xl:grid xl:place-items-center">
+        <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:top-0 xl:w-screen w-full h-full opacity-55 z-0">
           <Image
             src="/backgrounds/lines.svg"
             alt=""
             fill
-            className="hidden md:block"
+            className="hidden md:block object-cover"
           />
           <Image
             src="/backgrounds/lines2.svg"
             alt=""
             fill
-            className="block md:hidden "
+            className="block md:hidden object-cover"
           />
         </div>
-        <Preview />
+        <div className="relative z-10 w-full max-w-screen-xl px-6">
+          <Preview />
+        </div>
       </section>
       <section className="h-full">
         <NavProcess onStickyChange={setIsSticky} />
@@ -51,22 +53,24 @@ const Home = () => {
       <section className=" lg:h-[850px] my-40 hidden lg:block">
         <Prices />
       </section>
-      <section className="h-full md:h-[850px] relative mb-16">
-        <div className="absolute w-full h-full opacity-55">
+      <section className="relative h-full md:h-[850px] xl:h-[900px] 2xl:h-[1100px] mb-16 overflow-visible xl:grid xl:place-items-center">
+        <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:top-0 xl:w-screen w-full h-full opacity-55 z-0">
           <Image
             src="/backgrounds/lines.svg"
             alt=""
             fill
-            className="hidden md:block"
+            className="hidden md:block object-cover"
           />
           <Image
             src="/backgrounds/lines2.svg"
             alt=""
             fill
-            className="block md:hidden "
+            className="block md:hidden object-cover"
           />
         </div>
-        <CallToAction />
+        <div className="relative z-10 w-full max-w-screen-xl px-6">
+          <CallToAction />
+        </div>
       </section>
     </>
   );

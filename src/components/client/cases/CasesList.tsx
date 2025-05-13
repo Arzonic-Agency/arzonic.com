@@ -90,9 +90,9 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
-          <div className="p-5 flex flex-col justify-between h-52">
+          <div className="p-5 flex flex-col justify-evenly h-52">
             <h3 className="text-lg font-bold">{item.companyName}</h3>
-            <p className="text-sm text-zinc-600 line-clamp-3">
+            <p className="text-sm text-zinc-400 line-clamp-3">
               {item.description}
             </p>
             <div className="text-xs text-zinc-500 flex justify-between pt-4">

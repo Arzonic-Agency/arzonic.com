@@ -134,7 +134,7 @@ const OfferForm = () => {
                     type="text"
                     autoComplete="name"
                     placeholder={t("OfferForm.fields.name.placeholder")}
-                    className="input input-bordered w-full md:max-w-xs"
+                    className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -152,7 +152,7 @@ const OfferForm = () => {
                     type="email"
                     autoComplete="email"
                     placeholder={t("OfferForm.fields.email.placeholder")}
-                    className="input input-bordered w-full md:max-w-xs"
+                    className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={mail}
                     onChange={(e) => setMail(e.target.value)}
                     required
@@ -170,7 +170,7 @@ const OfferForm = () => {
                     type="tel"
                     autoComplete="tel"
                     placeholder={t("OfferForm.fields.phone.placeholder")}
-                    className="input input-bordered w-full md:max-w-xs"
+                    className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
                     required
@@ -197,7 +197,7 @@ const OfferForm = () => {
                     name="message"
                     rows={5}
                     placeholder={t("OfferForm.fields.message.placeholder")}
-                    className="textarea textarea-bordered textarea-md text-base w-full md:max-w-xs resize-none"
+                    className="textarea textarea-ghost bg-base-200 textarea-md text-base w-full md:max-w-xs resize-none"
                     value={message}
                     onChange={handleMessageChange}
                     maxLength={charLimit}

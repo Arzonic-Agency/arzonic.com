@@ -3,6 +3,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
+import { motion } from "framer-motion";
 
 const AboutPage = () => {
   const { t } = useTranslation();
@@ -39,7 +40,12 @@ const AboutPage = () => {
           </h1>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-20 max-w-3xl">
+        <motion.div
+          className="flex flex-col items-center justify-center gap-20 max-w-3xl"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <div className="flex flex-col gap-5 tracking-wide text-sm md:text-base">
             <p>{t("aboutPage.textOne")}</p>
             <p>{t("aboutPage.textTwo")}</p>
@@ -64,7 +70,7 @@ const AboutPage = () => {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

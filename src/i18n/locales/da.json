@@ -218,10 +218,10 @@
     "title": "MODERNE WEBBUREAU",
     "description": "Vi bygger lynhurtige hjemmesider og engagerende oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov.",
     "noTemplates": "— ingen skabeloner, ingen WordPress",
-    "customWebsites": "Tilpasset Hjemmesider",
-    "visualization": "3D Design",
+    "customWebsites": "Hjemmesider",
+    "visualization": "3D-Design",
     "webApplications": "Webapplikationer",
-    "seeMore": "Se mere"
+    "seeMore": "Se løsninger"
   },
   "Present": {
     "title": "Superhurtige hjemmesider – bygget til ydeevne og vækst",
@@ -423,6 +423,49 @@
     "lastUpdated": "Sidst opdateret: 7. maj 2025",
     "closeButton": "Luk"
   },
+  "TermsModal": {
+    "title": "Vilkår og betingelser",
+    "closeButton": "Luk",
+    "effectiveFrom": "Gyldig fra: 7. maj 2025",
+    "lastUpdated": "Sidst opdateret: 7. maj 2025",
+    "effectiveNote": "Disse vilkår gælder for alle aftaler indgået efter denne dato.",
+    "section1": {
+      "title": "1. Introduktion",
+      "description": "Disse vilkår gælder for alle ydelser og produkter leveret af Arzonic Agency til vores kunder. Ved at bruge vores hjemmeside eller tjenester accepterer du disse vilkår."
+    },
+    "section2": {
+      "title": "2. Ydelser",
+      "description": "Vi tilbyder digitale konsulentydelser og færdige løsninger, herunder webudvikling, 3D-design og vedligeholdelse. Omfanget aftales individuelt."
+    },
+    "section3": {
+      "title": "3. Betaling og fakturering",
+      "description": "Betaling sker efter fremsendt faktura. Betalingsfrist: 8 dage netto. Ved forsinket betaling pålægges gebyr og renter jf. lovgivning."
+    },
+    "section4": {
+      "title": "4. Immaterielle rettigheder",
+      "description": "Alt materiale udviklet af Arzonic forbliver vores ejendom, medmindre andet er skriftligt aftalt. Kunden får brugsret til løsningen."
+    },
+    "section5": {
+      "title": "5. Ansvar og begrænsninger",
+      "description": "Vi fraskriver os ansvar for indirekte tab, fejl forårsaget af tredjepart, og force majeure-situationer."
+    },
+    "section6": {
+      "title": "6. Samarbejde og ændringer",
+      "description": "Kunden skal medvirke rettidigt. Ændringer i projektet skal aftales skriftligt. Manglende medvirken kan påvirke levering."
+    },
+    "section7": {
+      "title": "7. Opsigelse",
+      "description": "Løbende aftaler kan opsiges med én måneds varsel. Ved væsentlig misligholdelse kan samarbejdet ophøre straks."
+    },
+    "section8": {
+      "title": "8. Gældende lov og værneting",
+      "description": "Tvister afgøres efter dansk ret med værneting i Retten i Hillerød."
+    },
+    "section9": {
+      "title": "9. Ændringer af vilkår",
+      "description": "Vi forbeholder os retten til at ændre disse vilkår. Den nyeste version findes altid på vores hjemmeside."
+    }
+  },
   "GetStarted": {
     "title": "Beregn dit projekt",
     "subtitle": "– på under et minut"
@@ -442,11 +485,16 @@
     "collaborationMessage": "Hos Arzonic samarbejder vi med ambitiøse virksomheder i hele Europa. Uanset hvor du er, står vi klar til at løfte din digitale tilstedeværelse!"
   },
   "solutionsPage": {
+    "common": {
+      "countryAllTitle": "Tilgængelig i disse lande:"
+    },
+
     "custom-websites": {
       "titleStart": "Tilpassede",
       "titleEnd": "Hjemmesider",
       "hero": "Unikke hjemmesider der afspejler din identitet – ingen skabeloner, kun skræddersyede løsninger.",
       "body": "Dit website er ofte det første indtryk – og det skal ramme plet.\nVi bygger fra bunden med blik for dit brand, dine mål og din målgruppe. Det betyder lynhurtige sider, mobilvenligt design og fleksibel struktur, så du altid er klar til at vækste.",
+      "processTitle": "Processen for at skabe en skræddersyet hjemmeside",
       "process": [
         "Workshops og strategi",
         "Wireframes og design",
@@ -460,6 +508,7 @@
       "titleEnd": "Webapplikationer",
       "hero": "Fra idé til interaktiv oplevelse – vi bygger webapps der arbejder for dig.",
       "body": "En god webapp kombinerer brugervenlighed, funktionalitet og performance.\nVi udvikler alt fra interne dashboards og kundeværktøjer til komplekse platforms-løsninger – altid med fokus på hastighed, skalerbarhed og sikkerhed.",
+      "processTitle": "Sådan udvikler vi en webapplikation",
       "process": [
         "Analyse og flow-mapping",
         "Prototyping og UI/UX",
@@ -473,6 +522,7 @@
       "titleEnd": "Visualisering",
       "hero": "Skab wow-effekt med 3D – fra produktvisualisering til interaktive oplevelser.",
       "body": "3D giver dybde, realisme og følelsen af noget større.\nVi laver alt fra arkitektur og produktpræsentationer til interaktive 3D-elementer på din hjemmeside – med styr på æstetik, teknik og performance.",
+      "processTitle": "Processen for at skabe 3D-visualisering",
       "process": [
         "3D-modellering & teksturering",
         "Rendering og animation",
@@ -486,12 +536,14 @@
       "titleEnd": "Animation",
       "hero": "Visuel identitet med kant – og bevægelse, der skaber engagement.",
       "body": "Godt design handler ikke bare om pæne flader – det handler om at få mennesker til at føle noget. Vi udvikler visuelle identiteter, grafiske elementer og animationer der løfter din kommunikation og gør dit brand mindeværdigt.",
+      "processTitle": "Processen for at skabe grafisk design og animation",
       "process": [
         "Branddesign og stilretning",
         "Illustration og grafiske komponenter",
         "UI-animerede elementer og mikrointeraktioner",
-        "Lottie, GSAP og motion-integration"
+        "rive og motion-integration"
       ],
+
       "cta": "👉 Skal dit brand bevæge sig?"
     }
   },
@@ -527,17 +579,18 @@
   },
   "estimator": {
     "intro": {
-      "title": "Lad os finde din pris",
-      "subtitle": "4 enkle spørgsmål. 1 minut. En klar beregning til dit projekt – 100 % uforpligtende.",
-      "startButton": "Start beregningen"
+      "title": "Beregn prisen på dit nye projekt",
+      "subtitle": "Få en skræddersyet prisberegning med blot 4 hurtige spørgsmål. 100% gratis, 100% uforpligtende",
+      "startButton": "Start din beregning nu"
     },
     "form": {
-      "title": "Næsten færdig!",
+      "title": "Din prisberegning er klar!",
+      "subtitle": "Udfyld dine oplysninger for at modtage din skræddersyede pris. Vi sender den direkte til din indbakke – ingen spam, ingen forpligtelser.",
       "nextButton": "Næste",
       "namePlaceholder": "Dit navn",
       "emailPlaceholder": "Din mailadresse",
       "phonePlaceholder": "Telefonnummer",
-      "submitButton": "Indsend"
+      "submitButton": "Få tilsendt prisen"
     },
     "consent": {
       "agree": "Jeg accepterer",

@@ -3,11 +3,12 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FaBars, FaFacebook, FaInstagram, FaXmark } from "react-icons/fa6";
+import { FaFacebook, FaGripLines, FaInstagram, FaXmark } from "react-icons/fa6";
 import Image from "next/image";
 import Language from "./Language";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
+import LanguageAdmin from "@/components/admin/layout/LanguageAdmin";
 
 const Header = () => {
   const pathname = usePathname();
@@ -41,7 +42,7 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar absolute top-0 bg-ghost inset-x-0 z-50 max-w-[1536px] mx-auto py-5 flex justify-between items-center">
+    <div className="navbar absolute top-0 bg-ghost inset-x-0 z-50 max-w-[1536px] mx-auto md:py-5 flex justify-between items-center py-7 bg-base-100 md:bg-transparent ">
       <div className="flex-1">
         <Link className="cursor-pointer pl-4 flex items-center gap-2" href="/">
           <Image
@@ -116,14 +117,14 @@ const Header = () => {
         </ul>
 
         {/* Mobile menu */}
-        <div className="drawer drawer-end flex md:hidden">
+        <div className="drawer drawer-end flex md:hidden items-center">
           <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
           <div className="drawer-content">
             <label
               htmlFor="my-drawer-4"
               className="drawer-button btn btn-ghost"
             >
-              <FaBars size={30} />
+              <FaGripLines size={30} />
             </label>
           </div>
           <div className="drawer-side">
@@ -132,29 +133,34 @@ const Header = () => {
               aria-label="close sidebar"
               className="drawer-overlay"
             ></label>
-            <ul className="menu menu-lg bg-base-100 text-base-content min-h-full w-96 p-4 pt-20 gap-2 items-center relative">
+            <ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4 pt-24 gap-2 items-center relative">
               <li className="absolute top-6 right-3">
                 <label htmlFor="my-drawer-4">
                   <FaXmark size={30} />
                 </label>
               </li>
-              <li className="text-2xl font-bold">
+              <li className="text-xl font-semibold">
                 <Link href="/solutions" onClick={handleCloseDrawer}>
                   {t("Header.solutions")}
                 </Link>
               </li>
-              <li className="text-2xl font-bold">
+              <li className="text-xl font-semibold">
                 <Link href="/cases" onClick={handleCloseDrawer}>
                   {t("Header.cases")}
                 </Link>
               </li>
+              <li className="text-xl font-semibold">
+                <Link href="/contact" onClick={handleCloseDrawer}>
+                  {t("Header.contact")}
+                </Link>
+              </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/get-started"
                   className="btn btn-primary text-neutral-content py-2 mt-4"
                   onClick={handleCloseDrawer}
                 >
-                  {t("Header.contact")}
+                  {t("Header.getStarted")}
                 </Link>
               </li>
               <div className="flex flex-col items-center gap-6 flex-1 justify-center w-full">
@@ -163,7 +169,7 @@ const Header = () => {
                 </span>
                 <div className="flex gap-6">
                   <Link
-                    href="https://www.facebook.com/share/18mtAGts1w/?mibextid=wwXIfr"
+                    href="https://www.facebook.com/profile.php?id=61575249251500"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center gap-1"
@@ -190,6 +196,9 @@ const Header = () => {
                   </Link>
                 </div>
               </div>
+              <li className="mb-7">
+                <LanguageAdmin />
+              </li>
             </ul>
           </div>
         </div>
