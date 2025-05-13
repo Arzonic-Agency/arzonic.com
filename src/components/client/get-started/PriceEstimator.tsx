@@ -109,11 +109,12 @@ const PriceEstimator = () => {
       : [];
 
   useEffect(() => {
-    if (step >= 0 && step < slides) {
+    const totalSlides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
+    if (step >= 0 && step < totalSlides) {
       const saved = answers[step] || [];
       setGroupSel([saved]);
     }
-  }, [step, answers]);
+  }, [step, answers, questionsState]);
 
   const toggleOption = (qIdx: number, optId: number) => {
     setGroupSel((prev) => {
