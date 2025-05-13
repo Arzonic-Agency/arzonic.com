@@ -26,20 +26,19 @@ export async function GET(request) {
       `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.UMAMI_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
           Accept: "application/json",
         },
       }
     );
     const statsData = await statsResponse.json();
-    console.log("STATS RESPONSE:", statsData);
 
     // Hent de mest besøgte sider
     const pagesResponse = await fetch(
       `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.UMAMI_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
           Accept: "application/json",
         },
       }
@@ -51,7 +50,7 @@ export async function GET(request) {
       `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.UMAMI_ACCESS_TOKEN}`,
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
           Accept: "application/json",
         },
       }
