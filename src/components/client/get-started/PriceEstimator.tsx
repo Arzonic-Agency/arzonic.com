@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getEstimatorQuestions, EstimatorQuestion } from "@/lib/server/actions";
-import { FaAngleLeft, FaAngleDown } from "react-icons/fa6";
-import ConsentModal from "../modal/ConsentModal";
+import { FaAngleLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import EstimatorContactForm from "../forms/EstimatorForm";
+import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
 
 type Country = { name: string; code: string; dial: string; flag: string };
 type RestCountry = {
@@ -58,7 +57,6 @@ const PriceEstimator = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [packageLabel, setPackageLabel] = useState("");
 
   // fetch package label on final slide
   useEffect(() => {
@@ -71,10 +69,10 @@ const PriceEstimator = () => {
         body: JSON.stringify({ optionId: pkgOptId }),
       })
         .then((r) => r.json())
-        .then(({ label }) => setPackageLabel(label || ""))
+        .then(({ label }) => console.log(label || "")) // Removed packageLabel usage
         .catch((e) => console.error("Failed to load package label", e));
     }
-  }, [step, answers, questionsState]);
+  }, [step, answers, questionsState, slides]); // Added slides to dependencies
 
   // fetch + sort countries
   useEffect(() => {

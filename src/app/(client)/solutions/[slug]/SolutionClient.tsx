@@ -3,14 +3,7 @@
 import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
-import EuropeMap from "@/components/client/home/elements/EuropeMap";
-import {
-  FaAngleRight,
-  FaAnglesRight,
-  FaArrowPointer,
-  FaHandPointRight,
-} from "react-icons/fa6";
-import Image from "next/image";
+import { FaAnglesRight } from "react-icons/fa6";
 
 type Props = {
   slug:
@@ -18,10 +11,9 @@ type Props = {
     | "web-applications"
     | "3d-visualization"
     | "design-animation";
-  countryName: string;
 };
 
-const SolutionClient = ({ slug, countryName }: Props) => {
+const SolutionClient = ({ slug }: Props) => {
   const { t } = useTranslation();
 
   const seoTitleStart = t(`solutionsPage.${slug}.titleStart`);

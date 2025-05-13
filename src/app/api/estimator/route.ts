@@ -2,8 +2,8 @@
 import { NextResponse } from "next/server";
 import { createServerClientInstance } from "@/utils/supabase/server";
 import { sendEstimatorEmail } from "@/lib/server/contact";
-import { createContactRequest } from "@/lib/server/actions";
 import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
+import { createContactRequest } from "@/lib/client/actions";
 
 export async function POST(req: Request) {
   const {
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       estimate,
       details,
       packageLabel,
-      lang                
+      lang
     );
 
     return NextResponse.json({ success: true, requestId, estimate });

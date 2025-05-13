@@ -1,7 +1,7 @@
 "use server";
 
 import {
-  createAdmin,
+  createAdminClient,
   createServerClientInstance,
 } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
@@ -16,7 +16,7 @@ export async function createMember(data: {
   role: "editor" | "admin";
   name: string;
 }) {
-  const supabase = await createAdmin();
+  const supabase = await createServerClientInstance();
 
   try {
     const createResult = await supabase.auth.admin.createUser({
@@ -88,7 +88,7 @@ export async function signOut() {
 //USERS
 
 export async function getAllUsers() {
-  const supabase = await createAdmin();
+  const supabase = await createAdminClient();
 
   const {
     data: { users },
@@ -134,7 +134,7 @@ export async function getAllUsers() {
 }
 
 export async function deleteUser(userId: string) {
-  const supabase = await createAdmin();
+  const supabase = await createAdminClient();
 
   try {
     // Step 1: Delete user from Supabase Auth
@@ -204,7 +204,7 @@ export async function updateUser(
   userId: string,
   data: { email?: string; password?: string; role?: string; name?: string }
 ): Promise<void> {
-  const supabase = await createAdmin();
+  const supabase = await createAdminClient();
 
   try {
     // Update user in Supabase Auth
@@ -926,102 +926,4 @@ export async function updatePackage(
     console.error("Error in updatePackage:", err);
     throw err;
   }
-}
-
-
-export async function createContactRequest(
-  name: string,
-  email: string,
-  country: string,
-  mobile: string,
-  answers: { questionId: number; optionIds: number[] }[]
-): Promise<{ requestId: string }> {
-  const supabase = await createServerClientInstance();
-
-  const { data: request, error: reqErr } = await supabase
-    .from("requests")
-    .insert({ name, mail: email, country, mobile })
-    .select("id")
-    .single();
-
-  if (reqErr || !request) {
-    throw new Error("Failed to create request: " + reqErr?.message);
-  }
-  const requestId = request.id;
-
-  const { error: respErr } = await supabase
-    .from("responses")
-    .insert({ request_id: requestId, answers });
-
-  if (respErr) {
-    throw new Error("Failed to save responses: " + respErr.message);
-  }
-
-  return { requestId };
-}
-
-export type Option = { id: number; text: string };
-export type EstimatorQuestion = {
-  id: number;
-  text: string;
-  type: "single" | "multiple";
-  options: Option[];
-};
-
-/**
- * Fetches estimator questions and answer-options,
- * choosing the right language in JS.
- */
-export async function getEstimatorQuestions(
-  lang: "en" | "da" = "en"
-): Promise<EstimatorQuestion[]> {
-  const supabase = await createServerClientInstance();
-
-  // grab both cols
-  const { data, error } = await supabase
-    .from("questions")
-    .select(
-      `
-      id,
-      text,
-      text_translated,
-      type,
-      options (
-        id,
-        text,
-        text_translated
-      )
-    `
-    )
-    .order("id", { ascending: true });
-
-  if (error) {
-    console.error("Failed to fetch estimator questions:", error.message);
-    throw new Error("Failed to fetch questions: " + error.message);
-  }
-
-  return (data || []).map(
-    (q: {
-      id: number;
-      text: string;
-      text_translated?: string;
-      type: "single" | "multiple";
-      options: {
-        id: number;
-        text: string;
-        text_translated?: string;
-      }[];
-    }) => ({
-      id: q.id,
-      // pick Danish if requested and exists, else fallback to English
-      text: lang === "da" && q.text_translated ? q.text_translated : q.text,
-      type: q.type,
-      options: q.options.map(
-        (o: { id: number; text: string; text_translated?: string }) => ({
-          id: o.id,
-          text: lang === "da" && o.text_translated ? o.text_translated : o.text,
-        })
-      ),
-    })
-  );
 }

@@ -29,7 +29,7 @@ export async function createServerClientInstance() {
   );
 }
 
-export async function createAdmin() {
+export async function createAdminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,

@@ -19,7 +19,7 @@ const CountrySolutionsPage = () => {
     return <div>Solution or country not found</div>;
   }
 
-  return <SolutionClient slug={slug as SolutionSlug} countryName={country} />;
+  return <SolutionClient slug={slug as SolutionSlug} />;
 };
 
 export default CountrySolutionsPage;

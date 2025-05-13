@@ -4,6 +4,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const AboutPage = () => {
   const { t } = useTranslation();
@@ -58,10 +59,12 @@ const AboutPage = () => {
                 className="flex flex-col gap-3 items-center justify-center flex-1"
               >
                 <div className="avatar">
-                  <div className="mask mask-hexagon-2 w-30">
-                    <img
+                  <div className="mask mask-hexagon-2 w-28 h-28">
+                    <Image
                       src={member.image}
                       alt={`${member.name} – ${member.role}`}
+                      width={100}
+                      height={100}
                     />
                   </div>
                 </div>

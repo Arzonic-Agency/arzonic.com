@@ -1,7 +1,6 @@
-// File: components/NavProcess.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaBrush, FaCode, FaMap, FaRocket } from "react-icons/fa6";
@@ -20,28 +19,31 @@ const NavProcess = ({
 }) => {
   const { t } = useTranslation();
 
-  const steps: Step[] = [
-    {
-      id: "discovery-strategy",
-      label: t("NavProcess.steps.discoveryStrategy"),
-      icon: <FaMap />,
-    },
-    {
-      id: "design-experience",
-      label: t("NavProcess.steps.designExperience"),
-      icon: <FaBrush />,
-    },
-    {
-      id: "development-integration",
-      label: t("NavProcess.steps.developmentIntegration"),
-      icon: <FaCode />,
-    },
-    {
-      id: "launch-support",
-      label: t("NavProcess.steps.launchSupport"),
-      icon: <FaRocket />,
-    },
-  ];
+  const steps: Step[] = useMemo(
+    () => [
+      {
+        id: "discovery-strategy",
+        label: t("NavProcess.steps.discoveryStrategy"),
+        icon: <FaMap />,
+      },
+      {
+        id: "design-experience",
+        label: t("NavProcess.steps.designExperience"),
+        icon: <FaBrush />,
+      },
+      {
+        id: "development-integration",
+        label: t("NavProcess.steps.developmentIntegration"),
+        icon: <FaCode />,
+      },
+      {
+        id: "launch-support",
+        label: t("NavProcess.steps.launchSupport"),
+        icon: <FaRocket />,
+      },
+    ],
+    [t]
+  );
 
   const navRef = useRef<HTMLDivElement | null>(null);
   const originalOffsetRef = useRef<number>(0);
