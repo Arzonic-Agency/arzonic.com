@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "Arzonic",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/custom-websites.jpg",
         width: 1200,
         height: 630,
         alt: "Arzonic preview image",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Arzonic Agency",
     description:
       "Custom web apps and 3D-powered websites for modern businesses.",
-    images: ["/opengraph-image.png"],
+    images: ["/custom-websites.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
