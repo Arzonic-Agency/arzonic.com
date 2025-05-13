@@ -554,19 +554,15 @@
     "germany": "Germany",
     "netherlands": "Netherlands",
     "belgium": "Belgium",
-    "france": "France",
-    "spain": "Spain",
-    "italy": "Italy",
-    "austria": "Austria",
     "ireland": "Ireland",
-    "portugal": "Portugal",
     "switzerland": "Switzerland",
     "estonia": "Estonia",
+    "poland": "Poland",
+    "hungary": "Hungary",
+    "czechia": "Czechia",
     "latvia": "Latvia",
     "lithuania": "Lithuania",
-    "czechia": "Czech Republic",
-    "hungary": "Hungary",
-    "poland": "Poland"
+    "austria": "Austria"
   },
   "CasesPage": {
     "title": "What we have",

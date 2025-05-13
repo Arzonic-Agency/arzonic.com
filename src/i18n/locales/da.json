@@ -556,19 +556,15 @@
     "germany": "Tyskland",
     "netherlands": "Holland",
     "belgium": "Belgien",
-    "france": "Frankrig",
-    "spain": "Spanien",
-    "italy": "Italien",
-    "austria": "Østrig",
     "ireland": "Irland",
-    "portugal": "Portugal",
     "switzerland": "Schweiz",
     "estonia": "Estland",
+    "poland": "Polen",
+    "hungary": "Ungarn",
+    "czechia": "Tjekkiet",
     "latvia": "Letland",
     "lithuania": "Litauen",
-    "czechia": "Tjekkiet",
-    "hungary": "Ungarn",
-    "poland": "Polen"
+    "austria": "Østrig"
   },
   "CasesPage": {
     "title": "Hvad vi har",

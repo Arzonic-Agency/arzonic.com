@@ -17,7 +17,24 @@ export async function GET() {
     "solutions/design-animation",
   ];
 
-  const dynamicCountries = ["denmark", "germany", "netherlands"];
+  const dynamicCountries = [
+    "denmark",
+    "sweden",
+    "norway",
+    "finland",
+    "germany",
+    "netherlands",
+    "belgium",
+    "ireland",
+    "switzerland",
+    "estonia",
+    "poland",
+    "hungary",
+    "czechia",
+    "latvia",
+    "lithuania",
+    "austria",
+  ];
 
   const urls = [
     ...staticPaths.map(
