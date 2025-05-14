@@ -46,9 +46,9 @@ export default function SplashScreen() {
           transition={{ duration: 0.8 }}
         >
           <motion.img
-            src="/logo-arzonic.png"
+            src="/icon-512x512.png"
             alt="Logo"
-            className="w-32 h-32"
+            className="w-32 h-32 md:w-40 md:h-40"
             initial={{ scale: 0.7, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8 }}

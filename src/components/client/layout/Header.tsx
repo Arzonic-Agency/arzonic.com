@@ -46,7 +46,7 @@ const Header = () => {
       <div className="flex-1">
         <Link className="cursor-pointer pl-4 flex items-center gap-2" href="/">
           <Image
-            src="/logo-arzonic.png"
+            src="/icon-192x192.png"
             alt=""
             width={60}
             height={60}
