@@ -29,7 +29,7 @@ const Navbar = () => {
     <div className="flex flex-col items-center justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
       <div className="flex flex-col sm:gap-5 h-full ">
         <div className="flex flex-col items-center justify-center h-32 w-full text-xl">
-          <Image src="/logo-arzonic.png" alt="" width={60} height={60} />
+          <Image src="/icon-192x192.png" alt="" width={60} height={60} />
           <span className="font-bold">ADMIN</span>
         </div>
         <div className="hidden sm:flex">
