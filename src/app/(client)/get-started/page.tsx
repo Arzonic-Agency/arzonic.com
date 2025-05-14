@@ -12,7 +12,7 @@ const GetStarted = () => {
   return (
     <div className="p-7 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20">
       <div className="max-w-xs sm:max-w-md md:max-w-lg">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-start sm:text-center">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
           {t("GetStarted.title")}
           <span className="text-primary"> {t("GetStarted.subtitle")} </span>
         </h1>

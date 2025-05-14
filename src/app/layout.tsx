@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   },
   description: "Custom web apps and 3D-powered websites for modern businesses.",
   metadataBase: new URL("https://arzonic.com"),
+  manifest: "/manifest.json", // <-- Her tilføjes manifest-linket
+  themeColor: "#171717", // <-- Vises også i statusbar på mobil
   openGraph: {
     title: "Arzonic Agency",
     description:
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#171717",
+  themeColor: "#171717", // Du kan beholde denne også
 };
 
 export default function RootLayout({
