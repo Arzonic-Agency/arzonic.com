@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaAngleLeft, FaListCheck } from "react-icons/fa6";
+import { FaAngleLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import EstimatorContactForm from "../forms/EstimatorForm";
 import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
