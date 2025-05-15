@@ -32,7 +32,7 @@ const Process = ({ isSticky }: ProcessProps) => {
         id="discovery-strategy"
         className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 md:h-full pt-10 p-5 md:p-10 md:w-[55%]">
+        <div className="flex flex-col justify-center gap-5 md:h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
             {t("Process.discoveryStrategy.title")}
           </h3>
