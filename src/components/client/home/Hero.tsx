@@ -47,9 +47,12 @@ const Hero = () => {
                 {t("Hero.webApplications")}
               </span>
             </div>
-            <div className="mt-5">
-              <Link href="/solutions" className="btn ">
+            <div className="mt-5 flex items-center gap-3">
+              <Link href="/solutions" className="btn btn-soft">
                 {t("Hero.seeMore")}
+              </Link>
+              <Link href="/get-started" className="btn btn-primary md:hidden">
+                {t("Header.getStarted")}
               </Link>
             </div>
           </div>

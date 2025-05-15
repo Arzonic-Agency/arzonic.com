@@ -19,7 +19,7 @@ const GetStarted = () => {
       </div>
 
       <motion.div
-        className="flex flex-col gap-7 md:flex-row justify-center items-center z-10 relative md:max-w-4xl lg:max-w-6xl h-[850px]  md:h-[450px]"
+        className="flex flex-col gap-7 md:flex-row justify-center items-center z-10 relative md:max-w-4xl lg:max-w-6x md:h-[450px]"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -27,7 +27,7 @@ const GetStarted = () => {
         <div className="h-full md:w-1/2">
           <PriceEstimator />
         </div>
-        <div className="flex md:w-1/2 h-full justify-center items-center relative">
+        <div className="hidden md:flex md:w-1/2 md:h-full justify-center items-center relative">
           <Image
             src="/backgrounds/mockup-preview.png"
             alt=""

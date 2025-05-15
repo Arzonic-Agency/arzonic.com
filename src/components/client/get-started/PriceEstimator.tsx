@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaAngleLeft } from "react-icons/fa6";
+import { FaAngleLeft, FaListCheck } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import EstimatorContactForm from "../forms/EstimatorForm";
 import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
@@ -44,7 +44,7 @@ const PriceEstimator = () => {
   }, []);
 
   const slides = Math.ceil(questionsState.length / QUESTIONS_PER_SLIDE);
-  const [step, setStep] = useState(-1); // -1 = intro
+  const [step, setStep] = useState(-1);
   const [direction, setDirection] = useState(0);
   const [groupSel, setGroupSel] = useState<number[][]>([]);
   const [answers, setAnswers] = useState<number[][]>([]);
@@ -217,13 +217,17 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="p-5 md:p-7 rounded-2xl flex flex-col justify-center items-start gap-6 h-[488px] md:h-[360px]"
+            className="p-5 md:p-7 rounded-2xl flex flex-col mt-10 md:justify-center items-start gap-6 md:h-[360px]"
           >
-            <h2 className="text-xl font-bold">{t("estimator.intro.title")}</h2>
-            <p className="text-zinc-400">{t("estimator.intro.subtitle")}</p>
-            <button onClick={goNext} className="btn btn-primary">
-              {t("estimator.intro.startButton", "Start the estimate")}
-            </button>
+            <div className="flex flex-col gap-5 text-center ">
+              <h2 className="text-xl font-bold">
+                {t("estimator.intro.title")}
+              </h2>
+              <p className="text-zinc-400">{t("estimator.intro.subtitle")}</p>
+              <button onClick={goNext} className="btn btn-primary mt-3 btn-lg">
+                {t("estimator.intro.startButton", "Start the estimate")}
+              </button>
+            </div>
           </motion.div>
         )}
 
@@ -237,7 +241,7 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="p-0 sm:p-7 flex flex-col justify-center md:justify-start gap-7 h-[488px] md:h-[360px]"
+            className="p-0 sm:p-7 flex flex-col mt-10  md:justify-start gap-7 h-[488px] md:h-[360px]"
           >
             {currentQs.map((q, idx) => (
               <div key={q.id} className="flex flex-col gap-5">
@@ -258,7 +262,7 @@ const PriceEstimator = () => {
                             : "checkbox checkbox-primary"
                         }
                       />
-                      <span className="text-sm md:text-base">{opt.text}</span>
+                      <span className="text-base">{opt.text}</span>
                     </label>
                   ))}
                 </div>

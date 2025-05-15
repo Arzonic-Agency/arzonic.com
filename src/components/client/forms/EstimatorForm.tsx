@@ -4,6 +4,7 @@ import React from "react";
 import { FaAngleLeft } from "react-icons/fa6";
 import ConsentModal from "../modal/ConsentModal";
 import { useTranslation } from "react-i18next";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 type Country = { name: string; code: string; dial: string; flag: string };
 
@@ -46,11 +47,12 @@ const EstimatorContactForm = ({
 
   return (
     <form onSubmit={onSubmit} className="p-7 flex flex-col gap-5 max-w-md">
-      <h2 className="text-base md:text-xl font-bold">
+      <h2 className="text-base md:text-xl font-bold flex gap-1 items-center">
+        <FaRegCheckCircle size={20} />
         {t(
           "estimator.form.title",
           "Your estimate is ready – just one step left!"
-        )}
+        )}{" "}
       </h2>
       <p className="text-sm text-zinc-400">{t("estimator.form.subtitle")}</p>
       {error && <p className="text-red-500 text-center">{error}</p>}

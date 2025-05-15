@@ -32,30 +32,30 @@ const Process = ({ isSticky }: ProcessProps) => {
         id="discovery-strategy"
         className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
-        <div className="flex flex-col justify-center gap-5 md:h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-85">
+        <div className="flex flex-col justify-center gap-5 md:h-full pt-10 p-5 md:p-10 md:w-[55%]">
+          <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
             {t("Process.discoveryStrategy.title")}
           </h3>
-          <h4 className="text-xl md:text-4xl font-extralight">
+          <h4 className="text-2xl md:text-4xl font-extralight">
             {t("Process.discoveryStrategy.subtitle")}
           </h4>
-          <p className="tracking-[0.022em] text-sm md:text-base">
+          <p className="tracking-[0.022em] text-sm md:text-base w-4/5 md:w-full">
             {t("Process.discoveryStrategy.description")}
           </p>
-          <ul className="flex flex-col gap-4 text-sm md:text-base">
-            <li className="flex gap-2 items-center">
+          <ul className="flex flex-col gap-4 text-sm md:text-base ">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.discoveryStrategy.steps.0")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.discoveryStrategy.steps.1")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.discoveryStrategy.steps.2")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.discoveryStrategy.steps.3")}
             </li>
@@ -72,35 +72,35 @@ const Process = ({ isSticky }: ProcessProps) => {
         className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-85">
+          <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
             {t("Process.designExperience.title")}
           </h3>
-          <h4 className="text-xl md:text-4xl font-extralight">
+          <h4 className="text-2xl md:text-4xl font-extralight">
             {t("Process.designExperience.subtitle")}
           </h4>
-          <p className="tracking-[0.022em] text-sm md:text-base">
+          <p className="tracking-[0.022em] text-sm md:text-base w-4/5 md:w-full">
             {t("Process.designExperience.description")}
           </p>
           <ul className="flex flex-col gap-4 text-sm md:text-base">
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.designExperience.steps.0")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.designExperience.steps.1")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.designExperience.steps.2")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.designExperience.steps.3")}
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full  px-10 md:p-10 md:w-[45%]">
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
           <div className="md:w-full w-60 h-full max-h-64 md:max-h-96">
             <DesignRive />
           </div>
@@ -111,35 +111,35 @@ const Process = ({ isSticky }: ProcessProps) => {
         className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-85">
+          <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
             {t("Process.developmentIntegration.title")}
           </h3>
-          <h4 className="text-xl md:text-4xl font-extralight">
+          <h4 className="text-2xl md:text-4xl font-extralight">
             {t("Process.developmentIntegration.subtitle")}
           </h4>
-          <p className="tracking-[0.022em] text-sm md:text-base">
+          <p className="tracking-[0.022em] text-sm md:text-base w-4/5 md:w-full">
             {t("Process.developmentIntegration.description")}
           </p>
           <ul className="flex flex-col gap-4 text-sm md:text-base">
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.developmentIntegration.steps.0")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.developmentIntegration.steps.1")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.developmentIntegration.steps.2")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.developmentIntegration.steps.3")}
             </li>
           </ul>
         </div>
-        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full  px-10 md:p-10 md:w-[45%]">
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
           <div className="md:w-full w-60 h-full max-h-64 md:max-h-80">
             <CodingRive />
           </div>
@@ -147,32 +147,32 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="launch-support"
-        className="md:h-[650px] h-[750px] w-full flex-col md:flex-row"
+        className="md:h-[650px] h-[750px] w-full  flex-col md:flex-row"
       >
         <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
-          <h3 className="text-lg tracking-widest text-secondary opacity-85">
+          <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
             {t("Process.launchSupport.title")}
           </h3>
           <h4 className="text-xl md:text-4xl font-extralight">
             {t("Process.launchSupport.subtitle")}
           </h4>
-          <p className="tracking-[0.022em] text-sm md:text-base">
+          <p className="tracking-[0.022em] text-sm md:text-base w-4/5 md:w-full">
             {t("Process.launchSupport.description")}
           </p>
-          <ul className="flex flex-col gap-4 text-sm md:text-base">
-            <li className="flex gap-2 items-center">
+          <ul className="flex flex-col gap-4 text-sm md:text-base pt-3">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.launchSupport.steps.0")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.launchSupport.steps.1")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.launchSupport.steps.2")}
             </li>
-            <li className="flex gap-2 items-center">
+            <li className="flex gap-1 md:gap-2 items-center">
               <FaCaretRight className="text-secondary text-xl" />{" "}
               {t("Process.launchSupport.steps.3")}
             </li>

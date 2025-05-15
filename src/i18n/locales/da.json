@@ -332,6 +332,10 @@
       "consent": {
         "label": "Jeg accepterer opbevaring af mine oplysninger i op til 30 dage",
         "readMore": "Læs mere"
+      },
+      "website_url": {
+        "label": "Link til hjemmeside",
+        "placeholder": "Indtast link til hjemmeside..."
       }
     },
     "buttons": {

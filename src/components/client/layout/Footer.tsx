@@ -54,11 +54,12 @@ const Footer = () => {
           </p>
         </aside>
         <nav className="md:place-self-center md:justify-self-end mb-5">
-          <div className="grid grid-flow-col gap-4 text-3xl">
+          <div className="grid grid-flow-col gap-4 text-3xl items-center">
             <Link
               href="https://www.facebook.com/profile.php?id=61575249251500"
               target="_blank"
               rel="noopener noreferrer"
+              className="md:hover:text-secondary md:transition-colors md:duration-300"
             >
               <FaFacebook size={30} />
             </Link>
@@ -67,6 +68,7 @@ const Footer = () => {
               href="https://www.instagram.com/arzonic.agency/"
               target="_blank"
               rel="noopener noreferrer"
+              className="md:hover:text-secondary md:transition-colors md:duration-300"
             >
               <FaInstagram size={33} />
             </Link>

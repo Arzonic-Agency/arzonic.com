@@ -149,6 +149,8 @@
   "delete_choosings": "Delete choosings",
   "days_left": "Days Left",
   "time_expired": "Time has expired",
+  "website_url": "Website URL",
+  "write_website_url": "Enter website URL...",
   "PriceEstimator": {
     "title": "Price Estimator",
     "loading": "Loading services…",
@@ -583,7 +585,7 @@
     "intro": {
       "title": "Find out your project’s price",
       "subtitle": "Answer just 4 quick questions and get a tailored price estimate. 100% free, no strings attached",
-      "startButton": "Start your estimate now"
+      "startButton": "Start Now"
     },
     "form": {
       "title": "Your estimate is ready!",

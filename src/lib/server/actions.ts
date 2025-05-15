@@ -256,19 +256,21 @@ export async function updateUser(
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function createCase({
-  companyName,
+  company_name,
   desc,
   city,
   country,
-  contactPerson,
+  contact_person,
   image,
+  website_url,
 }: {
-  companyName: string;
+  company_name: string;
   desc: string;
   city: string;
   country: string;
-  contactPerson: string;
+  contact_person: string;
   image?: File;
+  website_url?: string;
 }): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -358,16 +360,17 @@ export async function createCase({
 
     const { error } = await supabase.from("cases").insert([
       {
-        companyName,
+        company_name,
         desc,
         desc_translated,
         source_lang: sourceLang,
         city,
         country,
         country_translated,
-        contactPerson,
+        contact_person,
         image: imageUrl,
         creator_id: ud.user.id,
+        website_url,
       },
     ]);
     if (error) throw error;
@@ -379,13 +382,14 @@ export async function createCase({
 
 export async function updateCase(
   id: number,
-  companyName: string,
+  company_name: string,
   desc: string,
   city: string,
   country: string,
-  contactPerson: string,
+  contact_person: string,
   image: File | null,
-  created_at?: string
+  created_at?: string,
+  website_url?: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -481,28 +485,30 @@ export async function updateCase(
     if (ue || !ud?.user) throw new Error("Not authenticated");
 
     const payload: {
-      companyName: string;
+      company_name: string;
       desc: string;
       desc_translated: string;
       source_lang: string;
       city: string;
       country: string;
       country_translated: string;
-      contactPerson: string;
+      contact_person: string;
       image: string | null;
       creator_id: string;
       created_at?: string;
+      website_url?: string;
     } = {
-      companyName,
+      company_name,
       desc,
       desc_translated,
       source_lang: sourceLang,
       city,
       country,
       country_translated,
-      contactPerson,
+      contact_person,
       image: imageUrl,
       creator_id: ud.user.id,
+      website_url,
       ...(created_at ? { created_at } : {}),
     };
     if (created_at) payload.created_at = created_at;
@@ -584,8 +590,8 @@ async function detectAndTranslate(text: string) {
 export async function createReview(
   desc: string,
   rate: number,
-  companyName: string,
-  contactPerson: string
+  company_name: string,
+  contact_person: string
 ): Promise<void> {
   const supabase = await createServerClientInstance();
   const { sourceLang, translated } = await detectAndTranslate(desc);
@@ -599,8 +605,8 @@ export async function createReview(
       desc_translated: translated,
       source_lang: sourceLang,
       rate,
-      companyName,
-      contactPerson,
+      company_name,
+      contact_person,
     },
   ]);
 
@@ -649,8 +655,8 @@ export async function getLatestReviews(limit: number = 10) {
 
 export async function updateReview(
   reviewId: number,
-  companyName: string,
-  contactPerson: string,
+  company_name: string,
+  contact_person: string,
   desc: string,
   rate: number
 ): Promise<void> {
@@ -666,8 +672,8 @@ export async function updateReview(
       desc_translated: translated,
       source_lang: sourceLang,
       rate,
-      companyName,
-      contactPerson,
+      company_name,
+      contact_person,
       creator: u.user.id,
     })
     .eq("id", reviewId);

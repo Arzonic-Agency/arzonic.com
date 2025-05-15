@@ -8,7 +8,7 @@ const Present = () => {
   return (
     <div className="flex items-center justify-center h-full w-full p-3">
       <div className="max-w-5xl flex flex-col gap-7 ">
-        <h2 className="text-xl sm:text-xl md:text-3xl font-light text-center z-20 mb-10  max-w-xs sm:max-w-full mx-auto hidden md:block">
+        <h2 className="text-xl sm:text-xl md:text-3xl font-light text-center z-20 mb-3 md:mb-10  max-w-xs sm:max-w-full mx-auto ">
           {t("Present.title")}
         </h2>
         <div className="flex gap-7 relative md:flex-row flex-col">
