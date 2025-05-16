@@ -25,6 +25,8 @@
   "description": "Beskrivelse",
   "city": "By",
   "country": "Land",
+  "creation_date": "Oprettelsesdato",
+  "image_update": "Tilføj nyt billede",
   "subject": "Emne",
   "surname": "Efternavn",
   "email": "Mailadresse",
@@ -578,6 +580,14 @@
       "description": "Vi arbejder på at tilføje flere cases. Kom snart tilbage!"
     }
   },
+  "SolutionsPage": {
+    "title": "Hvad vi kan",
+    "highlight": "skabe for dig",
+    "custom-websites": "Tilpassede hjemmesider",
+    "web-applications": "Webapplikationer",
+    "visualization": "3D-visualisering",
+    "design-animation": "Design og animation"
+  },
   "jobsPage": {
     "titleStart": "Bliv en del af rejsen hos",
     "titleEnd": "Arzonic",
@@ -658,5 +668,17 @@
     "laptop": "Bærbar",
     "tablet": "Tablet",
     "unknown": "Ukendt"
+  },
+  "aria": {
+    "danishFlag": "Dansk flag",
+    "badges": {
+      "customWebsites": "Kategori: Tilpassede hjemmesider",
+      "visualization": "Kategori: 3D-visualisering",
+      "webApplications": "Kategori: Webapplikationer"
+    },
+    "navigation": {
+      "seeMoreSolutions": "Se flere løsninger",
+      "getStarted": "Få et tilbud"
+    }
   }
 }

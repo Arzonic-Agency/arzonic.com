@@ -5,9 +5,11 @@ const EuropeMap = () => {
     <Image
       src="/elements/europe.svg"
       alt="Europe Map"
-      width={400}
-      height={400}
-      className="w-auto h-32"
+      width={160}
+      height={128}
+      className="h-32 w-auto"
+      loading="lazy"
+      priority={false}
     />
   );
 };

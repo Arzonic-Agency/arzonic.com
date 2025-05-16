@@ -44,13 +44,18 @@ const Header = () => {
   return (
     <div className="navbar absolute top-0 bg-ghost inset-x-0 z-50 max-w-[1536px] mx-auto md:py-5 flex justify-between items-center py-7 bg-base-100 md:bg-transparent ">
       <div className="flex-1">
-        <Link className="cursor-pointer pl-4 flex items-center gap-2" href="/">
+        <Link
+          className="cursor-pointer pl-4 flex items-center gap-2"
+          href="/"
+          aria-label={t("Header.homeLink", "Gå til forsiden")}
+        >
           <Image
             src="/icon-192x192.png"
-            alt=""
+            alt={t("Header.logoAlt", "Arzonic logo")}
             width={60}
             height={60}
             className="h-10 w-10 md:h-14 md:w-14 rounded-full"
+            priority
           />
           <span className="font-bold text-2xl md:text-3xl tracking-wider">
             {t("Header.brandName")}

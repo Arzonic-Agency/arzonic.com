@@ -25,6 +25,8 @@
   "description": "Description",
   "city": "City",
   "country": "Country",
+  "creation_date": "Creation Date",
+  "image_update": "Update Image",
   "subject": "Subject",
   "surname": "Surname",
   "email": "Email",
@@ -574,6 +576,14 @@
       "description": "We are working on adding more cases. Check back soon!"
     }
   },
+  "SolutionsPage": {
+    "title": "What we can",
+    "highlight": "create for you",
+    "custom-websites": "Custom websites",
+    "web-applications": "Web applications",
+    "visualization": "3D visualization",
+    "design-animation": "Design & animation"
+  },
   "jobsPage": {
     "titleStart": "Join our journey at",
     "titleEnd": "Arzonic",
@@ -654,5 +664,17 @@
     "laptop": "Laptop",
     "tablet": "Tablet",
     "unknown": "Unknown"
+  },
+  "aria": {
+    "danishFlag": "Danish flag",
+    "badges": {
+      "customWebsites": "Category: Custom websites",
+      "visualization": "Category: 3D visualization",
+      "webApplications": "Category: Web applications"
+    },
+    "navigation": {
+      "seeMoreSolutions": "See more solutions",
+      "getStarted": "Get started"
+    }
   }
 }

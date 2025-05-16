@@ -12,8 +12,8 @@ interface CasesListProps {
 
 interface CaseItem {
   id: number;
-  companyName: string;
-  description: string;
+  company: string;
+  desc: string;
   image?: string;
   city: string;
   created_at: string;
@@ -75,7 +75,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 p-1 md:p-4">
       {caseItems.map((item, index) => (
-        <motion.div
+        <motion.article
           key={item.id}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,16 +85,14 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
           <div className="relative h-60">
             <Image
               src={item.image || FALLBACK_IMAGE}
-              alt={item.companyName}
+              alt={item.company}
               fill
               className="object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="p-5 flex flex-col justify-evenly h-52">
-            <h3 className="text-lg font-bold">{item.companyName}</h3>
-            <p className="text-sm text-zinc-400 line-clamp-3">
-              {item.description}
-            </p>
+            <h3 className="text-lg font-bold">{item.company}</h3>
+            <p className="text-sm text-zinc-400 line-clamp-3">{item.desc}</p>
             <div className="text-xs text-zinc-500 flex justify-between pt-4">
               <span>{formatDate(item.created_at)}</span>
               <span className="flex items-center gap-1">
@@ -103,7 +101,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
               </span>
             </div>
           </div>
-        </motion.div>
+        </motion.article>
       ))}
     </div>
   );

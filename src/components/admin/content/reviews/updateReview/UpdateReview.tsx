@@ -9,15 +9,15 @@ interface UpdateReviewProps {
 }
 
 const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
-  const [companyName, setCompanyName] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
+  const [company, setCompany] = useState("");
+  const [contact, setContact] = useState("");
   const [desc, setDesc] = useState("");
   const [rate, setRate] = useState<number>(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
-    companyName: "",
-    contactPerson: "",
+    company: "",
+    contact: "",
     desc: "",
   });
 
@@ -25,9 +25,8 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     const fetchReview = async () => {
       try {
         const review = await getReviewById(reviewId);
-        setCompanyName(review.company_name);
-        setContactPerson(review.contact_person);
-
+        setCompany(review.company);
+        setContact(review.contact);
         setDesc(review.desc);
         setRate(review.rate);
       } catch (error) {
@@ -43,11 +42,10 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     setLoading(true);
     setError(null);
 
-    if (!contactPerson || !companyName || !desc) {
+    if (!contact || !company || !desc) {
       setErrors({
-        companyName: !companyName ? t("company_name_required") : "",
-        contactPerson: !contactPerson ? t("company_name_required") : "",
-
+        company: !company ? t("company_required") : "",
+        contact: !contact ? t("contact_required") : "",
         desc: !desc ? t("desc_required") : "",
       });
       setLoading(false);
@@ -55,7 +53,7 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
     }
 
     try {
-      await updateReview(reviewId, companyName, contactPerson, desc, rate);
+      await updateReview(reviewId, company, contact, desc, rate);
       onReviewUpdated();
     } catch (err) {
       console.error("Failed to update review:", err);
@@ -87,37 +85,37 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("contact_person")}</legend>
+            <legend className="fieldset-legend">{t("contact")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
               placeholder="Reviewer name"
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
               required
             />
           </fieldset>
-          {errors.contactPerson && (
+          {errors.contact && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.contactPerson}
+              {errors.contact}
             </span>
           )}
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("company_name")}</legend>
+            <legend className="fieldset-legend">{t("company")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
               placeholder="Reviewer name"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
               required
             />
           </fieldset>
-          {errors.companyName && (
+          {errors.company && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.companyName}
+              {errors.company}
             </span>
           )}
         </div>

@@ -10,13 +10,13 @@ interface ReviewRow {
   desc_translated: string | null;
   source_lang: string;
   rate: number;
-  companyName: string;
+  company: string;
   contactPerson: string;
   created_at: string;
 }
 
 interface ReviewResponse extends ReviewRow {
-  description: string;
+  desc: string;
 }
 
 export async function GET(request: Request) {
@@ -31,12 +31,11 @@ export async function GET(request: Request) {
     const transformed: ReviewResponse[] = raw.map((r) => {
       const original = r.desc;
       const translated = r.desc_translated;
-      const description =
-        r.source_lang === lang ? original : translated ?? original;
+      const desc = r.source_lang === lang ? original : translated ?? original;
 
       return {
         ...r,
-        description,
+        desc,
       };
     });
 

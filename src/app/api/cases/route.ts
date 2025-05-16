@@ -4,29 +4,31 @@ import { getAllCases } from "@/lib/server/actions";
 
 interface CaseRow {
   id: number;
-  companyName: string;
+  company: string;
   desc: string;
   desc_translated: string | null;
-  source_lang: string;           // "en" or "da"
+  source_lang: string;
   city: string;
   country: string;
   country_translated: string | null;
-  contactPerson: string;
+  contact: string;
   image: string | null;
   creator_id: string;
   created_at: string;
+  website: string | null;
 }
 
 interface CaseResponse {
   id: number;
-  companyName: string;
+  company: string;
   city: string;
-  contactPerson: string;
+  contact: string;
   image: string | null;
   creator_id: string;
   created_at: string;
-  description: string;
-  countryName: string;
+  desc: string;
+  country: string;
+  website: string | null;
 }
 
 export async function GET(request: Request) {
@@ -40,28 +42,25 @@ export async function GET(request: Request) {
 
     const transformed: CaseResponse[] = raw.map((c) => {
       // choose the right description
-      const description =
-        c.source_lang === uiLang
-          ? c.desc
-          : c.desc_translated ?? c.desc;
+      const desc =
+        c.source_lang === uiLang ? c.desc : c.desc_translated ?? c.desc;
 
       // choose the right country name
-      const countryName =
-        uiLang === "en"
-          ? c.country_translated ?? c.country
-          : c.country;
+      const country =
+        uiLang === "en" ? c.country_translated ?? c.country : c.country;
 
       // explicitly return only the props we need
       return {
         id: c.id,
-        companyName: c.companyName,
+        company: c.company,
         city: c.city,
-        contactPerson: c.contactPerson,
+        contact: c.contact,
         image: c.image,
         creator_id: c.creator_id,
         created_at: c.created_at,
-        description,
-        countryName,
+        desc,
+        country,
+        website: c.website,
       };
     });
 

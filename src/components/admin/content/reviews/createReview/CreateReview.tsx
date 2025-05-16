@@ -10,14 +10,14 @@ interface CreateReviewProps {
 const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
   const [desc, setDesc] = useState("");
   const [rate, setRate] = useState<number>(1);
-  const [companyName, setCompanyName] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
+  const [company, setCompany] = useState("");
+  const [contact, setContact] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     desc: "",
-    companyName: "",
-    contactPerson: "",
+    company: "",
+    contact: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,18 +25,18 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
     setLoading(true);
     setError(null);
 
-    if (!desc || !companyName || !contactPerson) {
+    if (!desc || !company || !contact) {
       setErrors({
         desc: !desc ? t("desc_required") : "",
-        companyName: !companyName ? t("company_name_required") : "",
-        contactPerson: !contactPerson ? t("contact_person_required") : "",
+        company: !company ? t("company_required") : "",
+        contact: !contact ? t("contact_required") : "",
       });
       setLoading(false);
       return;
     }
 
     try {
-      await createReview(desc, rate, companyName, contactPerson);
+      await createReview(desc, rate, company, contact);
       onReviewCreated();
     } catch {
       setError("Failed to create review. Please try again.");
@@ -90,38 +90,38 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
         </div>
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("company_name")}</legend>
+            <legend className="fieldset-legend">{t("company")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
-              placeholder={t("write_company_name")}
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder={t("write_company")}
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
               required
             />
           </fieldset>
-          {errors.companyName && (
+          {errors.company && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.companyName}
+              {errors.company}
             </span>
           )}
         </div>
 
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("contact_person")}</legend>
+            <legend className="fieldset-legend">{t("contact")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
-              placeholder={t("write_contact_person")}
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
+              placeholder={t("write_contact")}
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
               required
             />
           </fieldset>
-          {errors.contactPerson && (
+          {errors.contact && (
             <span className="absolute -bottom-4 text-xs text-red-500">
-              {errors.contactPerson}
+              {errors.contact}
             </span>
           )}
         </div>

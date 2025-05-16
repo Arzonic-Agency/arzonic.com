@@ -16,9 +16,9 @@ interface ReviewsListProps {
 
 interface ReviewItem {
   id: number;
-  companyName: string;
-  contactPerson: string;
-  description: string;
+  company: string;
+  contact: string;
+  desc: string;
   rate: number;
 }
 
@@ -80,7 +80,7 @@ const ReviewsList = ({
 
   if (items.length === 0) {
     return (
-      <div className="flex justify-center items-center h-40">
+      <div className="flex justify-center items-center h-40 w-full">
         <p className="text-gray-500">{t("no_reviews")}</p>
       </div>
     );
@@ -94,9 +94,9 @@ const ReviewsList = ({
             <div key={r.id} className="card card-compact shadow-md rounded">
               <div className="card-body">
                 <ReviewsRating rate={r.rate} />
-                <p className="text-xs">{truncate(r.description, 100)}</p>
+                <p className="text-xs">{truncate(r.desc, 100)}</p>
                 <h2 className="text-sm font-semibold mt-2">
-                  {r.contactPerson} {t("from_reviews")} {r.companyName}
+                  {r.contact} {t("from_reviews")} {r.company}
                 </h2>
                 <div className="card-actions justify-end">
                   <button
@@ -125,9 +125,9 @@ const ReviewsList = ({
             <li key={r.id} className="flex justify-between items-start">
               <div className="flex-1">
                 <h3 className="font-semibold text-xs">
-                  {r.contactPerson}, {r.companyName}
+                  {r.contact}, {r.company}
                 </h3>
-                <p className="text-xs mt-1">{truncate(r.description, 80)}</p>
+                <p className="text-xs mt-1">{truncate(r.desc, 80)}</p>
               </div>
               <ReviewsRating rate={r.rate} />
               <div className="flex gap-2">

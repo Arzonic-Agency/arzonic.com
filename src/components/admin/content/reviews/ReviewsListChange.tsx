@@ -14,7 +14,7 @@ const ReviewsListChange = ({ onViewChange }: ReviewListChangeProps) => {
   };
 
   return (
-    <div role="tablist" className="tabs tabs-bordered">
+    <div role="tablist" className="tabs tabs-border">
       <a
         role="tab"
         className={`tab ${activeView === "cards" ? "tab-active" : ""}`}

@@ -4,22 +4,22 @@ import { useTranslation } from "react-i18next";
 
 const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   const { t } = useTranslation();
-  const [company_name, setCompanyName] = useState("");
+  const [company, setCompany] = useState("");
   const [desc, setDesc] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [contact_person, setContactPerson] = useState("");
-  const [website_url, setWebsiteUrl] = useState(""); // new state
+  const [contact, setContact] = useState("");
+  const [website, setWebsite] = useState("");
 
   const [errors, setErrors] = useState({
-    company_name: "",
+    company: "",
     desc: "",
     city: "",
     country: "",
     image: "",
-    contact_person: "",
-    website_url: "", // new error field
+    contact: "",
+    website: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -27,15 +27,15 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!company_name || !desc || !city || !country || !contact_person) {
+    if (!company || !desc || !city || !country || !contact) {
       setErrors({
-        company_name: !company_name ? t("company_name_required") : "",
+        company: !company ? t("company_name_required") : "",
         desc: !desc ? t("desc_required") : "",
         city: !city ? t("city_required") : "",
         country: !country ? t("country_required") : "",
         image: "",
-        contact_person: !contact_person ? t("contact_person_required") : "",
-        website_url: "", // no required validation
+        contact: !contact ? t("contact_person_required") : "",
+        website: "",
       });
       setLoading(false);
       return;
@@ -43,22 +43,23 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
 
     try {
       await createCase({
-        company_name,
+        company,
         desc,
         city,
         country,
-        contact_person,
+        contact,
         image,
-        website_url,
+        website,
       });
 
-      setCompanyName("");
+      // Reset form
+      setCompany("");
       setDesc("");
       setCity("");
       setCountry("");
-      setContactPerson("");
+      setContact("");
       setImage(null);
-      setWebsiteUrl(""); // reset websiteUrl
+      setWebsite("");
       onCaseCreated();
     } catch (error) {
       console.error(error);
@@ -91,35 +92,35 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("company_name")}</legend>
               <input
-                name="company_name"
+                name="company"
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_company_name")}
-                value={company_name}
-                onChange={(e) => setCompanyName(e.target.value)}
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
                 required
               />
-              {errors.company_name && (
+              {errors.company && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.company_name}
+                  {errors.company}
                 </span>
               )}
             </fieldset>
 
-            {/* New input for website URL */}
+            {/* Website input */}
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("website_url")}</legend>
               <input
-                name="website_url"
+                name="website"
                 type="url"
                 className="input input-bordered input-md"
                 placeholder={t("write_website_url")}
-                value={website_url}
-                onChange={(e) => setWebsiteUrl(e.target.value)}
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
               />
-              {errors.website_url && (
+              {errors.website && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.website_url}
+                  {errors.website}
                 </span>
               )}
             </fieldset>
@@ -127,17 +128,17 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("contact_person")}</legend>
               <input
-                name="contact_person"
+                name="contact"
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_contact_person")}
-                value={contact_person}
-                onChange={(e) => setContactPerson(e.target.value)}
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
                 required
               />
-              {errors.contact_person && (
+              {errors.contact && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.contact_person}
+                  {errors.contact}
                 </span>
               )}
             </fieldset>

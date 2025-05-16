@@ -15,8 +15,8 @@ interface CasesListProps {
 
 interface CaseItem {
   id: number;
-  companyName: string;
-  description: string;
+  company: string;
+  desc: string;
   image: string | null;
 }
 
@@ -51,8 +51,8 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
     fetchCases();
   }, [fetchCases]);
 
-  const truncate = (text: string, max: number) =>
-    text.length > max ? text.slice(0, max) + "…" : text;
+  const truncate = (text: string | null | undefined, max: number) =>
+    text && text.length > max ? text.slice(0, max) + "…" : text || "";
 
   const handleCaseUpdated = () => {
     setEditingCaseId(null);
@@ -111,14 +111,15 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
               <figure className="relative w-full aspect-[4/3] h-56 md:h-40 xl:h-56 overflow-hidden">
                 <Image
                   src={item.image || FALLBACK_IMAGE}
-                  alt={item.companyName}
+                  alt={`Case study for ${item.company}`}
                   fill
+                  priority={page === 1}
                   className="object-cover"
                 />
               </figure>
               <div className="card-body">
-                <h2 className="card-title text-lg">{item.companyName}</h2>
-                <p className="text-xs">{truncate(item.description, 100)}</p>
+                <h2 className="card-title text-lg">{item.company}</h2>
+                <p className="text-xs">{truncate(item.desc, 100)}</p>
                 <div className="card-actions justify-end mt-2">
                   <button
                     className="btn btn-sm"
@@ -149,16 +150,17 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                   <div className="relative w-12 h-10 rounded-md overflow-hidden">
                     <Image
                       src={item.image || FALLBACK_IMAGE}
-                      alt={item.companyName}
+                      alt={`Case study for ${item.company}`}
                       fill
+                      priority={page === 1}
                       className="object-cover"
                     />
                   </div>
                   <h3 className="font-semibold text-xs hidden sm:block">
-                    {item.companyName}
+                    {item.company}
                   </h3>
                   <h3 className="font-semibold text-xs block sm:hidden">
-                    {truncate(item.companyName, 20)}
+                    {truncate(item.company, 20)}
                   </h3>
                 </div>
                 <div className="flex gap-5 md:gap-2">

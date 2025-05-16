@@ -15,11 +15,11 @@ const CasesListChange = ({ onViewChange }: NewsListChangeProps) => {
   };
 
   return (
-    <div role="tablist" className="tabs tabs-bordered">
+    <div role="tablist" className="tabs tabs-border">
       <a
         role="tab"
         className={`tab ${
-          activeView === "cards" ? "tab-active bg-base-100 rounded-lg" : ""
+          activeView === "cards" ? "tab-active rounded-lg" : ""
         }`}
         onClick={() => handleViewChange("cards")}
       >
@@ -28,9 +28,7 @@ const CasesListChange = ({ onViewChange }: NewsListChangeProps) => {
       <a
         role="tab"
         className={`tab ${
-          activeView === "list"
-            ? "tab-active tab-active bg-base-100 rounded-lg"
-            : ""
+          activeView === "list" ? "tab-active tab-active rounded-lg" : ""
         }`}
         onClick={() => handleViewChange("list")}
       >

@@ -205,7 +205,7 @@ const PriceEstimator = () => {
   };
 
   return (
-    <div className="w-full">
+    <section className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
         {/* Intro */}
         {step === -1 && !success && (
@@ -328,7 +328,7 @@ const PriceEstimator = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 };
 

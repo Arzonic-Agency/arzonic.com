@@ -10,23 +10,23 @@ const UpdateCase = ({
   caseId: number;
   onCaseUpdated: () => void;
 }) => {
-  const [companyName, setCompanyName] = useState("");
+  const [company, setCompany] = useState("");
   const [desc, setDesc] = useState("");
   const [city, setCity] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [contactPerson, setContactPerson] = useState("");
+  const [contact, setContact] = useState("");
   const [country, setCountry] = useState("");
 
   const [existingImage, setExistingImage] = useState<string | null>(null);
 
   const [errors, setErrors] = useState({
-    companyName: "",
+    company: "",
     desc: "",
     city: "",
     country: "",
     image: "",
     created_at: "",
-    contactPerson: "",
+    contact: "",
   });
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -40,12 +40,12 @@ const UpdateCase = ({
           console.error(t("case_not_found"));
           return;
         }
-        setCompanyName(caseData.companyName || "");
+        setCompany(caseData.company || "");
         setDesc(caseData.desc || "");
         setCity(caseData.city || "");
         setCountry(caseData.country || "");
         setExistingImage(caseData.image || null);
-        setContactPerson(caseData.contactPerson || "");
+        setContact(caseData.contact || "");
 
         setCreatedAt(
           caseData.created_at
@@ -64,15 +64,15 @@ const UpdateCase = ({
     e.preventDefault();
     setLoading(true);
 
-    if (!companyName || !desc || !city || !country || !contactPerson) {
+    if (!company || !desc || !city || !country || !contact) {
       setErrors({
-        companyName: !companyName ? t("company_name_required") : "",
+        company: !company ? t("company_name_required") : "",
         desc: !desc ? t("desc_required") : "",
         city: !city ? t("city_required") : "",
         country: !country ? t("country_required") : "",
         image: "",
         created_at: "",
-        contactPerson: !contactPerson ? t("contact_person_required") : "",
+        contact: !contact ? t("contact_person_required") : "",
       });
       setLoading(false);
       return;
@@ -81,11 +81,11 @@ const UpdateCase = ({
     try {
       const formData = new FormData();
       formData.append("caseId", caseId.toString());
-      formData.append("companyName", companyName);
+      formData.append("company", company);
       formData.append("desc", desc);
       formData.append("city", city);
       formData.append("country", country);
-      formData.append("contact_person", contactPerson);
+      formData.append("contact", contact);
 
       formData.append("createdAt", createdAt);
 
@@ -93,11 +93,11 @@ const UpdateCase = ({
 
       await updateCase(
         caseId,
-        companyName,
+        company,
         desc,
         city,
         country,
-        contactPerson,
+        contact,
         image || undefined,
         createdAt
       );
@@ -134,53 +134,45 @@ const UpdateCase = ({
       >
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
           <div className="flex flex-col gap-5 items-center">
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("company_name")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("company_name")}</legend>
               <input
-                name="companyName"
+                name="company"
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_company_name")}
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
                 required
               />
-              {errors.companyName && (
+              {errors.company && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.companyName}
+                  {errors.company}
                 </span>
               )}
             </fieldset>
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("contact_person")}</legend>
               <input
-                name="contact_person"
+                name="contact"
                 type="text"
                 className="input input-bordered input-md"
                 placeholder={t("write_contact_person")}
-                value={contactPerson}
-                onChange={(e) => setContactPerson(e.target.value)}
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
                 required
               />
-              {errors.contactPerson && (
+              {errors.contact && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.contactPerson}
+                  {errors.contact}
                 </span>
               )}
             </fieldset>
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("description")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("description")}</legend>
               <textarea
                 name="desc"
-                className="textarea textarea-bordered textarea-md text"
+                className="textarea textarea-bordered textarea-md"
                 value={desc}
                 onChange={handleDescChange}
                 required
@@ -199,12 +191,8 @@ const UpdateCase = ({
               )}
             </fieldset>
 
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("creation_date")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("creation_date")}</legend>
               <input
                 name="createdAt"
                 type="date"
@@ -221,12 +209,8 @@ const UpdateCase = ({
             </fieldset>
           </div>
           <div className="flex flex-col gap-3 relative">
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("city")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("city")}</legend>
               <input
                 name="city"
                 type="text"
@@ -242,17 +226,13 @@ const UpdateCase = ({
                 </span>
               )}
             </fieldset>
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("country")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("country")}</legend>
               <input
-                name="city"
+                name="country"
                 type="text"
                 className="input input-bordered input-md"
-                placeholder={t("write_city")}
+                placeholder={t("write_country")}
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 required
@@ -263,12 +243,8 @@ const UpdateCase = ({
                 </span>
               )}
             </fieldset>
-            <fieldset className="flex flex-col gap-2 relative w-full">
-              <legend className="form-control">
-                <div className="label">
-                  <span className="label-text">{t("images_update")}</span>
-                </div>
-              </legend>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("image_update")}</legend>
               <input
                 name="image"
                 type="file"
