@@ -588,6 +588,47 @@
     "visualization": "3D-visualisering",
     "design-animation": "Design og animation"
   },
+  "solutionscards": {
+    "custom": {
+      "title": "Tilpassede Hjemmesider",
+      "description": "Skræddersyede sider med fokus på design, konvertering og ydeevne – bygget til at understøtte din identitet.",
+      "image": "/backgrounds/custom-websites.jpg"
+    },
+    "webapp": {
+      "title": "Web Applications",
+      "description": "Vi bygger funktionelle apps med dashboards, databaser og integrationer – til virksomheder med digitale produkter og behov.",
+      "image": "/backgrounds/web-applications.jpg"
+    },
+    "visualization": {
+      "title": "3D-Visualisering",
+      "description": "Integrer interaktiv 3D direkte i din løsning – ideelt til præsentationer, produkter og unikke oplevelser.",
+      "image": "/backgrounds/3d-visualization.jpg"
+    },
+    "design": {
+      "title": "Design & Animation",
+      "description": "Moderne UI-design og animationer, der skaber visuel sammenhæng, bevægelse og en professionel oplevelse.",
+      "image": "/backgrounds/design-animation.jpg"
+    }
+  },
+  "faq": {
+    "title": "Ofte stillede spørgsmål",
+    "q1": {
+      "title": "Hvor lang tid tager det?",
+      "answer": "Det afhænger af projektets kompleksitet. En simpel landingpage kan typisk være klar inden for 1–2 uger, mens en skræddersyet webapplikation eller løsning med 3D-elementer kan tage 4–8 uger eller mere. Vi giver altid en realistisk tidsplan ved projektstart."
+    },
+    "q2": {
+      "title": "Er der vedligeholdelse?",
+      "answer": "Vi tilbyder både engangsløsninger og løbende vedligeholdelse. Du kan vælge en supportaftale, hvor vi står for opdateringer, sikkerhed og drift – eller vi kan overdrage det hele til dig med dokumentation."
+    },
+    "q3": {
+      "title": "Kan jeg selv redigere indhold?",
+      "answer": "Ja! De fleste løsninger inkluderer et brugervenligt CMS eller dashboard, hvor du selv kan redigere tekst, billeder og indhold. Hvis du ønsker det, kan vi også bygge det som statisk løsning uden behov for vedligeholdelse."
+    },
+    "q4": {
+      "title": "Hvad hvis jeg har brug for nye funktioner senere?",
+      "answer": "Vi bygger med fremtiden i mente. Det er nemt at tilføje funktioner eller tilpasse løsningen senere, og vi tilbyder gerne videreudvikling – uanset om det er booking, integrationer, e-commerce eller noget andet."
+    }
+  },
   "jobsPage": {
     "titleStart": "Bliv en del af rejsen hos",
     "titleEnd": "Arzonic",

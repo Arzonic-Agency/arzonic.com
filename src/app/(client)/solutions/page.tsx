@@ -1,5 +1,6 @@
 "use client";
 
+import FAQ from "@/components/client/solutions/FAQ";
 import SolutionCards from "@/components/client/solutions/SolutionCards";
 import { NextSeo } from "next-seo";
 import React from "react";
@@ -28,7 +29,7 @@ const SolutionsPage = () => {
         }}
       />
       <div className="p-5 sm:p-7 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20">
-        <div className="max-w-md md:max-w-[470px]">
+        <div className="max-w-[290px] md:max-w-[470px]">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
             {t("SolutionsPage.title")}
             <span className="text-primary">
@@ -37,8 +38,9 @@ const SolutionsPage = () => {
             </span>
           </h1>
         </div>
-        <div>
+        <div className="flex flex-col gap-15 mt-10">
           <SolutionCards />
+          <FAQ />
         </div>
       </div>
     </>

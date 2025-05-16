@@ -1,45 +1,57 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
-
-const solutions = [
-  {
-    title: "Tilpassede Hjemmesider",
-    image: "/backgrounds/custom-websites.jpg",
-  },
-  {
-    title: "Web Applications",
-    image: "/backgrounds/web-applications.jpg",
-  },
-  {
-    title: "3D-Visualisering",
-    image: "/backgrounds/3d-visualization.jpg",
-  },
-  {
-    title: "Design & Animation",
-    image: "/backgrounds/design-animation.jpg",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const SolutionCards = () => {
+  const { t } = useTranslation();
+
+  const solutions = [
+    {
+      key: "custom",
+      href: "/solutions/custom-websites",
+    },
+    {
+      key: "webapp",
+      href: "/solutions/web-applications",
+    },
+    {
+      key: "visualization",
+      href: "/solutions/3d-visualization",
+    },
+    {
+      key: "design",
+      href: "/solutions/design-animation",
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2  gap-6">
+    <div className="flex flex-col gap-10 w-full max-w-screen-xl mx-auto">
       {solutions.map((solution, index) => (
-        <section
+        <Link
+          href={solution.href}
           key={index}
-          className="flex flex-col gap-3 bg-base-100 rounded-2xl shadow-md p-5 h-full w-96"
+          className="flex flex-row rounded-xl bg-base-200 ring-2 p-2 ring-base-300 hover:bg-base-300  transition-colors duration-400 ease-in-out gap-3 shadow-lg relative"
         >
-          <h2 className="text-lg font-semibold text-start">{solution.title}</h2>
-          <div className=" w-full px-9 py-10 rounded-2xl bg-base-200 flex items-center justify-center">
-            <div className="h-36 w-full relative rounded-xl overflow-hidden">
+          <div>
+            <div className="h-full w-24 sm:h-32 sm:w-32 relative rounded-lg overflow-hidden">
               <Image
-                src={solution.image}
-                alt={solution.title}
+                src={t(`solutionscards.${solution.key}.image`)}
+                alt={t(`solutionscards.${solution.key}.title`)}
                 fill
-                className="object-cover "
+                className="object-cover"
               />
             </div>
           </div>
-        </section>
+          <div className="p-2 sm:p-4">
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">
+              {t(`solutionscards.${solution.key}.title`)}
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-400">
+              {t(`solutionscards.${solution.key}.description`)}
+            </p>
+          </div>
+        </Link>
       ))}
     </div>
   );

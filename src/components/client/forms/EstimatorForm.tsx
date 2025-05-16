@@ -132,7 +132,7 @@ const EstimatorContactForm = ({
           {t("estimator.consent.agree", "I agree to the")}{" "}
           <ConsentModal
             buttonText={t("estimator.consent.privacyPolicy", "Privacy Policy")}
-            variant="hover"
+            variant="primary"
           />{" "}
           {t("estimator.consent.and", "and data processing.")}
         </label>

@@ -584,6 +584,47 @@
     "visualization": "3D visualization",
     "design-animation": "Design & animation"
   },
+  "solutionscards": {
+    "custom": {
+      "title": "Custom Websites",
+      "description": "Tailor-made sites focused on design, performance, and conversion – built to reflect your identity.",
+      "image": "/backgrounds/custom-websites.jpg"
+    },
+    "webapp": {
+      "title": "Web Applications",
+      "description": "We build apps with dashboards, databases, and integrations – ideal for digital-first companies.",
+      "image": "/backgrounds/web-applications.jpg"
+    },
+    "visualization": {
+      "title": "3D Visualization",
+      "description": "Integrate interactive 3D directly into your site – ideal for showcasing products or unique brand stories.",
+      "image": "/backgrounds/3d-visualization.jpg"
+    },
+    "design": {
+      "title": "Design & Animation",
+      "description": "Modern UI and animations that create fluid, engaging interfaces with strong brand expression.",
+      "image": "/backgrounds/design-animation.jpg"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "title": "How long does it take?",
+      "answer": "It depends on the complexity of the project. A simple landing page can typically be ready in 1–2 weeks, while a custom web application or a 3D-enhanced solution may take 4–8 weeks or more. We always provide a realistic timeline at project start."
+    },
+    "q2": {
+      "title": "Is maintenance included?",
+      "answer": "We offer both one-time solutions and ongoing maintenance. You can choose a support plan where we handle updates, security, and hosting – or we can hand it all over to you with full documentation."
+    },
+    "q3": {
+      "title": "Can I edit content myself?",
+      "answer": "Yes! Most of our solutions include a user-friendly CMS or dashboard, allowing you to manage text, images, and content on your own. If preferred, we can also build static solutions with zero maintenance needs."
+    },
+    "q4": {
+      "title": "What if I need new features later?",
+      "answer": "We build with scalability in mind. It's easy to add features or expand the solution later, and we're happy to help – whether it's bookings, integrations, e-commerce or something else."
+    }
+  },
   "jobsPage": {
     "titleStart": "Join our journey at",
     "titleEnd": "Arzonic",

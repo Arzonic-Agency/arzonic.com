@@ -45,14 +45,14 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         }}
       />
       <section
-        className="relative w-full h-[35vh] flex items-center justify-center bg-cover bg-center opacity-90"
+        className="relative w-full h-[25vh] md:h-[35vh] flex items-center justify-center bg-cover bg-center opacity-90"
         style={{
           backgroundImage: `url('/backgrounds/${slug}.jpg')`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-tranparent to-transparent z-10" />
-        <div className="relative z-20 text-center text-white px-4 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+        <div className="relative z-20 text-center text-white px-4 max-w-4xl pt-10">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             {seoTitleStart}
             <span className="text-secondary"> {seoTitleEnd}</span>
           </h1>
