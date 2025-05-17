@@ -8,7 +8,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
 
-//REGISTER
+// ─────────────────────────────────────────────────────────────────────────────
+// AUTHENTICATION
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function createMember(data: {
   email: string;
@@ -74,8 +76,6 @@ export async function createMember(data: {
   }
 }
 
-//LOGOUT
-
 export async function signOut() {
   const supabase = await createServerClientInstance();
 
@@ -85,7 +85,9 @@ export async function signOut() {
   redirect("/login");
 }
 
-//USERS
+// ─────────────────────────────────────────────────────────────────────────────
+// USERS
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function getAllUsers() {
   const supabase = await createAdminClient();
@@ -137,7 +139,6 @@ export async function deleteUser(userId: string) {
   const supabase = await createAdminClient();
 
   try {
-    // Step 1: Delete user from Supabase Auth
     const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(
       userId
     );
@@ -154,7 +155,6 @@ export async function deleteUser(userId: string) {
 
     console.log("User deleted from auth:", userId);
 
-    // Step 2: Delete user from members table
     const { error: deleteMemberError } = await supabase
       .from("members")
       .delete()
@@ -172,7 +172,6 @@ export async function deleteUser(userId: string) {
 
     console.log("User deleted from members:", userId);
 
-    // Step 3: Delete user from permissions table
     const { error: deletePermissionError } = await supabase
       .from("permissions")
       .delete()
@@ -198,8 +197,6 @@ export async function deleteUser(userId: string) {
   }
 }
 
-// UPDATE USER
-
 export async function updateUser(
   userId: string,
   data: { email?: string; password?: string; role?: string; name?: string }
@@ -207,7 +204,6 @@ export async function updateUser(
   const supabase = await createAdminClient();
 
   try {
-    // Update user in Supabase Auth
     const { error: authError } = await supabase.auth.admin.updateUserById(
       userId,
       {
@@ -220,7 +216,6 @@ export async function updateUser(
       throw new Error(`Failed to update user in auth: ${authError.message}`);
     }
 
-    // Update user in members table
     const { error: memberError } = await supabase
       .from("members")
       .update({ name: data.name })
@@ -232,7 +227,6 @@ export async function updateUser(
       );
     }
 
-    // Update user role in permissions table
     if (data.role) {
       const { error: permissionError } = await supabase
         .from("permissions")
@@ -252,7 +246,7 @@ export async function updateUser(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CREATE CASE
+// CASES
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function createCase({
@@ -550,7 +544,9 @@ export async function deleteCase(caseId: number): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 // REVIEWS
+// ─────────────────────────────────────────────────────────────────────────────
 
 const DEEPL_ENDPOINT = "https://api-free.deepl.com/v2/translate";
 
@@ -702,18 +698,20 @@ export async function getReviewById(reviewId: number) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 // REQUESTS
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function getAllRequests(page: number = 1, limit: number = 6) {
   const supabase = await createServerClientInstance();
-  const offset = (page - 1) * limit; // Calculate offset for pagination
+  const offset = (page - 1) * limit;
 
   try {
     const { data, count, error } = await supabase
       .from("requests")
-      .select("*", { count: "exact" }) // Include total count for pagination
+      .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1); // Fetch only the range for the current page
+      .range(offset, offset + limit - 1);
 
     if (error) {
       throw new Error(
@@ -721,7 +719,8 @@ export async function getAllRequests(page: number = 1, limit: number = 6) {
       );
     }
 
-    return { requests: data || [], total: count || 0 }; // Return requests and total count
+    return { requests: data || [], total: count || 0 };
+    count;
   } catch (err) {
     console.error("Unexpected error during fetching requests:", err);
     throw err;
@@ -797,7 +796,9 @@ export async function getRequestById(requestId: string) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
 // REQUEST NOTES
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function createRequestNote(
   message: string,
@@ -868,6 +869,10 @@ export async function deleteRequestNote(noteId: string): Promise<void> {
     throw error;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PACKAGES AND SERVICES
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function getPackages() {
   const supabase = await createServerClientInstance();

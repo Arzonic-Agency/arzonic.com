@@ -1,4 +1,3 @@
-// app/api/estimator/route.ts
 import { NextResponse } from "next/server";
 import { createServerClientInstance } from "@/utils/supabase/server";
 import { sendEstimatorEmail } from "@/lib/server/contact";
@@ -14,6 +13,7 @@ export async function POST(req: Request) {
     details,
     answers,
     lang = "en",
+    consentChecked, // Add consentChecked
   } = (await req.json()) as {
     name: string;
     email: string;
@@ -22,9 +22,10 @@ export async function POST(req: Request) {
     details: string;
     answers: { questionId: number; optionIds: number[] }[];
     lang?: "en" | "da";
+    consentChecked: boolean; // Add consentChecked type
   };
 
-  if (!name || !email || !answers?.length) {
+  if (!name || !email || !answers?.length || consentChecked === undefined) {
     return NextResponse.json(
       { error: "Missing required fields" },
       { status: 400 }
@@ -83,7 +84,8 @@ export async function POST(req: Request) {
       email,
       country,
       phone,
-      answers
+      answers,
+      consentChecked // Pass consentChecked as the 6th argument
     );
 
     // 4) Send the email

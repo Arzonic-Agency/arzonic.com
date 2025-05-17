@@ -47,7 +47,7 @@ const SolutionCards = () => {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#171717c9] via-tranparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#17171797] via-tranparent to-transparent z-10" />
               </div>
             </div>
             <div className="p-2 sm:p-4">

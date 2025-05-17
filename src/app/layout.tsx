@@ -10,16 +10,17 @@ const outfitSans = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "Arzonic Agency",
+    default: "Arzonic",
     template: "%s | Arzonic",
   },
-  description: "Custom web apps and 3D-powered websites for modern businesses.",
+  description:
+    "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
   metadataBase: new URL("https://arzonic.com"),
   manifest: "/manifest.json",
   openGraph: {
-    title: "Arzonic Agency",
+    title: "Arzonic",
     description:
-      "Custom web apps and 3D-powered websites for modern businesses.",
+      "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
     url: "https://arzonic.com",
     siteName: "Arzonic",
     images: [
@@ -34,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Arzonic Agency",
+    title: "Arzonic",
     description:
-      "Custom web apps and 3D-powered websites for modern businesses.",
+      "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
     images: ["/custom-websites.jpg"],
   },
   icons: {

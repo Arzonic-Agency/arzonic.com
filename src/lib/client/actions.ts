@@ -41,7 +41,9 @@ export async function getLatestCases() {
   return data;
 }
 
-//REVIEWS
+// ─────────────────────────────────────────────────────────────────────────────
+// REVIEWS
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function getLatestReviews() {
   const supabase = createClient();
@@ -112,16 +114,22 @@ export async function createContactRequest(
   email: string,
   country: string,
   mobile: string,
-  answers: { questionId: number; optionIds: number[] }[]
+  answers: { questionId: number; optionIds: number[] }[],
+  consentChecked: boolean
 ): Promise<{ requestId: string }> {
-  const supabase = await createAdminClient(); // ← service role
+  const supabase = await createAdminClient();
 
-  // 1) Insert into `requests`
   const { data: request, error: reqErr } = await supabase
     .from("requests")
-    .insert({ name, mail: email, country, mobile })
+    .insert({
+      name,
+      mail: email,
+      country,
+      mobile,
+      consent: consentChecked,
+    })
     .select("id")
-    .single(); // ← virker nu fordi du bruger service role
+    .single();
 
   if (reqErr || !request) {
     throw new Error("Failed to create request: " + reqErr?.message);
@@ -129,7 +137,6 @@ export async function createContactRequest(
 
   const requestId = request.id;
 
-  // 2) Insert related answers
   const { error: respErr } = await supabase
     .from("responses")
     .insert({ request_id: requestId, answers });
@@ -154,7 +161,6 @@ export async function getEstimatorQuestions(
 ): Promise<EstimatorQuestion[]> {
   const supabase = createClient();
 
-  // grab both cols
   const { data, error } = await supabase
     .from("questions")
     .select(

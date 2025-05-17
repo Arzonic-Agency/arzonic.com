@@ -157,6 +157,14 @@ const PriceEstimator = () => {
     setLoading(true);
     setError(null);
 
+    if (!consentChecked) {
+      setError(
+        t("estimator.form.error.consentRequired", "Consent is required.")
+      );
+      setLoading(false);
+      return;
+    }
+
     const payload = questionsState.map((q, i) => ({
       questionId: q.id,
       optionIds: answers[i] || [],
@@ -185,6 +193,7 @@ const PriceEstimator = () => {
           details,
           answers: payload,
           lang,
+          consentChecked,
         }),
       });
       const body = await res.json();
@@ -207,7 +216,6 @@ const PriceEstimator = () => {
   return (
     <section className="w-full">
       <AnimatePresence initial={false} custom={direction} mode="wait">
-        {/* Intro */}
         {step === -1 && !success && (
           <motion.div
             key="intro"
@@ -231,7 +239,6 @@ const PriceEstimator = () => {
           </motion.div>
         )}
 
-        {/* Question Slides */}
         {step >= 0 && step < slides && (
           <motion.div
             key={`slide-${step}`}
@@ -283,7 +290,6 @@ const PriceEstimator = () => {
           </motion.div>
         )}
 
-        {/* Final Form */}
         {step === slides && !success && (
           <EstimatorContactForm
             name={name}
@@ -304,7 +310,6 @@ const PriceEstimator = () => {
           />
         )}
 
-        {/* Thank You */}
         {success && (
           <motion.div
             key="thanks"

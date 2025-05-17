@@ -25,7 +25,6 @@ const Cases = () => {
 
   return (
     <div className="flex flex-col md:items-start gap-7  w-full">
-      <CasesFilter />
       <CasesList page={page} setTotal={setTotal} />
       <div className="flex w-full justify-center">
         {total > 6 && (
