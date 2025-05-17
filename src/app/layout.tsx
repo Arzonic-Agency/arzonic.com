@@ -58,6 +58,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Arzonic Agency",
+              url: "https://arzonic.com",
+              logo: "https://arzonic.com/icon-search-512x512.png",
+            }),
+          }}
+        />
+      </head>
       <body className={outfitSans.className}>
         <I18nProvider>{children}</I18nProvider>
       </body>
