@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import CasesList from "./CasesList";
 import { getAllCases } from "@/lib/client/actions";
 import CasesPagination from "./CasesPagination";
-import CasesFilter from "./CasesFilter";
 
 const Cases = () => {
   const [page, setPage] = useState<number>(1);
