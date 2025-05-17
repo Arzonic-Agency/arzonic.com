@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     images: ["/custom-websites.jpg"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
     shortcut: "/favicon.png",
     apple: "/favicon.png",
   },
