@@ -720,7 +720,6 @@ export async function getAllRequests(page: number = 1, limit: number = 6) {
     }
 
     return { requests: data || [], total: count || 0 };
-    count;
   } catch (err) {
     console.error("Unexpected error during fetching requests:", err);
     throw err;
