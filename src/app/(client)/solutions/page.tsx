@@ -1,5 +1,6 @@
 "use client";
 
+import Prices from "@/components/client/home/Prices";
 import FAQ from "@/components/client/solutions/FAQ";
 import SolutionCards from "@/components/client/solutions/SolutionCards";
 import { NextSeo } from "next-seo";
@@ -38,9 +39,10 @@ const SolutionsPage = () => {
             </span>
           </h1>
         </div>
-        <div className="flex flex-col gap-15 mt-10">
+        <div className="flex flex-col justify-center gap-15 mt-10">
           <SolutionCards />
           <FAQ />
+          <Prices />
         </div>
       </div>
     </>

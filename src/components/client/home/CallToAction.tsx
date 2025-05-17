@@ -41,7 +41,7 @@ const CallToAction = () => {
           <h1 className="text-lg text-zinc-400 ">
             {t("CallToAction.reachingBeyondBorders")}
           </h1>
-          <p className="text-sm tracking-wide text-zinc-500 ">
+          <p className="text-sm tracking-wide text-zinc-500 md:max-w-sm">
             {t("CallToAction.collaborationMessage")}
           </p>
         </div>

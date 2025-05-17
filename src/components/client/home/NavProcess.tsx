@@ -159,7 +159,13 @@ const NavProcess = ({
   if (!showNav) return null;
 
   const handleClick = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    const offset = window.innerWidth < 768 ? 100 : 0;
+    const top = element.getBoundingClientRect().top + window.scrollY - offset;
+
+    window.scrollTo({ top, behavior: "smooth" });
   };
 
   return (

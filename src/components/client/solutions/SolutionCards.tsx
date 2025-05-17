@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
 
 const SolutionCards = () => {
   const { t } = useTranslation();
@@ -26,32 +27,39 @@ const SolutionCards = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-10 w-full max-w-screen-xl mx-auto">
+    <div className="grid grid-cols-1 place-items-center xl:grid-cols-2 gap-10 w-full max-w-screen-xl">
       {solutions.map((solution, index) => (
-        <Link
-          href={solution.href}
+        <motion.div
           key={index}
-          className="flex flex-row rounded-xl bg-base-200 ring-2 p-2 ring-base-300 hover:bg-base-300  transition-colors duration-400 ease-in-out gap-3 shadow-lg relative"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.4 }}
         >
-          <div>
-            <div className="h-full w-24 sm:h-32 sm:w-32 relative rounded-lg overflow-hidden">
-              <Image
-                src={t(`solutionscards.${solution.key}.image`)}
-                alt={t(`solutionscards.${solution.key}.title`)}
-                fill
-                className="object-cover"
-              />
+          <Link
+            href={solution.href}
+            className="flex flex-row rounded-xl bg-base-200 ring-2 p-2 ring-base-300 md:hover:bg-base-300 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-all duration-300 ease-in-out gap-3 shadow-lg relative max-w-[650px] xl:max-w-[500px] "
+          >
+            <div>
+              <div className="h-full w-24 sm:h-32 sm:w-32 relative rounded-lg overflow-hidden">
+                <Image
+                  src={t(`solutionscards.${solution.key}.image`)}
+                  alt={t(`solutionscards.${solution.key}.title`)}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#171717c9] via-tranparent to-transparent z-10" />
+              </div>
             </div>
-          </div>
-          <div className="p-2 sm:p-4">
-            <h2 className="text-lg sm:text-xl font-semibold mb-2">
-              {t(`solutionscards.${solution.key}.title`)}
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400">
-              {t(`solutionscards.${solution.key}.description`)}
-            </p>
-          </div>
-        </Link>
+            <div className="p-2 sm:p-4">
+              <h2 className="text-lg sm:text-xl font-semibold mb-2">
+                {t(`solutionscards.${solution.key}.title`)}
+              </h2>
+              <p className="text-xs sm:text-sm text-zinc-400">
+                {t(`solutionscards.${solution.key}.description`)}
+              </p>
+            </div>
+          </Link>
+        </motion.div>
       ))}
     </div>
   );

@@ -241,7 +241,7 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className="p-0 sm:p-7 flex flex-col mt-10  md:justify-start gap-7 h-[488px] md:h-[360px]"
+            className="p-0 sm:p-7 flex flex-col mt-10 w-xs md:w-sm md:justify-start gap-7 h-[488px] md:h-[360px]"
           >
             {currentQs.map((q, idx) => (
               <div key={q.id} className="flex flex-col gap-5">

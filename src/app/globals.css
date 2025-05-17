@@ -148,6 +148,39 @@
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-one>*,
+.bg-two>* {
+  position: relative;
+  z-index: 1;
+}
+
+
+@-moz-document url-prefix() {
+
+  .bg-one,
+  .bg-two {
+    background-image: none;
+  }
+
+  .bg-one::before,
+  .bg-two::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/backgrounds/noise-ff.svg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #1717177a;
+    z-index: 0;
+    pointer-events: none;
+  }
 }
 
 .flash {

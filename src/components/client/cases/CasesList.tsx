@@ -80,14 +80,14 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
-          className="rounded-lg overflow-hidden bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-300"
+          className="rounded-xl overflow-hidden bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300"
         >
           <div className="relative h-60">
             <Image
               src={item.image || FALLBACK_IMAGE}
               alt={item.company}
               fill
-              className="object-cover hover:scale-105 transition-transform duration-300"
+              className="object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300"
             />
           </div>
           <div className="p-5 flex flex-col justify-evenly h-52">

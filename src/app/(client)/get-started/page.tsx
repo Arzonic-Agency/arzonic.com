@@ -24,7 +24,7 @@ const GetStarted = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <div className="h-full md:w-1/2">
+        <div className="h-full w-full md:w-1/2">
           <PriceEstimator />
         </div>
         <div className="hidden md:flex md:w-1/2 md:h-full justify-center items-center relative">

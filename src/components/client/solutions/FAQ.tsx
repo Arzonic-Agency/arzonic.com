@@ -6,14 +6,14 @@ const FAQ = () => {
 
   return (
     <div className="w-full h-full py-10">
-      <div className="flex flex-col gap-10 sm:gap-16 md:gap-20 justify-center items-center h-full w-full">
-        <h2 className="text-xl md:text-4xl md:font-semibold">
+      <div className="flex flex-col gap-10 sm:gap-16 justify-center items-center h-full w-full">
+        <h2 className="text-xl sm:text-xl md:text-3xl font-light">
           {t("faq.title")}
         </h2>
         <div className="flex flex-col gap-4 md:gap-6 w-full justify-center items-center">
           <div className="collapse collapse-arrow shadow-sm max-w-[650px] w-full bg-base-200">
             <input type="radio" name="my-accordion-1" />
-            <div className="collapse-title text-base md:text-lg font-semibold">
+            <div className="collapse-title text-base md:text-lg font-medium">
               {t("faq.q1.title")}
             </div>
             <div className="collapse-content">
@@ -24,7 +24,7 @@ const FAQ = () => {
           </div>
           <div className="collapse collapse-arrow shadow-sm max-w-[650px] w-full bg-base-200">
             <input type="radio" name="my-accordion-1" />
-            <div className="collapse-title text-base md:text-lg font-semibold">
+            <div className="collapse-title text-base md:text-lg font-medium">
               {t("faq.q2.title")}
             </div>
             <div className="collapse-content">
@@ -35,7 +35,7 @@ const FAQ = () => {
           </div>
           <div className="collapse collapse-arrow shadow-sm max-w-[650px] w-full bg-base-200">
             <input type="radio" name="my-accordion-1" />
-            <div className="collapse-title text-base md:text-lg  font-semibold">
+            <div className="collapse-title text-base md:text-lg font-medium">
               {t("faq.q3.title")}
             </div>
             <div className="collapse-content">
@@ -46,7 +46,7 @@ const FAQ = () => {
           </div>
           <div className="collapse collapse-arrow shadow-sm max-w-[650px] w-full bg-base-200">
             <input type="radio" name="my-accordion-1" />
-            <div className="collapse-title text-base md:text-lg font-semibold">
+            <div className="collapse-title text-base md:text-lg font-font-medium">
               {t("faq.q4.title")}
             </div>
             <div className="collapse-content">
