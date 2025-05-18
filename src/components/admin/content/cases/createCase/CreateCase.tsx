@@ -107,24 +107,6 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
               )}
             </fieldset>
 
-            {/* Website input */}
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
-              <legend className="fieldset-legend">{t("website_url")}</legend>
-              <input
-                name="website"
-                type="url"
-                className="input input-bordered input-md"
-                placeholder={t("write_website_url")}
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-              />
-              {errors.website && (
-                <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.website}
-                </span>
-              )}
-            </fieldset>
-
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("contact_person")}</legend>
               <input
@@ -202,7 +184,22 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 </span>
               )}
             </fieldset>
-
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("website_url")}</legend>
+              <input
+                name="website"
+                type="url"
+                className="input input-bordered input-md"
+                placeholder={t("write_website_url")}
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+              {errors.website && (
+                <span className="absolute -bottom-4 text-xs text-red-500">
+                  {errors.website}
+                </span>
+              )}
+            </fieldset>
             <fieldset className="flex flex-col gap-2 relative w-full fieldset">
               <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input

@@ -16,6 +16,7 @@ const UpdateCase = ({
   const [image, setImage] = useState<File | null>(null);
   const [contact, setContact] = useState("");
   const [country, setCountry] = useState("");
+  const [website, setWebsite] = useState("");
 
   const [existingImage, setExistingImage] = useState<string | null>(null);
 
@@ -27,6 +28,7 @@ const UpdateCase = ({
     image: "",
     created_at: "",
     contact: "",
+    website: "",
   });
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -46,6 +48,7 @@ const UpdateCase = ({
         setCountry(caseData.country || "");
         setExistingImage(caseData.image || null);
         setContact(caseData.contact || "");
+        setWebsite(caseData.website || "");
 
         setCreatedAt(
           caseData.created_at
@@ -73,6 +76,7 @@ const UpdateCase = ({
         image: "",
         created_at: "",
         contact: !contact ? t("contact_person_required") : "",
+        website: "",
       });
       setLoading(false);
       return;
@@ -86,6 +90,7 @@ const UpdateCase = ({
       formData.append("city", city);
       formData.append("country", country);
       formData.append("contact", contact);
+      formData.append("website", website);
 
       formData.append("createdAt", createdAt);
 
@@ -99,7 +104,8 @@ const UpdateCase = ({
         country,
         contact,
         image || undefined,
-        createdAt
+        createdAt,
+        website
       );
 
       onCaseUpdated();
@@ -240,6 +246,22 @@ const UpdateCase = ({
               {errors.country && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
                   {errors.country}
+                </span>
+              )}
+            </fieldset>
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+              <legend className="fieldset-legend">{t("website_url")}</legend>
+              <input
+                name="website"
+                type="url"
+                className="input input-bordered input-md"
+                placeholder={t("write_website_url")}
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+              {errors.website && (
+                <span className="absolute -bottom-4 text-xs text-red-500">
+                  {errors.website}
                 </span>
               )}
             </fieldset>

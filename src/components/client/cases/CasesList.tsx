@@ -1,9 +1,11 @@
 "use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
+import Link from "next/link";
 
 interface CasesListProps {
   page: number;
@@ -17,6 +19,7 @@ interface CaseItem {
   image?: string;
   city: string;
   created_at: string;
+  website: string;
 }
 
 const FALLBACK_IMAGE = "/demo.jpg";
@@ -73,7 +76,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 p-1 md:p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-1 md:p-4">
       {caseItems.map((item, index) => (
         <motion.article
           key={item.id}
@@ -82,25 +85,27 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
           transition={{ delay: index * 0.1, duration: 0.4 }}
           className="rounded-xl overflow-hidden bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300"
         >
-          <div className="relative h-60">
-            <Image
-              src={item.image || FALLBACK_IMAGE}
-              alt={item.company}
-              fill
-              className="object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300"
-            />
-          </div>
-          <div className="p-5 flex flex-col justify-evenly h-52">
-            <h3 className="text-lg font-bold">{item.company}</h3>
-            <p className="text-sm text-zinc-400 line-clamp-3">{item.desc}</p>
-            <div className="text-xs text-zinc-500 flex justify-between pt-4">
-              <span>{formatDate(item.created_at)}</span>
-              <span className="flex items-center gap-1">
-                <FaLocationDot className="text-zinc-400" />
-                {item.city}
-              </span>
+          <Link href={item.website || "/cases"} className="w-full h-full block">
+            <div className="relative h-64">
+              <Image
+                src={item.image || FALLBACK_IMAGE}
+                alt={item.company}
+                fill
+                className="object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300"
+              />
             </div>
-          </div>
+            <div className="p-5 flex flex-col justify-evenly h-52">
+              <h3 className="text-lg font-bold">{item.company}</h3>
+              <p className="text-sm text-zinc-400 line-clamp-3">{item.desc}</p>
+              <div className="text-xs text-zinc-500 flex justify-between pt-4">
+                <span>{formatDate(item.created_at)}</span>
+                <span className="flex items-center gap-1">
+                  <FaLocationDot className="text-zinc-400" />
+                  {item.city}
+                </span>
+              </div>
+            </div>
+          </Link>
         </motion.article>
       ))}
     </div>

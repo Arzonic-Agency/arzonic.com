@@ -1,4 +1,3 @@
-// app/client/about/page.tsx
 import { Metadata } from "next";
 import SolutionsPage from "./SolutionsPage";
 
