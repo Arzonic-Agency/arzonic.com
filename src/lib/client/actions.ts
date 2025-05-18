@@ -78,14 +78,11 @@ export async function createRequest(
   const supabase = createClient();
 
   try {
-    // Hent brugerens IP-adresse
     const ipResponse = await fetch("https://api64.ipify.org?format=json");
     const ipData = await ipResponse.json();
     const ipAddress = ipData.ip;
 
     const consentTimestamp = consent ? new Date().toISOString() : null;
-
-    // Indsæt data i databasen
     const { error } = await supabase.from("requests").insert([
       {
         name,

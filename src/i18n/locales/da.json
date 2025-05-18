@@ -721,5 +721,20 @@
       "seeMoreSolutions": "Se flere løsninger",
       "getStarted": "Få et tilbud"
     }
+  },
+  "SEO": {
+    "title": "Arzonic",
+    "titleAbout": "Om os",
+    "titleSolutions": "Løsninger",
+    "titleCases": "Cases",
+    "titleContact": "Kontakt os",
+    "titleGetStarted": "Prisberegner",
+    "titleJobs": "Jobs",
+    "titleCustomsWebsites": "Tilpassede Hjemmesider",
+    "titleJobsWebApplictions": "Webapplikationer",
+    "titleJobs3DVisualization": "3D-Visualisering",
+    "titleJobsDesignAndAnimation": "Design & Animation",
+    "description": "Vi bygger lynhurtige hjemmesider og engagerende oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov",
+    "keywords": "webbureau, hjemmesider, webapplikationer, 3D-visualisering, digitalt bureau, UI/UX design, frontend udvikling"
   }
 }

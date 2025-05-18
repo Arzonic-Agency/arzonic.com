@@ -5,6 +5,7 @@ import { FaAngleUp } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
+import { DefaultSeo } from "next-seo";
 
 export default function ClientLayout({
   children,
@@ -33,6 +34,17 @@ export default function ClientLayout({
         defer
         src="https://stats.arzonic.com/script.js"
         data-website-id="3226dc67-1feb-4d8c-9f6d-75f7dd0d23d7"
+      />
+      <DefaultSeo
+        titleTemplate="%s - Arzonic"
+        defaultTitle="Arzonic"
+        description="We build blazing-fast websites and immersive 3D experiences."
+        openGraph={{
+          type: "website",
+          locale: "en_US",
+          url: "https://arzonic.com",
+          siteName: "Arzonic",
+        }}
       />
       <div className="sm:h-lvh h-dvh max-w-screen-2xl mx-auto pt-[64px] md:pt-[101px] ">
         <header>

@@ -717,5 +717,20 @@
       "seeMoreSolutions": "See more solutions",
       "getStarted": "Get started"
     }
+  },
+  "SEO": {
+    "title": "Arzonic",
+    "titleAbout": "About Us",
+    "titleSolutions": "Solutions",
+    "titleCases": "Cases",
+    "titleContact": "Contact Us",
+    "titleGetStarted": "Price Calculator",
+    "titleJobs": "Careers",
+    "titleCustomsWebsites": "Custom Websites",
+    "titleJobsWebApplictions": "Web Applications",
+    "titleJobs3DVisualization": "3D Visualization",
+    "titleJobsDesignAndAnimation": "Design & Animation",
+    "description": "We build blazing-fast websites and engaging experiences using custom-built technology – always modern, always tailored to your needs",
+    "keywords": "web agency, websites, web applications, 3D visualization, digital agency, UI/UX design, frontend development"
   }
 }

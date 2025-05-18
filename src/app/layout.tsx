@@ -11,7 +11,7 @@ const outfitSans = Outfit({
 export const metadata: Metadata = {
   title: {
     default: "Arzonic",
-    template: "%s | Arzonic",
+    template: "%s - Arzonic",
   },
   description:
     "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
@@ -25,10 +25,10 @@ export const metadata: Metadata = {
     siteName: "Arzonic",
     images: [
       {
-        url: "/custom-websites.jpg",
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "Arzonic preview image",
+        alt: "Arzonic OpenGraph preview",
       },
     ],
     type: "website",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Arzonic",
     description:
       "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
-    images: ["/custom-websites.jpg"],
+    images: ["/opengraph-image.png"],
   },
   icons: {
     icon: "/favicon.png",
@@ -46,7 +46,6 @@ export const metadata: Metadata = {
     apple: "/favicon.png",
   },
 };
-
 export const viewport: Viewport = {
   themeColor: "#171717",
 };
