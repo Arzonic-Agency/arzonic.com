@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 Arzonic – Danish Modern Web Agency
 
-## Getting Started
+**Arzonic** is a modern digital agency specializing in custom web applications, immersive 3D experiences, and performance-focused solutions. This repository contains the official agency website, built with cutting-edge technology and a strong focus on design, speed, and flexibility.
 
-First, run the development server:
+---
 
+## 🚀 Tech Stack
+
+| Technology         | Purpose                                         |
+|--------------------|-------------------------------------------------|
+| **Next.js (App Router)** | React-based SSR/SSG routing              |
+| **React**           | Interactive UI components                     |
+| **Tailwind CSS**    | Utility-first styling and responsive layouts  |
+| **Supabase**        | Headless backend and database (case data)     |
+| **i18next**         | Internationalization (English/Danish)         |
+| **Framer Motion**   | Animations and interactive transitions        |
+| **WebGL / 3D**      | Real-time 3D visual elements                  |
+| **Next SEO / Metadata API** | Dynamic SEO per page               |
+| **Umami Analytics** | Privacy-friendly visitor tracking             |
+
+---
+
+## ✨ Features
+
+- 📦 **Pricing comparison** with interactive package table
+- 🧩 **Dynamic SEO** using Next.js metadata API
+- 🌍 **Multilingual** support (Danish / English) via i18next
+- 🧑‍💻 **Case system** powered by Supabase backend
+- 🌀 **Custom 3D visuals** and scroll animations
+- 📱 **Responsive** and highly optimized performance
+- 🧠 **Structured layout** with shared header, footer and scroll-to-top button
+
+---
+
+## 🧪 Local Setup
+
+1. **Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/arzonic.git
+cd arzonic
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**
+```bash
+npm install
+# or
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Create `.env.local`**
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Start the development server**
+```bash
+npm run dev
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🌐 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The project is production-ready and can be deployed on Vercel, a VPS, or any Node.js-compatible hosting provider.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Fully SEO-optimized
+- Server-side rendered
+- Automatic locale routing
+- Lightweight analytics with Umami
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/` – App Router with layouts, pages, and metadata
+- `components/` – Reusable UI components
+- `lib/` – Supabase and API utility functions
+- `i18n/` – Language config and translation files
+- `public/` – Static assets and SEO files
+
+---
+
+## 📣 Contact
+
+Developed by [Arzonic](https://arzonic.com/about)  
+Specializing in custom web and 3D experiences — built from scratch, without limitations.
+
+---
