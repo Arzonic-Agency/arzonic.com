@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌐 Arzonic – Modern Web & 3D Agency Website
 
-## Getting Started
+**Arzonic** er et moderne digitalt bureau, specialiseret i skræddersyede webapplikationer, 3D-visualisering og performance-fokuserede webløsninger. Dette repository indeholder det officielle website – bygget med cutting-edge teknologi og høj fokus på design, brugervenlighed og hastighed.
 
-First, run the development server:
+---
 
+## 🚀 Teknologistack
+
+| Teknologi         | Anvendelse                                |
+|-------------------|--------------------------------------------|
+| **Next.js (App Router)** | Moderne React-baseret SSR/SSG-routing  |
+| **React**         | UI-komponenter med interaktiv logik        |
+| **Tailwind CSS**  | Utility-first styling & responsive layout  |
+| **Supabase**      | Headless backend og database (cases m.m.)  |
+| **i18next**       | Internationalisering (dansk/engelsk)       |
+| **Framer Motion** | Animationer og interaktioner               |
+| **WebGL / 3D**    | Interaktive 3D-elementer og visualisering  |
+| **Next SEO / Metadata API** | Dynamisk SEO for hver side          |
+| **Umami**         | Privacy-friendly web analytics              |
+
+---
+
+## ✨ Funktioner
+
+- 📦 **Pakke-sammenligning** med interaktiv prisskema
+- 🧩 **Dynamisk SEO** (metadata per side)
+- 🌍 **Flersproget** (dansk / engelsk) via i18next
+- 🧑‍💻 **Case-system** med Supabase-integration
+- 🌀 **Custom 3D-visualisering** og scroll-effekter
+- 📱 **Responsivt og performance-optimeret**
+- 🧠 **Tilpasset layout** med fælles header/footer & scroll-to-top
+
+---
+
+## 🧪 Lokalt setup
+
+1. **Klon projektet**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/dit-brugernavn/arzonic.git
+cd arzonic
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Installer dependencies**
+```bash
+npm install
+# eller
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Opret `.env.local`**
+```env
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Start udviklingsserver**
+```bash
+npm run dev
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🌐 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Projektet er klar til production hosting på Vercel, VPS eller anden Node.js-platform.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- SEO-friendly
+- Server-side rendered
+- Automatisk i18n-routing
+- Letvægts analytik med Umami
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Strukturelle noter
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/` – App Router med layouts, pages og SEO-metadata
+- `components/` – Genanvendelige UI-komponenter
+- `lib/` – Supabase og API helpers
+- `i18n/` – Konfiguration og oversættelser
+- `public/` – Assets og metadatafiler
+
+---
+
+## 📣 Kontakt
+
+Udviklet af [Arzonic](https://arzonic.com)  
+Moderne digitale løsninger – fra websites til 3D, helt uden skabeloner.
+
+---
