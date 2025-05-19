@@ -1,4 +1,4 @@
-# 🌐 Arzonic – Modern Web & 3D Agency Website
+# 🌐 Arzonic – Danish Modern Web Agency
 
 **Arzonic** er et moderne digitalt bureau, specialiseret i skræddersyede webapplikationer, 3D-visualisering og performance-fokuserede webløsninger. Dette repository indeholder det officielle website – bygget med cutting-edge teknologi og høj fokus på design, brugervenlighed og hastighed.
 
