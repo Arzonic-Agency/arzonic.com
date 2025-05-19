@@ -1,6 +1,6 @@
 # 🌐 Arzonic – Danish Modern Web Agency
 
-**Arzonic** is a danish modern digital agency specializing in custom web applications, immersive 3D experiences, and performance-focused solutions. This repository contains the official agency website, built with cutting-edge technology and a strong focus on design, speed, and flexibility.
+**Arzonic** is a modern digital agency specializing in custom web applications, immersive 3D experiences, and performance-focused solutions. This repository contains the official agency website, built with cutting-edge technology and a strong focus on design, speed, and flexibility.
 
 ---
 
