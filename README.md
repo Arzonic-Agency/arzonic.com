@@ -83,7 +83,7 @@ The project is production-ready and can be deployed on Vercel, a VPS, or any Nod
 
 ## 📣 Contact
 
-Developed by [Arzonic](https://arzonic.com)  
+Developed by [Arzonic](https://arzonic.com/about)  
 Specializing in custom web and 3D experiences — built from scratch, without limitations.
 
 ---
