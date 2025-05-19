@@ -74,7 +74,7 @@ const Prices: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full relative">
       {/* Title & subtitle */}
-      <div className="flex flex-col items-center gap-3 mb-10">
+      <div className="flex flex-col items-center gap-5 mb-7">
         <h3 className="text-2xl md:text-3xl text-primary font-light">
           {t("Pricing.title")}
         </h3>
@@ -198,7 +198,7 @@ const Prices: React.FC = () => {
           <div className="absolute left-0 bottom-0 w-[320px] rounded-2xl flash h-8 -z-10" />
         </div>
       </motion.div>
-
+      <p className="text-xs text-zinc-500">{t("Pricing.vatNote")}</p>
       {/* CTA */}
       <div className="flex flex-col items-center justify-center gap-5 mt-10">
         <h3 className="text-lg">{t("customQuotePrompt")}</h3>

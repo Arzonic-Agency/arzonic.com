@@ -313,7 +313,8 @@
   },
   "Pricing": {
     "title": "Flexible Packages, Clear Pricing",
-    "subtitle": "Choose a solution that fits your needs and budget – no surprises, just results"
+    "subtitle": "Choose a solution that fits your needs and budget – no surprises, just results",
+    "vatNote": "All prices are excl. VAT"
   },
   "OfferForm": {
     "title": "Request a custom quote",
@@ -624,6 +625,47 @@
     "q4": {
       "title": "What if I need new features later?",
       "answer": "We build with scalability in mind. It's easy to add features or expand the solution later, and we're happy to help – whether it's bookings, integrations, e-commerce or something else."
+    }
+  },
+  "pricingComparison": {
+    "title": "Compare our plans",
+    "table": {
+      "featureColumn": "Feature / Package"
+    },
+    "startingFrom": "Starting from {{price}}",
+    "vatNote": "All prices are excl. VAT",
+    "legend": "Included | – Not included in standard package",
+    "features": {
+      "customDesign": "Custom design",
+      "responsive": "Responsive and fast",
+      "seo": "SEO setup",
+      "cms": "CMS / Editable content",
+      "login": "User login and access",
+      "booking": "Booking / Webshop / Mail system",
+      "dashboard": "Admin dashboard",
+      "database": "Database integration",
+      "3d": "3D elements and animations",
+      "scroll": "Scroll effects and parallax"
+    },
+    "plans": {
+      "start": {
+        "name": "Starter Site",
+        "price": "7,000 DKK",
+        "seo": "Basic",
+        "cms": "Simple"
+      },
+      "app": {
+        "name": "Web Application",
+        "price": "13,000 DKK",
+        "seo": "Advanced",
+        "cms": "Advanced"
+      },
+      "premium": {
+        "name": "3D Premium",
+        "price": "16,000 DKK",
+        "seo": "Advanced",
+        "cms": "Advanced"
+      }
     }
   },
   "jobsPage": {

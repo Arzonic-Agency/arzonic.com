@@ -311,7 +311,8 @@
   },
   "Pricing": {
     "title": "Fleksible Pakker, Gennemsigtige Priser",
-    "subtitle": "Vælg en løsning der passer til dine behov og dit budget – ingen overraskelser, kun resultater"
+    "subtitle": "Vælg en løsning der passer til dine behov og dit budget – ingen overraskelser, kun resultater",
+    "vatNote": "Alle priser er ekskl. moms"
   },
   "OfferForm": {
     "title": "Få et skræddersyet tilbud",
@@ -628,6 +629,47 @@
     "q4": {
       "title": "Hvad hvis jeg har brug for nye funktioner senere?",
       "answer": "Vi bygger med fremtiden i mente. Det er nemt at tilføje funktioner eller tilpasse løsningen senere, og vi tilbyder gerne videreudvikling – uanset om det er booking, integrationer, e-commerce eller noget andet."
+    }
+  },
+  "pricingComparison": {
+    "title": "Sammenlign vores pakker",
+    "table": {
+      "featureColumn": "Funktion / Pakke"
+    },
+    "startingFrom": "Starter fra {{price}}",
+    "vatNote": "Alle priser er ekskl. moms",
+    "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
+    "features": {
+      "customDesign": "Tilpasset design",
+      "responsive": "Responsiv og hurtig",
+      "seo": "SEO-opsætning",
+      "cms": "CMS / Redigerbart indhold",
+      "login": "Login og brugerstyring",
+      "booking": "Booking / Webshop / Mailsystem",
+      "dashboard": "Admin-dashboard",
+      "database": "Databaseintegration",
+      "3d": "3D-elementer og animation",
+      "scroll": "Scroll-effekter og parallax"
+    },
+    "plans": {
+      "start": {
+        "name": "Startside",
+        "price": "7.000 kr.",
+        "seo": "Grundlæggende",
+        "cms": "Simpelt"
+      },
+      "app": {
+        "name": "Webapplikation",
+        "price": "13.000 kr.",
+        "seo": "Udvidet",
+        "cms": "Avanceret"
+      },
+      "premium": {
+        "name": "3D Premium",
+        "price": "16.000 kr.",
+        "seo": "Udvidet",
+        "cms": "Avanceret"
+      }
     }
   },
   "jobsPage": {

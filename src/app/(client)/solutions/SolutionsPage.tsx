@@ -2,6 +2,7 @@
 
 import Prices from "@/components/client/home/Prices";
 import FAQ from "@/components/client/solutions/FAQ";
+import OverviewServices from "@/components/client/solutions/PricingComparison";
 import SolutionCards from "@/components/client/solutions/SolutionCards";
 import { NextSeo } from "next-seo";
 import React from "react";
@@ -39,10 +40,10 @@ const SolutionsPage = () => {
             </span>
           </h1>
         </div>
-        <div className="flex flex-col justify-center gap-15 mt-10">
+        <div className="flex flex-col justify-center gap-10 md:gap-15 xl:gap-28 mt-10">
           <SolutionCards />
           <FAQ />
-          <Prices />
+          <OverviewServices />
         </div>
       </div>
     </>
