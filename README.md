@@ -1,59 +1,59 @@
-# 🌐 Arzonic – Danish Modern Web Agency
+# 🌐 Arzonic – Modern Web & 3D Agency Website
 
-**Arzonic** er et moderne digitalt bureau, specialiseret i skræddersyede webapplikationer, 3D-visualisering og performance-fokuserede webløsninger. Dette repository indeholder det officielle website – bygget med cutting-edge teknologi og høj fokus på design, brugervenlighed og hastighed.
-
----
-
-## 🚀 Teknologistack
-
-| Teknologi         | Anvendelse                                |
-|-------------------|--------------------------------------------|
-| **Next.js (App Router)** | Moderne React-baseret SSR/SSG-routing  |
-| **React**         | UI-komponenter med interaktiv logik        |
-| **Tailwind CSS**  | Utility-first styling & responsive layout  |
-| **Supabase**      | Headless backend og database (cases m.m.)  |
-| **i18next**       | Internationalisering (dansk/engelsk)       |
-| **Framer Motion** | Animationer og interaktioner               |
-| **WebGL / 3D**    | Interaktive 3D-elementer og visualisering  |
-| **Next SEO / Metadata API** | Dynamisk SEO for hver side          |
-| **Umami**         | Privacy-friendly web analytics              |
+**Arzonic** is a modern digital agency specializing in custom web applications, immersive 3D experiences, and performance-focused solutions. This repository contains the official agency website, built with cutting-edge technology and a strong focus on design, speed, and flexibility.
 
 ---
 
-## ✨ Funktioner
+## 🚀 Tech Stack
 
-- 📦 **Pakke-sammenligning** med interaktiv prisskema
-- 🧩 **Dynamisk SEO** (metadata per side)
-- 🌍 **Flersproget** (dansk / engelsk) via i18next
-- 🧑‍💻 **Case-system** med Supabase-integration
-- 🌀 **Custom 3D-visualisering** og scroll-effekter
-- 📱 **Responsivt og performance-optimeret**
-- 🧠 **Tilpasset layout** med fælles header/footer & scroll-to-top
+| Technology         | Purpose                                         |
+|--------------------|-------------------------------------------------|
+| **Next.js (App Router)** | React-based SSR/SSG routing              |
+| **React**           | Interactive UI components                     |
+| **Tailwind CSS**    | Utility-first styling and responsive layouts  |
+| **Supabase**        | Headless backend and database (case data)     |
+| **i18next**         | Internationalization (English/Danish)         |
+| **Framer Motion**   | Animations and interactive transitions        |
+| **WebGL / 3D**      | Real-time 3D visual elements                  |
+| **Next SEO / Metadata API** | Dynamic SEO per page               |
+| **Umami Analytics** | Privacy-friendly visitor tracking             |
 
 ---
 
-## 🧪 Lokalt setup
+## ✨ Features
 
-1. **Klon projektet**
+- 📦 **Pricing comparison** with interactive package table
+- 🧩 **Dynamic SEO** using Next.js metadata API
+- 🌍 **Multilingual** support (Danish / English) via i18next
+- 🧑‍💻 **Case system** powered by Supabase backend
+- 🌀 **Custom 3D visuals** and scroll animations
+- 📱 **Responsive** and highly optimized performance
+- 🧠 **Structured layout** with shared header, footer and scroll-to-top button
+
+---
+
+## 🧪 Local Setup
+
+1. **Clone the repository**
 ```bash
-git clone https://github.com/dit-brugernavn/arzonic.git
+git clone https://github.com/your-username/arzonic.git
 cd arzonic
 ```
 
-2. **Installer dependencies**
+2. **Install dependencies**
 ```bash
 npm install
-# eller
+# or
 pnpm install
 ```
 
-3. **Opret `.env.local`**
+3. **Create `.env.local`**
 ```env
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-4. **Start udviklingsserver**
+4. **Start the development server**
 ```bash
 npm run dev
 ```
@@ -62,28 +62,28 @@ npm run dev
 
 ## 🌐 Deployment
 
-Projektet er klar til production hosting på Vercel, VPS eller anden Node.js-platform.
+The project is production-ready and can be deployed on Vercel, a VPS, or any Node.js-compatible hosting provider.
 
-- SEO-friendly
+- Fully SEO-optimized
 - Server-side rendered
-- Automatisk i18n-routing
-- Letvægts analytik med Umami
+- Automatic locale routing
+- Lightweight analytics with Umami
 
 ---
 
-## 📁 Strukturelle noter
+## 📁 Project Structure
 
-- `app/` – App Router med layouts, pages og SEO-metadata
-- `components/` – Genanvendelige UI-komponenter
-- `lib/` – Supabase og API helpers
-- `i18n/` – Konfiguration og oversættelser
-- `public/` – Assets og metadatafiler
+- `app/` – App Router with layouts, pages, and metadata
+- `components/` – Reusable UI components
+- `lib/` – Supabase and API utility functions
+- `i18n/` – Language config and translation files
+- `public/` – Static assets and SEO files
 
 ---
 
-## 📣 Kontakt
+## 📣 Contact
 
-Udviklet af [Arzonic](https://arzonic.com)  
-Moderne digitale løsninger – fra websites til 3D, helt uden skabeloner.
+Made with ❤️ by [Arzonic](https://arzonic.com)  
+We craft tailored web and 3D solutions – without templates, without limits.
 
 ---
