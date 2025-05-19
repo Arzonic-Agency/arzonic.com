@@ -10,7 +10,7 @@ const FAQ = () => {
         <h2 className="text-xl sm:text-xl md:text-3xl font-light">
           {t("faq.title")}
         </h2>
-        <div className="flex flex-col gap-4 md:gap-6 w-full justify-center items-center">
+        <div className="flex flex-col gap-4 md:gap-6 w-full h-[400px] justify-start items-center">
           <div className="collapse collapse-arrow shadow-sm max-w-[650px] w-full bg-base-200">
             <input type="radio" name="my-accordion-1" />
             <div className="collapse-title text-base md:text-lg font-medium">

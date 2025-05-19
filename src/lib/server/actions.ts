@@ -18,9 +18,14 @@ export async function createMember(data: {
   role: "editor" | "admin";
   name: string;
 }) {
-  const supabase = await createServerClientInstance();
+  const supabase = await createAdminClient();
 
   try {
+    // Ensure the Supabase admin client is properly configured
+    if (!supabase.auth.admin) {
+      throw new Error("Supabase admin client is not configured correctly.");
+    }
+
     const createResult = await supabase.auth.admin.createUser({
       email: data.email,
       password: data.password,
@@ -32,6 +37,14 @@ export async function createMember(data: {
 
     if (createResult.error) {
       console.error("Failed to create user:", createResult.error.message);
+
+      // Provide more context for the error
+      if (createResult.error.message.includes("not allowed")) {
+        throw new Error(
+          "Failed to create user: Insufficient permissions or invalid configuration."
+        );
+      }
+
       throw new Error("Failed to create user: " + createResult.error.message);
     }
 

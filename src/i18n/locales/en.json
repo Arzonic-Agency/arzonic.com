@@ -632,6 +632,8 @@
     "table": {
       "featureColumn": "Feature / Package"
     },
+    "title-btn": "Ready to find your plan?",
+    "text-btn": "Get Started",
     "startingFrom": "Starting from {{price}}",
     "vatNote": "All prices are excl. VAT",
     "legend": "Included | – Not included in standard package",

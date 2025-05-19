@@ -11,7 +11,7 @@ import Present from "@/components/client/home/Present";
 import CallToAction from "@/components/client/home/CallToAction";
 import Image from "next/image";
 
-const Home = () => {
+const HomePage = () => {
   const [isSticky, setIsSticky] = useState(false);
 
   return (
@@ -76,4 +76,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

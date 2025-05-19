@@ -636,6 +636,8 @@
     "table": {
       "featureColumn": "Funktion / Pakke"
     },
+    "title-btn": "Klar til at komme i gang?",
+    "text-btn": "Find din pakke",
     "startingFrom": "Starter fra {{price}}",
     "vatNote": "Alle priser er ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
