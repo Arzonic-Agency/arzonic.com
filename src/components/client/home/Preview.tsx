@@ -17,13 +17,13 @@ const Preview = () => {
           {t("Preview.subtitle")}
         </span>
       </div>
-      <div className="relative w-full max-w-[900px] aspect-video mx-auto rounded-2xl overflow-hidden">
+      <div className="relative w-full max-w-[900px] mx-auto rounded-2xl overflow-hidden">
         <Image
           src="/backgrounds/mockup-preview.png"
           alt="Eksempel på løsning"
           width={900}
-          height={506} // 16:9
-          className="w-full max-w-[900px] h-auto rounded-2xl shadow-md mx-auto"
+          height={0} // eller fjern, hvis du bruger `fill`
+          className="w-full h-auto rounded-2xl shadow-md mx-auto"
           sizes="(max-width: 640px) 90vw, (max-width: 1024px) 85vw, 900px"
           quality={75}
           priority
