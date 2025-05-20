@@ -17,6 +17,23 @@ export async function sendContactEmail(
 ): Promise<void> {
   // 1) Notify admin
   await transporter.sendMail({
+    from: `"Website Contact" <${process.env.FROM_EMAIL!}>`,
+    to: process.env.ADMIN_EMAIL!,
+    subject: `New contact form submission from ${name}`,
+    text: `You’ve received a new message:\n\nName: ${name}\nEmail: ${email}\n\n${message}`,
+    html: `
+      <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 24px; border-radius: 8px; font-family: Arial, sans-serif; color: #333333;">
+        <h2>New Contact Form Submission</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, "<br/>")}</p>
+      </div>
+    `,
+  });
+
+  // 2) Confirmation to user
+  await transporter.sendMail({
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
     subject: `We’ve received your message, ${name}!`,
@@ -33,22 +50,6 @@ export async function sendContactEmail(
     <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
   </div>
   `,
-  });
-
-  // 2) Confirmation to user
-  await transporter.sendMail({
-    from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
-    to: email,
-    subject: `We’ve received your message, ${name}!`,
-    text: `Hi ${name},\n\nThanks for reaching out! We’ll be in touch shortly.\n\n– Arzonic Agency`,
-    html: `
-     <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
-  </div>
-      <p>Hi ${name},</p>
-      <p>Thanks for reaching out! We’ll be in touch shortly.</p>
-      <p>– Arzonic Agency</p>
-    `,
   });
 }
 
