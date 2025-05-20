@@ -64,7 +64,7 @@ export async function sendEstimatorEmail(
   estimate: string,
   details: string,
   packageLabel: string,
-  lang: 'en' | 'da' = 'en'
+  lang: "en" | "da" = "en"
 ): Promise<void> {
   // 1) Build English templates
   const adminText = `Estimate request details:
@@ -80,7 +80,7 @@ ${details}`;
 <p><strong>Selected package:</strong> ${packageLabel}</p>
 <p><strong>Estimated Price:</strong> ${estimate}</p>
 <hr/>
-<p>${details.replace(/\n/g, '<br/>')}</p>`;
+<p>${details.replace(/\n/g, "<br/>")}</p>`;
 
   const userText = `Hi ${name},
 
@@ -98,7 +98,7 @@ Best,
 The Arzonic Team`;
   const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
   <div style="text-align: center; margin-bottom: 24px;">
-    <img src="https://arzonic.com/arzonic-logo.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
+    <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
   </div>
   <p>Hi ${name},</p>
   <p>Thanks for using our project estimator – we’re excited to learn more about your vision!</p>
@@ -122,9 +122,10 @@ The Arzonic Team`;
   await transporter.sendMail({
     from: `"New Client - Price Estimator" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
-    subject: lang === 'da'
-      ? `Ny tilbudsanmodning fra ${name}`
-      : `New estimate request from ${name}`,
+    subject:
+      lang === "da"
+        ? `Ny tilbudsanmodning fra ${name}`
+        : `New estimate request from ${name}`,
     text: adminTextTr,
     html: adminHtmlTr,
   });
@@ -133,11 +134,11 @@ The Arzonic Team`;
   await transporter.sendMail({
     from: `"Arzonic - Danish Modern Web Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
-    subject: lang === 'da'
-      ? `Dit forslag er klar, ${name}!`
-      : `Your project estimate is ready, ${name}`,
+    subject:
+      lang === "da"
+        ? `Dit forslag er klar, ${name}!`
+        : `Your project estimate is ready, ${name}`,
     text: userTextTr,
     html: userHtmlTr,
   });
 }
-

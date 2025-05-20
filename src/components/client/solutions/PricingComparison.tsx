@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase-browser";
 import Image from "next/image";
 
 interface DBPackage {
-  label: string; // e.g. "Starter Site", "Web Application", "3D Premium"
+  label: string;
   price_eur: number;
   price_dkk?: number;
 }
