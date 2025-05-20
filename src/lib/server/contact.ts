@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { translate } from "./deepl";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST!,
@@ -13,47 +14,93 @@ const transporter = nodemailer.createTransport({
 export async function sendContactEmail(
   name: string,
   email: string,
-  message: string
+  message: string,
+  lang: "en" | "da" = "en"
 ): Promise<void> {
-  // 1) Notify admin
+  const adminText = `You’ve received a new message:
+Name: ${name}
+Email: ${email}
+
+${message}`;
+
+  const adminHtml = `
+  <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 32px 24px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: Arial, sans-serif; color: #333;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
+      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="36" style="display: block;" />
+      <span style="font-size: 20px; font-weight: bold;">New Contact Message</span>
+    </div>
+    <p style="margin-bottom: 12px;"><strong>Name:</strong><br/>${name}</p>
+    <p style="margin-bottom: 12px;"><strong>Email:</strong><br/><a href="mailto:${email}" style="color: #2563eb;">${email}</a></p>
+    <p style="margin-bottom: 8px;"><strong>Message:</strong></p>
+    <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; line-height: 1.6;">
+      ${message.replace(/\n/g, "<br/>")}
+    </div>
+    <p style="font-size: 12px; color: #888; margin-top: 32px;">Sent via contact form on arzonic.com</p>
+  </div>`;
+
+  const userText = `Hi ${name},
+
+Thanks for reaching out! We’ll be in touch shortly.
+
+– Arzonic Agency`;
+
+  const userHtml = `
+  <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333; text-align: start;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
+      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="40" style="display: block;" />
+      <span style="font-size: 22px; font-weight: bold; color: #111;">Arzonic</span>
+    </div>
+    <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for your message, ${name}!</h2>
+    <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; margin: 16px 0;">
+      <p style="margin: 0; font-size: 16px; font-weight: 500;">
+        We’ve received your inquiry and will get back to you shortly.
+      </p>
+    </div>
+    <p>If you're curious already, feel free to try our project estimator and get a quick price range for your next idea:</p>
+    <div style="margin: 16px 0;">
+      <a href="https://arzonic.com/#priser" style="background-color: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
+        Try the estimator
+      </a>
+    </div>
+    <p style="font-size: 14px; color: #555;">Have questions or want to add more details? Just reply to this email or <a href="mailto:mail@arzonic.com" style="color: #2563eb;">contact us directly</a>.</p>
+    <p style="margin-top: 32px;">Best regards,<br/><strong>Arzonic Agency</strong></p>
+  </div>`;
+
+  // Translate if needed
+  const [adminTextTr, adminHtmlTr, userTextTr, userHtmlTr] =
+    lang === "en"
+      ? [adminText, adminHtml, userText, userHtml]
+      : await Promise.all([
+          translate(adminText, lang),
+          translate(adminHtml, lang),
+          translate(userText, lang),
+          translate(userHtml, lang),
+        ]);
+
+  // Send to admin
   await transporter.sendMail({
     from: `"Website Contact" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
-    subject: `New contact form submission from ${name}`,
-    text: `You’ve received a new message:\n\nName: ${name}\nEmail: ${email}\n\n${message}`,
-    html: `
-      <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 24px; border-radius: 8px; font-family: Arial, sans-serif; color: #333333;">
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br/>")}</p>
-      </div>
-    `,
+    subject:
+      lang === "da"
+        ? `Ny kontaktbesked fra ${name}`
+        : `New contact form submission from ${name}`,
+    text: adminTextTr,
+    html: adminHtmlTr,
   });
 
-  // 2) Confirmation to user
+  // Send to user
   await transporter.sendMail({
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
-    subject: `We’ve received your message, ${name}!`,
-    text: `Hi ${name},\n\nThanks for reaching out! We’ll be in touch shortly.\n\n– Arzonic Agency`,
-    html: `
-  <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
-    <div style="text-align: center; margin-bottom: 24px;">
-      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
-    </div>
-    <p>Hi ${name},</p>
-    <p>Thanks for reaching out to us – we appreciate your interest!</p>
-    <p>Our team will review your message and get back to you shortly.</p>
-    <p>If you have any further questions or details you'd like to add, feel free to reply directly to this email or <a href="mailto:mail@arzonic.com">contact us</a>.</p>
-    <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
-  </div>
-  `,
+    subject:
+      lang === "da"
+        ? `Vi har modtaget din besked, ${name}`
+        : `We’ve received your message, ${name}!`,
+    text: userTextTr,
+    html: userHtmlTr,
   });
 }
-
-import { translate } from "./deepl";
 
 /**
  * Sends estimate emails to admin and user, translating content via DeepL if needed.
