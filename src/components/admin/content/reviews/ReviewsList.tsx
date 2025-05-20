@@ -122,14 +122,18 @@ const ReviewsList = ({
       ) : (
         <ul className="flex flex-col gap-3">
           {items.map((r) => (
-            <li key={r.id} className="flex justify-between items-start">
+            <li key={r.id} className="flex justify-between items-center">
               <div className="flex-1">
                 <h3 className="font-semibold text-xs">
                   {r.contact}, {r.company}
                 </h3>
-                <p className="text-xs mt-1">{truncate(r.desc, 80)}</p>
+                <p className="text-xs mt-1 hidden lg:block">
+                  {truncate(r.desc, 80)}
+                </p>
               </div>
-              <ReviewsRating rate={r.rate} />
+              <div className="pr-5">
+                <ReviewsRating rate={r.rate} />
+              </div>
               <div className="flex gap-2">
                 <button
                   className="btn btn-sm"

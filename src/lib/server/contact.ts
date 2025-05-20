@@ -17,19 +17,22 @@ export async function sendContactEmail(
 ): Promise<void> {
   // 1) Notify admin
   await transporter.sendMail({
-    from: `"Website Contact" <${process.env.FROM_EMAIL!}>`,
-    to: process.env.ADMIN_EMAIL!,
-    subject: `New contact form submission from ${name}`,
-    text: `You’ve received a new message:\n\nName: ${name}\nEmail: ${email}\n\n${message}`,
+    from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
+    to: email,
+    subject: `We’ve received your message, ${name}!`,
+    text: `Hi ${name},\n\nThanks for reaching out! We’ll be in touch shortly.\n\n– Arzonic Agency`,
     html: `
-      <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 24px; border-radius: 8px; font-family: Arial, sans-serif; color: #333333;">
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br/>")}</p>
-      </div>
-    `,
+  <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
+    </div>
+    <p>Hi ${name},</p>
+    <p>Thanks for reaching out to us – we appreciate your interest!</p>
+    <p>Our team will review your message and get back to you shortly.</p>
+    <p>If you have any further questions or details you'd like to add, feel free to reply directly to this email or <a href="mailto:mail@arzonic.com">contact us</a>.</p>
+    <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
+  </div>
+  `,
   });
 
   // 2) Confirmation to user
@@ -39,6 +42,9 @@ export async function sendContactEmail(
     subject: `We’ve received your message, ${name}!`,
     text: `Hi ${name},\n\nThanks for reaching out! We’ll be in touch shortly.\n\n– Arzonic Agency`,
     html: `
+     <div style="text-align: center; margin-bottom: 24px;">
+    <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
+  </div>
       <p>Hi ${name},</p>
       <p>Thanks for reaching out! We’ll be in touch shortly.</p>
       <p>– Arzonic Agency</p>
@@ -119,7 +125,7 @@ The Arzonic Team`;
 
   // 3) Admin notification (subject localized)
   await transporter.sendMail({
-    from: `"New Client - Price Estimator" <${process.env.FROM_EMAIL!}>`,
+    from: `"New Client Request - Price Estimator" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
     subject:
       lang === "da"
@@ -131,7 +137,7 @@ The Arzonic Team`;
 
   // 4) User email (subject localized)
   await transporter.sendMail({
-    from: `"Arzonic - Danish Modern Web Agency" <${process.env.FROM_EMAIL!}>`,
+    from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
     subject:
       lang === "da"

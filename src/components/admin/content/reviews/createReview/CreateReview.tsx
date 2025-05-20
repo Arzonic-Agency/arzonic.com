@@ -94,7 +94,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
             <input
               type="text"
               className="input input-bordered input-md"
-              placeholder={t("write_company")}
+              placeholder={t("write_company_name")}
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
@@ -109,11 +109,11 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
 
         <div className="flex flex-col gap-2 relative w-full">
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">{t("contact")}</legend>
+            <legend className="fieldset-legend">{t("contact_person")}</legend>
             <input
               type="text"
               className="input input-bordered input-md"
-              placeholder={t("write_contact")}
+              placeholder={t("write_contact_person")}
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               required
