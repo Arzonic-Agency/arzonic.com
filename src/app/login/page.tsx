@@ -1,8 +1,8 @@
 "use client";
 
+import { login } from "@/lib/server/actions";
 import React, { useState } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa6";
-import { login } from "./actions";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
