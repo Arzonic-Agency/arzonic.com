@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { translate } from "./deepl";
+import { translateText, translateHtml } from "./deepl";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST!,
@@ -17,7 +17,6 @@ export async function sendContactEmail(
   message: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
-  // Default English content
   const adminText = `You’ve received a new message:
 Name: ${name}
 Email: ${email}
@@ -67,18 +66,22 @@ Thanks for reaching out! We’ll be in touch shortly.
     <p style="margin-top: 32px;">Best regards,<br/><strong>Arzonic Agency</strong></p>
   </div>`;
 
-  // Translate content if not in English
-  const [adminTextTr, adminHtmlTr, userTextTr, userHtmlTr] =
-    lang === "en"
-      ? [adminText, adminHtml, userText, userHtml]
-      : await Promise.all([
-          translate(adminText, lang),
-          translate(adminHtml, lang),
-          translate(userText, lang),
-          translate(userHtml, lang),
-        ]);
+  let adminTextTr = adminText;
+  let adminHtmlTr = adminHtml;
+  let userTextTr = userText;
+  let userHtmlTr = userHtml;
 
-  // Send to admin
+  if (lang !== "en") {
+    [adminTextTr, userTextTr] = await Promise.all([
+      translateText(adminText, lang),
+      translateText(userText, lang),
+    ]);
+    [adminHtmlTr, userHtmlTr] = await Promise.all([
+      translateHtml(adminHtml, lang),
+      translateHtml(userHtml, lang),
+    ]);
+  }
+
   await transporter.sendMail({
     from: `"Website Contact" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
@@ -90,7 +93,6 @@ Thanks for reaching out! We’ll be in touch shortly.
     html: adminHtmlTr,
   });
 
-  // Send to user
   await transporter.sendMail({
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
@@ -103,6 +105,7 @@ Thanks for reaching out! We’ll be in touch shortly.
   });
 }
 
+
 /**
  * Sends estimate emails to admin and user, translating content via DeepL if needed.
  * @param name - recipient name
@@ -112,6 +115,7 @@ Thanks for reaching out! We’ll be in touch shortly.
  * @param packageLabel - human-readable package name
  * @param lang - target language code (e.g. 'en' or 'da')
  */
+
 export async function sendEstimatorEmail(
   name: string,
   email: string,
@@ -120,7 +124,6 @@ export async function sendEstimatorEmail(
   packageLabel: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
-  // 1) Build English templates
   const adminText = `Estimate request details:
 Name: ${name}
 Email: ${email}
@@ -128,6 +131,7 @@ Selected package: ${packageLabel}
 Estimated Price: ${estimate}
 
 ${details}`;
+
   const adminHtml = `<h2>New Estimate Request</h2>
 <p><strong>Name:</strong> ${name}</p>
 <p><strong>Email:</strong> ${email}</p>
@@ -150,6 +154,7 @@ If you have any questions, ideas, or just want to chat, reply directly to this e
 
 Best,
 The Arzonic Team`;
+
   const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
   <div style="text-align: center; margin-bottom: 24px;">
     <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
@@ -164,15 +169,22 @@ The Arzonic Team`;
   <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
 </div>`;
 
-  // 2) Translate if not English
-  const [adminTextTr, adminHtmlTr, userTextTr, userHtmlTr] = await Promise.all([
-    translate(adminText, lang),
-    translate(adminHtml, lang),
-    translate(userText, lang),
-    translate(userHtml, lang),
-  ]);
+  let adminTextTr = adminText;
+  let adminHtmlTr = adminHtml;
+  let userTextTr = userText;
+  let userHtmlTr = userHtml;
 
-  // 3) Admin notification (subject localized)
+  if (lang !== "en") {
+    [adminTextTr, userTextTr] = await Promise.all([
+      translateText(adminText, lang),
+      translateText(userText, lang),
+    ]);
+    [adminHtmlTr, userHtmlTr] = await Promise.all([
+      translateHtml(adminHtml, lang),
+      translateHtml(userHtml, lang),
+    ]);
+  }
+
   await transporter.sendMail({
     from: `"New Client Request - Price Estimator" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
@@ -184,7 +196,6 @@ The Arzonic Team`;
     html: adminHtmlTr,
   });
 
-  // 4) User email (subject localized)
   await transporter.sendMail({
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
