@@ -17,7 +17,6 @@ export async function sendContactEmail(
   message: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
-  // Default English content
   const adminText = `You’ve received a new message:
 Name: ${name}
 Email: ${email}

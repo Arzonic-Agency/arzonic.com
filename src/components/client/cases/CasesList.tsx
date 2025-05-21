@@ -101,7 +101,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
               />
             </div>
             <div className="p-5 flex flex-col justify-evenly h-52">
-              <h3 className="text-lg font-bold">{item.company}</h3>
+              <h2 className="text-lg font-bold">{item.company}</h2>
               <p className="text-sm text-zinc-400 line-clamp-3">{item.desc}</p>
               <div className="text-xs text-zinc-500 flex justify-between pt-4">
                 <span>{formatDate(item.created_at)}</span>
