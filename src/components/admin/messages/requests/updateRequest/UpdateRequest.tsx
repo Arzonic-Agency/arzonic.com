@@ -72,7 +72,7 @@ const UpdateRequest = ({
       city,
       message,
     };
-    onUpdateRequest(requestId, updatedData); // Optimistic update
+    onUpdateRequest(requestId, updatedData);
     setShowToast(true);
     onBackClick();
     try {
