@@ -12,38 +12,50 @@ const Footer = () => {
     <div>
       <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-10 border-base-300 border-t">
         <nav>
-          <h6 className="footer-title">{t("Footer.solutions")}</h6>
+          <h5 className="footer-title">{t("Footer.solutions")}</h5>
           <Link
             href="/solutions/custom-websites"
             className="link link-hover"
-            aria-label={t("aria.footer.linkToCustomWebsites", "Go to custom websites")}
+            aria-label={t(
+              "aria.footer.linkToCustomWebsites",
+              "Go to custom websites"
+            )}
           >
             {t("Header.dropdown.customWebsites")}
           </Link>
           <Link
             href="/solutions/web-applications"
             className="link link-hover"
-            aria-label={t("aria.footer.linkToWebApplications", "Go to web applications")}
+            aria-label={t(
+              "aria.footer.linkToWebApplications",
+              "Go to web applications"
+            )}
           >
             {t("Header.dropdown.webApplications")}
           </Link>
           <Link
             href="/solutions/3d-visualization"
             className="link link-hover"
-            aria-label={t("aria.footer.linkTo3DVisualization", "Go to 3D visualization")}
+            aria-label={t(
+              "aria.footer.linkTo3DVisualization",
+              "Go to 3D visualization"
+            )}
           >
             {t("Header.dropdown.visualization")}
           </Link>
           <Link
             href="/solutions/design-animation"
             className="link link-hover"
-            aria-label={t("aria.footer.linkToDesignAnimation", "Go to design and animation")}
+            aria-label={t(
+              "aria.footer.linkToDesignAnimation",
+              "Go to design and animation"
+            )}
           >
             {t("Header.dropdown.designAnimation")}
           </Link>
         </nav>
         <nav>
-          <h6 className="footer-title">{t("Footer.aboutUs")}</h6>
+          <h5 className="footer-title">{t("Footer.aboutUs")}</h5>
           <Link
             href="/about"
             className="link link-hover"
@@ -67,7 +79,7 @@ const Footer = () => {
           </Link>
         </nav>
         <nav>
-          <h6 className="footer-title">{t("Footer.legal", "Legal")}</h6>
+          <h5 className="footer-title">{t("Footer.legal", "Legal")}</h5>
           <TermsModal buttonText={t("terms_of_service")} variant="hover" />
           <ConsentModal buttonText={t("privacy_policy")} variant="hover" />
         </nav>

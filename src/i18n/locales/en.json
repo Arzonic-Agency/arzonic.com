@@ -361,6 +361,10 @@
       "consent": {
         "label": "I accept the storage of my information for up to 30 days",
         "readMore": "Read more"
+      },
+      "website_url": {
+        "label": "Website URL",
+        "placeholder": "Enter website URL..."
       }
     },
     "buttons": {
@@ -984,13 +988,5 @@
     "titleJobsDesignAndAnimation": "Design & Animation",
     "description": "We build blazing-fast websites and engaging experiences using custom-built technology – always modern, always tailored to your needs",
     "keywords": "web agency, websites, web applications, 3D visualization, digital agency, UI/UX design, frontend development"
-  },
-  "Prices": {
-    "aria": {
-      "getQuoteButton": "Get a quote",
-      "starterSiteCard": "View details for Starter Site",
-      "webApplicationCard": "View details for Web Application",
-      "premium3DCard": "View details for 3D Premium"
-    }
   }
 }
