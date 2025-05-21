@@ -28,22 +28,14 @@ ${message}`;
   <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; padding: 32px 24px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-family: Arial, sans-serif; color: #333;">
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
       <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="36" style="display: block;" />
-      <span style="font-size: 20px; font-weight: bold;">New Contact Message</span>
+      <span style="font-size: 20px; font-weight: bold;">New Contact Submission</span>
     </div>
-    <p style="margin-bottom: 12px;"><strong>Name:</strong><br/>${name}</p>
-    <p style="margin-bottom: 12px;"><strong>Email:</strong><br/><a href="mailto:${email}" style="color: #2563eb;">${email}</a></p>
-    <p style="margin-bottom: 8px;"><strong>Message:</strong></p>
-    <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; line-height: 1.6;">
-      ${message.replace(/\n/g, "<br/>")}
-    </div>
-    <p style="font-size: 12px; color: #888; margin-top: 32px;">Sent via contact form on arzonic.com</p>
+    <p style="margin-bottom: 16px;">A new customer has submitted the contact form on <strong>arzonic.com</strong>.</p>
+    <a href="https://arzonic.com/admin/messages" style="display: inline-block; background-color: #2563eb; color: white; text-decoration: none; padding: 12px 20px; border-radius: 6px; font-weight: 500;">
+      View Customer Message
+    </a>
+    <p style="font-size: 12px; color: #888; margin-top: 32px;">This is an automated notification from Arzonic Agency.</p>
   </div>`;
-
-  const userText = `Hi ${name},
-
-Thanks for reaching out! We’ll be in touch shortly.
-
-– Arzonic Agency`;
 
   const userHtml = `
   <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333; text-align: start;">
@@ -60,7 +52,7 @@ Thanks for reaching out! We’ll be in touch shortly.
     <p>If you're curious already, feel free to try our project estimator and get a quick price range for your next idea:</p>
     <div style="margin: 16px 0;">
       <a href="https://arzonic.com/get-started" style="background-color: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
-        Try the estimator
+        Try our price estimator
       </a>
     </div>
     <p style="font-size: 14px; color: #555;">Have questions or want to add more details? Just reply to this email or <a href="mailto:mail@arzonic.com" style="color: #2563eb;">contact us directly</a>.</p>
