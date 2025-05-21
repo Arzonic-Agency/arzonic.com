@@ -25,6 +25,10 @@ const Process = ({ isSticky }: ProcessProps) => {
     src: "/rive/coding.riv",
     autoplay: true,
   });
+  const { RiveComponent: LaunchRive } = useRive({
+    src: "/rive/launch.riv",
+    autoplay: true,
+  });
 
   return (
     <div className={`md:px-5 ${isSticky ? "pt-[118px] md:pt-[112px]" : ""}`}>
@@ -177,6 +181,11 @@ const Process = ({ isSticky }: ProcessProps) => {
               {t("Process.launchSupport.steps.3")}
             </li>
           </ul>
+        </div>
+        <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
+          <div className="md:w-full w-60 h-full max-h-64 md:max-h-96">
+            <LaunchRive />
+          </div>
         </div>
       </section>
     </div>
