@@ -152,6 +152,7 @@ export type EstimatorQuestion = {
   type: "single" | "multiple";
   options: Option[];
 };
+
 export async function getEstimatorQuestions(
   lang: "en" | "da" = "en"
 ): Promise<EstimatorQuestion[]> {
@@ -198,10 +199,7 @@ export async function getEstimatorQuestions(
       options: q.options.map(
         (o: { id: number; text: string; text_translated?: string }) => ({
           id: o.id,
-          text:
-            lang === "da" && o.text_translated
-              ? o.text_translated
-              : o.text,
+          text: lang === "da" && o.text_translated ? o.text_translated : o.text,
         })
       ),
     })
