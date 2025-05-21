@@ -151,7 +151,7 @@ const Process = ({ isSticky }: ProcessProps) => {
       </section>
       <section
         id="launch-support"
-        className="md:h-[650px] h-[750px] w-full  flex-col md:flex-row"
+        className="md:h-[650px] h-[750px] w-full flex flex-col md:flex-row justify-center"
       >
         <div className="flex flex-col justify-center gap-5  md:h-full p-5 md:p-10 md:w-[55%]">
           <h3 className="text-sm md:text-lg tracking-widest text-secondary opacity-85">
@@ -183,7 +183,7 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
         <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
-          <div className="md:w-full w-60 h-full max-h-64 md:max-h-96">
+          <div className="md:w-full w-full h-full max-h-64 md:max-h-96 md:scale-125">
             <LaunchRive />
           </div>
         </div>
