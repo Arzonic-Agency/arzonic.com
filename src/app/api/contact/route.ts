@@ -5,10 +5,12 @@ interface ContactPayload {
   name: string;
   email: string;
   message: string;
+  lang?: "en" | "da";
 }
 
 export async function POST(request: Request) {
-  const { name, email, message } = (await request.json()) as ContactPayload;
+  const { name, email, message, lang } =
+    (await request.json()) as ContactPayload;
 
   if (!name || !email || !message) {
     return NextResponse.json(
@@ -18,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await sendContactEmail(name, email, message);
+    await sendContactEmail(name, email, message, lang ?? "en");
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Mail error:", err);

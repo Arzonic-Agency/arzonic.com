@@ -4,10 +4,10 @@ import React, { useState, FormEvent } from "react";
 import { createRequest } from "@/lib/client/actions";
 import TaskSelect from "./TaskSelect";
 import ConsentModal from "../modal/ConsentModal";
-import { useTranslation } from "react-i18next"; // Import translation hook
+import { useTranslation } from "react-i18next";
 
 const OfferForm = () => {
-  const { t } = useTranslation(); // Initialize translation hook
+  const { t } = useTranslation();
 
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
@@ -44,10 +44,8 @@ const OfferForm = () => {
     setSuccessText("");
 
     try {
-      // 1) persist the request
       await createRequest(name, "", mobile, mail, category, isChecked, message);
 
-      // 2) ask the API to send the emails
       const emailBody = [
         `Phone: ${mobile}`,
         `Category: ${category}`,
@@ -57,10 +55,17 @@ const OfferForm = () => {
         message,
       ].join("\n");
 
+      const lang = (localStorage.getItem("i18nextLng") as "en" | "da") || "en";
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email: mail, message: emailBody }),
+        body: JSON.stringify({
+          name,
+          email: mail,
+          message: emailBody,
+          lang,
+        }),
       });
 
       if (!res.ok) {

@@ -17,6 +17,7 @@ export async function sendContactEmail(
   message: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
+  // Default English content
   const adminText = `You’ve received a new message:
 Name: ${name}
 Email: ${email}
@@ -66,22 +67,31 @@ Thanks for reaching out! We’ll be in touch shortly.
     <p style="margin-top: 32px;">Best regards,<br/><strong>Arzonic Agency</strong></p>
   </div>`;
 
+  // Default to English if no translation
   let adminTextTr = adminText;
   let adminHtmlTr = adminHtml;
   let userTextTr = userText;
   let userHtmlTr = userHtml;
 
+  console.log("[sendContactEmail] selected lang=", lang);
+
   if (lang !== "en") {
+    // translate plain text
     [adminTextTr, userTextTr] = await Promise.all([
       translateText(adminText, lang),
       translateText(userText, lang),
     ]);
+
+    // translate HTML with tag handling
     [adminHtmlTr, userHtmlTr] = await Promise.all([
       translateHtml(adminHtml, lang),
       translateHtml(userHtml, lang),
     ]);
+
+    console.log("[sendContactEmail] adminHtmlTr=", adminHtmlTr);
   }
 
+  // Send to admin
   await transporter.sendMail({
     from: `"Website Contact" <${process.env.FROM_EMAIL!}>`,
     to: process.env.ADMIN_EMAIL!,
@@ -93,6 +103,7 @@ Thanks for reaching out! We’ll be in touch shortly.
     html: adminHtmlTr,
   });
 
+  // Send to user
   await transporter.sendMail({
     from: `"Arzonic Agency" <${process.env.FROM_EMAIL!}>`,
     to: email,
@@ -104,7 +115,6 @@ Thanks for reaching out! We’ll be in touch shortly.
     html: userHtmlTr,
   });
 }
-
 
 /**
  * Sends estimate emails to admin and user, translating content via DeepL if needed.
