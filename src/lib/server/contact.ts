@@ -37,6 +37,12 @@ ${message}`;
     <p style="font-size: 12px; color: #888; margin-top: 32px;">This is an automated notification from Arzonic Agency.</p>
   </div>`;
 
+  const userText = `Hi ${name},
+
+Thanks for reaching out! We’ll be in touch shortly.
+
+– Arzonic Agency`;
+
   const userHtml = `
   <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333; text-align: start;">
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
