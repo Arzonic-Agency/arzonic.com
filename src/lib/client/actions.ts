@@ -152,7 +152,6 @@ export type EstimatorQuestion = {
   type: "single" | "multiple";
   options: Option[];
 };
-
 export async function getEstimatorQuestions(
   lang: "en" | "da" = "en"
 ): Promise<EstimatorQuestion[]> {
@@ -173,7 +172,8 @@ export async function getEstimatorQuestions(
       )
     `
     )
-    .order("id", { ascending: true });
+    .order("id", { ascending: true })
+    .order("id", { referencedTable: "options", ascending: true });
 
   if (error) {
     console.error("Failed to fetch estimator questions:", error.message);
@@ -198,7 +198,10 @@ export async function getEstimatorQuestions(
       options: q.options.map(
         (o: { id: number; text: string; text_translated?: string }) => ({
           id: o.id,
-          text: lang === "da" && o.text_translated ? o.text_translated : o.text,
+          text:
+            lang === "da" && o.text_translated
+              ? o.text_translated
+              : o.text,
         })
       ),
     })
