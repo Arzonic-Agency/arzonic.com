@@ -4,7 +4,7 @@ import RequestsList, { Request } from "./RequestsList";
 import RequestsDetails from "./RequestsDetails";
 import { FaAngleLeft } from "react-icons/fa6";
 import { deleteRequest, updateRequest } from "@/lib/server/actions";
-import RequestsPagination from "./RequestsPagination"; // Import the pagination component
+import RequestsPagination from "./RequestsPagination";
 
 import { useTranslation } from "react-i18next";
 
@@ -85,7 +85,11 @@ const Requests = () => {
         <div className="flex flex-col items-start gap-5">
           {!isEditing && (
             <div className="flex items-start gap-5">
-              <button onClick={handleBackClick} className="btn btn-ghost">
+              <button
+                onClick={handleBackClick}
+                className="btn btn-ghost"
+                aria-label={t("aria.requests.backButton")}
+              >
                 <FaAngleLeft />
                 {t("back")}
               </button>
@@ -131,6 +135,7 @@ const Requests = () => {
             setSearchTerm={setSearchTerm}
             selectedRequests={selectedRequests}
             onDeleteSelected={handleDeleteSelected}
+            aria-label={t("aria.requests.searchInput")}
           />
           <RequestsList
             requests={requests}

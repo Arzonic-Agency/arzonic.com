@@ -30,6 +30,7 @@ const CasesPagination = ({ page, setPage, total }: NewsPaginationProps) => {
         className="join-item btn bg-base-100"
         onClick={handlePrevious}
         disabled={page === 1}
+        aria-label={t("aria.casesPagination.previousPage")}
       >
         <FaAngleLeft />
       </button>
@@ -40,6 +41,7 @@ const CasesPagination = ({ page, setPage, total }: NewsPaginationProps) => {
         className="join-item btn bg-base-100"
         onClick={handleNext}
         disabled={page >= totalPages}
+        aria-label={t("aria.casesPagination.nextPage")}
       >
         <FaAngleRight />
       </button>

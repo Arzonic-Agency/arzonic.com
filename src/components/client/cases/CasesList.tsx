@@ -85,7 +85,13 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
           transition={{ delay: index * 0.1, duration: 0.4 }}
           className="rounded-xl overflow-hidden bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300"
         >
-          <Link href={item.website || "/cases"} className="w-full h-full block">
+          <Link
+            href={item.website || "/cases"}
+            className="w-full h-full block"
+            aria-label={
+              t("aria.navigation.linkToCases") || "Go to customer's website"
+            }
+          >
             <div className="relative h-64">
               <Image
                 src={item.image || FALLBACK_IMAGE}

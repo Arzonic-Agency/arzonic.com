@@ -40,6 +40,7 @@ const Topbar = () => {
             tabIndex={0}
             role="button"
             className="btn btn-ghost btn-sm md:btn-md m-1 text-lg"
+            aria-label={t("aria.topbar.moreOptions")}
           >
             <FaEllipsis />
           </div>
@@ -57,6 +58,7 @@ const Topbar = () => {
               <button
                 onClick={signOut}
                 className="pl-[14px] flex items-center gap-2"
+                aria-label={t("aria.topbar.logout")}
               >
                 <FaRightFromBracket /> {t("logout")}
               </button>

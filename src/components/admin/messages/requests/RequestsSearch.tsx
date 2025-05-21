@@ -35,6 +35,7 @@ const RequestsSearch = ({
           placeholder={t("search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label={t("aria.requestsSearch.searchInput")}
         />
         <FaSearch />
       </label>
@@ -43,6 +44,7 @@ const RequestsSearch = ({
           className="btn btn-sm btn-error"
           onClick={openModal}
           disabled={selectedRequests.length === 0}
+          aria-label={t("aria.requestsSearch.deleteSelectedButton")}
         >
           <FaTrash />
           <span className="hidden md:block">{t("delete_selected")}</span>
@@ -59,10 +61,18 @@ const RequestsSearch = ({
               {t("delete_request_warning")}
             </p>
             <div className="modal-action">
-              <button className="btn" onClick={closeModal}>
+              <button
+                className="btn"
+                onClick={closeModal}
+                aria-label={t("aria.requestsSearch.cancelButton")}
+              >
                 {t("cancel")}
               </button>
-              <button className="btn btn-error" onClick={handleDelete}>
+              <button
+                className="btn btn-error"
+                onClick={handleDelete}
+                aria-label={t("aria.requestsSearch.confirmDeleteButton")}
+              >
                 {t("delete")}
               </button>
             </div>

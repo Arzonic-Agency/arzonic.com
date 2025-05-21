@@ -34,16 +34,27 @@ const ThemeAdmin = () => {
         checked={isLight}
         onChange={toggleTheme}
         className="hidden"
+        aria-label={
+          isLight
+            ? t("aria.theme.switchToDark")
+            : t("aria.theme.switchToLight")
+        }
       />
 
       {/* sun icon (light mode) */}
-      <div className="text-lg swap-off flex items-center gap-2">
+      <div
+        className="text-lg swap-off flex items-center gap-2"
+        aria-label={t("aria.theme.switchToLight")}
+      >
         <MdSunny className="" />
         <span className="text-sm">{t("light")}</span>
       </div>
 
       {/* moon icon (dark mode) */}
-      <div className="text-lg swap-on flex items-center gap-2">
+      <div
+        className="text-lg swap-on flex items-center gap-2"
+        aria-label={t("aria.theme.switchToDark")}
+      >
         <FaMoon className="" />
         <span className="text-sm">{t("dark")}</span>
       </div>

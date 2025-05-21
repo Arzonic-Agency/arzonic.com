@@ -34,7 +34,6 @@ const Overview = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Stats */}
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <div className="flex justify-end items-center mb-5">
           <div role="tablist" className="tabs tabs-border">
@@ -42,6 +41,7 @@ const Overview = () => {
               role="tab"
               className={`tab ${period === "7d" ? "tab-active" : ""}`}
               onClick={() => setPeriod("7d")}
+              aria-label={t("aria.overview.last7DaysTab")}
             >
               {t("analytics.last_7_days")}
             </button>
@@ -49,6 +49,7 @@ const Overview = () => {
               role="tab"
               className={`tab ${period === "30d" ? "tab-active" : ""}`}
               onClick={() => setPeriod("30d")}
+              aria-label={t("aria.overview.last30DaysTab")}
             >
               {t("analytics.last_30_days")}
             </button>
@@ -64,7 +65,10 @@ const Overview = () => {
 
         {loading ? (
           <div className="flex justify-start items-center h-32 gap-3">
-            <span className="loading loading-spinner loading-md" />
+            <span
+              className="loading loading-spinner loading-md"
+              aria-label={t("aria.overview.loadingSpinner")}
+            />
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-4 mt-4">
@@ -83,8 +87,6 @@ const Overview = () => {
           </div>
         )}
       </div>
-
-      {/* Most Visited */}
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.most_visited")}</h3>
         {loading ? (
@@ -107,8 +109,6 @@ const Overview = () => {
           <p className="text-neutral-400 mt-3">{t("analytics.no_data")}</p>
         )}
       </div>
-
-      {/* Devices */}
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
         {loading ? (

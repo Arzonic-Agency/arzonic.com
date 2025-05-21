@@ -17,6 +17,7 @@ export async function sendContactEmail(
   message: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
+  // Default English content
   const adminText = `You’ve received a new message:
 Name: ${name}
 Email: ${email}
@@ -48,7 +49,7 @@ Thanks for reaching out! We’ll be in touch shortly.
   <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333; text-align: start;">
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px;">
       <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="40" style="display: block;" />
-      <span style="font-size: 22px; font-weight: bold; color: #111;">Arzonic</span>
+      <span style="font-size: 22px; padding-left: 5px; padding-top: 1px; font-weight: bold; color: #111;">Arzonic</span>
     </div>
     <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for your message, ${name}!</h2>
     <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; margin: 16px 0;">
@@ -58,7 +59,7 @@ Thanks for reaching out! We’ll be in touch shortly.
     </div>
     <p>If you're curious already, feel free to try our project estimator and get a quick price range for your next idea:</p>
     <div style="margin: 16px 0;">
-      <a href="https://arzonic.com/#priser" style="background-color: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
+      <a href="https://arzonic.com/get-started" style="background-color: #2563eb; color: #fff; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
         Try the estimator
       </a>
     </div>
@@ -66,7 +67,7 @@ Thanks for reaching out! We’ll be in touch shortly.
     <p style="margin-top: 32px;">Best regards,<br/><strong>Arzonic Agency</strong></p>
   </div>`;
 
-  // Translate if needed
+  // Translate content if not in English
   const [adminTextTr, adminHtmlTr, userTextTr, userHtmlTr] =
     lang === "en"
       ? [adminText, adminHtml, userText, userHtml]

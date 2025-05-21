@@ -93,6 +93,7 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               required
+              aria-label={t("aria.updateReview.contactInput")}
             />
           </fieldset>
           {errors.contact && (
@@ -111,6 +112,7 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
+              aria-label={t("aria.updateReview.companyInput")}
             />
           </fieldset>
           {errors.company && (
@@ -133,6 +135,7 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
               style={{ resize: "none" }}
               cols={30}
               rows={8}
+              aria-label={t("aria.updateReview.descriptionInput")}
             ></textarea>
             <div className="text-right text-xs font-medium text-gray-500">
               {desc.length} / 100
@@ -145,7 +148,16 @@ const UpdateReview = ({ reviewId, onReviewUpdated }: UpdateReviewProps) => {
           )}
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading}
+          aria-label={
+            loading
+              ? t("aria.updateReview.saving")
+              : t("aria.updateReview.save")
+          }
+        >
           {loading ? t("saving") : t("save")}
         </button>
       </form>

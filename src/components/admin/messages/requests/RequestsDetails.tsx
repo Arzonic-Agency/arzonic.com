@@ -112,7 +112,6 @@ const RequestsDetails = ({
   return (
     <div className="flex flex-col gap-10 w-full p-3 ">
       <h2 className="text-lg font-bold">{t("request_details")}</h2>{" "}
-      {/* Use translation */}
       <div className="flex justify-between items-start">
         <div className="flex items-center gap-5">
           <a
@@ -120,6 +119,7 @@ const RequestsDetails = ({
             className={`btn btn-primary btn-sm sm:btn-md flex items-center gap-2 ${
               !mobile ? "btn-disabled" : ""
             }`}
+            aria-label={t("aria.requestsDetails.phoneLink")}
           >
             <FaPhoneVolume /> {t("contact_customer")}
           </a>
@@ -137,6 +137,7 @@ const RequestsDetails = ({
               className={`text-lg font-semibold btn btn-sm sm:btn-md btn-neutral ${
                 !requestDetails.address ? "btn-disabled" : ""
               }`}
+              aria-label={t("aria.requestsDetails.mapLink")}
             >
               <span className="hidden md:block">{t("show_route")}</span>
               <FaLocationArrow />
@@ -148,16 +149,16 @@ const RequestsDetails = ({
           onEditClick={handleEditClick}
           onDeleteSuccess={() => {
             handleDeleteSuccess();
-            setLocalIsEditing(false); // Reset local editing state
+            setLocalIsEditing(false);
           }}
-          setShowToast={() => {}} // Remove toast handling here
+          setShowToast={() => {}}
         />
       </div>
       <div className="flex flex-col gap-10">
         <div className="flex flex-col md:flex-row gap-10 md:gap-0">
           <div className="flex flex-col gap-2 w-full md:w-1/2 2xl:w-1/3">
             <span className="text-sm font-medium text-gray-400">
-              {t("days_left")} {/* Use translation */}
+              {t("days_left")}
             </span>
             <span
               className={`text-lg font-bold ${

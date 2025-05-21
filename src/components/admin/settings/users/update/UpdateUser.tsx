@@ -82,10 +82,10 @@ const UpdateUser = ({
         if (role) updateData.role = role;
         if (name) updateData.name = name;
 
-        await updateUser(userId, updateData); // Use updateUser function
-        onUserUpdated(); // Call onUserUpdated after successful update
+        await updateUser(userId, updateData);
+        onUserUpdated();
       } catch {
-        setErrors({ ...errors, password: t("registration_error") }); // Use translation key
+        setErrors({ ...errors, password: t("registration_error") });
       } finally {
         setLoading(false);
       }
@@ -105,6 +105,7 @@ const UpdateUser = ({
             name="role"
             value={role}
             onChange={(e) => setRole(e.target.value as "editor" | "admin")}
+            aria-label={t("aria.select_access_level")}
           >
             <option disabled value="">
               {t("select_access_level")}
@@ -128,6 +129,7 @@ const UpdateUser = ({
               placeholder={t("name")}
               value={name}
               onChange={(e) => setName(e.target.value)}
+              aria-label={t("aria.name_input")}
             />
           </label>
         </div>
@@ -146,6 +148,7 @@ const UpdateUser = ({
               placeholder={t("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              aria-label={t("aria.email_input")}
             />
           </label>
           {errors.email && (
@@ -169,6 +172,7 @@ const UpdateUser = ({
               placeholder={t("password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              aria-label={t("aria.password_input")}
             />
           </label>
           {errors.password && (
@@ -192,6 +196,7 @@ const UpdateUser = ({
               placeholder={t("confirm_password")}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              aria-label={t("aria.confirm_password_input")}
             />
           </label>
           {errors.confirmPassword && (
@@ -205,6 +210,9 @@ const UpdateUser = ({
           type="submit"
           className="btn btn-primary mt-2"
           disabled={loading}
+          aria-label={
+            loading ? t("aria.updating_button") : t("aria.update_button")
+          }
         >
           {loading ? t("updating") : t("update")}
         </button>

@@ -24,6 +24,7 @@ const NavSettings = () => {
               : ""
           }`}
           onClick={() => setActiveTab("setup")}
+          aria-label={t("aria.nav_settings_setup_tab")}
         >
           <FaExternalLinkAlt />
           {t("layout_settings")}
@@ -36,6 +37,7 @@ const NavSettings = () => {
               : ""
           }`}
           onClick={() => setActiveTab("users")}
+          aria-label={t("aria.nav_settings_users_tab")}
         >
           <FaUsers />
           {t("user_control")}

@@ -22,6 +22,7 @@ const CasesListChange = ({ onViewChange }: NewsListChangeProps) => {
           activeView === "cards" ? "tab-active rounded-lg" : ""
         }`}
         onClick={() => handleViewChange("cards")}
+        aria-label={t("aria.casesListChange.cardsView")}
       >
         {t("cards")}
       </a>
@@ -31,6 +32,7 @@ const CasesListChange = ({ onViewChange }: NewsListChangeProps) => {
           activeView === "list" ? "tab-active tab-active rounded-lg" : ""
         }`}
         onClick={() => handleViewChange("list")}
+        aria-label={t("aria.casesListChange.listView")}
       >
         {t("list")}
       </a>

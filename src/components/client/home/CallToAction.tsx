@@ -38,9 +38,9 @@ const CallToAction = () => {
       <div className="flex items-center gap-5 md:gap-7 max-w-2xl ">
         <EuropeMap />
         <div>
-          <h1 className="text-lg text-zinc-400 ">
+          <h4 className="text-lg text-zinc-400 ">
             {t("CallToAction.reachingBeyondBorders")}
-          </h1>
+          </h4>
           <p className="text-sm tracking-wide text-zinc-500 md:max-w-sm">
             {t("CallToAction.collaborationMessage")}
           </p>

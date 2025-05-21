@@ -92,7 +92,7 @@ const Prices: React.FC = () => {
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         {/* Starter Site */}
-        <div className="relative">
+        <div className="relative" aria-label={t("Prices.aria.starterSiteCard")}>
           <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-10 bg-base-100 border-zinc-400 border-b-5 shadow-zinc-800">
             <div className="flex flex-col gap-5">
               <h3 className="text-2xl font-bold">{t("StarterSite.title")}</h3>
@@ -121,7 +121,10 @@ const Prices: React.FC = () => {
         </div>
 
         {/* Web Application */}
-        <div className="relative">
+        <div
+          className="relative"
+          aria-label={t("Prices.aria.webApplicationCard")}
+        >
           <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-10 border-primary border-b-5 shadow-zinc-800 bg-base-100">
             <div className="flex flex-col gap-5">
               <h3 className="text-2xl font-bold">
@@ -161,7 +164,7 @@ const Prices: React.FC = () => {
         </div>
 
         {/* 3D Premium */}
-        <div className="relative">
+        <div className="relative" aria-label={t("Prices.aria.premium3DCard")}>
           <div className="flex flex-col justify-between shadow-lg border-zinc-400 border-b-5 rounded-xl w-80 h-[500px] p-10 bg-base-100 shadow-zinc-800">
             <div className="flex flex-col gap-5">
               <h3 className="text-2xl font-bold">{t("3DPremium.title")}</h3>
@@ -202,7 +205,11 @@ const Prices: React.FC = () => {
       {/* CTA */}
       <div className="flex flex-col items-center justify-center gap-5 mt-10">
         <h3 className="text-lg">{t("customQuotePrompt")}</h3>
-        <Link href="/get-started" className="btn btn-primary">
+        <Link
+          href="/get-started"
+          className="btn btn-primary"
+          aria-label={t("Prices.aria.getQuoteButton")}
+        >
           {t("getQuote")}
         </Link>
       </div>

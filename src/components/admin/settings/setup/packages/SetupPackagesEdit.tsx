@@ -12,7 +12,10 @@ interface SetupPackagesEditProps {
   onSave: () => void;
 }
 
-const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({ packageData, onSave }) => {
+const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({
+  packageData,
+  onSave,
+}) => {
   const [label, setLabel] = useState(packageData.label);
   const [priceEur, setPriceEur] = useState<number>(packageData.price_eur);
   const [priceDkk, setPriceDkk] = useState<number>(packageData.price_dkk);
@@ -39,10 +42,10 @@ const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({ packageData, onSa
           className="input w-full"
           value={label}
           onChange={(e) => setLabel(e.target.value)}
+          aria-label="Edit package label"
         />
       </fieldset>
 
-      {/* Price in EUR */}
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Price (EUR)</legend>
         <input
@@ -50,10 +53,10 @@ const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({ packageData, onSa
           className="input w-full"
           value={priceEur}
           onChange={(e) => setPriceEur(Number(e.target.value))}
+          aria-label="Edit package price in EUR"
         />
       </fieldset>
 
-      {/* Price in DKK */}
       <fieldset className="fieldset">
         <legend className="fieldset-legend">Price (DKK)</legend>
         <input
@@ -61,10 +64,15 @@ const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({ packageData, onSa
           className="input w-full"
           value={priceDkk}
           onChange={(e) => setPriceDkk(Number(e.target.value))}
+          aria-label="Edit package price in DKK"
         />
       </fieldset>
 
-      <button className="btn btn-primary" onClick={handleSave}>
+      <button
+        className="btn btn-primary"
+        onClick={handleSave}
+        aria-label="Save package changes"
+      >
         Save
       </button>
     </div>

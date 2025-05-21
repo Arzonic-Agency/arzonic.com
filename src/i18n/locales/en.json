@@ -219,6 +219,19 @@
       "visualization": "3D Visualization",
       "designAnimation": "Design & Animation",
       "marketing": "Marketing"
+    },
+    "aria": {
+      "navigation": {
+        "linkToHome": "Go to homepage",
+        "linkToSolutions": "Go to solutions",
+        "linkToCases": "Go to cases",
+        "linkToContact": "Go to contact",
+        "getStarted": "Get started",
+        "linkToOverview": "Go to overview",
+        "linkToContent": "Go to content",
+        "linkToCustomers": "Go to customers",
+        "linkToSettings": "Go to settings"
+      }
     }
   },
   "Hero": {
@@ -251,7 +264,10 @@
   },
   "Preview": {
     "title": "Your Dashboard, Your Way",
-    "subtitle": "Stay in control with a dashboard built around you"
+    "subtitle": "Stay in control with a dashboard built around you",
+    "aria": {
+      "imageAlt": "Example of a solution"
+    }
   },
   "NavProcess": {
     "header": {
@@ -264,6 +280,12 @@
       "designExperience": "Design & Experience",
       "developmentIntegration": "Development & Integration",
       "launchSupport": "Launch & Support"
+    },
+    "aria": {
+      "discoveryStrategy": "Go to Discovery & Strategy",
+      "designExperience": "Go to Design & Experience",
+      "developmentIntegration": "Go to Development & Integration",
+      "launchSupport": "Go to Launch & Support"
     }
   },
   "Process": {
@@ -354,6 +376,14 @@
       "invalidPhone": "Invalid phone number.",
       "consentRequired": "You must accept storage of your information.",
       "generic": "Something went wrong. Please try again later."
+    },
+    "aria": {
+      "nameInput": "Enter your name",
+      "emailInput": "Enter your email",
+      "phoneInput": "Enter your phone number",
+      "messageInput": "Enter your message",
+      "submitButton": "Submit the form",
+      "consentCheckbox": "Accept consent"
     }
   },
   "TaskSelect": {
@@ -366,6 +396,9 @@
       "branding": "Branding",
       "marketing": "Marketing",
       "other": "Other"
+    },
+    "aria": {
+      "selectTask": "Select a task"
     }
   },
   "ContactPage": {
@@ -669,6 +702,9 @@
         "seo": "Advanced",
         "cms": "Advanced"
       }
+    },
+    "aria": {
+      "getStartedButton": "Get started with pricing comparison"
     }
   },
   "jobsPage": {
@@ -753,6 +789,12 @@
     "unknown": "Unknown"
   },
   "aria": {
+    "edit_user_button": "Edit user {{name}}",
+    "delete_user_button": "Delete user {{name}}",
+    "cancel_button": "Cancel",
+    "nav_settings_setup_tab": "Setup",
+    "nav_settings_users_tab": "Users",
+    "confirm_delete_button": "Confirm deletion",
     "danishFlag": "Danish flag",
     "badges": {
       "customWebsites": "Category: Custom websites",
@@ -761,7 +803,171 @@
     },
     "navigation": {
       "seeMoreSolutions": "See more solutions",
-      "getStarted": "Get started"
+      "getStarted": "Get started",
+      "linkToCases": "Go to customer's website",
+      "linkToContact": "Go to contact",
+      "buttonSubmitForm": "Submit form",
+      "linkToOverview": "Go to overview",
+      "linkToContent": "Go to content",
+      "linkToCustomers": "Go to customers",
+      "linkToSettings": "Go to settings"
+    },
+    "topbar": {
+      "moreOptions": "More options",
+      "logout": "Log out"
+    },
+    "estimator": {
+      "nameInput": "Enter your name",
+      "emailInput": "Enter your email",
+      "phoneInput": "Enter your phone number",
+      "submitButton": "Submit the form",
+      "backButton": "Go back to the previous step"
+    },
+    "footer": {
+      "linkToCustomWebsites": "Go to custom websites",
+      "linkToWebApplications": "Go to web applications",
+      "linkTo3DVisualization": "Go to 3D visualization",
+      "linkToDesignAnimation": "Go to design and animation",
+      "linkToAbout": "Go to about us",
+      "linkToContact": "Go to contact",
+      "linkToJobs": "Go to jobs",
+      "linkToFacebook": "Go to Facebook",
+      "linkToInstagram": "Go to Instagram"
+    },
+    "language": {
+      "changeToDanish": "Change language to Danish",
+      "changeToEnglish": "Change language to English"
+    },
+    "faq": {
+      "q1": "Expand FAQ question 1",
+      "q2": "Expand FAQ question 2",
+      "q3": "Expand FAQ question 3",
+      "q4": "Expand FAQ question 4"
+    },
+    "solutionCards": {
+      "custom": "Go to Custom Websites solution",
+      "webapp": "Go to Web Applications solution",
+      "visualization": "Go to 3D Visualization solution",
+      "design": "Go to Design & Animation solution"
+    },
+    "theme": {
+      "switchToLight": "Switch to light theme",
+      "switchToDark": "Switch to dark theme"
+    },
+    "createCase": {
+      "companyName": "Enter company name",
+      "contactPerson": "Enter contact person",
+      "description": "Enter description",
+      "city": "Enter city",
+      "country": "Enter country",
+      "websiteUrl": "Enter website URL",
+      "chooseImage": "Choose image",
+      "create": "Create case",
+      "creating": "Creating case"
+    },
+    "cases": {
+      "back": "Back to overview",
+      "createCase": "Create a new case",
+      "caseCreated": "Case was created",
+      "caseUpdated": "Case was updated"
+    },
+    "casesListChange": {
+      "cardsView": "Switch to cards view",
+      "listView": "Switch to list view"
+    },
+    "casesPagination": {
+      "previousPage": "Go to the previous page",
+      "nextPage": "Go to the next page"
+    },
+    "updateReview": {
+      "contactInput": "Enter the contact person's name",
+      "companyInput": "Enter the company name",
+      "descriptionInput": "Enter the review description",
+      "save": "Save review",
+      "saving": "Saving review"
+    },
+    "createRating": {
+      "rate1": "Select rating 1 star",
+      "rate2": "Select rating 2 stars",
+      "rate3": "Select rating 3 stars",
+      "rate4": "Select rating 4 stars",
+      "rate5": "Select rating 5 stars"
+    },
+    "reviews": {
+      "backButton": "Go back",
+      "createReviewButton": "Create a new review"
+    },
+    "reviewsList": {
+      "editButton": "Edit review",
+      "deleteButton": "Delete review",
+      "cancelDeleteButton": "Cancel deletion",
+      "confirmDeleteButton": "Confirm deletion"
+    },
+    "reviewsListChange": {
+      "cardsView": "Switch to cards view",
+      "listView": "Switch to list view"
+    },
+    "reviewsPagination": {
+      "previousPage": "Go to the previous page",
+      "nextPage": "Go to the next page"
+    },
+    "reviewsRating": {
+      "star": "Star number {{index}}"
+    },
+    "navContent": {
+      "casesTab": "Switch to Cases tab",
+      "reviewsTab": "Switch to Reviews tab"
+    },
+    "navMessages": {
+      "requestsTab": "Switch to Requests tab",
+      "bookingsTab": "Switch to Bookings tab"
+    },
+    "requestNote": {
+      "inputNote": "Enter a note",
+      "submitButton": "Add note",
+      "deleteButton": "Delete note"
+    },
+    "updateRequest": {
+      "backButton": "Go back",
+      "companyInput": "Enter company name",
+      "mailInput": "Enter email address",
+      "mobileInput": "Enter mobile number",
+      "categorySelect": "Select task category",
+      "nameInput": "Enter contact person's name",
+      "addressInput": "Enter address and house number",
+      "cityInput": "Enter postal code and city",
+      "messageTextarea": "Enter message",
+      "submitButton": "Update customer"
+    },
+    "requests": {
+      "backButton": "Go back to the overview",
+      "deleteSelectedButton": "Delete selected requests",
+      "searchInput": "Search for requests"
+    },
+    "requestsActions": {
+      "editButton": "Edit customer",
+      "deleteButton": "Delete customer",
+      "dropdownMenu": "Open actions for customer"
+    },
+    "requestsDetails": {
+      "phoneLink": "Call the customer",
+      "mapLink": "Open customer's address on Google Maps",
+      "backButton": "Go back to the requests list"
+    },
+    "requestsList": {
+      "selectAllCheckbox": "Select all requests",
+      "individualCheckbox": "Select request",
+      "detailsButton": "View details for request"
+    },
+    "overview": {
+      "last7DaysTab": "View statistics for the last 7 days",
+      "last30DaysTab": "View statistics for the last 30 days",
+      "loadingSpinner": "Loading statistics"
+    },
+    "register": {
+      "nameInput": "Enter your name",
+      "emailInput": "Enter your email address",
+      "passwordInput": "Enter your password"
     }
   },
   "SEO": {
@@ -778,5 +984,13 @@
     "titleJobsDesignAndAnimation": "Design & Animation",
     "description": "We build blazing-fast websites and engaging experiences using custom-built technology – always modern, always tailored to your needs",
     "keywords": "web agency, websites, web applications, 3D visualization, digital agency, UI/UX design, frontend development"
+  },
+  "Prices": {
+    "aria": {
+      "getQuoteButton": "Get a quote",
+      "starterSiteCard": "View details for Starter Site",
+      "webApplicationCard": "View details for Web Application",
+      "premium3DCard": "View details for 3D Premium"
+    }
   }
 }

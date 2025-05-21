@@ -120,6 +120,7 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
                 <button
                   className="btn btn-ghost"
                   onClick={() => handleDelete(note.id)}
+                  aria-label={t("aria.requestNote.deleteButton")}
                 >
                   {t("delete")}
                   <FaTrashAlt />
@@ -137,17 +138,23 @@ const RequestNote = ({ requestId }: { requestId: string }) => {
           <input
             type="text"
             placeholder={t("write_note")}
-            className="input input-bordered w-full max-w-xs "
+            className="input input-bordered w-full max-w-xs"
             value={message}
             onChange={handleInputChange}
             maxLength={maxCharLimit}
+            aria-label={t("aria.requestNote.inputNote")}
           />
           <span className="text-xs text-zinc-500 absolute -bottom-6 right-0">
             {charCount}/{maxCharLimit} {t("chars")}
           </span>
         </div>
 
-        <button type="submit" className="btn" disabled={!message.trim()}>
+        <button
+          type="submit"
+          className="btn"
+          disabled={!message.trim()}
+          aria-label={t("aria.requestNote.submitButton")}
+        >
           {t("add_note")}
         </button>
       </form>

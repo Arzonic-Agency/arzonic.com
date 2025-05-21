@@ -23,6 +23,7 @@ const NavMessages = () => {
               : ""
           }`}
           onClick={() => setActiveTab("users")}
+          aria-label={t("aria.navMessages.requestsTab")}
         >
           <FaClipboardCheck />
           {t("requests")}
@@ -35,6 +36,7 @@ const NavMessages = () => {
               : ""
           }`}
           onClick={() => setActiveTab("extra")}
+          aria-label={t("aria.navMessages.bookingsTab")}
         >
           <FaCalendarCheck />
           Bookings

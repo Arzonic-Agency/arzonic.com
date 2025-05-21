@@ -87,7 +87,6 @@ const UserList = ({
       ) : (
         <>
           {error && <p className="text-red-500">{error}</p>}{" "}
-          {/* Display error message */}
           <ul className="flex flex-col gap-4 md:gap-5">
             {users.map((user) => (
               <React.Fragment key={user.id}>
@@ -117,12 +116,18 @@ const UserList = ({
                     <button
                       className="btn btn-sm"
                       onClick={() => handleUpdateClick(user.id)}
+                      aria-label={t("aria.edit_user_button", {
+                        name: user.name,
+                      })}
                     >
                       <FaPen size={17} />
                     </button>
                     <button
                       className="btn btn-sm"
                       onClick={() => openModal(user)}
+                      aria-label={t("aria.delete_user_button", {
+                        name: user.name,
+                      })}
                     >
                       <FaTrash size={16} />
                     </button>
@@ -134,21 +139,27 @@ const UserList = ({
           </ul>
         </>
       )}
-
-      {/* Confirmation Modal */}
       {isModalOpen && (
-        <div className="modal modal-open">
+        <div className="modal modal-open" aria-labelledby="modal-title">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">
+            <h3 id="modal-title" className="font-bold text-lg">
               {t("delete_user_confirmation")}
             </h3>
             <p className="py-4">{t("delete_user_prompt")}</p>
             <p className="text-sm text-warning">{t("delete_user_warning")}</p>
             <div className="modal-action">
-              <button className="btn" onClick={closeModal}>
+              <button
+                className="btn"
+                onClick={closeModal}
+                aria-label={t("aria.cancel_button")}
+              >
                 {t("cancel")}
               </button>
-              <button className="btn btn-error" onClick={handleDelete}>
+              <button
+                className="btn btn-error"
+                onClick={handleDelete}
+                aria-label={t("aria.confirm_delete_button")}
+              >
                 {t("delete")}
               </button>
             </div>

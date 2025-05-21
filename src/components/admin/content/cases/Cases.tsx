@@ -42,6 +42,7 @@ const Cases = () => {
           <button
             onClick={() => setShowCreateCase(false)}
             className="btn btn-ghost"
+            aria-label={t("aria.cases.back")}
           >
             <FaAngleLeft />
             {t("back")}
@@ -53,6 +54,7 @@ const Cases = () => {
           <button
             onClick={() => setShowUpdateCase(false)}
             className="btn btn-ghost"
+            aria-label={t("aria.cases.back")}
           >
             <FaAngleLeft />
             {t("back")}
@@ -67,7 +69,8 @@ const Cases = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateCase(true)}
-              className="btn btn-primary "
+              className="btn btn-primary"
+              aria-label={t("aria.cases.createCase")}
             >
               {t("create")} Case
             </button>
@@ -91,7 +94,14 @@ const Cases = () => {
       )}
       {showToast && (
         <div className="toast bottom-20 md:bottom-0 toast-end">
-          <div className="alert alert-success text-neutral-content">
+          <div
+            className="alert alert-success text-neutral-content"
+            aria-label={
+              showCreateCase
+                ? t("aria.cases.caseCreated")
+                : t("aria.cases.caseUpdated")
+            }
+          >
             <span className="text-base md:text-lg">
               {showCreateCase ? t("case_created") : t("case_updated")}
             </span>

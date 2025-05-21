@@ -60,6 +60,7 @@ const Reviews = () => {
           <button
             onClick={() => setShowCreateReview(false)}
             className="btn btn-ghost"
+            aria-label={t("aria.reviews.backButton")}
           >
             <FaAngleLeft />
             {t("back")}
@@ -71,6 +72,7 @@ const Reviews = () => {
           <button
             onClick={() => setShowUpdateReview(false)}
             className="btn btn-ghost"
+            aria-label={t("aria.reviews.backButton")}
           >
             <FaAngleLeft />
             {t("back")}
@@ -86,6 +88,7 @@ const Reviews = () => {
             <button
               onClick={() => setShowCreateReview(true)}
               className="btn btn-primary"
+              aria-label={t("aria.reviews.createReviewButton")}
             >
               {t("create")} {t("review")}
             </button>

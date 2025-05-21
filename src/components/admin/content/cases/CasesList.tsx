@@ -106,9 +106,9 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
           {caseItems.map((item) => (
             <div
               key={item.id}
-              className="card card-compact shadow-md bg-base-300 rounded-md"
+              className="card card-compact shadow-md bg-base-300 rounded-lg ring-base-300 ring-3 md:ring-5"
             >
-              <figure className="relative w-full aspect-[4/3] h-56 md:h-40 xl:h-56 overflow-hidden">
+              <figure className="relative w-full aspect-[4/3] overflow-hidden">
                 <Image
                   src={item.image || FALLBACK_IMAGE}
                   alt={`Case study for ${item.company}`}

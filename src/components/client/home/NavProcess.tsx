@@ -214,6 +214,7 @@ const NavProcess = ({
                     key={step.id}
                     onClick={() => handleClick(step.id)}
                     className="cursor-pointer font-normal transition-all duration-200 text-xs md:text-base xl:text-lg flex flex-col items-center"
+                    aria-label={t(`NavProcess.aria.${step.id}`)}
                   >
                     <span className={`block md:hidden text-2xl ${colorClass}`}>
                       {step.icon}

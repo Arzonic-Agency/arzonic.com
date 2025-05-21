@@ -173,16 +173,20 @@ const PricingComparison: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center gap-5  mt-10 relative">
+      <div className="flex flex-col items-center justify-center gap-5 mt-10 relative">
         <Image
           src="/elements/rocket.png"
-          alt="Rocket illustraion"
+          alt="Rocket illustration"
           width={80}
           height={80}
-          className=" absolute -top-26 block md:hidden"
+          className="absolute -top-26 block md:hidden"
         />
         <h3 className="text-base">{t("pricingComparison.title-btn")}</h3>
-        <Link href="/get-started" className="btn btn-primary">
+        <Link
+          href="/get-started"
+          className="btn btn-primary"
+          aria-label={t("aria.pricingComparison.getStartedButton", "Get started with pricing comparison")}
+        >
           {t("pricingComparison.text-btn")}
         </Link>
       </div>

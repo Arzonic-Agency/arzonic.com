@@ -17,20 +17,20 @@ const Users = () => {
 
   const handleUserCreated = () => {
     setShowRegister(false);
-    setToastMessage(t("user_created")); // Ensure translation function is used
+    setToastMessage(t("user_created"));
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
 
   const handleUserUpdated = () => {
     setShowUpdate(false);
-    setToastMessage(t("user_updated")); // Ensure translation function is used
+    setToastMessage(t("user_updated"));
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
 
   const handleUserDeleted = () => {
-    setToastMessage(t("user_deleted")); // Ensure translation function is used
+    setToastMessage(t("user_deleted"));
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };

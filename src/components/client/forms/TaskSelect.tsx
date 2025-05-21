@@ -25,6 +25,7 @@ const TaskSelect = ({ onChange }: ContactSelectProps) => {
           className="select select-ghost bg-base-200 select-md w-full md:max-w-xs"
           value={selectedOption}
           onChange={handleChange}
+          aria-label={t("TaskSelect.aria.selectTask")}
           required
         >
           <option value="" disabled>

@@ -217,6 +217,15 @@
       "visualization": "3D-visualisering",
       "designAnimation": "Design & Animation",
       "marketing": "Marketing"
+    },
+    "aria": {
+      "navigation": {
+        "linkToHome": "Gå til forsiden",
+        "linkToSolutions": "Gå til løsninger",
+        "linkToCases": "Gå til cases",
+        "linkToContact": "Gå til kontakt",
+        "getStarted": "Få tilbud"
+      }
     }
   },
   "Hero": {
@@ -249,7 +258,10 @@
   },
   "Preview": {
     "title": "Dit Dashboard, Din Måde",
-    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasses dig"
+    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasses dig",
+    "aria": {
+      "imageAlt": "Eksempel på løsning"
+    }
   },
   "NavProcess": {
     "header": {
@@ -262,6 +274,12 @@
       "designExperience": "Design & Oplevelse",
       "developmentIntegration": "Udvikling & Integration",
       "launchSupport": "Lancering & Support"
+    },
+    "aria": {
+      "discoveryStrategy": "Gå til Indsigt & Strategi",
+      "designExperience": "Gå til Design & Oplevelse",
+      "developmentIntegration": "Gå til Udvikling & Integration",
+      "launchSupport": "Gå til Lancering & Support"
     }
   },
   "Process": {
@@ -356,18 +374,25 @@
       "invalidPhone": "Ugyldigt telefonnummer.",
       "consentRequired": "Du skal acceptere opbevaring af dine oplysninger.",
       "generic": "Noget gik galt. Prøv venligst igen senere."
+    },
+    "aria": {
+      "name": "Indtast dit navn",
+      "email": "Indtast din e-mail",
+      "phone": "Indtast dit telefonnummer",
+      "message": "Indtast din besked",
+      "submit": "Send formularen",
+      "consent": "Accepter samtykke",
+      "nameInput": "Indtast dit navn",
+      "emailInput": "Indtast din e-mail",
+      "phoneInput": "Indtast dit telefonnummer",
+      "messageInput": "Indtast din besked",
+      "submitButton": "Send formularen",
+      "consentCheckbox": "Accepter samtykke"
     }
   },
   "TaskSelect": {
-    "legend": "Hvilken opgave er du interesseret i?",
-    "placeholder": "Vælg opgave",
-    "options": {
-      "website": "Hjemmeside",
-      "webApp": "Webapplikation",
-      "visualization": "3D-visualisering",
-      "branding": "Branding",
-      "marketing": "Marketing",
-      "other": "Andet"
+    "aria": {
+      "selectTask": "Vælg en opgave"
     }
   },
   "ContactPage": {
@@ -757,6 +782,11 @@
     "unknown": "Ukendt"
   },
   "aria": {
+    "edit_user_button": "Rediger bruger {{name}}",
+    "delete_user_button": "Slet bruger {{name}}",
+    "cancel_button": "Annuller",
+    "confirm_delete_button": "Bekræft sletning",
+    "nav_settings_setup_tab": "Indstillinger",
     "danishFlag": "Dansk flag",
     "badges": {
       "customWebsites": "Kategori: Tilpassede hjemmesider",
@@ -765,22 +795,187 @@
     },
     "navigation": {
       "seeMoreSolutions": "Se flere løsninger",
-      "getStarted": "Få et tilbud"
+      "getStarted": "Få et tilbud",
+      "linkToCases": "Gå til kundens hjemmeside",
+      "linkToContact": "Gå til kontakt",
+      "buttonSubmitForm": "Send formular",
+      "linkToOverview": "Gå til overblik",
+      "linkToContent": "Gå til indhold",
+      "linkToCustomers": "Gå til kunder",
+      "linkToSettings": "Gå til indstillinger"
+    },
+    "estimator": {
+      "nameInput": "Indtast dit navn",
+      "emailInput": "Indtast din e-mail",
+      "phoneInput": "Indtast dit telefonnummer",
+      "submitButton": "Indsend formularen",
+      "backButton": "Gå tilbage til forrige trin"
+    },
+    "footer": {
+      "linkToCustomWebsites": "Gå til tilpassede hjemmesider",
+      "linkToWebApplications": "Gå til webapplikationer",
+      "linkTo3DVisualization": "Gå til 3D-visualisering",
+      "linkToDesignAnimation": "Gå til design og animation",
+      "linkToAbout": "Gå til om os",
+      "linkToContact": "Gå til kontakt",
+      "linkToJobs": "Gå til jobs",
+      "linkToFacebook": "Gå til Facebook",
+      "linkToInstagram": "Gå til Instagram"
+    },
+    "language": {
+      "changeToDanish": "Skift sprog til dansk",
+      "changeToEnglish": "Skift sprog til engelsk"
+    },
+    "faq": {
+      "q1": "Udvid FAQ spørgsmål 1",
+      "q2": "Udvid FAQ spørgsmål 2",
+      "q3": "Udvid FAQ spørgsmål 3",
+      "q4": "Udvid FAQ spørgsmål 4"
+    },
+    "pricingComparison": {
+      "getStartedButton": "Kom i gang med pris sammenligning"
+    },
+    "solutionCards": {
+      "custom": "Gå til Tilpassede Hjemmesider løsning",
+      "webapp": "Gå til Webapplikationer løsning",
+      "visualization": "Gå til 3D-Visualisering løsning",
+      "design": "Gå til Design & Animation løsning"
+    },
+    "topbar": {
+      "moreOptions": "Flere muligheder",
+      "logout": "Log ud"
+    },
+    "theme": {
+      "switchToLight": "Skift til lys tema",
+      "switchToDark": "Skift til mørk tema"
+    },
+    "createCase": {
+      "companyName": "Indtast virksomhedsnavn",
+      "contactPerson": "Indtast kontaktperson",
+      "description": "Indtast beskrivelse",
+      "city": "Indtast by",
+      "country": "Indtast land",
+      "websiteUrl": "Indtast hjemmeside URL",
+      "chooseImage": "Vælg billede",
+      "create": "Opret case",
+      "creating": "Opretter case"
+    },
+    "cases": {
+      "back": "Tilbage til oversigten",
+      "createCase": "Opret en ny case",
+      "caseCreated": "Case blev oprettet",
+      "caseUpdated": "Case blev opdateret"
+    },
+    "casesListChange": {
+      "cardsView": "Skift til kortvisning",
+      "listView": "Skift til listevisning"
+    },
+    "casesPagination": {
+      "previousPage": "Gå til forrige side",
+      "nextPage": "Gå til næste side"
+    },
+    "updateReview": {
+      "contactInput": "Indtast kontaktpersonens navn",
+      "companyInput": "Indtast virksomhedsnavn",
+      "descriptionInput": "Indtast anmeldelsesbeskrivelse",
+      "save": "Gem anmeldelse",
+      "saving": "Gemmer anmeldelse"
+    },
+    "createRating": {
+      "rate1": "Vælg vurdering 1 stjerne",
+      "rate2": "Vælg vurdering 2 stjerner",
+      "rate3": "Vælg vurdering 3 stjerner",
+      "rate4": "Vælg vurdering 4 stjerner",
+      "rate5": "Vælg vurdering 5 stjerner"
+    },
+    "reviews": {
+      "backButton": "Gå tilbage",
+      "createReviewButton": "Opret en ny anmeldelse"
+    },
+    "reviewsList": {
+      "editButton": "Rediger anmeldelse",
+      "deleteButton": "Slet anmeldelse",
+      "cancelDeleteButton": "Annuller sletning",
+      "confirmDeleteButton": "Bekræft sletning"
+    },
+    "reviewsPagination": {
+      "previousPage": "Gå til forrige side",
+      "nextPage": "Gå til næste side"
+    },
+    "reviewsRating": {
+      "star": "Stjerne nummer {{index}}"
+    },
+    "navContent": {
+      "casesTab": "Skift til Cases fanen",
+      "reviewsTab": "Skift til Anmeldelser fanen"
+    },
+    "requestNote": {
+      "inputNote": "Indtast en note",
+      "submitButton": "Tilføj note",
+      "deleteButton": "Slet note"
+    },
+    "updateRequest": {
+      "backButton": "Gå tilbage",
+      "companyInput": "Indtast virksomhedsnavn",
+      "mailInput": "Indtast mailadresse",
+      "mobileInput": "Indtast mobilnummer",
+      "categorySelect": "Vælg opgavekategori",
+      "nameInput": "Indtast kontaktpersonens navn",
+      "addressInput": "Indtast adresse og husnummer",
+      "cityInput": "Indtast postnummer og by",
+      "messageTextarea": "Indtast besked",
+      "submitButton": "Opdater kunde"
+    },
+    "requests": {
+      "backButton": "Gå tilbage til oversigten",
+      "deleteSelectedButton": "Slet valgte henvendelser",
+      "searchInput": "Søg efter henvendelser"
+    },
+    "requestsActions": {
+      "editButton": "Rediger kunde",
+      "deleteButton": "Slet kunde",
+      "dropdownMenu": "Åbn handlinger for kunde"
+    },
+    "requestsDetails": {
+      "phoneLink": "Ring til kunden",
+      "mapLink": "Åbn kundens adresse på Google Maps",
+      "backButton": "Gå tilbage til henvendelseslisten"
+    },
+    "requestsList": {
+      "selectAllCheckbox": "Vælg alle henvendelser",
+      "individualCheckbox": "Vælg henvendelse",
+      "detailsButton": "Se detaljer for henvendelse"
+    },
+    "requestsPagination": {
+      "previousButton": "Gå til forrige side",
+      "nextButton": "Gå til næste side",
+      "pageIndicator": "Side {{currentPage}} af {{totalPages}}"
+    },
+    "requestsSearch": {
+      "searchInput": "Søg efter henvendelser",
+      "deleteSelectedButton": "Slet valgte henvendelser",
+      "cancelButton": "Annuller sletning",
+      "confirmDeleteButton": "Bekræft sletning"
+    },
+    "overview": {
+      "last7DaysTab": "Vis statistik for de seneste 7 dage",
+      "last30DaysTab": "Vis statistik for de seneste 30 dage",
+      "loadingSpinner": "Indlæser statistik"
     }
   },
   "SEO": {
     "title": "Arzonic",
-    "titleAbout": "Om os",
+    "titleAbout": "Om Os",
     "titleSolutions": "Løsninger",
     "titleCases": "Cases",
-    "titleContact": "Kontakt os",
+    "titleContact": "Kontakt Os",
     "titleGetStarted": "Prisberegner",
-    "titleJobs": "Jobs",
-    "titleCustomsWebsites": "Tilpassede Hjemmesider",
+    "titleJobs": "Karriere",
+    "titleCustomsWebsites": "Skræddersyede Hjemmesider",
     "titleJobsWebApplictions": "Webapplikationer",
     "titleJobs3DVisualization": "3D-Visualisering",
     "titleJobsDesignAndAnimation": "Design & Animation",
-    "description": "Vi bygger lynhurtige hjemmesider og engagerende oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov",
+    "description": "Vi bygger lynhurtige hjemmesider og engagerende digitale oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov.",
     "keywords": "webbureau, hjemmesider, webapplikationer, 3D-visualisering, digitalt bureau, UI/UX design, frontend udvikling"
   }
 }

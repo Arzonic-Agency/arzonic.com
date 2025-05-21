@@ -1,7 +1,7 @@
 import { createMember } from "@/lib/server/actions";
 import React, { useState } from "react";
 import { FaEnvelope, FaKey, FaShield, FaSignature } from "react-icons/fa6";
-import { useTranslation } from "react-i18next"; // Import translation hook
+import { useTranslation } from "react-i18next";
 
 const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
   const { t } = useTranslation();
@@ -28,17 +28,16 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
     const errors = { email: "", password: "", confirmPassword: "" };
 
     if (!validateEmail(email)) {
-      errors.email = t("invalid_email"); // Use translation key
+      errors.email = t("invalid_email");
       valid = false;
     }
 
     if (password.length < 6) {
-      errors.password = t("password_too_short"); // Use translation key
-      valid = false;
+      errors.password = t("password_too_short");
     }
 
     if (password !== confirmPassword) {
-      errors.confirmPassword = t("passwords_not_matching"); // Use translation key
+      errors.confirmPassword = t("passwords_not_matching");
       valid = false;
     }
 
@@ -55,7 +54,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
         });
         onUserCreated();
       } catch {
-        setErrors({ ...errors, password: t("registration_error") }); // Use translation key
+        setErrors({ ...errors, password: t("registration_error") });
       } finally {
         setLoading(false);
       }
@@ -100,6 +99,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              aria-label={t("aria.register.nameInput")}
             />
           </label>
         </div>
@@ -119,6 +119,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              aria-label={t("aria.register.emailInput")}
             />
           </label>
           {errors.email && (
@@ -143,6 +144,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              aria-label={t("aria.register.passwordInput")}
             />
           </label>
           {errors.password && (

@@ -102,6 +102,7 @@ const ReviewsList = ({
                   <button
                     className="btn btn-sm btn-neutral"
                     onClick={() => onEditReview(r.id)}
+                    aria-label={t("aria.reviewsList.editButton")}
                   >
                     <FaPen /> {t("edit")}
                   </button>
@@ -111,6 +112,7 @@ const ReviewsList = ({
                       setDeletingId(r.id);
                       setIsModalOpen(true);
                     }}
+                    aria-label={t("aria.reviewsList.deleteButton")}
                   >
                     <FaTrash />
                   </button>
@@ -138,6 +140,7 @@ const ReviewsList = ({
                 <button
                   className="btn btn-sm"
                   onClick={() => onEditReview(r.id)}
+                  aria-label={t("aria.reviewsList.editButton")}
                 >
                   <FaPen />
                 </button>
@@ -147,6 +150,7 @@ const ReviewsList = ({
                     setDeletingId(r.id);
                     setIsModalOpen(true);
                   }}
+                  aria-label={t("aria.reviewsList.deleteButton")}
                 >
                   <FaTrash />
                 </button>
@@ -162,10 +166,18 @@ const ReviewsList = ({
             <h3 className="font-bold">{t("delete_review_confirmation")}</h3>
             <p className="py-4">{t("delete_review_prompt")}</p>
             <div className="modal-action">
-              <button className="btn" onClick={() => setIsModalOpen(false)}>
+              <button
+                className="btn"
+                onClick={() => setIsModalOpen(false)}
+                aria-label={t("aria.reviewsList.cancelDeleteButton")}
+              >
                 {t("cancel")}
               </button>
-              <button className="btn btn-error" onClick={handleDelete}>
+              <button
+                className="btn btn-error"
+                onClick={handleDelete}
+                aria-label={t("aria.reviewsList.confirmDeleteButton")}
+              >
                 {t("delete")}
               </button>
             </div>

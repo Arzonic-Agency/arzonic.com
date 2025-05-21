@@ -13,11 +13,11 @@ const RequestsPagination = ({
   setPage,
   total,
 }: RequestsPaginationProps) => {
-  const totalPages = Math.ceil(total / 6); // Calculate total pages based on 6 items per page
+  const totalPages = Math.ceil(total / 6);
   const { t } = useTranslation();
 
   if (total <= 6) {
-    return null; // Do not render pagination if there are 6 or fewer requests
+    return null;
   }
 
   const handlePrevious = () => {
@@ -38,16 +38,24 @@ const RequestsPagination = ({
         className="join-item btn "
         onClick={handlePrevious}
         disabled={page === 1}
+        aria-label={t("aria.requestsPagination.previousButton")}
       >
         <FaAngleLeft />
       </button>
-      <span className="join-item btn text-zinc-400">
+      <span
+        className="join-item btn text-zinc-400"
+        aria-label={t("aria.requestsPagination.pageIndicator", {
+          currentPage: page,
+          totalPages: totalPages,
+        })}
+      >
         {t("site")} {page} / {totalPages}{" "}
       </span>
       <button
         className="join-item btn"
         onClick={handleNext}
         disabled={page >= totalPages}
+        aria-label={t("aria.requestsPagination.nextButton")}
       >
         <FaAngleRight />
       </button>

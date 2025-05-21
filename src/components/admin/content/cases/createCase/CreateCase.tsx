@@ -99,6 +99,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
                 required
+                aria-label={t("aria.createCase.companyName")}
               />
               {errors.company && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -117,6 +118,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 value={contact}
                 onChange={(e) => setContact(e.target.value)}
                 required
+                aria-label={t("aria.createCase.contactPerson")}
               />
               {errors.contact && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -137,6 +139,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 style={{ resize: "none" }}
                 cols={30}
                 rows={8}
+                aria-label={t("aria.createCase.description")}
               ></textarea>
               <div className="text-right text-xs font-medium text-zinc-500">
                 {desc.length} / 500
@@ -159,6 +162,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 required
+                aria-label={t("aria.createCase.city")}
               />
               {errors.city && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -177,6 +181,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 required
+                aria-label={t("aria.createCase.country")}
               />
               {errors.country && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -193,6 +198,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 placeholder={t("write_website_url")}
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
+                aria-label={t("aria.createCase.websiteUrl")}
               />
               {errors.website && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -208,6 +214,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 className="file-input file-input-bordered file-input-md w-full"
                 onChange={(e) => setImage(e.target.files?.[0] || null)}
                 required
+                aria-label={t("aria.createCase.chooseImage")}
               />
               {errors.image && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -221,6 +228,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
           type="submit"
           className="btn btn-primary mt-2"
           disabled={loading}
+          aria-label={loading ? t("aria.createCase.creating") : t("aria.createCase.create")}
         >
           {loading ? t("creating") : t("create")}
         </button>

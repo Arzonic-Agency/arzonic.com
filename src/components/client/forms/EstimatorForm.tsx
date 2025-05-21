@@ -60,6 +60,7 @@ const EstimatorContactForm = ({
       <input
         type="text"
         placeholder={t("estimator.form.namePlaceholder", "Your name")}
+        aria-label={t("aria.estimator.nameInput", "Enter your name")}
         required
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -69,6 +70,7 @@ const EstimatorContactForm = ({
       <input
         type="email"
         placeholder={t("estimator.form.emailPlaceholder", "Your email")}
+        aria-label={t("aria.estimator.emailInput", "Enter your email")}
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -112,6 +114,7 @@ const EstimatorContactForm = ({
         <input
           type="tel"
           placeholder={t("estimator.form.phonePlaceholder", "Phone number")}
+          aria-label={t("aria.estimator.phoneInput", "Enter your phone number")}
           required
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
@@ -139,7 +142,12 @@ const EstimatorContactForm = ({
       </div>
 
       <div className="flex items-center gap-10">
-        <button onClick={onBack} type="button" className="btn btn-sm btn-soft">
+        <button
+          onClick={onBack}
+          type="button"
+          className="btn btn-sm btn-soft"
+          aria-label={t("aria.estimator.backButton", "Go back to the previous step")}
+        >
           <FaAngleLeft />
         </button>
         <button
@@ -148,6 +156,7 @@ const EstimatorContactForm = ({
             loading ? "loading" : ""
           }`}
           disabled={loading || !consentChecked}
+          aria-label={t("aria.estimator.submitButton", "Submit the form")}
         >
           {t("estimator.form.submitButton", "Submit")}
         </button>

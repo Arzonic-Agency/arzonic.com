@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaAngleLeft } from "react-icons/fa6";
 import { updateRequest, getRequestById } from "@/lib/server/actions";
 import { Request } from "../RequestsList";
+import { useTranslation } from "next-i18next";
 
 interface UpdateRequestProps {
   requestId: string;
@@ -16,6 +17,7 @@ const UpdateRequest = ({
   setShowToast,
   onUpdateRequest,
 }: UpdateRequestProps) => {
+  const { t } = useTranslation("common");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
   const [category, setCategory] = useState("");
@@ -83,9 +85,13 @@ const UpdateRequest = ({
   return (
     <div className="flex flex-col w-full gap-5">
       <div className="flex items-start">
-        <button onClick={onBackClick} className="btn btn-ghost">
+        <button
+          onClick={onBackClick}
+          className="btn btn-ghost"
+          aria-label={t("aria.updateRequest.backButton")}
+        >
           <FaAngleLeft />
-          Tilbage
+          {t("back")}
         </button>
       </div>
 
@@ -103,6 +109,7 @@ const UpdateRequest = ({
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.companyInput")}
                 />
               </fieldset>
               <fieldset className="flex flex-col gap-2 relative w-full fieldset">
@@ -114,6 +121,7 @@ const UpdateRequest = ({
                   value={mail}
                   onChange={(e) => setMail(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.mailInput")}
                 />
               </fieldset>
               <fieldset className="flex flex-col gap-2 relative w-full fieldset">
@@ -125,6 +133,7 @@ const UpdateRequest = ({
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.mobileInput")}
                 />
               </fieldset>
 
@@ -135,9 +144,10 @@ const UpdateRequest = ({
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.categorySelect")}
                 >
                   <option value="" disabled>
-                    Choose Task
+                    {t("task_interest")}
                   </option>
                   <option value="Website">Website</option>
                   <option value="Web App">Web App</option>
@@ -161,6 +171,7 @@ const UpdateRequest = ({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.nameInput")}
                 />
               </fieldset>
               <fieldset className="flex flex-col gap-2 relative w-full fieldset">
@@ -172,6 +183,7 @@ const UpdateRequest = ({
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.addressInput")}
                 />
               </fieldset>
 
@@ -184,6 +196,7 @@ const UpdateRequest = ({
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   required
+                  aria-label={t("aria.updateRequest.cityInput")}
                 />
               </fieldset>
               <fieldset className="flex flex-col gap-2 relative w-full fieldset">
@@ -197,6 +210,7 @@ const UpdateRequest = ({
                   value={message}
                   onChange={handleMessageChange}
                   required
+                  aria-label={t("aria.updateRequest.messageTextarea")}
                 />
                 <div className="text-right text-xs font-medium text-zinc-500">
                   {charCount}/{charLimit}
@@ -206,8 +220,12 @@ const UpdateRequest = ({
           </div>
 
           <div className="flex items-center justify-start gap-3">
-            <button className="btn btn-primary" type="submit">
-              Opdater kunde
+            <button
+              className="btn btn-primary"
+              type="submit"
+              aria-label={t("aria.updateRequest.submitButton")}
+            >
+              {t("update")}
             </button>
           </div>
         </form>

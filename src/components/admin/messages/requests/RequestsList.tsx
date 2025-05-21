@@ -112,6 +112,7 @@ const RequestsList = ({
                     )
                   }
                   checked={selectedRequests.length === localRequests.length}
+                  aria-label={t("aria.requestsList.selectAllCheckbox")}
                 />
               </label>
             </th>
@@ -130,6 +131,7 @@ const RequestsList = ({
                     className="checkbox checkbox-primary "
                     checked={selectedRequests.includes(request.id)}
                     onChange={() => handleCheckboxChange(request.id)}
+                    aria-label={t("aria.requestsList.individualCheckbox")}
                   />
                 </label>
               </th>
@@ -159,6 +161,7 @@ const RequestsList = ({
                 <button
                   className="btn btn-outline btn-primary btn-sm flex items-center"
                   onClick={() => onDetailsClick(request.id)}
+                  aria-label={t("aria.requestsList.detailsButton")}
                 >
                   <span className="hidden lg:block">{t("details")}</span>
                   <FaAngleRight />

@@ -29,6 +29,7 @@ const ReviewsPagination = ({ page, setPage, total }: ReviewPaginationProps) => {
         className="join-item btn bg-base-100"
         onClick={handlePrevious}
         disabled={page === 1}
+        aria-label={t("aria.reviewsPagination.previousPage")}
       >
         <FaAngleLeft />
       </button>
@@ -39,6 +40,7 @@ const ReviewsPagination = ({ page, setPage, total }: ReviewPaginationProps) => {
         className="join-item btn bg-base-100"
         onClick={handleNext}
         disabled={page >= totalPages}
+        aria-label={t("aria.reviewsPagination.nextPage")}
       >
         <FaAngleRight />
       </button>

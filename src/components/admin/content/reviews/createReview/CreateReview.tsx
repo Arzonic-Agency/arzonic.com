@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { createReview } from "@/lib/server/actions";
 import CreateRating from "./CreateRating";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface CreateReviewProps {
   onReviewCreated: () => void;
 }
 
 const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
+  const { t } = useTranslation();
   const [desc, setDesc] = useState("");
   const [rate, setRate] = useState<number>(1);
   const [company, setCompany] = useState("");
@@ -74,6 +75,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
               onChange={handleDescChange}
               required
               placeholder={t("write_desc")}
+              aria-label={t("aria.descriptionInput")}
               style={{ resize: "none" }}
               cols={30}
               rows={5}
@@ -98,6 +100,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
+              aria-label={t("aria.companyInput")}
             />
           </fieldset>
           {errors.company && (
@@ -117,6 +120,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               required
+              aria-label={t("aria.contactInput")}
             />
           </fieldset>
           {errors.contact && (
@@ -126,7 +130,14 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
           )}
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading}
+          aria-label={
+            loading ? t("aria.creatingReview") : t("aria.createReview")
+          }
+        >
           {loading ? t("creating") : `${t("create")} ${t("request")}`}
         </button>
       </form>

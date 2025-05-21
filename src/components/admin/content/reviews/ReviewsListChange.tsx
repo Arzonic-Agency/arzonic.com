@@ -19,6 +19,7 @@ const ReviewsListChange = ({ onViewChange }: ReviewListChangeProps) => {
         role="tab"
         className={`tab ${activeView === "cards" ? "tab-active" : ""}`}
         onClick={() => handleViewChange("cards")}
+        aria-label={t("aria.reviewsListChange.cardsView")}
       >
         {t("cards")}
       </a>
@@ -26,6 +27,7 @@ const ReviewsListChange = ({ onViewChange }: ReviewListChangeProps) => {
         role="tab"
         className={`tab ${activeView === "list" ? "tab-active" : ""}`}
         onClick={() => handleViewChange("list")}
+        aria-label={t("aria.reviewsListChange.listView")}
       >
         {t("list")}
       </a>

@@ -47,7 +47,7 @@ const Header = () => {
         <Link
           className="cursor-pointer pl-4 flex items-center gap-2"
           href="/"
-          aria-label={t("Header.homeLink", "Gå til forsiden")}
+          aria-label={t("aria.navigation.linkToHome", "Go to homepage")}
         >
           <Image
             src="/icon-192x192.png"
@@ -70,7 +70,11 @@ const Header = () => {
             onMouseEnter={() => setDropdownOpen(true)}
             onMouseLeave={() => setDropdownOpen(false)}
           >
-            <Link href="/solutions" className="cursor-pointer">
+            <Link
+              href="/solutions"
+              className="cursor-pointer"
+              aria-label={t("aria.navigation.linkToSolutions", "Go to solutions")}
+            >
               {t("Header.solutions")}
             </Link>
 
@@ -108,13 +112,27 @@ const Header = () => {
             </AnimatePresence>
           </li>
           <li>
-            <Link href="/cases">{t("Header.cases")}</Link>
+            <Link
+              href="/cases"
+              aria-label={t("aria.navigation.linkToCases", "Go to cases")}
+            >
+              {t("Header.cases")}
+            </Link>
           </li>
           <li>
-            <Link href="/contact">{t("Header.contact")}</Link>
+            <Link
+              href="/contact"
+              aria-label={t("aria.navigation.linkToContact", "Go to contact")}
+            >
+              {t("Header.contact")}
+            </Link>
           </li>
           <li>
-            <Link href="/get-started" className="btn btn-primary text-base">
+            <Link
+              href="/get-started"
+              className="btn btn-primary text-base"
+              aria-label={t("aria.navigation.getStarted", "Get started")}
+            >
               {t("Header.getStarted")}
             </Link>
           </li>
@@ -147,17 +165,29 @@ const Header = () => {
                 </label>
               </li>
               <li className="text-xl font-semibold">
-                <Link href="/solutions" onClick={handleCloseDrawer}>
+                <Link
+                  href="/solutions"
+                  onClick={handleCloseDrawer}
+                  aria-label={t("aria.navigation.linkToSolutions", "Go to solutions")}
+                >
                   {t("Header.solutions")}
                 </Link>
               </li>
               <li className="text-xl font-semibold">
-                <Link href="/cases" onClick={handleCloseDrawer}>
+                <Link
+                  href="/cases"
+                  onClick={handleCloseDrawer}
+                  aria-label={t("aria.navigation.linkToCases", "Go to cases")}
+                >
                   {t("Header.cases")}
                 </Link>
               </li>
               <li className="text-xl font-semibold">
-                <Link href="/contact" onClick={handleCloseDrawer}>
+                <Link
+                  href="/contact"
+                  onClick={handleCloseDrawer}
+                  aria-label={t("aria.navigation.linkToContact", "Go to contact")}
+                >
                   {t("Header.contact")}
                 </Link>
               </li>
@@ -166,6 +196,7 @@ const Header = () => {
                   href="/get-started"
                   className="btn btn-primary text-neutral-content py-2 mt-4"
                   onClick={handleCloseDrawer}
+                  aria-label={t("aria.navigation.getStarted", "Get started")}
                 >
                   {t("Header.getStarted")}
                 </Link>

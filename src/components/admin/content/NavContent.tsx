@@ -23,6 +23,7 @@ const NavContent = () => {
               : ""
           }`}
           onClick={() => setActiveTab("cases")}
+          aria-label={t("aria.navContent.casesTab")}
         >
           <FaRegNewspaper />
           Cases
@@ -35,6 +36,7 @@ const NavContent = () => {
               : ""
           }`}
           onClick={() => setActiveTab("reviews")}
+          aria-label={t("aria.navContent.reviewsTab")}
         >
           <FaStar />
           {t("reviews")}

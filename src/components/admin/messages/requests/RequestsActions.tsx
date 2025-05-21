@@ -35,7 +35,12 @@ const RequestsActions = ({
   return (
     <>
       <div className="dropdown dropdown-bottom dropdown-end">
-        <div tabIndex={0} role="button" className="btn">
+        <div
+          tabIndex={0}
+          role="button"
+          className="btn"
+          aria-label={t("aria.requestsActions.dropdownMenu")}
+        >
           <FaEllipsis size={20} />
         </div>
         <ul
@@ -43,12 +48,20 @@ const RequestsActions = ({
           className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 gap-2 p-2 shadow"
         >
           <li>
-            <button className="" onClick={onEditClick}>
+            <button
+              className=""
+              onClick={onEditClick}
+              aria-label={t("aria.requestsActions.editButton")}
+            >
               <FaPen /> {`${t("update")} ${t("customer")}`}
             </button>
           </li>
           <li>
-            <button className="" onClick={openModal}>
+            <button
+              className=""
+              onClick={openModal}
+              aria-label={t("aria.requestsActions.deleteButton")}
+            >
               <FaTrash /> {`${t("delete")} ${t("customer")}`}
             </button>
           </li>

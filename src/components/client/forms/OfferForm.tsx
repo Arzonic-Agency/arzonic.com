@@ -134,6 +134,7 @@ const OfferForm = () => {
                     type="text"
                     autoComplete="name"
                     placeholder={t("OfferForm.fields.name.placeholder")}
+                    aria-label={t("OfferForm.aria.nameInput")}
                     className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -152,6 +153,7 @@ const OfferForm = () => {
                     type="email"
                     autoComplete="email"
                     placeholder={t("OfferForm.fields.email.placeholder")}
+                    aria-label={t("OfferForm.aria.emailInput")}
                     className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={mail}
                     onChange={(e) => setMail(e.target.value)}
@@ -170,6 +172,7 @@ const OfferForm = () => {
                     type="tel"
                     autoComplete="tel"
                     placeholder={t("OfferForm.fields.phone.placeholder")}
+                    aria-label={t("OfferForm.aria.phoneInput")}
                     className="input input-ghost bg-base-200 w-full md:max-w-xs"
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value)}
@@ -197,6 +200,7 @@ const OfferForm = () => {
                     name="message"
                     rows={5}
                     placeholder={t("OfferForm.fields.message.placeholder")}
+                    aria-label={t("OfferForm.aria.messageInput")}
                     className="textarea textarea-ghost bg-base-200 textarea-md text-base w-full md:max-w-xs resize-none"
                     value={message}
                     onChange={handleMessageChange}
@@ -221,6 +225,7 @@ const OfferForm = () => {
               className="checkbox checkbox-md checkbox-primary"
               checked={isChecked}
               onChange={(e) => setIsChecked(e.target.checked)}
+              aria-label={t("OfferForm.aria.consentCheckbox")}
               required
             />
             <label htmlFor="consent" className="label-text text-xs max-w-60">
@@ -239,6 +244,7 @@ const OfferForm = () => {
             type="submit"
             className="btn btn-primary mt-5"
             disabled={isLoading}
+            aria-label={t("OfferForm.aria.submitButton")}
           >
             {isLoading
               ? t("OfferForm.buttons.sending")

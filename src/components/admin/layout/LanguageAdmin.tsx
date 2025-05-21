@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const LanguageAdmin = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isEnglish, setIsEnglish] = useState(i18n.language === "en");
 
   useEffect(() => {
@@ -15,12 +15,23 @@ const LanguageAdmin = () => {
         type="checkbox"
         checked={isEnglish}
         onChange={() => setIsEnglish(!isEnglish)}
+        aria-label={
+          isEnglish
+            ? t("aria.language.changeToDanish")
+            : t("aria.language.changeToEnglish")
+        }
       />
-      <div className="swap-on flex items-center gap-2">
+      <div
+        className="swap-on flex items-center gap-2"
+        aria-label={t("aria.language.changeToDanish")}
+      >
         <span>🇩🇰</span>
         <span>Dansk</span>
       </div>
-      <div className="swap-off flex items-center gap-2">
+      <div
+        className="swap-off flex items-center gap-2"
+        aria-label={t("aria.language.changeToEnglish")}
+      >
         <span>🇬🇧</span>
         <span>English</span>
       </div>

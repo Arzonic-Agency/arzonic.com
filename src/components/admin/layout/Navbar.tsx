@@ -38,6 +38,7 @@ const Navbar = () => {
               <Link
                 className={pathname === "/admin" ? "menu-active" : ""}
                 href="/admin"
+                aria-label={t("aria.navigation.linkToOverview")}
               >
                 {t("overview")}
               </Link>
@@ -46,6 +47,7 @@ const Navbar = () => {
               <Link
                 className={pathname === "/admin/content" ? "menu-active" : ""}
                 href="/admin/content"
+                aria-label={t("aria.navigation.linkToContent")}
               >
                 {t("content")}
               </Link>
@@ -54,6 +56,7 @@ const Navbar = () => {
               <Link
                 className={pathname === "/admin/messages" ? "menu-active" : ""}
                 href="/admin/messages"
+                aria-label={t("aria.navigation.linkToCustomers")}
               >
                 {t("customers")}
               </Link>
@@ -65,6 +68,7 @@ const Navbar = () => {
                     pathname === "/admin/settings" ? "menu-active" : ""
                   }
                   href="/admin/settings"
+                  aria-label={t("aria.navigation.linkToSettings")}
                 >
                   {t("settings")}
                 </Link>
@@ -78,6 +82,7 @@ const Navbar = () => {
               <Link
                 href="/admin"
                 className={pathname === "/admin" ? "active" : ""}
+                aria-label={t("aria.navigation.linkToOverview")}
               >
                 <FaHouse size={25} />
               </Link>
@@ -86,6 +91,7 @@ const Navbar = () => {
               <Link
                 href="/admin/content"
                 className={pathname === "/admin/content" ? "active" : ""}
+                aria-label={t("aria.navigation.linkToContent")}
               >
                 <FaList size={25} />
               </Link>
@@ -94,6 +100,7 @@ const Navbar = () => {
               <Link
                 href="/admin/messages"
                 className={pathname === "/admin/messages" ? "active" : ""}
+                aria-label={t("aria.navigation.linkToCustomers")}
               >
                 <FaComment size={25} />
               </Link>
@@ -102,6 +109,7 @@ const Navbar = () => {
               <Link
                 href="/admin/settings"
                 className={pathname === "/admin/settings" ? "active" : ""}
+                aria-label={t("aria.navigation.linkToSettings")}
               >
                 <FaGear size={25} />
               </Link>
