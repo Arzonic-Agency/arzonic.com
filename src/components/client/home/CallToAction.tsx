@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { FaPhone } from "react-icons/fa6";
 import OfferForm from "../forms/OfferForm";
 import Image from "next/image";
-import EuropeMap from "./elements/EuropeMap";
+import EuropeMap from "@/components/elements/EuropeMap";
 
 const CallToAction = () => {
   const { t } = useTranslation();

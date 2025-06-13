@@ -1,4 +1,3 @@
-// components/SplashScreen.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -8,12 +7,11 @@ import { useProgress } from "@react-three/drei";
 export default function SplashScreen() {
   const { progress } = useProgress();
   const [hideSplash, setHideSplash] = useState(false);
-
-  // Detect mobile via media‐query
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(max-width: 768px)");
+    const mq = window.matchMedia("(max-width: 1024px)");
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", onChange);
     setIsMobile(mq.matches);
@@ -27,13 +25,8 @@ export default function SplashScreen() {
     }
   }, [progress]);
 
-  useEffect(() => {
-    if (!isMobile) return;
-    const fallbackTimeout = setTimeout(() => {
-      setHideSplash(true);
-    }, 2000); // e.g. 2s max wait on mobile
-    return () => clearTimeout(fallbackTimeout);
-  }, [isMobile]);
+  // Fjern splash helt på mobil
+  if (isMobile) return null;
 
   return (
     <AnimatePresence>

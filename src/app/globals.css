@@ -17,7 +17,7 @@
   --color-accent: oklch(27% 0.046 192.524);
   --color-accent-content: oklch(98% 0 0);
   --color-neutral: #111;
-  --color-neutral-content: #e4e4e4;
+  --color-neutral-content: #E4E4E4;
   --color-info: oklch(50% 0.134 242.749);
   --color-info-content: oklch(29% 0.066 243.157);
   --color-success: #177512;
@@ -25,7 +25,7 @@
   --color-warning: #AE9F17;
   --color-warning-content: oklch(28% 0.066 53.813);
   --color-error: oklch(45% 0.188 13.697);
-  --color-error-content: #e4e4e4;
+  --color-error-content: #E4E4E4;
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
   --radius-box: 0.5rem;
@@ -190,4 +190,29 @@
 .flash-popular {
   box-shadow: 0px 4px 30px #048179;
   color: #ffffff70;
+}
+
+/* Bullet & number list fix */
+.tiptap-list-style ul {
+  padding-left: 0.7rem;
+  list-style-position: inside;
+}
+
+.tiptap-list-style ul>li {
+  list-style-type: disc;
+  display: list-item;
+}
+
+
+.tiptap-list-style li>p {
+  margin: 0;
+  display: inline;
+}
+
+.tiptap-list-style h3 {
+  @apply text-lg font-bold mt-3 mb-2;
+}
+
+.tiptap-list-style h4 {
+  @apply text-lg font-medium mt-2 mb-1;
 }

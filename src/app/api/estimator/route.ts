@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerClientInstance } from "@/utils/supabase/server";
-import { sendEstimatorEmail } from "@/lib/server/contact";
+import { sendEstimatorEmail } from "@/lib/server/mails";
 import { calculateEstimateFromAnswers } from "@/lib/server/estimate";
 import { createContactRequest } from "@/lib/client/actions";
 

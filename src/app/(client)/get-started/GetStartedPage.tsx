@@ -2,9 +2,9 @@
 
 import React from "react";
 import PriceEstimator from "@/components/client/get-started/PriceEstimator";
-import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const GetStartedPage = () => {
   const { t } = useTranslation();

@@ -900,6 +900,282 @@ export async function deleteRequestNote(noteId: string): Promise<void> {
     throw error;
   }
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// JOBS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getAllJobs(page: number = 1, limit: number = 6) {
+  const supabase = await createServerClientInstance();
+  const offset = (page - 1) * limit;
+
+  try {
+    const { data, count, error } = await supabase
+      .from("jobs")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(offset, offset + limit - 1);
+
+    if (error) {
+      throw new Error(
+        `Failed to fetch requests: ${error.message || "Unknown error"}`
+      );
+    }
+
+    return { requests: data || [], total: count || 0 };
+  } catch (err) {
+    console.error("Unexpected error during fetching requests:", err);
+    throw err;
+  }
+}
+
+export async function getJobEnums() {
+  const supabase = await createServerClientInstance();
+
+  const fetchEnum = async (enumName: string) => {
+    try {
+      const { data, error } = await supabase.rpc("get_enum_values", {
+        enum_name: enumName,
+      });
+
+      if (error || !data) {
+        console.error(
+          `[getJobEnums] Failed to fetch ${enumName}:`,
+          error?.message || "No data returned"
+        );
+        return [];
+      }
+
+      return data;
+    } catch (err) {
+      console.error(
+        `[getJobEnums] Unexpected error while fetching ${enumName}:`,
+        err
+      );
+      return [];
+    }
+  };
+
+  const [jobType, jobWorkplace, jobStartType] = await Promise.all([
+    fetchEnum("job-type"),
+    fetchEnum("job-workplace"),
+    fetchEnum("job-start-type"),
+  ]);
+
+  return {
+    jobType,
+    jobWorkplace,
+    jobStartType,
+  };
+}
+
+export async function createJob(data: {
+  title: string;
+  subtitle: string;
+  desc: string;
+  type: string;
+  workplace: string;
+  start_type: string | null;
+  start_date: string | null;
+  deadline: string;
+}) {
+  const supabase = await createServerClientInstance();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    console.error("[createJob] Not authenticated", authError);
+    throw new Error("Du er ikke logget ind");
+  }
+
+  // Generér slug ud fra title
+  let baseSlug = data.title
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  let slug = baseSlug;
+  let counter = 1;
+
+  // Tjek om slug findes – tilføj -1, -2, osv. hvis nødvendigt
+  while (true) {
+    const { data: existing } = await supabase
+      .from("jobs")
+      .select("id")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    if (!existing) break;
+    slug = `${baseSlug}-${counter++}`;
+  }
+
+  const { error } = await supabase.from("jobs").insert([
+    {
+      title: data.title,
+      subtitle: data.subtitle,
+      desc: data.desc,
+      type: data.type,
+      workplace: data.workplace,
+      start_type: data.start_type,
+      start_date: data.start_date,
+      deadline: data.deadline,
+      slug,
+    },
+  ]);
+
+  if (error) {
+    console.error("[createJob] Supabase insert error:", error.message);
+    throw new Error("Kunne ikke oprette job. Tjek rettigheder og data.");
+  }
+
+  console.log("[createJob] Job oprettet med slug:", slug);
+}
+
+export async function updateJob(
+  jobId: string,
+  data: {
+    title?: string;
+    subtitle?: string;
+    desc?: string;
+    type?: string;
+    workplace?: string;
+    start_type?: string | null;
+    start_date?: string | null;
+    deadline?: string;
+    active?: boolean; // Added active property
+  }
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    console.error("[updateJob] Not authenticated", authError);
+    throw new Error("Du er ikke logget ind");
+  }
+
+  const { error } = await supabase.from("jobs").update(data).eq("id", jobId);
+
+  if (error) {
+    console.error(
+      "[updateJob] Supabase update error:",
+      error.message,
+      error.details
+    );
+    throw new Error("Kunne ikke opdatere job. Tjek rettigheder og data.");
+  }
+}
+
+export async function deleteJob(jobId: string): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { error } = await supabase.from("jobs").delete().eq("id", jobId);
+
+    if (error) {
+      throw new Error(`Failed to delete job: ${error.message}`);
+    }
+
+    console.log(`[deleteJob] Job with ID ${jobId} deleted successfully.`);
+  } catch (err) {
+    console.error("[deleteJob] Unexpected error during job deletion:", err);
+    throw err;
+  }
+}
+
+export async function getJobById(jobId: string) {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data, error } = await supabase
+      .from("jobs")
+      .select("*")
+      .eq("id", jobId)
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to fetch job by ID: ${error.message}`);
+    }
+
+    return data;
+  } catch (err) {
+    console.error("Unexpected error during fetching job by ID:", err);
+    throw err;
+  }
+}
+
+export async function getApplicationsByJobId(jobId: string) {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data: applications, error } = await supabase
+      .from("applications")
+      .select("*")
+      .eq("job_id", jobId);
+
+    if (error) {
+      throw new Error(`Failed to fetch applications: ${error.message}`);
+    }
+
+    if (!applications || applications.length === 0) return [];
+
+    const signedApplications = await Promise.all(
+      applications.map(async (app) => {
+        const [cvSigned, appSigned] = await Promise.all([
+          supabase.storage
+            .from("applications-files")
+            .createSignedUrl(app.cv, 60 * 60),
+          supabase.storage
+            .from("applications-files")
+            .createSignedUrl(app.application, 60 * 60),
+        ]);
+
+        return {
+          ...app,
+          cvSignedUrl: cvSigned.data?.signedUrl || null,
+          applicationSignedUrl: appSigned.data?.signedUrl || null,
+        };
+      })
+    );
+
+    return signedApplications;
+  } catch (err) {
+    console.error("Unexpected error during fetching applications:", err);
+    throw err;
+  }
+}
+
+export async function deleteApplication(applicationId: string): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { error } = await supabase
+      .from("applications")
+      .delete()
+      .eq("id", applicationId);
+
+    if (error) {
+      throw new Error(`Failed to delete application: ${error.message}`);
+    }
+
+    console.log(
+      `[deleteApplication] Application with ID ${applicationId} deleted successfully.`
+    );
+  } catch (err) {
+    console.error(
+      "[deleteApplication] Unexpected error during application deletion:",
+      err
+    );
+    throw err;
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PACKAGES AND SERVICES

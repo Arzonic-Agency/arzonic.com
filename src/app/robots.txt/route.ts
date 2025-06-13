@@ -7,7 +7,7 @@ Disallow: /login/
 Disallow: /dashboard/
 Disallow: /admin/
 
-Sitemap: https://arzonic.com/sitemap
+Sitemap: https://arzonic.com/sitemap.xml
 `;
 
   return new NextResponse(content, {

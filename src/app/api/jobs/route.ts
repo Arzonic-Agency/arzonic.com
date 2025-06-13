@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
-import { sendContactEmail } from "@/lib/server/mails";
+import { sendJobApplicationConfirmEmail } from "@/lib/server/mails";
 
-interface ContactPayload {
+interface JobApplicationPayload {
   name: string;
-  email: string;
-  message: string;
+  mail: string;
+  title: string;
   lang?: "en" | "da";
 }
 
 export async function POST(request: Request) {
-  const { name, email, message, lang } =
-    (await request.json()) as ContactPayload;
+  const { name, mail, title, lang } =
+    (await request.json()) as JobApplicationPayload;
 
-  if (!name || !email || !message) {
+  if (!name || !mail || !title) {
     return NextResponse.json(
       { error: "Missing required fields." },
       { status: 400 }
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await sendContactEmail(name, email, message, lang ?? "en");
+    await sendJobApplicationConfirmEmail(name, mail, title, lang ?? "en");
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Mail error:", err);

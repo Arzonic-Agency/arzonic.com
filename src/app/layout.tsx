@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import React from "react";
-import I18nProvider from "@/i18n/i18nProvidedr";
+import I18nProvider from "@/i18n/i18nProvider";
 
 const outfitSans = Outfit({
   subsets: ["latin"],

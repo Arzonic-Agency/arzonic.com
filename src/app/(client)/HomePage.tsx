@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Hero from "@/components/client/home/Hero";
-import Prices from "@/components/client/home/Prices";
 import Process from "@/components/client/home/Process";
 import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
@@ -50,10 +49,7 @@ const HomePage = () => {
       <section className="h-[3000px] md:h-[2600px]" id="Process">
         <Process isSticky={isSticky} />
       </section>
-      <section className=" lg:h-[850px] my-40 hidden lg:block">
-        <Prices />
-      </section>
-      <section className="relative h-full md:h-[850px] xl:h-[900px] 2xl:h-[1100px] mb-16 overflow-visible xl:grid xl:place-items-center">
+      <section className="relative h-full md:h-[850px] xl:h-[900px] 2xl:h-[1100px] mb-16 overflow-visible xl:grid xl:place-items-center mt-16">
         <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:top-0 xl:w-screen w-full h-full opacity-55 z-0">
           <Image
             src="/backgrounds/lines.svg"

@@ -1,21 +1,18 @@
 import { create } from "zustand";
 
-// Definér typen for brugerens data
 interface User {
   id: string;
   email: string | undefined;
 }
 
-// Definér Zustand state
 interface AuthState {
-  user: User | null; // Brugerens data
-  role: "admin" | "editor" | null; // Brugerens rolle
-  setUser: (user: User) => void; // Sæt brugerdata
-  setRole: (role: "admin" | "editor") => void; // Sæt brugerrolle
-  clearSession: () => void; // Ryd session
+  user: User | null;
+  role: "admin" | "editor" | null;
+  setUser: (user: User) => void;
+  setRole: (role: "admin" | "editor") => void;
+  clearSession: () => void;
 }
 
-// Opret Zustand-store
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   role: null,

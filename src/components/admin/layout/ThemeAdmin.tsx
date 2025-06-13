@@ -35,9 +35,7 @@ const ThemeAdmin = () => {
         onChange={toggleTheme}
         className="hidden"
         aria-label={
-          isLight
-            ? t("aria.theme.switchToDark")
-            : t("aria.theme.switchToLight")
+          isLight ? t("aria.theme.switchToDark") : t("aria.theme.switchToLight")
         }
       />
 

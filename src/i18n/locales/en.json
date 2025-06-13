@@ -57,9 +57,12 @@
   "bookings": "Bookings",
   "request_details": "Request Details",
   "request_time": "Request Time",
+  "updated_job": "Job updated",
   "deleted_case": "Case deleted",
   "deleted_request": "Request deleted",
   "deleted_review": "Review deleted",
+  "deleted_application": "Application deleted",
+  "deleted_job": "Job posting deleted",
   "delete_case_confirmation": "Delete Case",
   "delete_case_prompt": "Are you sure you want to delete this case?",
   "delete_case_warning": "This action cannot be undone.",
@@ -70,6 +73,12 @@
   "delete_review_confirmation": "Delete Review",
   "delete_review_prompt": "Are you sure you want to delete this review?",
   "delete_review_warning": "This action cannot be undone.",
+  "delete_application_confirmation": "Delete Application",
+  "delete_application_prompt": "Are you sure you want to delete this application?",
+  "delete_application_warning": "This action cannot be undone.",
+  "delete_job_confirmation": "Delete Job Posting",
+  "delete_job_prompt": "Are you sure you want to delete this job posting?",
+  "delete_job_warning": "This action cannot be undone.",
   "case_creation": "Case creation",
   "review_creation": "Review creation",
   "case_editing": "Case editing",
@@ -110,6 +119,7 @@
   "loading_request": "Loading Requests...",
   "loading_users": "Loading Users...",
   "loading_packages": "Loading Packages...",
+  "loading_jobs": "Loading Jobs...",
   "no_users": "No users available",
   "no_cases": "No cases available",
   "no_reviews": "No reviews available",
@@ -120,6 +130,79 @@
   "site": "Site",
   "site_setup": "Site Setup",
   "layout_settings": "Layout Settings",
+  "createJob": {
+    "formTitle": "Create Job Posting",
+    "title": "Job Title",
+    "subtitle": "Headline",
+    "jobType": "Job Type",
+    "workplace": "Workplace",
+    "startType": "Start Time",
+    "deadline": "Application Deadline",
+    "description": "Job Description",
+    "create": "Create Job",
+    "creating": "Saving...",
+    "loading": "Loading job form...",
+    "placeholders": {
+      "title": "Enter a job title...",
+      "subtitle": "Enter a headline..."
+    },
+    "errors": {
+      "title": "Title is required",
+      "subtitle": "Subtitle is required",
+      "desc": "Description is required",
+      "type": "Job type is required",
+      "workplace": "Workplace is required",
+      "deadline": "Deadline is required",
+      "start": "Select a start date or start type"
+    }
+  },
+  "updateJob": {
+    "formTitle": "Edit Job Posting",
+    "title": "Job Title",
+    "subtitle": "Headline",
+    "jobType": "Job Type",
+    "workplace": "Workplace",
+    "startType": "Start Time",
+    "deadline": "Application Deadline",
+    "description": "Job Description",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "loading": "Loading job data...",
+    "placeholders": {
+      "title": "Enter a new job title...",
+      "subtitle": "Enter a new headline..."
+    },
+    "errors": {
+      "title": "Title is required",
+      "subtitle": "Headline is required",
+      "desc": "Description is required",
+      "type": "Job type is required",
+      "workplace": "Workplace is required",
+      "deadline": "Application deadline is required",
+      "start": "Select either a start date or start type"
+    }
+  },
+  "jobsDetails": {
+    "loading": "Loading job details...",
+    "title": "Job Details",
+    "back": "Back",
+    "edit": "Edit",
+    "active": "Active",
+    "inactive": "Inactive",
+    "fields": {
+      "title": "Job Title",
+      "type": "Job Type",
+      "startDate": "Start Date",
+      "workplace": "Workplace",
+      "deadline": "Application Deadline",
+      "createdAt": "Created At"
+    },
+    "applications": {
+      "title": "List of Candidates",
+      "noApplications": "No applications found.",
+      "noReason": "No reason provided"
+    }
+  },
   "image_upload": {
     "change_image": "Change Image",
     "select_image_type": "Select image type",
@@ -207,7 +290,9 @@
   "Header": {
     "brandName": "Arzonic",
     "solutions": "Solutions",
+    "logoAlt": "Arzonic Agency Logo",
     "cases": "Cases",
+    "pricing": "Pricing",
     "contact": "Contact",
     "getStarted": "Get Started",
     "followUs": "Follow us",
@@ -237,7 +322,7 @@
   "Hero": {
     "title": "MODERN WEB AGENCY",
     "description": "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
-    "noTemplates": "— no templates, no WordPress.",
+    "noTemplates": "— no templates, no WordPress",
     "customWebsites": "Custom Websites",
     "visualization": "3D Visualization",
     "webApplications": "Web Applications",
@@ -282,10 +367,10 @@
       "launchSupport": "Launch & Support"
     },
     "aria": {
-      "discoveryStrategy": "Go to Discovery & Strategy",
-      "designExperience": "Go to Design & Experience",
-      "developmentIntegration": "Go to Development & Integration",
-      "launchSupport": "Go to Launch & Support"
+      "discovery-strategy": "Go to Discovery & Strategy",
+      "design-experience": "Go to Design & Experience",
+      "development-integration": "Go to Development & Integration",
+      "launch-support": "Go to Launch & Support"
     }
   },
   "Process": {
@@ -333,11 +418,6 @@
         "Scalable solutions for future needs"
       ]
     }
-  },
-  "Pricing": {
-    "title": "Flexible Packages, Clear Pricing",
-    "subtitle": "Choose a solution that fits your needs and budget – no surprises, just results",
-    "vatNote": "All prices are excl. VAT"
   },
   "OfferForm": {
     "title": "Request a custom quote",
@@ -391,8 +471,8 @@
     }
   },
   "TaskSelect": {
-    "legend": "Which task are you interested in?",
-    "placeholder": "Choose Task",
+    "legend": "Which solution are you interested in?",
+    "placeholder": "Choose Solution",
     "options": {
       "website": "Website",
       "webApp": "Web App",
@@ -414,6 +494,66 @@
     "callPrompt": "Call us at",
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
+  },
+  "PricingPage": {
+    "titleStart": "Flexible plans,",
+    "titleEnd": "Transparent pricing",
+    "subtitle": "Choose a solution that fits your needs – no surprises, just results",
+    "vatNote": "All prices are excluding VAT",
+    "aria": {
+      "getQuoteButton": "Get a quote"
+    },
+    "oneTime": "One-time payment (monthly maintenance required)",
+    "monthlyIncl": "36-month plan (includes hosting and support)",
+    "oneTimeTab": "One-time payment",
+    "monthlyTab": "Monthly plan"
+  },
+  "PlansComparison": {
+    "title": "Compare our plans",
+    "table": {
+      "featureColumn": "Feature / Package"
+    },
+    "title-btn": "Ready to find your plan?",
+    "text-btn": "Get Started",
+    "startingFrom": "Starting from {{price}}",
+    "vatNote": "All prices are excl. VAT",
+    "legend": "Included | – Not included in standard package",
+    "features": {
+      "customDesign": "Custom design",
+      "responsive": "Responsive and fast",
+      "seo": "SEO setup",
+      "cms": "CMS / Editable content",
+      "login": "User login and access",
+      "booking": "Booking / Webshop / Mail system",
+      "dashboard": "Admin dashboard",
+      "database": "Database integration",
+      "3d": "3D elements and animations",
+      "scroll": "Scroll effects and parallax"
+    },
+    "plans": {
+      "start": {
+        "name": "A Starter",
+        "price": "7,000 DKK",
+        "seo": "Basic",
+        "cms": "Simple"
+      },
+      "app": {
+        "name": "Web Application",
+        "price": "13,000 DKK",
+        "seo": "Advanced",
+        "cms": "Advanced"
+      },
+      "premium": {
+        "name": "3D Premium",
+        "price": "16,000 DKK",
+        "seo": "Advanced",
+        "cms": "Advanced"
+      }
+    },
+
+    "aria": {
+      "getStartedButton": "Get started with pricing comparison"
+    }
   },
   "ConsentModal": {
     "title": "Consent & Privacy Policy",
@@ -516,7 +656,11 @@
     "subtitle": "– in under a minute"
   },
   "Footer": {
+    "companyName": "Arzonic ApS",
+    "reliableTech": "Reliable solutions since 2024",
     "aboutUs": "About Us",
+    "jobs": "Jobs",
+    "legal": "Legal",
     "solutions": "Solutions",
     "contactUs": "Contact Us",
     "followUs": "Follow Us",
@@ -646,7 +790,7 @@
       "image": "/backgrounds/design-animation.jpg"
     }
   },
-  "faq": {
+  "FAQ": {
     "title": "Frequently Asked Questions",
     "q1": {
       "title": "How long does it take?",
@@ -665,52 +809,7 @@
       "answer": "We build with scalability in mind. It's easy to add features or expand the solution later, and we're happy to help – whether it's bookings, integrations, e-commerce or something else."
     }
   },
-  "pricingComparison": {
-    "title": "Compare our plans",
-    "table": {
-      "featureColumn": "Feature / Package"
-    },
-    "title-btn": "Ready to find your plan?",
-    "text-btn": "Get Started",
-    "startingFrom": "Starting from {{price}}",
-    "vatNote": "All prices are excl. VAT",
-    "legend": "Included | – Not included in standard package",
-    "features": {
-      "customDesign": "Custom design",
-      "responsive": "Responsive and fast",
-      "seo": "SEO setup",
-      "cms": "CMS / Editable content",
-      "login": "User login and access",
-      "booking": "Booking / Webshop / Mail system",
-      "dashboard": "Admin dashboard",
-      "database": "Database integration",
-      "3d": "3D elements and animations",
-      "scroll": "Scroll effects and parallax"
-    },
-    "plans": {
-      "start": {
-        "name": "Starter Site",
-        "price": "7,000 DKK",
-        "seo": "Basic",
-        "cms": "Simple"
-      },
-      "app": {
-        "name": "Web Application",
-        "price": "13,000 DKK",
-        "seo": "Advanced",
-        "cms": "Advanced"
-      },
-      "premium": {
-        "name": "3D Premium",
-        "price": "16,000 DKK",
-        "seo": "Advanced",
-        "cms": "Advanced"
-      }
-    },
-    "aria": {
-      "getStartedButton": "Get started with pricing comparison"
-    }
-  },
+
   "jobsPage": {
     "titleStart": "Join our journey at",
     "titleEnd": "Arzonic",
@@ -718,6 +817,65 @@
     "noOpenings": "We currently have no open positions, but we're always happy to hear from talented and passionate individuals. You're very welcome to send us an unsolicited application.",
     "contactMail": "You can reach us at:"
   },
+  "applyJobForm": {
+    "title": "Submit your application",
+    "subtitle": "Fill in your details and feel free to attach your CV and application.",
+    "applyTo": "Apply to:",
+    "fields": {
+      "name": {
+        "label": "Full name",
+        "placeholder": "Enter your full name"
+      },
+      "email": {
+        "label": "Mail address",
+        "placeholder": "Enter your mail address"
+      },
+      "phone": {
+        "label": "Mobile number",
+        "placeholder": "Enter your mobile number"
+      },
+      "cv": {
+        "label": "Upload CV",
+        "maxSize": "Max size: 10 MB. PDF only."
+      },
+      "application": {
+        "label": "Upload application",
+        "maxSize": "Max size: 10 MB. PDF only."
+      },
+      "consent": {
+        "label": "I consent to having my information stored for up to 30 days",
+        "readMore": "Read more"
+      }
+    },
+    "aria": {
+      "nameInput": "Enter your name",
+      "emailInput": "Enter your mail address",
+      "phoneInput": "Enter your mobile number",
+      "cvInput": "Upload your CV",
+      "applicationInput": "Upload your application",
+      "consentCheckbox": "Give consent",
+      "submitButton": "Submit application"
+    },
+    "buttons": {
+      "submit": "Submit application",
+      "sending": "Sending..."
+    },
+    "errors": {
+      "invalidPhone": "Please enter a valid Danish phone number.",
+      "invalidEmail": "Please enter a valid email address.",
+      "consentRequired": "You must accept the consent to proceed.",
+      "alreadyAppliedMail": "You have already applied for this position with this email address.",
+      "alreadyAppliedMobile": "You have already applied for this position with this mobile number.",
+      "generic": "Something went wrong. Please try again later."
+    },
+    "success": {
+      "requestSent": "Your application has been submitted.",
+      "title": "Thank you for your application",
+      "message": "We have received your information and will get back to you.",
+      "closeButton": "Back to job post"
+    }
+  },
+
   "estimator": {
     "intro": {
       "title": "Find out your project’s price",
@@ -806,7 +964,7 @@
       "webApplications": "Category: Web applications"
     },
     "navigation": {
-      "seeMoreSolutions": "See more solutions",
+      "linkToSolutions": "See more solutions",
       "getStarted": "Get started",
       "linkToCases": "Go to customer's website",
       "linkToContact": "Go to contact",
@@ -814,7 +972,8 @@
       "linkToOverview": "Go to overview",
       "linkToContent": "Go to content",
       "linkToCustomers": "Go to customers",
-      "linkToSettings": "Go to settings"
+      "linkToSettings": "Go to settings",
+      "linkToHome": "Go to homepage"
     },
     "topbar": {
       "moreOptions": "More options",
@@ -842,7 +1001,7 @@
       "changeToDanish": "Change language to Danish",
       "changeToEnglish": "Change language to English"
     },
-    "faq": {
+    "FAQ": {
       "q1": "Expand FAQ question 1",
       "q2": "Expand FAQ question 2",
       "q3": "Expand FAQ question 3",
@@ -869,6 +1028,7 @@
       "create": "Create case",
       "creating": "Creating case"
     },
+
     "cases": {
       "back": "Back to overview",
       "createCase": "Create a new case",
@@ -973,20 +1133,5 @@
       "emailInput": "Enter your email address",
       "passwordInput": "Enter your password"
     }
-  },
-  "SEO": {
-    "title": "Arzonic",
-    "titleAbout": "About Us",
-    "titleSolutions": "Solutions",
-    "titleCases": "Cases",
-    "titleContact": "Contact Us",
-    "titleGetStarted": "Price Calculator",
-    "titleJobs": "Careers",
-    "titleCustomsWebsites": "Custom Websites",
-    "titleJobsWebApplictions": "Web Applications",
-    "titleJobs3DVisualization": "3D Visualization",
-    "titleJobsDesignAndAnimation": "Design & Animation",
-    "description": "We build blazing-fast websites and engaging experiences using custom-built technology – always modern, always tailored to your needs",
-    "keywords": "web agency, websites, web applications, 3D visualization, digital agency, UI/UX design, frontend development"
   }
 }

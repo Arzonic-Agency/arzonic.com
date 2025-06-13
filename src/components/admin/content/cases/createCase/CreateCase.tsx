@@ -228,7 +228,11 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
           type="submit"
           className="btn btn-primary mt-2"
           disabled={loading}
-          aria-label={loading ? t("aria.createCase.creating") : t("aria.createCase.create")}
+          aria-label={
+            loading
+              ? t("aria.createCase.creating")
+              : t("aria.createCase.create")
+          }
         >
           {loading ? t("creating") : t("create")}
         </button>

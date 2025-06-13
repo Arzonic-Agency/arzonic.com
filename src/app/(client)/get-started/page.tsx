@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import GetStartedPage from "./GetStartedPage";
 
 export const metadata: Metadata = {
-  title: "Project Estimator",
+  title: "Get Started",
   description:
     "Estimate the price of your digital solution in minutes with our interactive project calculator.",
 };

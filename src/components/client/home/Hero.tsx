@@ -76,7 +76,7 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="lg:w-[50%] h-full md:block hidden">
+          <div className="lg:w-[50%] h-full lg:block hidden">
             <div className="w-full h-full relative bg-transparent ">
               <ThreeAnimation />
             </div>

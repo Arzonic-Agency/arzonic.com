@@ -6,32 +6,25 @@ import { useAuthStore } from "./useAuthStore";
 export async function readUserSession() {
   const supabase = await createServerClientInstance();
 
-  try {
-    // Hent brugerdata fra Supabase session
-    const { data: userResponse, error: userError } =
-      await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-    if (userError || !userResponse?.user) {
-      console.error("User fetch error:", userError?.message || "No user found");
-      return null;
-    }
+  if (userError || !user) return null;
 
-    // Hent rolle direkte fra brugerens metadata
-    const role = userResponse.user.user_metadata?.role;
+  const { data: roleResult, error: roleError } = await supabase
+    .from("permissions")
+    .select("role")
+    .eq("member_id", user.id)
+    .single();
 
-    if (!role) {
-      console.error("Role not found in metadata");
-      return null;
-    }
+  if (roleError || !roleResult) return null;
 
-    return {
-      user: userResponse.user,
-      role,
-    };
-  } catch (error) {
-    console.error("Unexpected error in readUserSession:", error);
-    return null;
-  }
+  return {
+    user,
+    role: roleResult.role as "admin" | "editor",
+  };
 }
 
 export async function fetchAndSetUserSession() {

@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { FaSquareCheck } from "react-icons/fa6";
-import { supabase } from "@/lib/supabase-browser";
 import Image from "next/image";
+import { getPackages } from "@/lib/client/actions";
+import { useTranslation } from "react-i18next";
 
 interface DBPackage {
   label: string;
@@ -28,23 +30,23 @@ const featureKeys = [
 
 const planKeys: PlanKey[] = ["StarterSite", "WebApplication", "3DPremium"];
 
-const PricingComparison: React.FC = () => {
+const PlansComparison = () => {
   const { t, i18n } = useTranslation();
+  const translate = (key: string) => t(`PlansComparison.${key}`);
+  const translateAria = (key: string) =>
+    t(`aria.plansComparison.${key}`, {
+      defaultValue: "Get started with pricing comparison",
+    });
+
   const [pkgMap, setPkgMap] = useState<Partial<Record<PlanKey, DBPackage>>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
-      const { data, error } = await supabase
-        .from("packages")
-        .select("label, price_eur, price_dkk");
-
-      if (error) {
-        console.error("Failed to load packages:", error);
-      } else if (data) {
-        const list = data as DBPackage[];
+      try {
+        const data = await getPackages();
         const map: Partial<Record<PlanKey, DBPackage>> = {};
-        list.forEach((p) => {
+        data.forEach((p) => {
           const lab = p.label.toLowerCase();
           if (lab.includes("starter")) {
             map.StarterSite = p;
@@ -55,8 +57,11 @@ const PricingComparison: React.FC = () => {
           }
         });
         setPkgMap(map);
+      } catch (error) {
+        console.error("Failed to load packages:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     load();
   }, []);
@@ -76,76 +81,68 @@ const PricingComparison: React.FC = () => {
     }).format(value);
   };
 
-  // Build table data
-  const features = featureKeys.map((k) => t(`pricingComparison.features.${k}`));
-  const rawPlans = planKeys.map((key) => ({
-    key,
-    name: t(
-      `pricingComparison.plans.${
-        key === "StarterSite"
-          ? "start"
-          : key === "WebApplication"
-          ? "app"
-          : "premium"
-      }.name`
-    ),
-    values: featureKeys.map((fk) => {
-      if (fk === "seo" || fk === "cms") {
-        const planKey =
-          key === "StarterSite"
-            ? "start"
-            : key === "WebApplication"
-            ? "app"
-            : "premium";
+  const features = featureKeys.map((k) => translate(`features.${k}`));
+  const rawPlans = planKeys.map((key) => {
+    const shortKey =
+      key === "StarterSite"
+        ? "start"
+        : key === "WebApplication"
+        ? "app"
+        : "premium";
 
-        return t(`pricingComparison.plans.${planKey}.${fk}`);
-      }
+    return {
+      key,
+      name: translate(`plans.${shortKey}.name`),
+      values: featureKeys.map((fk) => {
+        if (fk === "seo" || fk === "cms") {
+          return translate(`plans.${shortKey}.${fk}`);
+        }
 
-      const has = (() => {
-        if (key === "StarterSite")
-          return [0, 1].includes(featureKeys.indexOf(fk));
-        if (key === "WebApplication")
-          return [0, 1, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
-        return true;
-      })();
+        const has = (() => {
+          if (key === "StarterSite")
+            return [0, 1].includes(featureKeys.indexOf(fk));
+          if (key === "WebApplication")
+            return [0, 1, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
+          return true;
+        })();
 
-      return has ? (
-        <FaSquareCheck
-          key={`${key}-${fk}`}
-          size={20}
-          className="text-secondary"
-        />
-      ) : (
-        "–"
-      );
-    }),
-  }));
+        return has ? (
+          <FaSquareCheck
+            key={`${key}-${fk}`}
+            size={20}
+            className="text-secondary"
+          />
+        ) : (
+          "–"
+        );
+      }),
+    };
+  });
 
   return (
     <>
-      <div className="hidden md:flex flex-col gap-10">
+      <div className="hidden md:flex flex-col gap-10 items-center">
         <h2 className="text-xl md:text-3xl font-light text-center">
-          {t("pricingComparison.title")}
+          {translate("title")}
         </h2>
 
-        <div className="overflow-x-auto mt-8 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto mt-8 rounded-xl overflow-hidden w-full max-w-5xl">
           <table className="min-w-full border-3 border-base-200 rounded-xl">
             <thead className="bg-base-200">
               <tr>
                 <th className="p-3 text-left">
-                  {t("pricingComparison.table.featureColumn")}
+                  {translate("table.featureColumn")}
                 </th>
                 {rawPlans.map((plan) => (
                   <th key={plan.key} className="p-3 text-left">
                     <div className="font-semibold">{plan.name}</div>
                     <div className="text-sm font-medium text-zinc-500">
-                      {t("startingFrom")} {getPrice(plan.key)}
+                      {translate("startingFrom")} {getPrice(plan.key)}
                     </div>
                   </th>
                 ))}
               </tr>
             </thead>
-
             <tbody>
               {features.map((feat, idx) => (
                 <tr key={idx}>
@@ -164,15 +161,17 @@ const PricingComparison: React.FC = () => {
 
           <div className="text-xs mt-3 flex justify-between items-center px-3">
             <div className="text-zinc-400">
-              <p>{t("pricingComparison.vatNote")}</p>
+              <p>{translate("vatNote")}</p>
             </div>
             <div className="flex items-center gap-2 text-zinc-400">
-              <FaSquareCheck size={14} className="text-secondary" />{" "}
-              {t("pricingComparison.legend")}
+              <FaSquareCheck size={14} className="text-secondary" />
+              {translate("legend")}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile */}
       <div className="flex flex-col items-center justify-center gap-5 mt-10 relative">
         <Image
           src="/elements/rocket.png"
@@ -181,17 +180,17 @@ const PricingComparison: React.FC = () => {
           height={80}
           className="absolute -top-26 block md:hidden"
         />
-        <h3 className="text-base">{t("pricingComparison.title-btn")}</h3>
+        <h3 className="text-base">{translate("title-btn")}</h3>
         <Link
           href="/get-started"
           className="btn btn-primary"
-          aria-label={t("aria.pricingComparison.getStartedButton", "Get started with pricing comparison")}
+          aria-label={translateAria("getStartedButton")}
         >
-          {t("pricingComparison.text-btn")}
+          {translate("text-btn")}
         </Link>
       </div>
     </>
   );
 };
 
-export default PricingComparison;
+export default PlansComparison;

@@ -146,7 +146,10 @@ const EstimatorContactForm = ({
           onClick={onBack}
           type="button"
           className="btn btn-sm btn-soft"
-          aria-label={t("aria.estimator.backButton", "Go back to the previous step")}
+          aria-label={t(
+            "aria.estimator.backButton",
+            "Go back to the previous step"
+          )}
         >
           <FaAngleLeft />
         </button>

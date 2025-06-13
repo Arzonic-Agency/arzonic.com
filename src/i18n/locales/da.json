@@ -57,9 +57,12 @@
   "bookings": "Bookings",
   "request_details": "Detaljer for henvendelse",
   "request_time": "Tidspunkt for henvendelse",
+  "updated_job": "Jobopslag opdateret",
   "deleted_case": "Case slettet",
   "deleted_request": "Henvendelse slettet",
   "deleted_review": "Anmeldelse slettet",
+  "deleted_application": "Ansøgning slettet",
+  "deleted_job": "Jobopslaget slettet",
   "delete_case_confirmation": "Sletning af case",
   "delete_case_prompt": "Er du sikker på, at du vil slette denne case?",
   "delete_case_warning": "Denne handling kan ikke fortrydes.",
@@ -70,6 +73,12 @@
   "delete_review_confirmation": "Slet anmeldelse",
   "delete_review_prompt": "Er du sikker på, at du vil slette denne anmeldelse?",
   "delete_review_warning": "Denne handling kan ikke fortrydes.",
+  "delete_application_confirmation": "Slet ansøgning",
+  "delete_application_prompt": "Er du sikker på, at du vil slette denne ansøgning?",
+  "delete_application_warning": "Denne handling kan ikke fortrydes.",
+  "delete_job_confirmation": "Slet jobopslag",
+  "delete_job_prompt": "Er du sikker på, at du vil slette dette jobopslag?",
+  "delete_job_warning": "Denne handling kan ikke fortrydes.",
   "case_creation": "Oprettelse af Case",
   "review_creation": "Oprettelse af Anmeldelse",
   "case_editing": "Redigering af Case",
@@ -110,6 +119,7 @@
   "loading_request": "Indlæser Henvendelser...",
   "loading_users": "Indlæser Brugere...",
   "loading_packages": "Indlæser Pakker...",
+  "loading_jobs": "Indlæser jobstillinger...",
   "no_users": "Ingen brugere fundet",
   "no_cases": "Ingen sager fundet",
   "no_reviews": "Ingen anmeldelser fundet",
@@ -120,6 +130,79 @@
   "site": "Side",
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
+  "createJob": {
+    "formTitle": "Opret jobopslag",
+    "title": "Jobtitel",
+    "subtitle": "Overskrift",
+    "jobType": "Jobtype",
+    "workplace": "Arbejdssted",
+    "startType": "Starttidspunkt",
+    "deadline": "Ansøgningsfrist",
+    "description": "Jobbeskrivelse",
+    "create": "Opret job",
+    "creating": "Gemmer...",
+    "loading": "Indlæser jobformular...",
+    "placeholders": {
+      "title": "Skriv en jobtitel...",
+      "subtitle": "Skriv en overskrift..."
+    },
+    "errors": {
+      "title": "Titel er påkrævet",
+      "subtitle": "Underoverskrift er påkrævet",
+      "desc": "Beskrivelse er påkrævet",
+      "type": "Jobtype er påkrævet",
+      "workplace": "Arbejdssted er påkrævet",
+      "deadline": "Ansøgningsfrist er påkrævet",
+      "start": "Vælg enten startdato eller starttype"
+    }
+  },
+  "updateJob": {
+    "formTitle": "Rediger jobopslag",
+    "title": "Jobtitel",
+    "subtitle": "Overskrift",
+    "jobType": "Jobtype",
+    "workplace": "Arbejdssted",
+    "startType": "Starttidspunkt",
+    "deadline": "Ansøgningsfrist",
+    "description": "Jobbeskrivelse",
+    "save": "Gem ændringer",
+    "saving": "Gemmer...",
+    "loading": "Indlæser jobdata...",
+    "placeholders": {
+      "title": "Skriv en ny jobtitel...",
+      "subtitle": "Skriv en ny overskrift..."
+    },
+    "errors": {
+      "title": "Titel er påkrævet",
+      "subtitle": "Underoverskrift er påkrævet",
+      "desc": "Beskrivelse er påkrævet",
+      "type": "Jobtype er påkrævet",
+      "workplace": "Arbejdssted er påkrævet",
+      "deadline": "Ansøgningsfrist er påkrævet",
+      "start": "Vælg enten startdato eller starttype"
+    }
+  },
+  "jobsDetails": {
+    "loading": "Indlæser joboplysninger...",
+    "title": "Jobdetaljer",
+    "back": "Tilbage",
+    "edit": "Rediger",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "fields": {
+      "title": "Jobtitel",
+      "type": "Jobtype",
+      "startDate": "Startdato",
+      "workplace": "Arbejdsplads",
+      "deadline": "Ansøgningsfrist",
+      "createdAt": "Oprettet den"
+    },
+    "applications": {
+      "title": "Liste over kandidater",
+      "noApplications": "Ingen ansøgninger fundet.",
+      "noReason": "Ingen besked angivet"
+    }
+  },
   "image_upload": {
     "change_image": "Skift billede",
     "select_image_type": "Vælg billede type",
@@ -204,8 +287,10 @@
   "getQuote": "Prisberegner",
   "Header": {
     "brandName": "Arzonic",
+    "logoAlt": "Arzonic Agency Logo",
     "solutions": "Løsninger",
     "cases": "Cases",
+    "pricing": "Priser",
     "contact": "Kontakt",
     "getStarted": "Få tilbud",
     "followUs": "Følg os",
@@ -276,10 +361,10 @@
       "launchSupport": "Lancering & Support"
     },
     "aria": {
-      "discoveryStrategy": "Gå til Indsigt & Strategi",
-      "designExperience": "Gå til Design & Oplevelse",
-      "developmentIntegration": "Gå til Udvikling & Integration",
-      "launchSupport": "Gå til Lancering & Support"
+      "discovery-strategy": "Gå til Indsigt & Strategi",
+      "design-experience": "Gå til Design & Oplevelse",
+      "development-integration": "Gå til Udvikling & Integration",
+      "launch-support": "Gå til Lancering & Support"
     }
   },
   "Process": {
@@ -327,11 +412,6 @@
         "Skalerbare løsninger til fremtidige behov"
       ]
     }
-  },
-  "Pricing": {
-    "title": "Fleksible Pakker, Gennemsigtige Priser",
-    "subtitle": "Vælg en løsning der passer til dine behov og dit budget – ingen overraskelser, kun resultater",
-    "vatNote": "Alle priser er ekskl. moms"
   },
   "OfferForm": {
     "title": "Få et skræddersyet tilbud",
@@ -391,8 +471,18 @@
     }
   },
   "TaskSelect": {
+    "legend": "Hvilken løsning er du interesseret i?",
+    "placeholder": "Vælg løsning",
+    "options": {
+      "website": "Website",
+      "webApp": "Webapp",
+      "visualization": "3D-visualisering",
+      "branding": "Branding",
+      "marketing": "Markedsføring",
+      "other": "Andet"
+    },
     "aria": {
-      "selectTask": "Vælg en opgave"
+      "selectTask": "Vælg en løsning"
     }
   },
   "ContactPage": {
@@ -404,6 +494,62 @@
     "callPrompt": "Ring til os på",
     "phoneNumber": "+45 22 50 17 03",
     "imageAlt": "hero"
+  },
+  "PricingPage": {
+    "titleStart": "Fleksible pakker,",
+    "titleEnd": "Gennemsigtige priser",
+    "subtitle": "Vælg en løsning, der matcher dine behov – ingen overraskelser, kun resultater",
+    "vatNote": "Alle priser er ekskl. moms",
+    "aria": {
+      "getQuoteButton": "Få et tilbud"
+    },
+    "oneTime": "Engangsbetaling (drift tilføjes separat)",
+    "monthlyIncl": "36 måneders løsning (inkl. drift og support)",
+    "oneTimeTab": "Engangsbetaling",
+    "monthlyTab": "Månedlig løsning"
+  },
+  "PlansComparison": {
+    "title": "Sammenlign vores pakker",
+    "table": {
+      "featureColumn": "Funktion / Pakke"
+    },
+    "title-btn": "Klar til at komme i gang?",
+    "text-btn": "Find din pakke",
+    "startingFrom": "Starter fra {{price}}",
+    "vatNote": "Alle priser er ekskl. moms",
+    "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
+    "features": {
+      "customDesign": "Tilpasset design",
+      "responsive": "Responsiv og hurtig",
+      "seo": "SEO-opsætning",
+      "cms": "CMS / Redigerbart indhold",
+      "login": "Login og brugerstyring",
+      "booking": "Booking / Webshop / Mailsystem",
+      "dashboard": "Admin-dashboard",
+      "database": "Databaseintegration",
+      "3d": "3D-elementer og animation",
+      "scroll": "Scroll-effekter og parallax"
+    },
+    "plans": {
+      "start": {
+        "name": "Startside",
+        "price": "7.000 kr.",
+        "seo": "Grundlæggende",
+        "cms": "Simpelt"
+      },
+      "app": {
+        "name": "Webapplikation",
+        "price": "13.000 kr.",
+        "seo": "Udvidet",
+        "cms": "Avanceret"
+      },
+      "premium": {
+        "name": "3D Premium",
+        "price": "16.000 kr.",
+        "seo": "Udvidet",
+        "cms": "Avanceret"
+      }
+    }
   },
   "ConsentModal": {
     "title": "Samtykke & Privatlivspolitik",
@@ -506,7 +652,11 @@
     "subtitle": "– på under et minut"
   },
   "Footer": {
+    "companyName": "Arzonic ApS",
+    "reliableTech": "Stærke løsninger siden 2024",
     "aboutUs": "Om os",
+    "jobs": "Jobs",
+    "legal": "Juridisk",
     "solutions": "Løsninger",
     "contactUs": "Kontakt os",
     "followUs": "Følg os",
@@ -519,6 +669,7 @@
     "reachingBeyondBorders": "Længere end grænserne",
     "collaborationMessage": "Hos Arzonic hjælper vi ambitiøse virksomheder i Europa med at styrke deres digitale tilstedeværelse"
   },
+
   "solutionsPage": {
     "common": {
       "countryAllTitle": "Tilgængelig i disse lande:",
@@ -623,7 +774,7 @@
       "image": "/backgrounds/custom-websites.jpg"
     },
     "webapp": {
-      "title": "Web Applications",
+      "title": "Webapplikationer",
       "description": "Vi bygger funktionelle apps med dashboards, databaser og integrationer – til virksomheder med digitale produkter og behov.",
       "image": "/backgrounds/web-applications.jpg"
     },
@@ -657,55 +808,71 @@
       "answer": "Vi bygger med fremtiden i mente. Det er nemt at tilføje funktioner eller tilpasse løsningen senere, og vi tilbyder gerne videreudvikling – uanset om det er booking, integrationer, e-commerce eller noget andet."
     }
   },
-  "pricingComparison": {
-    "title": "Sammenlign vores pakker",
-    "table": {
-      "featureColumn": "Funktion / Pakke"
-    },
-    "title-btn": "Klar til at komme i gang?",
-    "text-btn": "Find din pakke",
-    "startingFrom": "Starter fra {{price}}",
-    "vatNote": "Alle priser er ekskl. moms",
-    "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
-    "features": {
-      "customDesign": "Tilpasset design",
-      "responsive": "Responsiv og hurtig",
-      "seo": "SEO-opsætning",
-      "cms": "CMS / Redigerbart indhold",
-      "login": "Login og brugerstyring",
-      "booking": "Booking / Webshop / Mailsystem",
-      "dashboard": "Admin-dashboard",
-      "database": "Databaseintegration",
-      "3d": "3D-elementer og animation",
-      "scroll": "Scroll-effekter og parallax"
-    },
-    "plans": {
-      "start": {
-        "name": "Startside",
-        "price": "7.000 kr.",
-        "seo": "Grundlæggende",
-        "cms": "Simpelt"
-      },
-      "app": {
-        "name": "Webapplikation",
-        "price": "13.000 kr.",
-        "seo": "Udvidet",
-        "cms": "Avanceret"
-      },
-      "premium": {
-        "name": "3D Premium",
-        "price": "16.000 kr.",
-        "seo": "Udvidet",
-        "cms": "Avanceret"
-      }
-    }
-  },
+
   "jobsPage": {
     "titleStart": "Bliv en del af rejsen hos",
     "titleEnd": "Arzonic",
     "noOpeningsTitle": "Tak for din interesse",
     "noOpenings": "Vi har i øjeblikket ingen ledige stillinger, men vi hører altid gerne fra dygtige og passionerede mennesker. Du er meget velkommen til at sende en uopfordret ansøgning til os.",
     "contactMail": "Du kan skrive til os på:"
+  },
+  "applyJobForm": {
+    "title": "Send din ansøgning",
+    "subtitle": "Udfyld dine oplysninger og vedhæft gerne dit CV og din ansøgning.",
+    "applyTo": "Ansøgning:",
+    "fields": {
+      "name": {
+        "label": "Fulde navn",
+        "placeholder": "Indtast dit fulde navn"
+      },
+      "email": {
+        "label": "Mailadresse",
+        "placeholder": "Indtast din mailadresse"
+      },
+      "phone": {
+        "label": "Mobilnummer",
+        "placeholder": "Indtast dit mobilnummer"
+      },
+      "cv": {
+        "label": "Upload CV",
+        "maxSize": "Maks. størrelse: 10 MB. Kun PDF."
+      },
+      "application": {
+        "label": "Upload ansøgning",
+        "maxSize": "Maks. størrelse: 10 MB. Kun PDF."
+      },
+      "consent": {
+        "label": "Jeg accepterer opbevaring af mine oplysninger i op til 30 dage",
+        "readMore": "Læs mere"
+      }
+    },
+    "aria": {
+      "nameInput": "Indtast dit navn",
+      "emailInput": "Indtast din mailadresse",
+      "phoneInput": "Indtast dit mobilnummer",
+      "cvInput": "Upload dit CV",
+      "applicationInput": "Upload din ansøgning",
+      "consentCheckbox": "Giv samtykke",
+      "submitButton": "Send ansøgning"
+    },
+    "buttons": {
+      "submit": "Send ansøgning",
+      "sending": "Sender..."
+    },
+    "errors": {
+      "invalidPhone": "Indtast et gyldigt dansk telefonnummer.",
+      "invalidEmail": "Indtast en gyldig e-mailadresse.",
+      "consentRequired": "Du skal acceptere samtykke for at fortsætte.",
+      "alreadyAppliedMail": "Du har allerede ansøgt denne stilling med denne e-mailadresse.",
+      "alreadyAppliedMobile": "Du har allerede ansøgt denne stilling med dette mobilnummer.",
+      "generic": "Noget gik galt. Prøv igen senere."
+    },
+    "success": {
+      "requestSent": "Din ansøgning er sendt.",
+      "title": "Tak for din ansøgning",
+      "message": "Vi har modtaget dine oplysninger og vender tilbage til dig hurtigst muligt.",
+      "closeButton": "Tilbage til jobopslaget"
+    }
   },
   "estimator": {
     "intro": {
@@ -795,7 +962,7 @@
       "webApplications": "Kategori: Webapplikationer"
     },
     "navigation": {
-      "seeMoreSolutions": "Se flere løsninger",
+      "linkToSolutions": "Se flere løsninger",
       "getStarted": "Få et tilbud",
       "linkToCases": "Gå til kundens hjemmeside",
       "linkToContact": "Gå til kontakt",
@@ -803,7 +970,8 @@
       "linkToOverview": "Gå til overblik",
       "linkToContent": "Gå til indhold",
       "linkToCustomers": "Gå til kunder",
-      "linkToSettings": "Gå til indstillinger"
+      "linkToSettings": "Gå til indstillinger",
+      "linkToHome": "Gå til forsiden"
     },
     "estimator": {
       "nameInput": "Indtast dit navn",
@@ -827,7 +995,7 @@
       "changeToDanish": "Skift sprog til dansk",
       "changeToEnglish": "Skift sprog til engelsk"
     },
-    "faq": {
+    "FAG": {
       "q1": "Udvid FAQ spørgsmål 1",
       "q2": "Udvid FAQ spørgsmål 2",
       "q3": "Udvid FAQ spørgsmål 3",
@@ -963,20 +1131,5 @@
       "last30DaysTab": "Vis statistik for de seneste 30 dage",
       "loadingSpinner": "Indlæser statistik"
     }
-  },
-  "SEO": {
-    "title": "Arzonic",
-    "titleAbout": "Om Os",
-    "titleSolutions": "Løsninger",
-    "titleCases": "Cases",
-    "titleContact": "Kontakt Os",
-    "titleGetStarted": "Prisberegner",
-    "titleJobs": "Karriere",
-    "titleCustomsWebsites": "Skræddersyede Hjemmesider",
-    "titleJobsWebApplictions": "Webapplikationer",
-    "titleJobs3DVisualization": "3D-Visualisering",
-    "titleJobsDesignAndAnimation": "Design & Animation",
-    "description": "Vi bygger lynhurtige hjemmesider og engagerende digitale oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov.",
-    "keywords": "webbureau, hjemmesider, webapplikationer, 3D-visualisering, digitalt bureau, UI/UX design, frontend udvikling"
   }
 }

@@ -11,7 +11,7 @@ import {
   PCFSoftShadowMap,
   Group,
 } from "three";
-import { supabase } from "@/lib/supabase-browser";
+import { getModelUrl } from "@/lib/client/actions";
 
 interface LaptopModelProps {
   modelUrl: string;
@@ -25,7 +25,6 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   const [screenTexture, setScreenTexture] = useState<Texture | null>(null);
   const { size } = useThree();
 
-  // Load screen texture
   useEffect(() => {
     const loader = new TextureLoader();
     loader.load("/models/screen.png", (tex) => {
@@ -37,7 +36,6 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
   const clipDuration = animations[0]?.duration ?? 0;
   const maxScroll = 600;
 
-  // Build and scale the model whenever scene or screenTexture or size changes
   useEffect(() => {
     if (!group.current || !screenTexture) return;
 
@@ -47,7 +45,6 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     const center = box.getCenter(new Vector3());
     model.position.sub(center).y -= box.min.y;
 
-    // Responsive scaling
     let scalePct = 100;
     if (size.width < 400) scalePct = 60;
     else if (size.width < 600) scalePct = 65;
@@ -82,7 +79,6 @@ function LaptopModel({ modelUrl, scrollY }: LaptopModelProps) {
     mixer.current.setTime(clipDuration - 1 / 24);
   }, [scene, animations, screenTexture, clipDuration, size.width]);
 
-  // Drive the animation by scroll
   useFrame((_, delta) => {
     if (!mixer.current) return;
     const t = Math.min(1, Math.max(0, scrollY / maxScroll));
@@ -104,7 +100,6 @@ export default function ThreeAnimation() {
   const [scrollY, setScrollY] = useState(0);
   const [modelUrl, setModelUrl] = useState<string | null>(null);
 
-  // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -115,28 +110,31 @@ export default function ThreeAnimation() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  // Fetch the GLB URL from Supabase
   useEffect(() => {
-    const { data } = supabase.storage.from("models").getPublicUrl("laptop.glb");
-    setModelUrl(data.publicUrl);
+    const loadModelUrl = async () => {
+      try {
+        const url = await getModelUrl("laptop.glb");
+        setModelUrl(url);
+      } catch (error) {
+        console.error("Failed to load model URL:", error);
+      }
+    };
+
+    loadModelUrl();
   }, []);
 
-  // Track scroll position
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // 1) Mobile fallback
   if (isMobile) {
     return null;
   }
 
-  // 2) Still loading?
   if (!modelUrl) return null;
 
-  // 3) Desktop / Tablet: full 3D scene
   return (
     <Canvas
       shadows

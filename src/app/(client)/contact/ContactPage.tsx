@@ -4,8 +4,8 @@ import OfferForm from "@/components/client/forms/OfferForm";
 import Image from "next/image";
 import React from "react";
 import { FaPhone } from "react-icons/fa6";
-import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const ContactPage = () => {
   const { t } = useTranslation();

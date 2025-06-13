@@ -18,13 +18,19 @@ const Language = () => {
       />
       <div
         className="swap-on flex items-center gap-2 text-3xl"
-        aria-label={t("aria.language.changeToDanish", "Change language to Danish")}
+        aria-label={t(
+          "aria.language.changeToDanish",
+          "Change language to Danish"
+        )}
       >
         <span>🇩🇰</span>
       </div>
       <div
         className="swap-off flex items-center gap-2 text-3xl"
-        aria-label={t("aria.language.changeToEnglish", "Change language to English")}
+        aria-label={t(
+          "aria.language.changeToEnglish",
+          "Change language to English"
+        )}
       >
         <span>🇬🇧</span>
       </div>
