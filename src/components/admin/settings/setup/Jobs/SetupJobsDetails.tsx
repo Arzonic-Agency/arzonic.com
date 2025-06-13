@@ -79,16 +79,6 @@ const SetupJobsDetails = ({
   };
 
   const handleSave = (updatedJob: Job) => {
-    const jobData = {
-      title: updatedJob.title,
-      subtitle: "", // Add logic to map subtitle if available
-      desc: "", // Add logic to map description if available
-      type: updatedJob.type,
-      workplace: updatedJob.workplace,
-      start_type: updatedJob.start_type,
-      start_date: updatedJob.start_date,
-      deadline: updatedJob.deadline,
-    };
     setJob(updatedJob);
     setUpdateToast(true);
     setTimeout(() => setUpdateToast(false), 3000);
