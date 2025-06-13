@@ -4,8 +4,13 @@ import React from "react";
 import SetupJobsList from "./SetupJobsList";
 import { useTranslation } from "react-i18next";
 
+interface Job {
+  id: string;
+  title: string;
+}
+
 interface SetupJobsProps {
-  onEdit: (job: any) => void;
+  onEdit: (job: Job) => void;
   onCreate: () => void;
 }
 

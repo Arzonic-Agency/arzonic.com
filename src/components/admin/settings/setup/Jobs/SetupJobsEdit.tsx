@@ -6,9 +6,20 @@ import { getJobById, updateJob, getJobEnums } from "@/lib/server/actions";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
+interface JobData {
+  title: string;
+  subtitle: string;
+  desc: string;
+  type: string;
+  workplace: string;
+  start_type?: string;
+  start_date?: string;
+  deadline: string;
+}
+
 interface SetupJobsEditProps {
   jobId: string;
-  onSave: (jobData: any) => void;
+  onSave: (jobData: JobData) => void;
   onBackToDetails: () => void;
 }
 
@@ -25,7 +36,7 @@ const SetupJobsEdit = ({
   const [enumLoading, setEnumLoading] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [jobData, setJobData] = useState<any>({
+  const [jobData, setJobData] = useState<JobData>({
     title: "",
     subtitle: "",
     desc: "",

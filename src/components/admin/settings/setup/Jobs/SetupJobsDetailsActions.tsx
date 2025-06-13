@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FaCheck, FaEllipsis, FaPen, FaTrash, FaX } from "react-icons/fa6";
+import { FaEllipsis, FaPen, FaTrash } from "react-icons/fa6";
 import { deleteJob, updateJob } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
 

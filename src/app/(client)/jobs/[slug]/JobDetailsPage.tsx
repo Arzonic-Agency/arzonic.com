@@ -6,7 +6,6 @@ import { format } from "date-fns";
 import { da, enUS } from "date-fns/locale";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { useParams } from "next/navigation";
 
 type Job = {
   id: string;

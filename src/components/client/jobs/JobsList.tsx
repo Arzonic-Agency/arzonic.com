@@ -10,12 +10,22 @@ import Link from "next/link";
 import { getAllActiveJobs } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
 
+type Job = {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  type: string;
+  workplace: string;
+  created_at: string;
+};
+
 const JobsList = ({
   setHasJobs,
 }: {
   setHasJobs: (hasJobs: boolean) => void;
 }) => {
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
 
   const { t, i18n } = useTranslation();

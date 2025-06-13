@@ -221,16 +221,16 @@ export async function createApplication({
     if (appErr) throw new Error("Application upload failed");
 
     return { success: true };
-  } catch (err: any) {
-    console.error("❌ createApplication:", err.message);
+  } catch (err: unknown) {
+    console.error("❌ createApplication:", (err as Error).message);
 
     return {
       success: false,
       message:
-        err.message === "mail-already-applied" ||
-        err.message === "mobile-already-applied"
-          ? err.message
-          : err.message || "generic",
+        (err as Error).message === "mail-already-applied" ||
+        (err as Error).message === "mobile-already-applied"
+          ? (err as Error).message
+          : (err as Error).message || "generic",
     };
   }
 }
@@ -427,7 +427,7 @@ export async function getModelUrl(fileName: string): Promise<string> {
       .from("models")
       .getPublicUrl(fileName) as {
       data: { publicUrl: string } | null;
-      error: any | null;
+      error: Error | null; // Changed from `any` to `Error`
     };
 
     if (error || !data) {

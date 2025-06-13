@@ -1,8 +1,14 @@
 import React from "react";
 import SetupPackagesList from "./SetupPackagesList";
 
+interface Package {
+  id: string;
+  name: string;
+  description: string;
+}
+
 interface SetupPackagesProps {
-  onEdit: (pkg: any) => void;
+  onEdit: (pkg: Package) => void;
 }
 
 const SetupPackages: React.FC<SetupPackagesProps> = ({ onEdit }) => {

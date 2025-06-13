@@ -11,8 +11,19 @@ import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import SetupJobsApplicationActions from "./SetupJobsApplicationActions";
 
+interface Application {
+  id: string;
+  name?: string;
+  mobile?: string;
+  mail?: string;
+  consent?: boolean;
+  created_at?: string;
+  cvSignedUrl?: string;
+  applicationSignedUrl?: string;
+}
+
 interface SetupJobsApplicationProps {
-  application: any;
+  application: Application;
   onBackToDetails: () => void;
   onDeleteSuccess: () => void;
 }

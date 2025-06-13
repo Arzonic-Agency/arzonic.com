@@ -29,7 +29,7 @@ const TiptapEditor = ({
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value);
     }
-  }, [value]);
+  }, [value, editor]);
 
   return (
     <div className="relative w-full rounded-xl">

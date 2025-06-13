@@ -5,14 +5,23 @@ import { getAllJobs } from "@/lib/server/actions";
 import { FaAngleRight, FaHourglassHalf } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 
+// Define a Job interface
+interface Job {
+  id: string;
+  title: string;
+  active: boolean;
+  deadline: string;
+}
+
 interface SetupJobsListProps {
-  onEdit: (job: any) => void;
+  onEdit: (job: Job) => void;
 }
 
 const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
   const { t } = useTranslation();
 
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<Job[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

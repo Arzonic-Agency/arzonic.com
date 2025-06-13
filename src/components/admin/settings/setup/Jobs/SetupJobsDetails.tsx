@@ -10,6 +10,24 @@ import { format } from "date-fns";
 import { da, enUS } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 
+interface Job {
+  id: string;
+  title: string;
+  created_at: string;
+  type: string;
+  workplace: string;
+  deadline: string;
+  start_date?: string;
+  start_type?: string;
+  active: boolean;
+}
+
+interface Application {
+  id: string;
+  name: string;
+  created_at: string;
+}
+
 interface SetupJobsDetailsProps {
   jobId: string;
   onBack: () => void;
@@ -25,10 +43,11 @@ const SetupJobsDetails = ({
   const currentLocale = i18n.language === "da" ? da : enUS;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [job, setJob] = useState<any>(null);
-  const [applications, setApplications] = useState<any[]>([]);
+  const [job, setJob] = useState<Job | null>(null);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedApplication, setSelectedApplication] = useState<any>(null);
+  const [selectedApplication, setSelectedApplication] =
+    useState<Application | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [updateToast, setUpdateToast] = useState(false);
 
@@ -59,7 +78,17 @@ const SetupJobsDetails = ({
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleSave = (updatedJob: any) => {
+  const handleSave = (updatedJob: Job) => {
+    const jobData = {
+      title: updatedJob.title,
+      subtitle: "", // Add logic to map subtitle if available
+      desc: "", // Add logic to map description if available
+      type: updatedJob.type,
+      workplace: updatedJob.workplace,
+      start_type: updatedJob.start_type,
+      start_date: updatedJob.start_date,
+      deadline: updatedJob.deadline,
+    };
     setJob(updatedJob);
     setUpdateToast(true);
     setTimeout(() => setUpdateToast(false), 3000);
@@ -79,7 +108,13 @@ const SetupJobsDetails = ({
       {isEditing ? (
         <SetupJobsEdit
           jobId={jobId}
-          onSave={handleSave}
+          onSave={(jobData) => {
+            const updatedJob: Job = {
+              ...job,
+              ...jobData,
+            } as Job;
+            handleSave(updatedJob);
+          }}
           onBackToDetails={() => setIsEditing(false)}
         />
       ) : selectedApplication ? (

@@ -991,7 +991,7 @@ export async function createJob(data: {
   }
 
   // Generér slug ud fra title
-  let baseSlug = data.title
+  const baseSlug = data.title
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9\-]/g, "")
