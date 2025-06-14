@@ -183,7 +183,7 @@ const Process = ({ isSticky }: ProcessProps) => {
           </ul>
         </div>
         <div className="flex flex-col justify-start md:justify-center items-start md:items-center gap-5 h-full px-10 md:p-10 md:w-[45%]">
-          <div className="md:w-full w-full h-full max-h-64 md:max-h-96 md:scale-125">
+          <div className="md:w-full w-full h-full max-h-64 md:max-h-96">
             <LaunchRive />
           </div>
         </div>

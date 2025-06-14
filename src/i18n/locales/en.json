@@ -266,7 +266,8 @@
   },
   "Pro": {
     "title": "Pro",
-    "description": "Tailored for digital products and custom functionality",
+    "including": "Included",
+    "description": "Ideal for digital products and feature-rich solutions",
     "features": {
       "bespokeUIUX": "Bespoke UI/UX design",
       "featureRich": "Feature-rich functionality",
@@ -276,7 +277,8 @@
   },
   "Premium": {
     "title": "Premium",
-    "description": "Elegant visuals, smooth animations, and depth",
+    "including": "Included",
+    "description": "Everything included – premium features, visuals, and 3D",
     "features": {
       "sleekLayout": "Sleek, animated layout",
       "parallaxEffects": "Subtle parallax & motion effects",
@@ -284,6 +286,7 @@
       "performance": "Built for performance"
     }
   },
+
   "startingFrom": "Starting from",
   "customQuotePrompt": "Get your custom quote in few seconds",
   "getQuote": "Get a Quote",
@@ -503,9 +506,9 @@
     "aria": {
       "getQuoteButton": "Get a quote"
     },
-    "oneTime": "One-time payment (monthly maintenance required)",
+    "oneTime": "One-time payment",
     "monthly48": "Price per month over 48 months",
-    "paymentInfo": "The price is based on a 48-month payment plan and excludes hosting and support.",
+    "paymentInfo": "All plans require service fee, which includes maintenance and support",
     "oneTimeTab": "One-time payment",
     "monthlyTab": "Monthly plan"
   },

@@ -3,8 +3,8 @@ import { FaBuildingShield, FaCheck, FaGlobe, FaHeadset } from "react-icons/fa6";
 
 const Support = () => {
   return (
-    <div className="card lg:card-side bg-base-100 shadow-sm">
-      <figure className="w-1/2">
+    <div className="card lg:card-side bg-base-100 shadow-sm md:flex-row flex-col-reverse">
+      <figure className="md:w-1/2">
         <div className="flex items-center justify-center gap-10">
           <div className="">
             <FaBuildingShield size={100} />
@@ -15,7 +15,7 @@ const Support = () => {
           </div>
         </div>
       </figure>
-      <div className="card-body gap-7">
+      <div className="card-body gap-7 ">
         <h2 className="card-title text-2xl">
           Vi tager os af driften – så du kan fokusere på forretningen
         </h2>

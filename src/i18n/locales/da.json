@@ -254,10 +254,10 @@
   },
   "Starter": {
     "title": "Starter",
-    "description": "Perfekt til små virksomheder eller personlige brands",
+    "description": "Perfekt til mindre virksomheder eller personlige brands",
     "features": {
-      "customDesign": "Tilpasset design",
-      "responsiveFast": "Responsiv og hurtig",
+      "customDesign": "Skræddersyet design",
+      "responsiveFast": "Responsivt og hurtigt",
       "basicSEO": "Grundlæggende SEO-opsætning",
       "simpleCMS": "Simpelt CMS eller statisk indhold"
     }
@@ -265,10 +265,10 @@
   "Pro": {
     "title": "Pro",
     "including": "Inkluderet",
-    "description": "Skræddersyet til digitale produkter og tilpasset funktionalitet",
+    "description": "Ideel til digitale produkter og funktionelle løsninger",
     "features": {
-      "bespokeUIUX": "Skræddersyet UI/UX design",
-      "featureRich": "Funktionalitet med mange funktioner",
+      "bespokeUIUX": "Unikt UI/UX design",
+      "featureRich": "Avanceret funktionalitet",
       "databaseIntegration": "Databaseintegration",
       "adminDashboard": "Admin dashboard"
     }
@@ -276,12 +276,12 @@
   "Premium": {
     "title": "Premium",
     "including": "Inkluderet",
-    "description": "Elegante visuals, glatte animationer og dybde",
+    "description": "Alt samlet – premium funktioner, visuelle effekter og 3D",
     "features": {
-      "sleekLayout": "Elegant, animeret layout",
-      "parallaxEffects": "Subtile parallax- og bevægelseseffekter",
+      "sleekLayout": "Elegant og animeret layout",
+      "parallaxEffects": "Parallax og bevægelseseffekter",
       "integrated3D": "Integrerede 3D-elementer",
-      "performance": "Bygget til ydeevne"
+      "performance": "Optimeret til høj ydeevne"
     }
   },
   "startingFrom": "Starter fra",
