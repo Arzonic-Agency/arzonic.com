@@ -43,7 +43,6 @@ const SolutionsPage = () => {
         <div className="flex flex-col justify-center gap-10 md:gap-15 xl:gap-28 mt-10">
           <SolutionCards />
           <FAQ />
-          <PricingComparison />
         </div>
       </div>
     </>

@@ -79,9 +79,10 @@ const PriceEstimator = () => {
       .then((data: RestCountry[]) => {
         const list = data
           .map((c) => {
-            const root = c.idd?.root || "";
-            const suffix = c.idd?.suffixes?.[0] || "";
-            const dial = suffix ? `${root}${suffix}` : root;
+            if (!c.idd || !c.idd.root || !c.idd.suffixes) return null;
+            const root = c.idd.root;
+            const suffix = c.idd.suffixes[0] || "";
+            const dial = `${root}${suffix}`;
             if (!dial) return null;
             const code = c.cca2;
             const name = c.name.common;
