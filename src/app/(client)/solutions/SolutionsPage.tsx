@@ -1,6 +1,4 @@
 "use client";
-
-import PricingComparison from "@/components/client/pricing/PlansComparison";
 import FAQ from "@/components/client/solutions/FAQ";
 
 import SolutionCards from "@/components/client/solutions/SolutionCards";
