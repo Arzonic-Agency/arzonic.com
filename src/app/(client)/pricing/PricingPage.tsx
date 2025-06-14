@@ -2,6 +2,7 @@
 
 import Prices from "@/components/client/pricing/Plans";
 import PricingComparison from "@/components/client/pricing/PlansComparison";
+import Support from "@/components/client/pricing/Support";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +19,9 @@ const PricingPage = () => {
       </div>
       <div className="flex flex-col justify-center gap-15 md:gap-20 xl:gap-28 mt-10 max-w-6xl w-full">
         <Prices />
+
         <PricingComparison />
+        <Support />
       </div>
     </div>
   );

@@ -252,8 +252,8 @@
     "getInTouch": "Kontakt os",
     "disclaimer": "Ansvarsfraskrivelse: Prisen er kun et estimat og kan variere. Endelig pris bekræftes ved konsultation."
   },
-  "StarterSite": {
-    "title": "Startside",
+  "Starter": {
+    "title": "Starter",
     "description": "Perfekt til små virksomheder eller personlige brands",
     "features": {
       "customDesign": "Tilpasset design",
@@ -262,8 +262,9 @@
       "simpleCMS": "Simpelt CMS eller statisk indhold"
     }
   },
-  "WebApplication": {
-    "title": "Webapplikation",
+  "Pro": {
+    "title": "Pro",
+    "including": "Inkluderet",
     "description": "Skræddersyet til digitale produkter og tilpasset funktionalitet",
     "features": {
       "bespokeUIUX": "Skræddersyet UI/UX design",
@@ -272,8 +273,9 @@
       "adminDashboard": "Admin dashboard"
     }
   },
-  "3DPremium": {
-    "title": "3D Premium",
+  "Premium": {
+    "title": "Premium",
+    "including": "Inkluderet",
     "description": "Elegante visuals, glatte animationer og dybde",
     "features": {
       "sleekLayout": "Elegant, animeret layout",
@@ -504,7 +506,9 @@
       "getQuoteButton": "Få et tilbud"
     },
     "oneTime": "Engangsbetaling (drift tilføjes separat)",
-    "monthlyIncl": "36 måneders løsning (inkl. drift og support)",
+    "monthly48": "Pris pr. måned over 48 måneder",
+    "paymentInfo": "Prisen er baseret på 48 måneders afbetaling og er ekskl. drift og support.",
+
     "oneTimeTab": "Engangsbetaling",
     "monthlyTab": "Månedlig løsning"
   },
@@ -519,6 +523,7 @@
     "vatNote": "Alle priser er ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
+      "serviceFee": "Servicegebyr pr. måned",
       "customDesign": "Tilpasset design",
       "responsive": "Responsiv og hurtig",
       "seo": "SEO-opsætning",
@@ -531,20 +536,20 @@
       "scroll": "Scroll-effekter og parallax"
     },
     "plans": {
-      "start": {
-        "name": "Startside",
+      "starter": {
+        "name": "Starter",
         "price": "7.000 kr.",
         "seo": "Grundlæggende",
         "cms": "Simpelt"
       },
-      "app": {
-        "name": "Webapplikation",
+      "pro": {
+        "name": "Pro",
         "price": "13.000 kr.",
         "seo": "Udvidet",
         "cms": "Avanceret"
       },
       "premium": {
-        "name": "3D Premium",
+        "name": "Premium",
         "price": "16.000 kr.",
         "seo": "Udvidet",
         "cms": "Avanceret"

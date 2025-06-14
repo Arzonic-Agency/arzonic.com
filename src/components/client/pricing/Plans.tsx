@@ -10,15 +10,17 @@ interface Package {
   label: string;
   price_eur: number;
   price_dkk: number;
+  month_eur?: number;
+  month_dkk?: number;
 }
 
 const Plans = () => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
-  const tStart = (key: string) => t(`StarterSite.${key}`);
-  const tApp = (key: string) => t(`WebApplication.${key}`);
-  const t3D = (key: string) => t(`3DPremium.${key}`);
+  const tStarter = (key: string) => t(`Starter.${key}`);
+  const tPro = (key: string) => t(`Pro.${key}`);
+  const tPremium = (key: string) => t(`Premium.${key}`);
 
   const [packages, setPackages] = useState<Record<string, Package>>({});
   const [loading, setLoading] = useState(true);
@@ -30,9 +32,9 @@ const Plans = () => {
         const data = await getPackages();
 
         const keyToLabel: Record<string, string> = {
-          StarterSite: "Starter Site",
-          WebApplication: "Web Application",
-          "3DPremium": "3D Premium",
+          Starter: "Starter",
+          Pro: "Pro",
+          Premium: "Premium",
         };
 
         const map: Record<string, Package> = {};
@@ -62,8 +64,18 @@ const Plans = () => {
     if (!pkg) return t("PricingPage.startingFrom") + "…";
 
     const isDanish = locale.startsWith("da");
-    const value = isDanish ? pkg.price_dkk : pkg.price_eur;
     const currency = isDanish ? "DKK" : "EUR";
+
+    const value =
+      tab === "monthly"
+        ? isDanish
+          ? pkg.month_dkk
+          : pkg.month_eur
+        : isDanish
+        ? pkg.price_dkk
+        : pkg.price_eur;
+
+    if (value == null) return "–";
 
     return new Intl.NumberFormat(locale, {
       style: "currency",
@@ -72,22 +84,19 @@ const Plans = () => {
     }).format(value);
   };
 
-  const getTabLabel = () => {
-    return tab === "oneTime"
-      ? t("PricingPage.oneTime")
-      : t("PricingPage.monthlyIncl");
-  };
+  const getTabLabel = () =>
+    tab === "monthly" ? t("PricingPage.monthly48") : t("PricingPage.oneTime");
 
   return (
     <div className="flex flex-col gap-10 items-center justify-center w-full relative">
-      {/* Title & subtitle */}
+      {/* Titel og undertekst */}
       <div className="flex flex-col items-center gap-5">
         <span className="text-xl sm:text-xl md:text-2xl font-light text-center">
           {t("PricingPage.subtitle")}
         </span>
       </div>
 
-      {/* Tab buttons */}
+      {/* Tab knapper */}
       <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
         <button
           onClick={() => setTab("oneTime")}
@@ -111,7 +120,7 @@ const Plans = () => {
         </button>
       </div>
 
-      {/* Package cards */}
+      {/* Priskort */}
       <motion.div
         className="flex flex-col lg:flex-row items-center justify-between w-full h-full z-10 gap-4"
         initial={{ opacity: 0, y: 30 }}
@@ -121,52 +130,52 @@ const Plans = () => {
       >
         {[
           {
-            key: "StarterSite",
-            title: tStart("title"),
-            desc: tStart("description"),
+            key: "Starter",
+            title: tStarter("title"),
+            desc: tStarter("description"),
             features: [
               "customDesign",
               "responsiveFast",
               "basicSEO",
               "simpleCMS",
             ],
-            tFeature: tStart,
+            tFeature: tStarter,
           },
           {
-            key: "WebApplication",
-            title: tApp("title"),
-            desc: tApp("description"),
+            key: "Pro",
+            title: tPro("title"),
+            desc: tPro("description"),
             features: [
               <span
                 key="base"
                 className="text-xs font-semibold text-secondary flex items-center gap-1"
               >
-                <FaPlus size={12} /> {tStart("title")}
+                <FaPlus size={12} /> {tStarter("title")} {tPro("including")}
               </span>,
               "bespokeUIUX",
               "featureRich",
               "databaseIntegration",
               "adminDashboard",
             ],
-            tFeature: tApp,
+            tFeature: tPro,
           },
           {
-            key: "3DPremium",
-            title: t3D("title"),
-            desc: t3D("description"),
+            key: "Premium",
+            title: tPremium("title"),
+            desc: tPremium("description"),
             features: [
               <span
                 key="base"
                 className="text-xs font-semibold text-secondary flex items-center gap-1"
               >
-                <FaPlus size={12} /> {tApp("title")}
+                <FaPlus size={12} /> {tPro("title")} {tPremium("including")}
               </span>,
               "sleekLayout",
               "parallaxEffects",
               "integrated3D",
               "performance",
             ],
-            tFeature: t3D,
+            tFeature: tPremium,
           },
         ].map(({ key, title, desc, features, tFeature }) => (
           <div key={key} className="relative" aria-label={title}>
@@ -203,7 +212,12 @@ const Plans = () => {
         ))}
       </motion.div>
 
-      <p className="text-xs text-zinc-500">{t("PricingPage.vatNote")}</p>
+      {/* Note */}
+      <div className="text-xs text-zinc-500 text-center max-w-md">
+        {t("PricingPage.vatNote")}
+        <br />
+        {t("PricingPage.paymentInfo")}
+      </div>
     </div>
   );
 };

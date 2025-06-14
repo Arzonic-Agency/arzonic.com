@@ -11,11 +11,14 @@ interface DBPackage {
   label: string;
   price_eur: number;
   price_dkk?: number;
+  fee_eur?: number;
+  fee_dkk?: number;
 }
 
-type PlanKey = "StarterSite" | "WebApplication" | "3DPremium";
+type PlanKey = "Starter" | "Pro" | "Premium";
 
 const featureKeys = [
+  "serviceFee",
   "customDesign",
   "responsive",
   "seo",
@@ -28,7 +31,7 @@ const featureKeys = [
   "scroll",
 ] as const;
 
-const planKeys: PlanKey[] = ["StarterSite", "WebApplication", "3DPremium"];
+const planKeys: PlanKey[] = ["Starter", "Pro", "Premium"];
 
 const PlansComparison = () => {
   const { t, i18n } = useTranslation();
@@ -49,11 +52,11 @@ const PlansComparison = () => {
         data.forEach((p) => {
           const lab = p.label.toLowerCase();
           if (lab.includes("starter")) {
-            map.StarterSite = p;
-          } else if (lab.includes("application") || lab.includes("web")) {
-            map.WebApplication = p;
+            map.Starter = p;
+          } else if (lab.includes("pro")) {
+            map.Pro = p;
           } else if (lab.includes("premium") || lab.includes("3")) {
-            map["3DPremium"] = p;
+            map.Premium = p;
           }
         });
         setPkgMap(map);
@@ -67,6 +70,14 @@ const PlansComparison = () => {
   }, []);
 
   const isDanish = i18n.language.startsWith("da");
+
+  const formatCurrency = (value: number, currency: string) =>
+    new Intl.NumberFormat(i18n.language, {
+      style: "currency",
+      currency,
+      minimumFractionDigits: 0,
+    }).format(value);
+
   const getPrice = (key: PlanKey) => {
     if (loading) return "…";
     const pkg = pkgMap[key];
@@ -74,34 +85,41 @@ const PlansComparison = () => {
     const value =
       isDanish && pkg.price_dkk != null ? pkg.price_dkk : pkg.price_eur;
     const currency = isDanish ? "DKK" : "EUR";
-    return new Intl.NumberFormat(i18n.language, {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 0,
-    }).format(value);
+    return formatCurrency(value, currency);
+  };
+
+  const getFee = (key: PlanKey) => {
+    if (loading) return "…";
+    const pkg = pkgMap[key];
+    if (!pkg) return "–";
+    const value = isDanish && pkg.fee_dkk != null ? pkg.fee_dkk : pkg.fee_eur;
+    if (value == null) return "–";
+    const currency = isDanish ? "DKK" : "EUR";
+    return formatCurrency(value, currency);
   };
 
   const features = featureKeys.map((k) => translate(`features.${k}`));
+
   const rawPlans = planKeys.map((key) => {
     const shortKey =
-      key === "StarterSite"
-        ? "start"
-        : key === "WebApplication"
-        ? "app"
-        : "premium";
+      key === "Starter" ? "starter" : key === "Pro" ? "pro" : "premium";
 
     return {
       key,
       name: translate(`plans.${shortKey}.name`),
       values: featureKeys.map((fk) => {
+        if (fk === "serviceFee") {
+          return getFee(key);
+        }
+
         if (fk === "seo" || fk === "cms") {
           return translate(`plans.${shortKey}.${fk}`);
         }
 
         const has = (() => {
-          if (key === "StarterSite")
+          if (key === "Starter")
             return [0, 1].includes(featureKeys.indexOf(fk));
-          if (key === "WebApplication")
+          if (key === "Pro")
             return [0, 1, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
           return true;
         })();
@@ -121,7 +139,7 @@ const PlansComparison = () => {
 
   return (
     <>
-      <div className="hidden md:flex flex-col gap-10 items-center">
+      <div className="hidden md:flex flex-col gap-10 items-center w-full">
         <h2 className="text-xl md:text-3xl font-light text-center">
           {translate("title")}
         </h2>
@@ -162,6 +180,7 @@ const PlansComparison = () => {
           <div className="text-xs mt-3 flex justify-between items-center px-3">
             <div className="text-zinc-400">
               <p>{translate("vatNote")}</p>
+              <p>{translate("serviceFeeNote")}</p>
             </div>
             <div className="flex items-center gap-2 text-zinc-400">
               <FaSquareCheck size={14} className="text-secondary" />

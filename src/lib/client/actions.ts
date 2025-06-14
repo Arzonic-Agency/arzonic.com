@@ -405,7 +405,7 @@ export async function getPackages() {
   try {
     const { data, error } = await supabase
       .from("packages")
-      .select("label, price_eur, price_dkk")
+      .select("*")
       .order("price_eur", { ascending: true });
 
     if (error) {
