@@ -74,9 +74,15 @@ const PriceEstimator = () => {
   }, [step, answers, questionsState]);
 
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((r) => r.json())
-      .then((data: RestCountry[]) => {
+    fetch("https://restcountries.com/v3.1/all?fields=idd,cca2,name")
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP error ${r.status}`);
+        return r.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Unexpected API response format");
+        }
         const list = data
           .map((c) => {
             if (!c.idd || !c.idd.root || !c.idd.suffixes) return null;
@@ -96,7 +102,10 @@ const PriceEstimator = () => {
           .filter((c): c is Country => !!c)
           .sort((a, b) => a.name.localeCompare(b.name));
         const region = navigator.language.split("-")[1]?.toUpperCase() || "";
-        const match = list.find((c) => c.code === region) ?? list[0];
+        const match =
+          list.find((c) => c.code === region) ??
+          list.find((c) => c.code === "DK") ??
+          list[0];
         setCountries(list);
         setPhonePrefix(match.dial);
       })
@@ -131,6 +140,20 @@ const PriceEstimator = () => {
       }
       return next;
     });
+  };
+
+  const resetEstimator = () => {
+    setStep(-1);
+    setDirection(0);
+    setAnswers([]);
+    setGroupSel([]);
+    setName("");
+    setEmail("");
+    setPhoneNumber("");
+    setPhonePrefix("");
+    setConsentChecked(false);
+    setSuccess(false);
+    setError(null);
   };
 
   const goNext = () => {
@@ -215,7 +238,7 @@ const PriceEstimator = () => {
   };
 
   return (
-    <section className="w-full">
+    <section className="w-full h-full flex flex-col items-center justify-center">
       <AnimatePresence initial={false} custom={direction} mode="wait">
         {step === -1 && !success && (
           <motion.div
@@ -320,7 +343,7 @@ const PriceEstimator = () => {
             exit="exit"
             custom={direction}
             transition={{ duration: 0.4 }}
-            className=" p-6 rounded-2xl shadow-lg text-center"
+            className=" rounded-2xl shadow-lg text-center"
           >
             <h2 className="text-2xl font-bold mb-4">
               {t("estimator.thanks.title", "Thank you!")}
@@ -331,6 +354,17 @@ const PriceEstimator = () => {
                 "We’ve received your request and will get back to you soon."
               )}
             </p>
+            <p className="mt-2">
+              {t(
+                "estimator.thanks.followup",
+                "Inden for kort tid vil en af vores rådgivere tage kontakt til dig via den oplyste e-mail eller telefonnummer."
+              )}
+            </p>
+
+            {/* 🎯 Tilføj denne knap */}
+            <button onClick={resetEstimator} className="btn btn-primary mt-6">
+              {t("estimator.thanks.closeButton", "Luk")}
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

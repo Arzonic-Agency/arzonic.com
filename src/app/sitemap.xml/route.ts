@@ -1,8 +1,20 @@
+import { createAdminClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   const baseUrl = "https://arzonic.com";
   const today = new Date().toISOString().split("T")[0];
+
+  const supabase = await createAdminClient();
+
+  const { data: jobs, error } = await supabase
+    .from("jobs")
+    .select("slug, updated_at")
+    .eq("active", true);
+
+  if (error) {
+    console.error("Failed to fetch jobs for sitemap:", error.message);
+  }
 
   const staticPaths = [
     "",
@@ -60,6 +72,15 @@ export async function GET() {
         <lastmod>${today}</lastmod>
       </url>`
       )
+    ),
+    ...(jobs || []).map(
+      (job) => `
+      <url>
+        <loc>${baseUrl}/jobs/${job.slug}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+        <lastmod>${job.updated_at?.split("T")[0] || today}</lastmod>
+      </url>`
     ),
   ];
 

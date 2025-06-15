@@ -159,9 +159,6 @@ export async function sendEstimatorEmail(
     The Arzonic Team`;
 
   const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
-    <div style="text-align: center; margin-bottom: 24px;">
-      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="100" style="display: block; margin: 0 auto;" />
-    </div>
     <p>Hi ${name},</p>
     <p>Thanks for using our project estimator – we’re excited to learn more about your vision!</p>
     <p><strong>Selected package:</strong> ${packageLabel}<br/>
@@ -170,6 +167,9 @@ export async function sendEstimatorEmail(
     <p>We’ll carefully review your submission and get back to you — no matter what.</p>
     <p>If you have any additional information or questions, feel free to reply directly or <a href="mailto:mail@arzonic.com" style="color: #2563eb;">contact us</a>.</p>
     <p>Best regards,<br/><strong>The Arzonic Team</strong></p>
+        <div style="text-align: start; margin-bottom: 24px;">
+      <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="80" style="display: block;" />
+    </div>
     </div>`;
 
   let adminTextTr = adminText;

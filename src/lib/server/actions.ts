@@ -1111,6 +1111,24 @@ export async function getJobById(jobId: string) {
   }
 }
 
+export async function getJobBySlug(slug: string) {
+  const supabase = await createServerClientInstance(); // ✅
+
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("*")
+    .eq("slug", slug)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Job fetch error:", error.message);
+    return null;
+  }
+
+  return data;
+}
+
 export async function getApplicationsByJobId(jobId: string) {
   const supabase = await createServerClientInstance();
 

@@ -42,7 +42,7 @@ const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
     return (
       <div className="flex justify-center gap-3 items-center w-full">
         <span className="loading loading-spinner loading-md h-24"></span>
-        {t("jobs.loading_jobs")}
+        {t("loading_jobs")}
       </div>
     );
   }
@@ -84,7 +84,7 @@ const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
           </div>
           <div>
             <button className="btn btn-sm" onClick={() => onEdit(job)}>
-              <span className="md:flex hidden">{t("common.details")}</span>
+              <span className="md:flex hidden">{t("jobsDetails.details")}</span>
               <FaAngleRight />
             </button>
           </div>

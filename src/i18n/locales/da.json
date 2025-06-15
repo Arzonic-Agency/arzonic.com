@@ -130,6 +130,7 @@
   "site": "Side",
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
+  "packages": "Pakker",
   "createJob": {
     "formTitle": "Opret jobopslag",
     "title": "Jobtitel",
@@ -182,26 +183,60 @@
       "start": "Vælg enten startdato eller starttype"
     }
   },
+
   "jobsDetails": {
     "loading": "Indlæser joboplysninger...",
     "title": "Jobdetaljer",
+    "details": "Detaljer",
+    "cancel": "Annuller",
     "back": "Tilbage",
     "edit": "Rediger",
+    "delete": "Slet",
     "active": "Aktiv",
     "inactive": "Inaktiv",
+    "delete_job_confirmation": "Bekræft sletning af job",
+    "delete_job_prompt": "Er du sikker på, at du vil slette dette job?",
+    "delete_job_warning": "Denne handling kan ikke fortrydes.",
+    "deleted_application": "Ansøgning slettet",
+    "updated_job": "Job opdateret",
     "fields": {
       "title": "Jobtitel",
       "type": "Jobtype",
-      "startDate": "Startdato",
-      "workplace": "Arbejdsplads",
+      "startDate": "Startdato / -type",
+      "workplace": "Arbejdssted",
       "deadline": "Ansøgningsfrist",
-      "createdAt": "Oprettet den"
+      "createdAt": "Oprettet den",
+      "unknown": "Ukendt"
     },
     "applications": {
       "title": "Liste over kandidater",
       "noApplications": "Ingen ansøgninger fundet.",
       "noReason": "Ingen besked angivet"
     }
+  },
+
+  "setup": {
+    "jobs": "Jobopslag",
+    "create": "Opret",
+    "job": "job",
+    "job_details": "Jobdetaljer",
+    "unknown": "Ukendt",
+    "mobile": "Telefonnummer",
+    "email": "E-mail",
+    "consent_status": "Samtykke",
+    "consent_given": "Givet",
+    "consent_missing": "Mangler",
+    "creation_date": "Oprettet",
+    "cv_and_application": "CV og ansøgning",
+    "view_cv": "Se CV",
+    "view_application": "Se ansøgning",
+    "delete": "Slet",
+    "cancel": "Annuller",
+    "delete_confirmation": "Bekræft sletning",
+    "delete_application_prompt": "Er du sikker på, at du vil slette denne ansøgning?",
+    "delete_application_warning": "Dette kan ikke fortrydes.",
+    "back": "Tilbage",
+    "aria_delete_button": "Slet ansøgning"
   },
   "image_upload": {
     "change_image": "Skift billede",
@@ -921,8 +956,10 @@
       "and": "og databehandling."
     },
     "thanks": {
-      "title": "Tak!",
-      "message": "Vi har modtaget din forespørgsel og vender tilbage til dig hurtigst muligt."
+      "title": "Tak for din forespørgsel!",
+      "message": "Vi har modtaget dine oplysninger og beregning.",
+      "followup": "Du vil snarest modtage en mail med mere information – og vi kontakter dig, hvis vi har spørgsmål eller forslag.",
+      "closeButton": "Luk besked"
     },
     "error": {
       "loadingQuestions": "Fejl ved indlæsning af spørgsmål:"

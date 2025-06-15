@@ -122,7 +122,13 @@ const SetupJobsEdit = ({
     try {
       onSave(jobData);
       onBackToDetails();
-      await updateJob(jobId, jobData);
+      const updatedJobData = {
+        ...jobData,
+        start_type: jobData.start_date ? null : jobData.start_type,
+        start_date: jobData.start_type ? null : jobData.start_date,
+      };
+
+      await updateJob(jobId, updatedJobData);
     } catch (error) {
       console.error("Failed to update job:", error);
       alert("Could not update job.");
@@ -144,7 +150,7 @@ const SetupJobsEdit = ({
     <div className="flex flex-col gap-10 w-full">
       <div>
         <button onClick={onBackToDetails} className="btn btn-ghost">
-          <FaAngleLeft /> {t("common.back")}
+          <FaAngleLeft /> {t("back")}
         </button>
       </div>
       <div className="flex flex-col gap-5 w-full">
