@@ -9,7 +9,7 @@ export async function GET() {
 
   const { data: jobs, error } = await supabase
     .from("jobs")
-    .select("slug, created_at") // ✅ ikke "updated_at"
+    .select("slug, created_at")
     .eq("active", true);
   console.log("Jobs data:", jobs);
   console.log("Supabase error:", error);
@@ -80,7 +80,7 @@ export async function GET() {
         <loc>${baseUrl}/jobs/${job.slug}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
-        <lastmod>${job.updated_at?.split("T")[0] || today}</lastmod>
+        <lastmod>${job.created_at?.split("T")[0] || today}</lastmod>
       </url>`
     ),
   ];
