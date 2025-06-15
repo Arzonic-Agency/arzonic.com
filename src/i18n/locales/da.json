@@ -507,7 +507,7 @@
     },
     "oneTime": "Engangsbetaling (drift tilføjes separat)",
     "monthly48": "Pris pr. måned over 48 måneder",
-    "paymentInfo": "Prisen er baseret på 48 måneders afbetaling og er ekskl. drift og support.",
+    "paymentInfo": "Alle pakker kræver en servicepakke, som inkluderer support, drift og hosting.",
 
     "oneTimeTab": "Engangsbetaling",
     "monthlyTab": "Månedlig løsning"
@@ -519,7 +519,7 @@
     },
     "title-btn": "Klar til at komme i gang?",
     "text-btn": "Find din pakke",
-    "startingFrom": "Starter fra {{price}}",
+    "startingFrom": "Pakkepris",
     "vatNote": "Alle priser er ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
@@ -529,7 +529,7 @@
       "seo": "SEO-opsætning",
       "cms": "CMS / Redigerbart indhold",
       "login": "Login og brugerstyring",
-      "booking": "Booking / Webshop / Mailsystem",
+      "mail": "Mailsystem",
       "dashboard": "Admin-dashboard",
       "database": "Databaseintegration",
       "3d": "3D-elementer og animation",

@@ -133,17 +133,17 @@ const Plans = () => {
     },
   ].map(({ key, title, desc, features, tFeature }) => (
     <div key={key} className="relative" aria-label={title}>
-      <div className="flex flex-col justify-between shadow-lg rounded-xl w-80 h-[500px] p-8 border-zinc-400 border-b-4 shadow-zinc-800 bg-base-200">
+      <div className="flex flex-col justify-between shadow-lg rounded-xl w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 border-zinc-400 border-b-4 shadow-zinc-800 bg-base-200">
         <div className="flex flex-col gap-5">
           <h3 className="text-3xl font-bold tracking-wide">{title}</h3>
-          <p className="text-base">{desc}</p>
+          <p className="text-sm sm:text-base">{desc}</p>
         </div>
         <ul className="flex flex-col gap-4">
           {features.map((f, idx) =>
             typeof f === "string" ? (
               <li key={f} className="flex gap-2 items-center">
                 <FaCheck className="text-primary" size={20} />
-                <span className="text-sm font-semibold">
+                <span className="text-xs sm:text-sm font-semibold">
                   {tFeature(`features.${f}`)}
                 </span>
               </li>

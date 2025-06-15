@@ -3,7 +3,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaSquareCheck } from "react-icons/fa6";
-import Image from "next/image";
 import { getPackages } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
 
@@ -24,7 +23,7 @@ const featureKeys = [
   "seo",
   "cms",
   "login",
-  "booking",
+  "mail",
   "dashboard",
   "database",
   "3d",
@@ -43,6 +42,7 @@ const PlansComparison = () => {
 
   const [pkgMap, setPkgMap] = useState<Partial<Record<PlanKey, DBPackage>>>({});
   const [loading, setLoading] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState<PlanKey>("Starter");
 
   useEffect(() => {
     const load = async () => {
@@ -51,13 +51,10 @@ const PlansComparison = () => {
         const map: Partial<Record<PlanKey, DBPackage>> = {};
         data.forEach((p) => {
           const lab = p.label.toLowerCase();
-          if (lab.includes("starter")) {
-            map.Starter = p;
-          } else if (lab.includes("pro")) {
-            map.Pro = p;
-          } else if (lab.includes("premium") || lab.includes("3")) {
+          if (lab.includes("starter")) map.Starter = p;
+          else if (lab.includes("pro")) map.Pro = p;
+          else if (lab.includes("premium") || lab.includes("3"))
             map.Premium = p;
-          }
         });
         setPkgMap(map);
       } catch (error) {
@@ -103,27 +100,20 @@ const PlansComparison = () => {
   const rawPlans = planKeys.map((key) => {
     const shortKey =
       key === "Starter" ? "starter" : key === "Pro" ? "pro" : "premium";
-
     return {
       key,
       name: translate(`plans.${shortKey}.name`),
       values: featureKeys.map((fk) => {
-        if (fk === "serviceFee") {
-          return getFee(key);
-        }
-
-        if (fk === "seo" || fk === "cms") {
+        if (fk === "serviceFee") return getFee(key);
+        if (fk === "seo" || fk === "cms")
           return translate(`plans.${shortKey}.${fk}`);
-        }
-
         const has = (() => {
           if (key === "Starter")
-            return [0, 1].includes(featureKeys.indexOf(fk));
+            return [0, 1, 2].includes(featureKeys.indexOf(fk));
           if (key === "Pro")
-            return [0, 1, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
+            return [0, 1, 2, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
           return true;
         })();
-
         return has ? (
           <FaSquareCheck
             key={`${key}-${fk}`}
@@ -139,6 +129,7 @@ const PlansComparison = () => {
 
   return (
     <>
+      {/* Desktop Table */}
       <div className="hidden md:flex flex-col gap-10 items-center w-full">
         <h2 className="text-xl md:text-3xl font-light text-center">
           {translate("title")}
@@ -155,7 +146,7 @@ const PlansComparison = () => {
                   <th key={plan.key} className="p-3 text-left">
                     <div className="font-semibold">{plan.name}</div>
                     <div className="text-sm font-medium text-zinc-500">
-                      {translate("startingFrom")} {getPrice(plan.key)}
+                      {translate("startingFrom") + " " + getPrice(plan.key)}
                     </div>
                   </th>
                 ))}
@@ -189,20 +180,66 @@ const PlansComparison = () => {
           </div>
         </div>
       </div>
+      {/* Mobile: Select + Single Plan Table Styled Like Desktop */}
+      <div className="md:hidden w-full px-2 mt-10 space-y-4">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="plan-select" className="text-sm font-medium">
+            {translate("selectLabel") || "Choose a plan"}
+          </label>
+          <select
+            id="plan-select"
+            value={selectedPlan}
+            onChange={(e) => setSelectedPlan(e.target.value as PlanKey)}
+            className="select select-bordered w-full"
+          >
+            {rawPlans.map((plan) => (
+              <option key={plan.key} value={plan.key}>
+                {plan.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* Mobile */}
-      <div className="flex flex-col items-center justify-center gap-5 mt-10 relative">
-        <Image
-          src="/elements/rocket.png"
-          alt="Rocket illustration"
-          width={80}
-          height={80}
-          className="absolute -top-26 block md:hidden"
-        />
-        <h3 className="text-base">{translate("title-btn")}</h3>
+        {/* Styled Plan Table */}
+        <div className="overflow-x-auto w-full rounded-xl border border-base-200">
+          <table className="table w-full text-xs">
+            <thead className="bg-base-200">
+              <tr>
+                <th className="p-3">{translate("table.featureColumn")}</th>
+                <th className="p-3">
+                  {rawPlans.find((p) => p.key === selectedPlan)?.name}
+                  <div className="text-xs font-medium text-zinc-400 mt-1">
+                    {translate("startingFrom")} {getPrice(selectedPlan)}
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {features.map((feat, idx) => (
+                <tr key={`mobile-${idx}`}>
+                  <td className="px-3 py-3 font-medium text-xs">{feat}</td>
+                  <td className="px-3 py-3">
+                    {rawPlans.find((p) => p.key === selectedPlan)?.values[idx]}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Note & Button */}
+        <div className="text-xs mt-2 flex flex-col gap-1 text-zinc-400">
+          <p>{translate("vatNote")}</p>
+          <p>{translate("serviceFeeNote")}</p>
+          <div className="flex gap-2">
+            <FaSquareCheck size={14} className="text-secondary" />
+            {translate("legend")}
+          </div>
+        </div>
+
         <Link
           href="/get-started"
-          className="btn btn-primary"
+          className="btn btn-primary w-full"
           aria-label={translateAria("getStartedButton")}
         >
           {translate("text-btn")}

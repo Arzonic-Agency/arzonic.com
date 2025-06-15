@@ -519,7 +519,7 @@
     },
     "title-btn": "Ready to find your plan?",
     "text-btn": "Get Started",
-    "startingFrom": "Starting from {{price}}",
+    "startingFrom": "Package Price",
     "vatNote": "All prices are excl. VAT",
     "legend": "Included | – Not included in standard package",
     "features": {
@@ -529,7 +529,7 @@
       "seo": "SEO setup",
       "cms": "CMS / Editable content",
       "login": "User login and access",
-      "booking": "Booking / Webshop / Mail system",
+      "mail": "Mail system",
       "dashboard": "Admin dashboard",
       "database": "Database integration",
       "3d": "3D elements and animations",
