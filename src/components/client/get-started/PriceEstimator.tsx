@@ -8,11 +8,6 @@ import EstimatorContactForm from "../forms/EstimatorForm";
 import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
 
 type Country = { name: string; code: string; dial: string; flag: string };
-type RestCountry = {
-  cca2: string;
-  name: { common: string };
-  idd?: { root?: string; suffixes?: string[] };
-};
 
 const QUESTIONS_PER_SLIDE = 1;
 const slideVariants = {
