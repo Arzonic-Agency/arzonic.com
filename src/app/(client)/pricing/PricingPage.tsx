@@ -1,13 +1,17 @@
 "use client";
 
+import CallToAction from "@/components/client/home/CallToAction";
 import Prices from "@/components/client/pricing/Plans";
 import PricingComparison from "@/components/client/pricing/PlansComparison";
 import Support from "@/components/client/pricing/Support";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const PricingPage = () => {
   const { t } = useTranslation();
+  const [pricingType, setPricingType] = useState<"oneTime" | "monthly">(
+    "oneTime"
+  );
 
   return (
     <div className="p-5 sm:p-7 w-full h-full flex flex-col gap-12 md:gap-20 xl:gap-32 justify-center items-center my-20 ">
@@ -18,10 +22,12 @@ const PricingPage = () => {
         </h1>
       </div>
       <div className="flex flex-col justify-center gap-15 md:gap-20 xl:gap-28 mt-10 max-w-6xl w-full">
-        <Prices />
-
-        <PricingComparison />
+        <Prices pricingType={pricingType} setPricingType={setPricingType} />
+        <PricingComparison pricingType={pricingType} />
         <Support />
+        <div className="hidden md:block">
+          <CallToAction />
+        </div>
       </div>
     </div>
   );

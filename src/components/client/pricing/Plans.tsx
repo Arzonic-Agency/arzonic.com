@@ -14,7 +14,12 @@ interface Package {
   month_dkk?: number;
 }
 
-const Plans = () => {
+interface PlansProps {
+  pricingType: "oneTime" | "monthly";
+  setPricingType: React.Dispatch<React.SetStateAction<"oneTime" | "monthly">>;
+}
+
+const Plans: React.FC<PlansProps> = ({ pricingType, setPricingType }) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
@@ -24,7 +29,6 @@ const Plans = () => {
 
   const [packages, setPackages] = useState<Record<string, Package>>({});
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<"oneTime" | "monthly">("oneTime");
 
   useEffect(() => {
     const load = async () => {
@@ -67,7 +71,7 @@ const Plans = () => {
     const currency = isDanish ? "DKK" : "EUR";
 
     const value =
-      tab === "monthly"
+      pricingType === "monthly"
         ? isDanish
           ? pkg.month_dkk
           : pkg.month_eur
@@ -85,7 +89,9 @@ const Plans = () => {
   };
 
   const getTabLabel = () =>
-    tab === "monthly" ? t("PricingPage.monthly48") : t("PricingPage.oneTime");
+    pricingType === "monthly"
+      ? t("PricingPage.monthly48")
+      : t("PricingPage.oneTime");
 
   const planCards = [
     {
@@ -133,7 +139,7 @@ const Plans = () => {
     },
   ].map(({ key, title, desc, features, tFeature }) => (
     <div key={key} className="relative" aria-label={title}>
-      <div className="flex flex-col justify-between shadow-lg rounded-xl w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 border-zinc-400 border-b-4 shadow-zinc-800 bg-base-200">
+      <div className="flex flex-col justify-between shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-base-200 ring-2 shadow-base-300 ring-base-300">
         <div className="flex flex-col gap-5">
           <h3 className="text-3xl font-bold tracking-wide">{title}</h3>
           <p className="text-sm sm:text-base">{desc}</p>
@@ -176,9 +182,9 @@ const Plans = () => {
       {/* Tab knapper */}
       <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
         <button
-          onClick={() => setTab("oneTime")}
+          onClick={() => setPricingType("oneTime")}
           className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            tab === "oneTime"
+            pricingType === "oneTime"
               ? "bg-primary text-white "
               : "bg-transparent text-primary"
           }`}
@@ -186,9 +192,9 @@ const Plans = () => {
           {t("PricingPage.oneTimeTab")}
         </button>
         <button
-          onClick={() => setTab("monthly")}
+          onClick={() => setPricingType("monthly")}
           className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            tab === "monthly"
+            pricingType === "monthly"
               ? "bg-primary text-white"
               : "bg-transparent text-primary"
           }`}
@@ -211,7 +217,7 @@ const Plans = () => {
       {/* Mobil carousel visning */}
       <div className="carousel carousel-center w-full gap-5 lg:hidden">
         {planCards.map((card, index) => (
-          <div key={index} className="carousel-item px-2">
+          <div key={index} className="carousel-item p-2">
             <div className="w-full flex justify-center">{card}</div>
           </div>
         ))}

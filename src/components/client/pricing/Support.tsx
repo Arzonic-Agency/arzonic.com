@@ -1,55 +1,49 @@
+"use client";
+
 import React from "react";
-import { FaBuildingShield, FaCheck, FaGlobe, FaHeadset } from "react-icons/fa6";
+import { FaBuildingShield, FaGlobe, FaHeadset } from "react-icons/fa6";
+import { useTranslation } from "react-i18next";
 
 const Support = () => {
+  const { t } = useTranslation();
+
   return (
-    <div className="card lg:card-side bg-base-100 shadow-sm gap-5 lg:gap-0">
-      <figure className="lg:w-1/2">
-        <div className="flex items-center justify-center gap-10  text-6xl lg:text-8xl">
-          <div className="">
-            <FaBuildingShield />
-          </div>
-          <div className="flex lg:flex-col justify-center items-center gap-14">
-            <FaGlobe />
-            <FaHeadset />
-          </div>
+    <div className="card lg:card-side bg-base-100 shadow-sm gap-5 lg:gap-0 mt-10">
+      <div className="flex p-2 items-start justify-start lg:items-center lg:justify-center gap-7 lg:gap-10 text-5xl lg:text-8xl lg:w-1/2">
+        <div>
+          <FaBuildingShield />
         </div>
-      </figure>
-      <div className="card-body gap-7 ">
-        <h2 className="card-title  text-2xl">
-          Vi tager os af driften – så du kan fokusere på forretningen
-        </h2>
+        <div className="flex lg:flex-col justify-center items-center gap-7 lg:gap-14">
+          <FaGlobe />
+          <FaHeadset />
+        </div>
+      </div>
+
+      <div className="card-body gap-7 p-2 lg:p-10">
+        <h2 className="card-title text-2xl">{t("Support.title")}</h2>
         <ul className="flex flex-col gap-6">
           <li className="flex flex-col gap-1">
             <h3 className="text-base sm:text-lg font-semibold flex items-center gap-1">
-              <FaCheck /> Hosting & domæneadministration
+              {t("Support.items.hosting.title")}
             </h3>
             <p className="text-zinc-400 text-sm md:w-4/5">
-              Vi sørger for, at dit website er online, hurtigt og pålideligt. Du
-              slipper for at tænke på teknisk opsætning, fornyelse af domæner og
-              serverdrift.
+              {t("Support.items.hosting.desc")}
             </p>
           </li>
           <li className="flex flex-col gap-1">
             <h3 className="text-base sm:text-lg font-semibold flex items-center gap-1">
-              <FaCheck />
-              Backup & sikkerhedsopdateringer
+              {t("Support.items.security.title")}
             </h3>
             <p className="text-zinc-400 text-sm md:w-4/5">
-              Din løsning bliver løbende opdateret og sikkerhedskopieret. Vi
-              overvåger, vedligeholder og sikrer, at alt fungerer trygt og
-              stabilt – altid.
+              {t("Support.items.security.desc")}
             </p>
           </li>
           <li className="flex flex-col gap-1">
             <h3 className="text-base sm:text-lg font-semibold flex items-center gap-1">
-              <FaCheck />
-              Mindre ændringer & support
+              {t("Support.items.support.title")}
             </h3>
             <p className="text-zinc-400 text-sm md:w-4/5">
-              Du får adgang til løbende support og hjælp til småjusteringer –
-              hvad end det er opdatering af indhold eller mindre tilpasninger i
-              funktionalitet.
+              {t("Support.items.support.desc")}
             </p>
           </li>
         </ul>

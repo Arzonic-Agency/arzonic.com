@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaSquareCheck } from "react-icons/fa6";
-import { getPackages } from "@/lib/client/actions";
+import { FaCircleExclamation, FaSquareCheck } from "react-icons/fa6";
+import { getPackages, getExtraServices } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
 
 interface DBPackage {
@@ -12,6 +12,17 @@ interface DBPackage {
   price_dkk?: number;
   fee_eur?: number;
   fee_dkk?: number;
+  month_eur?: number;
+  month_dkk?: number;
+}
+
+interface DBExtraService {
+  label_dk: string;
+  label_en: string;
+  desc_dk?: string;
+  desc_en?: string;
+  price_dkk: number;
+  price_eur: number;
 }
 
 type PlanKey = "Starter" | "Pro" | "Premium";
@@ -20,19 +31,26 @@ const featureKeys = [
   "serviceFee",
   "customDesign",
   "responsive",
+  "contactForm",
   "seo",
   "cms",
   "login",
   "mail",
   "dashboard",
   "database",
+  "users",
+  "analytics",
   "3d",
   "scroll",
 ] as const;
 
 const planKeys: PlanKey[] = ["Starter", "Pro", "Premium"];
 
-const PlansComparison = () => {
+interface PlansComparisonProps {
+  pricingType: "oneTime" | "monthly";
+}
+
+const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   const { t, i18n } = useTranslation();
   const translate = (key: string) => t(`PlansComparison.${key}`);
   const translateAria = (key: string) =>
@@ -41,32 +59,40 @@ const PlansComparison = () => {
     });
 
   const [pkgMap, setPkgMap] = useState<Partial<Record<PlanKey, DBPackage>>>({});
+  const [extraServices, setExtraServices] = useState<DBExtraService[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<PlanKey>("Starter");
+
+  const isDanish = i18n.language.startsWith("da");
 
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await getPackages();
+        const [packageData, serviceData] = await Promise.all([
+          getPackages(),
+          getExtraServices(),
+        ]);
+
         const map: Partial<Record<PlanKey, DBPackage>> = {};
-        data.forEach((p) => {
+        packageData.forEach((p) => {
           const lab = p.label.toLowerCase();
           if (lab.includes("starter")) map.Starter = p;
           else if (lab.includes("pro")) map.Pro = p;
           else if (lab.includes("premium") || lab.includes("3"))
             map.Premium = p;
         });
+
         setPkgMap(map);
+        setExtraServices(serviceData);
       } catch (error) {
-        console.error("Failed to load packages:", error);
+        console.error("Failed to load data:", error);
       } finally {
         setLoading(false);
       }
     };
+
     load();
   }, []);
-
-  const isDanish = i18n.language.startsWith("da");
 
   const formatCurrency = (value: number, currency: string) =>
     new Intl.NumberFormat(i18n.language, {
@@ -80,18 +106,39 @@ const PlansComparison = () => {
     const pkg = pkgMap[key];
     if (!pkg) return "–";
     const value =
-      isDanish && pkg.price_dkk != null ? pkg.price_dkk : pkg.price_eur;
+      pricingType === "monthly"
+        ? isDanish && pkg.month_dkk != null
+          ? pkg.month_dkk
+          : pkg.month_eur
+        : isDanish && pkg.price_dkk != null
+        ? pkg.price_dkk
+        : pkg.price_eur;
     const currency = isDanish ? "DKK" : "EUR";
     return formatCurrency(value, currency);
+  };
+
+  const isBlockedForStarter = (label: string) => {
+    const blocked = ["webshop", "booking", "ai"];
+    return (
+      label.toLowerCase().includes(blocked[0]) ||
+      label.toLowerCase().includes(blocked[1]) ||
+      label.toLowerCase().includes(blocked[2])
+    );
   };
 
   const getFee = (key: PlanKey) => {
     if (loading) return "…";
     const pkg = pkgMap[key];
     if (!pkg) return "–";
-    const value = isDanish && pkg.fee_dkk != null ? pkg.fee_dkk : pkg.fee_eur;
+    const value = isDanish ? pkg.fee_dkk : pkg.fee_eur;
     if (value == null) return "–";
     const currency = isDanish ? "DKK" : "EUR";
+    return formatCurrency(value, currency);
+  };
+
+  const getExtraServicePrice = (dkk: number, eur?: number) => {
+    const currency = isDanish ? "DKK" : "EUR";
+    const value = isDanish ? dkk : eur ?? dkk;
     return formatCurrency(value, currency);
   };
 
@@ -109,9 +156,11 @@ const PlansComparison = () => {
           return translate(`plans.${shortKey}.${fk}`);
         const has = (() => {
           if (key === "Starter")
-            return [0, 1, 2].includes(featureKeys.indexOf(fk));
+            return [0, 1, 2, 3].includes(featureKeys.indexOf(fk));
           if (key === "Pro")
-            return [0, 1, 2, 4, 5, 6, 7].includes(featureKeys.indexOf(fk));
+            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(
+              featureKeys.indexOf(fk)
+            );
           return true;
         })();
         return has ? (
@@ -135,7 +184,7 @@ const PlansComparison = () => {
           {translate("title")}
         </h2>
 
-        <div className="overflow-x-auto mt-8 rounded-xl overflow-hidden w-full max-w-5xl">
+        <div className="mt-8 rounded-xl overflow-hidden w-full max-w-5xl">
           <table className="min-w-full border-3 border-base-200 rounded-xl">
             <thead className="bg-base-200">
               <tr>
@@ -146,7 +195,7 @@ const PlansComparison = () => {
                   <th key={plan.key} className="p-3 text-left">
                     <div className="font-semibold">{plan.name}</div>
                     <div className="text-sm font-medium text-zinc-500">
-                      {translate("startingFrom") + " " + getPrice(plan.key)}
+                      {translate("startingFrom")} {getPrice(plan.key)}
                     </div>
                   </th>
                 ))}
@@ -166,12 +215,70 @@ const PlansComparison = () => {
                 </tr>
               ))}
             </tbody>
+
+            {/* Extra services w/ tooltip - DESKTOP */}
+            {extraServices.length > 0 && (
+              <>
+                <thead className="bg-base-200">
+                  <tr>
+                    <th className="p-3 text-left">Ekstra services</th>
+                    {rawPlans.map((plan) => (
+                      <th
+                        key={`extra-head-${plan.key}`}
+                        className="p-3 text-left"
+                      >
+                        <div className="font-semibold">{plan.name}</div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {extraServices.map((service, idx) => (
+                    <tr key={`desktop-extra-${idx}`}>
+                      <td className="px-3 py-4 font-medium text-xs md:text-sm flex items-center gap-1">
+                        {isDanish ? service.label_dk : service.label_en}
+                        {(service.desc_dk || service.desc_en) && (
+                          <div className="dropdown dropdown-start">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn btn-xs btn-circle btn-ghost cursor-pointer m-0"
+                            >
+                              <FaCircleExclamation size={13} />
+                            </div>
+                            <div
+                              tabIndex={0}
+                              className="dropdown-content bg-base-200 rounded-box z-1 w-64 p-2 shadow-sm text-center"
+                            >
+                              {isDanish ? service.desc_dk : service.desc_en}
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                      {rawPlans.map((plan) => (
+                        <td
+                          key={`extra-cell-${plan.key}-${idx}`}
+                          className="p-3 text-sm"
+                        >
+                          {plan.key === "Starter" &&
+                          isBlockedForStarter(service.label_en)
+                            ? "–"
+                            : getExtraServicePrice(
+                                service.price_dkk,
+                                service.price_eur
+                              )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            )}
           </table>
 
           <div className="text-xs mt-3 flex justify-between items-center px-3">
             <div className="text-zinc-400">
               <p>{translate("vatNote")}</p>
-              <p>{translate("serviceFeeNote")}</p>
             </div>
             <div className="flex items-center gap-2 text-zinc-400">
               <FaSquareCheck size={14} className="text-secondary" />
@@ -180,8 +287,9 @@ const PlansComparison = () => {
           </div>
         </div>
       </div>
-      {/* Mobile: Select + Single Plan Table Styled Like Desktop */}
-      <div className="md:hidden w-full px-2 mt-10 space-y-4">
+
+      {/* Mobile version */}
+      <div className="md:hidden w-full overflow-hidden px-2 mt-10 flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <label htmlFor="plan-select" className="text-sm font-medium">
             {translate("selectLabel") || "Choose a plan"}
@@ -200,9 +308,8 @@ const PlansComparison = () => {
           </select>
         </div>
 
-        {/* Styled Plan Table */}
-        <div className="overflow-x-auto w-full rounded-xl border border-base-200">
-          <table className="table w-full text-xs">
+        <div className="w-full rounded-xl border border-base-200 overflow-hidden">
+          <table className="table w-full text-sm">
             <thead className="bg-base-200">
               <tr>
                 <th className="p-3">{translate("table.featureColumn")}</th>
@@ -224,13 +331,58 @@ const PlansComparison = () => {
                 </tr>
               ))}
             </tbody>
+            {extraServices.length > 0 && (
+              <>
+                <thead className="bg-base-200">
+                  <tr>
+                    <th className="p-3">Ekstra services</th>
+                    <th className="p-3">
+                      {rawPlans.find((p) => p.key === selectedPlan)?.name}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {extraServices.map((service, idx) => (
+                    <tr key={`extra-mobile-${idx}`}>
+                      <td className="px-3 py-3 font-medium text-xs flex items-center gap-1">
+                        {isDanish ? service.label_dk : service.label_en}
+                        {(service.desc_dk || service.desc_en) && (
+                          <div className="dropdown dropdown-start">
+                            <div
+                              tabIndex={0}
+                              role="button"
+                              className="btn btn-xs btn-circle btn-ghost m-0 cursor-pointer"
+                            >
+                              <FaCircleExclamation size={12} />
+                            </div>
+                            <div
+                              tabIndex={0}
+                              className="dropdown-content bg-base-200 rounded-box z-1 w-60 p-2 shadow-sm text-center"
+                            >
+                              {isDanish ? service.desc_dk : service.desc_en}
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-3 py-3">
+                        {selectedPlan === "Starter" &&
+                        isBlockedForStarter(service.label_en)
+                          ? "–"
+                          : getExtraServicePrice(
+                              service.price_dkk,
+                              service.price_eur
+                            )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            )}
           </table>
         </div>
 
-        {/* Note & Button */}
         <div className="text-xs mt-2 flex flex-col gap-1 text-zinc-400">
           <p>{translate("vatNote")}</p>
-          <p>{translate("serviceFeeNote")}</p>
           <div className="flex gap-2">
             <FaSquareCheck size={14} className="text-secondary" />
             {translate("legend")}

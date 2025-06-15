@@ -505,9 +505,9 @@
     "aria": {
       "getQuoteButton": "Få et tilbud"
     },
-    "oneTime": "Engangsbetaling (drift tilføjes separat)",
+    "oneTime": "Engangsbetaling (ekskl. serviceaftale)",
     "monthly48": "Pris pr. måned over 48 måneder",
-    "paymentInfo": "Alle pakker kræver en servicepakke, som inkluderer support, drift og hosting.",
+    "paymentInfo": "Alle pakker kræver serviceaftale, som dækker drift, support og hosting",
 
     "oneTimeTab": "Engangsbetaling",
     "monthlyTab": "Månedlig løsning"
@@ -517,21 +517,25 @@
     "table": {
       "featureColumn": "Funktion / Pakke"
     },
+    "selectLabel": "Vælg en pakke for at se detaljer",
     "title-btn": "Klar til at komme i gang?",
     "text-btn": "Find din pakke",
     "startingFrom": "Pakkepris",
     "vatNote": "Alle priser er ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
-      "serviceFee": "Servicegebyr pr. måned",
+      "serviceFee": "Serviceaftale pr. måned",
       "customDesign": "Tilpasset design",
       "responsive": "Responsiv og hurtig",
+      "contactForm": "Kontaktformular",
       "seo": "SEO-opsætning",
       "cms": "CMS / Redigerbart indhold",
       "login": "Login og brugerstyring",
       "mail": "Mailsystem",
       "dashboard": "Admin-dashboard",
       "database": "Databaseintegration",
+      "users": "Kundelogin og profiler",
+      "analytics": "Statistikker og analyse",
       "3d": "3D-elementer og animation",
       "scroll": "Scroll-effekter og parallax"
     },
@@ -553,6 +557,23 @@
         "price": "16.000 kr.",
         "seo": "Udvidet",
         "cms": "Avanceret"
+      }
+    }
+  },
+  "Support": {
+    "title": "Vi står for drift, support og hosting",
+    "items": {
+      "hosting": {
+        "title": "Hosting & domæneadministration",
+        "desc": "Vi sørger for, at dit website er online, hurtigt og pålideligt. Du slipper for at tænke på teknisk opsætning, fornyelse af domæner og serverdrift."
+      },
+      "security": {
+        "title": "Backup & sikkerhedsopdateringer",
+        "desc": "Din løsning bliver løbende opdateret og sikkerhedskopieret. Vi overvåger, vedligeholder og sikrer, at alt fungerer trygt og stabilt – altid."
+      },
+      "support": {
+        "title": "Mindre ændringer & support",
+        "desc": "Du får adgang til løbende support og hjælp til småjusteringer – hvad end det er opdatering af indhold eller mindre tilpasninger i funktionalitet."
       }
     }
   },

@@ -419,6 +419,18 @@ export async function getPackages() {
   }
 }
 
+export async function getExtraServices() {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("services")
+    .select("*")
+    .order("price_dkk", { ascending: true });
+
+  if (error)
+    throw new Error(`Failed to fetch extra services: ${error.message}`);
+  return data;
+}
+
 export async function getModelUrl(fileName: string): Promise<string> {
   const supabase = createClient();
 
