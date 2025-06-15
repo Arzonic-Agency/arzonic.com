@@ -9,9 +9,10 @@ export async function GET() {
 
   const { data: jobs, error } = await supabase
     .from("jobs")
-    .select("slug, updated_at")
+    .select("slug, created_at") // ✅ ikke "updated_at"
     .eq("active", true);
-
+  console.log("Jobs data:", jobs);
+  console.log("Supabase error:", error);
   if (error) {
     console.error("Failed to fetch jobs for sitemap:", error.message);
   }
