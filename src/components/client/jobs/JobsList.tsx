@@ -114,15 +114,15 @@ const JobsList = ({
           height={80}
           className="rotate-45"
         />
-        <h2 className="text-xl font-semibold">{t("jobsList.noMatchTitle")}</h2>
+        <h2 className="text-xl font-semibold">{t("jobsPage.noMatchTitle")}</h2>
         <p className="text-sm text-zinc-400">
-          {t("jobsList.noMatchDescription")}
+          {t("jobsPage.noMatchDescription")}
         </p>
         <a
           href="mailto:mail@arzonic.com"
           className="inline-block px-6 py-3 btn btn-primary"
         >
-          {t("jobsList.sendApplication")}
+          {t("jobsPage.sendApplication")}
         </a>
       </div>
     </div>

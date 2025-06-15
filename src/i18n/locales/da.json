@@ -192,6 +192,8 @@
     "back": "Tilbage",
     "edit": "Rediger",
     "delete": "Slet",
+    "apply": "Ansøg her",
+    "deadline": "Ansøgningsfrist",
     "active": "Aktiv",
     "inactive": "Inaktiv",
     "delete_job_confirmation": "Bekræft sletning af job",
@@ -875,7 +877,11 @@
     "titleEnd": "Arzonic",
     "noOpeningsTitle": "Tak for din interesse",
     "noOpenings": "Vi har i øjeblikket ingen ledige stillinger, men vi hører altid gerne fra dygtige og passionerede mennesker. Du er meget velkommen til at sende en uopfordret ansøgning til os.",
-    "contactMail": "Du kan skrive til os på:"
+    "contactMail": "Du kan skrive til os på:",
+
+    "noMatchTitle": "Fandt du ikke det rette?",
+    "noMatchDescription": "Vi søger altid engagerede mennesker, der brænder for web, design og teknologi. Send gerne en uopfordret ansøgning.",
+    "sendApplication": "Skriv til os"
   },
   "applyJobForm": {
     "title": "Send din ansøgning",

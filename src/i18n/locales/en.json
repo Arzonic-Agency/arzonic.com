@@ -183,7 +183,6 @@
       "start": "Select either a start date or start type"
     }
   },
-
   "jobsDetails": {
     "loading": "Loading job details...",
     "title": "Job details",
@@ -192,6 +191,8 @@
     "details": "Details",
     "cancel": "Cancel",
     "delete": "Delete",
+    "apply": "Apply now",
+    "deadline": "Application Deadline",
     "active": "Active",
     "inactive": "Inactive",
     "delete_job_confirmation": "Confirm job deletion",
@@ -872,11 +873,15 @@
   },
 
   "jobsPage": {
-    "titleStart": "Join our journey at",
+    "titleStart": "Join the journey at",
     "titleEnd": "Arzonic",
     "noOpeningsTitle": "Thank you for your interest",
-    "noOpenings": "We currently have no open positions, but we're always happy to hear from talented and passionate individuals. You're very welcome to send us an unsolicited application.",
-    "contactMail": "You can reach us at:"
+    "noOpenings": "We currently have no open positions, but we’re always happy to hear from talented and passionate people. You’re welcome to send us an unsolicited application.",
+    "contactMail": "You can write to us at:",
+
+    "noMatchTitle": "Didn't find the right position?",
+    "noMatchDescription": "We're always looking for passionate people who love web, design, and technology. Feel free to send us an application.",
+    "sendApplication": "Send your application"
   },
   "applyJobForm": {
     "title": "Submit your application",

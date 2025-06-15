@@ -91,11 +91,11 @@ const JobDetailsPage = ({ job }: Props) => {
         />
 
         <Link href={`/apply/${job.slug}`} className="btn btn-primary">
-          {t("jobDetails.apply")}
+          {t("jobsDetails.apply")}
         </Link>
 
         <div>
-          <strong>{t("jobDetails.deadline")}:</strong>{" "}
+          <strong>{t("jobsDetails.deadline")}:</strong>{" "}
           {format(new Date(job.deadline), "d. MMMM yyyy", {
             locale: currentLocale,
           })}

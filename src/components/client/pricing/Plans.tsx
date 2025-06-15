@@ -19,7 +19,7 @@ interface PlansProps {
   setPricingType: React.Dispatch<React.SetStateAction<"oneTime" | "monthly">>;
 }
 
-const Plans: React.FC<PlansProps> = ({ pricingType, setPricingType }) => {
+const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
