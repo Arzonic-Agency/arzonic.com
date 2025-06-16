@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Arzonic",
     description:
-      "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
+      "We are a Software Agency building custom websites, web applications, and immersive 3D experiences for businesses across Europe.",
     images: ["/opengraph-image.png"],
   },
   icons: {

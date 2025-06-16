@@ -291,14 +291,14 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
       {/* Mobile version */}
       <div className="md:hidden w-full overflow-hidden px-2 mt-10 flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="plan-select" className="text-sm font-medium">
+          <label htmlFor="plan-select" className="text-xl font-semibold">
             {translate("selectLabel") || "Choose a plan"}
           </label>
           <select
             id="plan-select"
             value={selectedPlan}
             onChange={(e) => setSelectedPlan(e.target.value as PlanKey)}
-            className="select select-bordered w-full"
+            className="select select-lg select-bordered w-full font-semibold"
           >
             {rawPlans.map((plan) => (
               <option key={plan.key} value={plan.key}>
