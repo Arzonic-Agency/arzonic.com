@@ -14,7 +14,7 @@ export default function Page() {
     <>
       <p className="sr-only">
         We are a software agency building custom websites, web applications, and
-        immersive 3D experiences for businesses across Europe
+        immersive 3D experiences for businesses across Europe.
       </p>
       <HomePage />
     </>
