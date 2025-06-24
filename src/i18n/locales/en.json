@@ -131,6 +131,7 @@
   "site_setup": "Site Setup",
   "layout_settings": "Layout Settings",
   "packages": "Packages",
+  "bookingMeeting": "Book a Meeting",
   "createJob": {
     "formTitle": "Create Job Posting",
     "title": "Job Title",

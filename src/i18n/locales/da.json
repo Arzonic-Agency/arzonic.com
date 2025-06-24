@@ -131,6 +131,7 @@
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
   "packages": "Pakker",
+  "bookingMeeting": "Book et møde",
   "createJob": {
     "formTitle": "Opret jobopslag",
     "title": "Jobtitel",
@@ -532,6 +533,7 @@
     "ambitionMessage": "Vi elsker ambitiøse idéer og hjælper gerne med at gøre dem til virkelighed.",
     "callPrompt": "Ring til os på",
     "phoneNumber": "+45 22 50 17 03",
+    "bookPrompt": "eller klar til et møde?",
     "imageAlt": "hero"
   },
   "PricingPage": {
