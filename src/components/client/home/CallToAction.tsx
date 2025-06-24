@@ -1,8 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FaPhone } from "react-icons/fa6";
 import OfferForm from "../forms/OfferForm";
-import Image from "next/image";
 import EuropeMap from "@/components/elements/EuropeMap";
 import BookingButton from "@/components/elements/BookingButton";
 
