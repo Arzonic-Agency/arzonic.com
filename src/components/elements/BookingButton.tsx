@@ -70,7 +70,6 @@ export default function BookingButton() {
     } else {
       loadScript();
     }
-  }, [t, i18n.language]); // dependency på t og sprog
-
+  }, [t, i18n.language]);
   return <div ref={buttonRef} />;
 }
