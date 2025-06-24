@@ -12,8 +12,8 @@ const CallToAction = () => {
         <div className="flex-initial lg:w-4/7 flex justify-center">
           <OfferForm />
         </div>
-        <div className="flex-1 lg:w-3/7 relative hidden lg:block">
-          <div className="bg-base-100 rounded-lg shadow-md md:p-10 flex flex-col gap-4 max-w-md">
+        <div className="flex-1 lg:w-3/7 relative flex justify-center">
+          <div className=" rounded-lg shadow-md p-5 md:p-10 flex flex-col gap-4 max-w-sm">
             <h3 className="text-xl font-bold">{t("ContactPage.readyTitle")}</h3>
             <p className="font-medium">{t("ContactPage.contactPrompt")}</p>
             <p>{t("ContactPage.ambitionMessage")}</p>
@@ -33,7 +33,7 @@ const CallToAction = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-center w-full gap-5 md:gap-7 lg:max-w-2xl ">
+      <div className="flex items-center justify-center w-full gap-5 md:gap-7 lg:max-w-2xl">
         <EuropeMap />
         <div>
           <h4 className="text-lg text-zinc-400 ">
