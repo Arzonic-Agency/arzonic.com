@@ -1,14 +1,14 @@
 import path from "path";
 import fs from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
-import { CONTENT_PATH } from "@/lib/env";
+
+const fallbackPath = path.join(process.cwd(), "localess");
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
-  const segments = url.pathname.split("/");
-  const lang = segments[segments.length - 1] || "da"; // get [lang] from URL
+  const lang = url.pathname.split("/").pop() || "da";
 
-  const filePath = path.join(
+  let filePath = path.join(
     process.cwd(),
     "public/data/content",
     `${lang}.json`
@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = await fs.readFile(filePath, "utf-8");
-
     return new NextResponse(data, {
       status: 200,
       headers: {
@@ -24,11 +23,25 @@ export async function GET(request: NextRequest) {
         "Cache-Control": "public, max-age=3600",
       },
     });
-  } catch (err) {
-    console.error("Kunne ikke læse oversættelse:", err);
-    return NextResponse.json(
-      { error: "Translation file not found or invalid" },
-      { status: 500 }
-    );
+  } catch (e) {
+    try {
+      const fallbackFile = path.join(fallbackPath, `${lang}.json`);
+      const data = await fs.readFile(fallbackFile, "utf-8");
+      return new NextResponse(data, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (err) {
+      console.error(
+        "Ingen oversættelse fundet i hverken public/data eller fallback:",
+        err
+      );
+      return NextResponse.json(
+        { error: "Translation not found" },
+        { status: 500 }
+      );
+    }
   }
 }
