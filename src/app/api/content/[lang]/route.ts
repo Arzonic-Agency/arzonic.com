@@ -1,9 +1,10 @@
 import path from "path";
 import fs from "fs/promises";
 import { CONTENT_PATH } from "@/lib/env";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  _: Request,
+  _: NextRequest,
   { params }: { params: { lang: string } }
 ) {
   const lang = params.lang || "da";
