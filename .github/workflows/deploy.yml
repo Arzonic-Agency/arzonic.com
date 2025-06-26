@@ -40,10 +40,10 @@ jobs:
             exit 1
           fi
 
-      - name: 🚀 Restart PM2 process with production env
+      - name: 🚀 Restart PM2 process
         run: |
           set -e
-          echo "🔄 Restarting PM2 process with NODE_ENV=production..."
+          echo "🔄 Restarting PM2 process..."
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
@@ -52,9 +52,8 @@ jobs:
           echo "🧹 Cleaning up old PM2 instance if any..."
           pm2 delete arzonic-app || true
 
-          echo "🚀 Starting app with PM2 on port 7000 and NODE_ENV=production..."
-          PORT=7000 NODE_ENV=production pm2 start npm --name "arzonic-app" -- start
-
+          echo "🚀 Starting app with PM2 on port 7000..."
+          PORT=7000 pm2 start npm --name "arzonic-app" -- start
           pm2 save
           pm2 list
 
