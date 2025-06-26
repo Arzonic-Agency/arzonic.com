@@ -1,13 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
+import { NextRequest, NextResponse } from "next/server";
 import { CONTENT_PATH } from "@/lib/env";
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { lang: string } }
-): Promise<NextResponse> {
-  const lang = params.lang || "da";
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const segments = url.pathname.split("/");
+  const lang = segments[segments.length - 1] || "da"; // get [lang] from URL
+
   const filePath = path.join(CONTENT_PATH, `${lang}.json`);
 
   try {
