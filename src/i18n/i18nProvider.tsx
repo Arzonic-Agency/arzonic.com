@@ -37,7 +37,7 @@ export default function I18nProvider({
   }, []);
 
   if (!ready) {
-    return <div className="p-4 text-center">Indlæser oversættelser...</div>;
+    return <div className=""></div>;
   }
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
