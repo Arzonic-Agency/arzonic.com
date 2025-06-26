@@ -8,7 +8,11 @@ export async function GET(request: NextRequest) {
   const segments = url.pathname.split("/");
   const lang = segments[segments.length - 1] || "da"; // get [lang] from URL
 
-  const filePath = path.join(CONTENT_PATH, `${lang}.json`);
+  const filePath = path.join(
+    process.cwd(),
+    "public/data/content",
+    `${lang}.json`
+  );
 
   try {
     const data = await fs.readFile(filePath, "utf-8");

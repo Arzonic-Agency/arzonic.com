@@ -3,9 +3,8 @@
 .env.local
 .env.development.local
 .env.test.local
-.env.production
 .env.production.local
-.env.production
+
 
 # Next.js build output
 .next/
@@ -33,4 +32,8 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+
+# Dont let it overwrite the content path
+/public/data
 
