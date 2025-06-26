@@ -1,13 +1,13 @@
+import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs/promises";
 import { CONTENT_PATH } from "@/lib/env";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _request: NextRequest,
-  context: { params: Record<string, string> }
-) {
-  const lang = context.params.lang || "da";
+  { params }: { params: { lang: string } }
+): Promise<NextResponse> {
+  const lang = params.lang || "da";
   const filePath = path.join(CONTENT_PATH, `${lang}.json`);
 
   try {
@@ -22,8 +22,8 @@ export async function GET(
     });
   } catch (err) {
     console.error("Kunne ikke læse oversættelse:", err);
-    return new NextResponse(
-      JSON.stringify({ error: "Translation file not found or invalid" }),
+    return NextResponse.json(
+      { error: "Translation file not found or invalid" },
       { status: 500 }
     );
   }
