@@ -84,7 +84,7 @@ const Header = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-10 left-0 bg-base-100 shadow-xl w-52 px-2 py-3 z-30 flex flex-col items-start gap-3 rounded-xl text-sm"
+                  className="absolute top-10 -left-5 bg-base-100 shadow-xl w-52 px-2 py-3 z-30 flex flex-col items-start gap-3 rounded-xl text-sm"
                 >
                   <li className="w-full">
                     <Link href="/solutions/custom-websites">
