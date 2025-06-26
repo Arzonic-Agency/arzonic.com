@@ -5,9 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { lang: string } }
+  context: { params: Record<string, string> }
 ) {
-  const lang = params.lang || "da"; // fallback hvis ikke sat
+  const lang = context.params.lang || "da";
   const filePath = path.join(CONTENT_PATH, `${lang}.json`);
 
   try {
