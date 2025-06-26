@@ -12,16 +12,32 @@ export default function I18nProvider({
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (i18n.isInitialized) {
-      setReady(true);
-    } else {
-      i18n.on("initialized", () => setReady(true));
-    }
+    const lang = i18n.language || "da";
+
+    const loadTranslations = async () => {
+      if (!i18n.hasResourceBundle(lang, "translation")) {
+        try {
+          const res = await fetch(`/api/content/${lang}`);
+          const data = await res.json();
+
+          i18n.addResourceBundle(lang, "translation", data, true, true);
+        } catch (err) {
+          console.error("Kunne ikke hente oversættelser:", err);
+        }
+      }
+
+      if (i18n.isInitialized) {
+        setReady(true);
+      } else {
+        i18n.on("initialized", () => setReady(true));
+      }
+    };
+
+    loadTranslations();
   }, []);
 
   if (!ready) {
-    // Du kan også returnere fx en loader her
-    return <div className="p-4 text-center"></div>;
+    return <div className="p-4 text-center">Indlæser oversættelser...</div>;
   }
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
