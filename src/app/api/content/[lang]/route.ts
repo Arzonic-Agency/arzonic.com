@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   const isProd = process.env.NODE_ENV === "production";
   const filePath = isProd
-    ? path.join(process.cwd(), "public/data/content", `${lang}.json`)
+    ? path.join(process.cwd(), "public/data", `${lang}.json`)
     : path.join(process.cwd(), "localess", `${lang}.json`);
 
   try {
