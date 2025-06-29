@@ -3,10 +3,10 @@ import HomePage from "./HomePage";
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Arzonic – Danish Modern Web Agency ",
+    absolute: "Arzonic – Danish Software Agency ",
   },
   description:
-    "We specialize in building high-performance webapplications and immersive 3D experiences using modern",
+    "We specialize in building high-performance webapplications and immersive 3D experiences using modern technologies.",
 };
 
 export default function Page() {
