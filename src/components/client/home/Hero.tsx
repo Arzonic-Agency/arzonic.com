@@ -16,7 +16,7 @@ const Hero = () => {
     <>
       <div className="relative h-full w-full overflow-visible md:pl-4 lg:pl-8">
         <div className="relative z-10 flex items-center justify-center md:justify-between h-full px-6 pt-20 lg:pt-0">
-          <div className="lg:w-[50%] flex flex-col gap-7">
+          <div className="lg:w-[50%] flex flex-col gap-5 md:gap-7">
             <div className="flex gap-1 md:gap-3 items-center">
               <div className="flex relative w-10 h-6 md:w-14 md:h-9">
                 <Image
@@ -24,41 +24,42 @@ const Hero = () => {
                   alt={t("flags.danish", "Dansk flag")}
                   width={40}
                   height={24}
-                  className="w-10 h-7 md:w-14 md:h-9 object-contain"
+                  className="w-9 h-6 md:w-14 md:h-9 object-contain"
                   priority
                 />
               </div>
-              <h1 className="text-2xl md:text-4xl">{t("Hero.title")}</h1>
+              <h1 className="text-2xl md:text-4xl font-medium">
+                {t("Hero.title")}
+              </h1>
             </div>
             <div className="max-w-xl flex flex-col gap-3">
-              <p className="text-sm sm:text-base">{t("Hero.description")} </p>
-              <span className="font-mono text-sm sm:text-base">
-                {t("Hero.noTemplates")}
-              </span>
+              <p className="text-sm sm:text-lg">{t("Hero.description")} </p>
             </div>
             <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
-              <span
-                className="badge badge-secondary badge-soft badge-xs md:badge-md"
-                aria-label={t("aria.badges.customWebsites")}
-              >
-                {t("Hero.customWebsites")}
-              </span>
-
-              <span
-                className="badge badge-secondary badge-soft badge-xs md:badge-md"
-                aria-label={t("aria.badges.visualization")}
-              >
-                {t("Hero.visualization")}
-              </span>
-
-              <span
-                className="badge badge-secondary badge-soft badge-xs md:badge-md"
+              <Link
+                href={"/solutions/web-applications"}
+                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
                 aria-label={t("aria.badges.webApplications")}
               >
                 {t("Hero.webApplications")}
-              </span>
+              </Link>
+              <Link
+                href={"/solutions/3d-visualization"}
+                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
+                aria-label={t("aria.badges.visualization")}
+              >
+                {t("Hero.visualization")}
+              </Link>
+
+              <Link
+                href={"/solutions/custom-websites"}
+                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
+                aria-label={t("aria.badges.customWebsites")}
+              >
+                {t("Hero.customWebsites")}
+              </Link>
             </div>
-            <div className="mt-5 flex items-center gap-3">
+            <div className="mt-2 flex items-center gap-3">
               <Link
                 href="/solutions"
                 className="btn btn-soft"

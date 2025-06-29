@@ -359,9 +359,8 @@
     }
   },
   "Hero": {
-    "title": "MODERN WEB AGENCY",
-    "description": "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
-    "noTemplates": "— no templates, no WordPress",
+    "title": "SOFTWARE AGENCY",
+    "description": "Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology.",
     "customWebsites": "Custom Websites",
     "visualization": "3D Visualization",
     "webApplications": "Web Applications",
@@ -977,9 +976,9 @@
   "aboutPage": {
     "titleStart": "About us",
     "titleEnd": " – Our journey and values",
-    "metaDescription": "We are Arzonic – a modern digital agency focused on web solutions, 3D, and user experience.",
-    "textOne": "Arzonic is a creative digital agency built on passion, curiosity, and a shared love for craftsmanship. We're a diverse team of specialists and newly graduated talents, each deeply engaged in our craft – from web development and UI/UX to 3D visualization and animation.",
-    "textTwo": "Our mindset is fresh and solution-driven. We don’t do cookie-cutter work – we explore what’s possible. Rooted in hobby projects and driven by a constant desire to learn, we create digital experiences that both perform and inspire.",
+    "metaDescription": "Arzonic is a modern software agency specializing in scalable web applications, immersive 3D experiences, and clean digital design.",
+    "textOne": "Arzonic is a creative software agency driven by passion, curiosity, and a shared love for digital craftsmanship. Our team brings together experienced specialists and newly graduated talents, working across web applications, UI/UX, 3D visualization, and animation – all with a focus on building polished and value-driven digital solutions.",
+    "textTwo": "We’re a young startup with big ambitions and an uncompromising approach to quality. Our mindset is fresh and solution-oriented. We come from diverse backgrounds, but we’re united by a desire to create work that works – and resonates. Every project is approached with care and intention, transforming ideas into functional, visually strong solutions with clear user experiences and measurable business impact. Nothing we do is templated – we build with purpose, from the ground up.",
     "team": [
       {
         "name": "Marc Møller",

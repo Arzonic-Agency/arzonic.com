@@ -354,9 +354,8 @@
     }
   },
   "Hero": {
-    "title": "MODERNE WEBBUREAU",
-    "description": "Vi bygger lynhurtige hjemmesider og engagerende oplevelser med skræddersyet teknologi – altid moderne, altid tilpasset dine behov.",
-    "noTemplates": "— ingen skabeloner, ingen WordPress",
+    "title": "SOFTWARE AGENCY",
+    "description": "Specialister i skræddersyede webapps, kraftfulde dashboards og engagerende 3D-løsninger, udviklet med nyeste teknologi.",
     "customWebsites": "Hjemmesider",
     "visualization": "3D-Design",
     "webApplications": "Webapplikationer",
@@ -976,9 +975,9 @@
   "aboutPage": {
     "titleStart": "Om os",
     "titleEnd": " – Vores rejse og værdier",
-    "metaDescription": "Vi er Arzonic – et moderne webbureau med fokus på digitale løsninger, 3D og brugeroplevelse.",
-    "textOne": "Arzonic er et kreativt digitalt bureau drevet af passion, nysgerrighed og en fælles kærlighed til godt håndværk. Vi er et sammensat team af specialister og nyuddannede ildsjæle, der brænder for hver vores felt – fra webudvikling og UI/UX til 3D-visualisering og animation.",
-    "textTwo": "Vores tilgang er frisk og løsningsorienteret. Vi tænker ikke i standardpakker, men i muligheder. Med rødder i hobbyprojekter og en konstant trang til at lære nyt, skaber vi digitale løsninger, der både performer og begejstrer.",
+    "metaDescription": "Arzonic er et moderne softwarebureau med speciale i skalerbare webapplikationer, medrivende 3D-oplevelser og gennemtænkt digitalt design",
+    "textOne": "Arzonic er et kreativt softwarebureau drevet af passion, nysgerrighed og en fælles kærlighed til digitalt håndværk. Vores team forener erfarne specialister og nyuddannede talenter, som arbejder med alt fra webapplikationer og UI/UX til 3D-visualisering og animation – med fokus på at skabe gennemførte og værdiskabende digitale løsninger.",
+    "textTwo": "Vi er et ungt startup med store ambitioner og en kompromisløs tilgang til kvalitet. Vores tilgang er frisk og løsningsorienteret. Vi kommer fra forskellige baggrunde, men mødes i ønsket om at skabe noget, der både virker – og mærkes. Vi sætter os grundigt ind i hver opgave og omsætter idéer til funktionelle, æstetisk stærke løsninger med tydelig brugeroplevelse og målbar forretningsværdi. Intet er skabelonarbejde – vi bygger med omtanke, fra bunden og fremad.",
     "team": [
       {
         "name": "Marc Møller",
