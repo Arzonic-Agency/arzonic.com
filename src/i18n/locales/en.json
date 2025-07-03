@@ -853,7 +853,7 @@
       "image": "/backgrounds/design-animation.jpg"
     }
   },
-  "FAQ": {
+  "faq": {
     "title": "Frequently Asked Questions",
     "q1": {
       "title": "How long does it take?",
@@ -1070,7 +1070,7 @@
       "changeToDanish": "Change language to Danish",
       "changeToEnglish": "Change language to English"
     },
-    "FAQ": {
+    "faq": {
       "q1": "Expand FAQ question 1",
       "q2": "Expand FAQ question 2",
       "q3": "Expand FAQ question 3",
