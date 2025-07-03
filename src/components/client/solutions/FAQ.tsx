@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 
 const FAQ = () => {
   const { t } = useTranslation();
-  const translate = (key: string) => t(`FAQ.${key}`);
+  const translate = (key: string) => t(`faq.${key}`);
   const translateAria = (key: string) =>
-    t(`aria.FAQ.${key}`, { defaultValue: `Expand FAQ question ${key}` });
+    t(`aria.faq.${key}`, { defaultValue: `Expand FAQ question ${key}` });
 
   return (
     <div className="w-full h-full py-10">
