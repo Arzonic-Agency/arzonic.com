@@ -13,6 +13,7 @@ const UpdateNews = ({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
   const [errors, setErrors] = useState({
     title: "",
     content: "",
@@ -33,7 +34,11 @@ const UpdateNews = ({
         setContent(news.content || news.desc || "");
         // If your backend supports multiple images, adapt this accordingly
         if (Array.isArray(news.images)) {
-          setExistingImages(news.images);
+          // Map to string[] if images are objects with a 'path' property
+          const urls = news.images
+            .map((img: any) => (typeof img === "string" ? img : img?.path || ""))
+            .filter(Boolean);
+          setExistingImages(urls);
         } else if (news.image) {
           setExistingImages([news.image]);
         } else {
