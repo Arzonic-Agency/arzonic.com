@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createNews } from "@/lib/server/actions";
-import { FaX, FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 
