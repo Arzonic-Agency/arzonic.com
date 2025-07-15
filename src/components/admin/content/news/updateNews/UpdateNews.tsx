@@ -3,6 +3,11 @@ import { updateNews, getNewsById } from "@/lib/server/actions";
 import { FaXmark } from "react-icons/fa6";
 import Image from "next/image";
 
+interface NewsImage {
+  path: string;
+  sort_order?: number;
+}
+
 const UpdateNews = ({
   newsId,
   onNewsUpdated,
@@ -36,7 +41,9 @@ const UpdateNews = ({
         if (Array.isArray(news.images)) {
           // Map to string[] if images are objects with a 'path' property
           const urls = news.images
-            .map((img: any) => (typeof img === "string" ? img : img?.path || ""))
+            .map((img: string | NewsImage) =>
+              typeof img === "string" ? img : img?.path || ""
+            )
             .filter(Boolean);
           setExistingImages(urls);
         } else if (news.image) {
