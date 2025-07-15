@@ -600,7 +600,8 @@ export async function createNews({
     target_lang: "EN",
   });
   const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
-  if (!titleRes.ok) throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
+  if (!titleRes.ok)
+    throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
   const {
     translations: [titleFirst],
   } = (await titleRes.json()) as {
@@ -615,8 +616,12 @@ export async function createNews({
       text: title,
       target_lang: "DA",
     });
-    const titleR2 = await fetch(endpoint, { method: "POST", body: titleParams2 });
-    if (!titleR2.ok) throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
+    const titleR2 = await fetch(endpoint, {
+      method: "POST",
+      body: titleParams2,
+    });
+    if (!titleR2.ok)
+      throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
     const {
       translations: [titleSecond],
     } = (await titleR2.json()) as {
@@ -718,7 +723,8 @@ export async function updateNews(
     target_lang: "EN",
   });
   const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
-  if (!titleRes.ok) throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
+  if (!titleRes.ok)
+    throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
   const {
     translations: [titleFirst],
   } = (await titleRes.json()) as {
@@ -733,8 +739,12 @@ export async function updateNews(
       text: title,
       target_lang: "DA",
     });
-    const titleR2 = await fetch(endpoint, { method: "POST", body: titleParams2 });
-    if (!titleR2.ok) throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
+    const titleR2 = await fetch(endpoint, {
+      method: "POST",
+      body: titleParams2,
+    });
+    if (!titleR2.ok)
+      throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
     const {
       translations: [titleSecond],
     } = (await titleR2.json()) as {
@@ -816,6 +826,11 @@ export async function updateNews(
   }
 }
 
+interface NewsImage {
+  path: string;
+  sort_order: number;
+}
+
 export async function getAllNews(page = 1, limit = 6) {
   const supabase = await createServerClientInstance();
   const offset = (page - 1) * limit;
@@ -825,24 +840,26 @@ export async function getAllNews(page = 1, limit = 6) {
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
   if (error) throw new Error(error.message);
-  
+
   // Transform data to include image URLs
-  const transformedNews = data?.map(newsItem => {
-    const images = newsItem.news_images
-      ?.sort((a: any, b: any) => a.sort_order - b.sort_order)
-      ?.map((img: any) => {
-        const { data: publicUrlData } = supabase.storage
-          .from("news-images")
-          .getPublicUrl(img.path);
-        return publicUrlData.publicUrl;
-      }) || [];
-    
-    return {
-      ...newsItem,
-      images,
-    };
-  }) || [];
-  
+  const transformedNews =
+    data?.map((newsItem) => {
+      const images =
+        (newsItem.news_images as NewsImage[] | undefined)
+          ?.sort((a, b) => a.sort_order - b.sort_order)
+          ?.map((img) => {
+            const { data: publicUrlData } = supabase.storage
+              .from("news-images")
+              .getPublicUrl(img.path);
+            return publicUrlData.publicUrl;
+          }) || [];
+
+      return {
+        ...newsItem,
+        images,
+      };
+    }) || [];
+
   return { news: transformedNews, total: count ?? 0 };
 }
 
@@ -854,17 +871,18 @@ export async function getNewsById(newsId: number) {
     .eq("id", newsId)
     .single();
   if (error) throw new Error(error.message);
-  
+
   // Transform data to include image URLs
-  const images = data.news_images
-    ?.sort((a: any, b: any) => a.sort_order - b.sort_order)
-    ?.map((img: any) => {
-      const { data: publicUrlData } = supabase.storage
-        .from("news-images")
-        .getPublicUrl(img.path);
-      return publicUrlData.publicUrl;
-    }) || [];
-  
+  const images =
+    (data.news_images as NewsImage[] | undefined)
+      ?.sort((a, b) => a.sort_order - b.sort_order)
+      ?.map((img) => {
+        const { data: publicUrlData } = supabase.storage
+          .from("news-images")
+          .getPublicUrl(img.path);
+        return publicUrlData.publicUrl;
+      }) || [];
+
   return {
     ...data,
     images,

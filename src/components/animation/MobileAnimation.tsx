@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Suspense } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import {
@@ -9,7 +9,6 @@ import {
   Vector3,
   Group,
   PCFSoftShadowMap,
-  Material,
 } from "three";
 import { getModelUrl } from "@/lib/client/actions";
 

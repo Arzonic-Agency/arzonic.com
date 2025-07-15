@@ -99,13 +99,15 @@ const Hero = () => {
             >
               <div className="mockup-phone-camera"></div>
               <div className="mockup-phone-display text-white grid place-content-center">
-                <img
+                <Image
                   alt="wallpaper"
                   src={
                     isFirstImage
                       ? "/models/mobile-screen-l.png"
                       : "/models/mobile-screen-d.png"
                   }
+                  width={400}
+                  height={800}
                 />
               </div>
             </motion.div>

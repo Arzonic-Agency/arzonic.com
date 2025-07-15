@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { createNews } from "@/lib/server/actions";
 import { FaX, FaXmark } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
 
 const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const { t } = useTranslation();
@@ -149,7 +150,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                         key={index}
                         className="carousel-item relative group h-full"
                       >
-                        <img
+                        <Image
                           src={url}
                           alt={`Billede ${index + 1}`}
                           className="w-48 h-32 object-cover"
