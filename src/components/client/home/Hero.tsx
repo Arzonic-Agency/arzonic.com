@@ -1,16 +1,30 @@
 "use client";
 import Image from "next/image";
-import React from "react";
-import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
+// import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-const ThreeAnimation = dynamic(() => import("../../animation/threeAnimation"), {
-  ssr: false,
-});
+// const MobileAnimation = dynamic(
+//   () => import("../../animation/MobileAnimation"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const Hero = () => {
   const { t } = useTranslation();
+
+  // Billedskift state
+  const [isFirstImage, setIsFirstImage] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsFirstImage((prev) => !prev);
+    }, 2500); // Skift hvert 2.5 sekund
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -77,10 +91,56 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="lg:w-[50%] h-full lg:block hidden">
-            <div className="w-full h-full relative bg-transparent ">
-              <ThreeAnimation />
+          <div className="lg:w-[50%] h-full lg:flex hidden items-center justify-center relative">
+            <motion.div
+              animate={{ y: [0, -30, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="mockup-phone scale-65"
+            >
+              <div className="mockup-phone-camera"></div>
+              <div className="mockup-phone-display text-white grid place-content-center">
+                <img
+                  alt="wallpaper"
+                  src={
+                    isFirstImage
+                      ? "/models/mobile-screen-l.png"
+                      : "/models/mobile-screen-d.png"
+                  }
+                />
+              </div>
+            </motion.div>
+            <div className="absolute bottom-45  left-20 flex flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
+              <div className="flex items-center justify-center gap-2">
+                <Image
+                  src="/customer/favicon1.png"
+                  alt={t("Hero.imageAlt")}
+                  width={200}
+                  height={200}
+                  className="w-5"
+                />
+                <span className="text-xs font-semibold pt-1">hhservice.dk</span>
+                <div className="rating rating-xs">
+                  <div className="mask mask-star" aria-label="1 star"></div>
+                  <div className="mask mask-star" aria-label="2 star"></div>
+                  <div className="mask mask-star " aria-label="3 star"></div>
+                  <div className="mask mask-star " aria-label="4 star"></div>
+                  <div
+                    className="mask mask-star "
+                    aria-label="5 star"
+                    aria-current="true"
+                  ></div>
+                </div>
+              </div>
+              <div>
+                <p className="text-[11px]">
+                  Effektivt, brugervenligt system – Arzonic leverer altid
+                  professionel, hurtig service.
+                </p>
+              </div>
             </div>
+            {/* <div className="w-full h-full relative bg-transparent ">
+              <MobileAnimation />
+            </div> */}
           </div>
         </div>
       </div>

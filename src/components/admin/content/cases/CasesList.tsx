@@ -113,6 +113,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                   src={item.image || FALLBACK_IMAGE}
                   alt={`Case study for ${item.company}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   priority={page === 1}
                   className="object-cover"
                 />
@@ -152,6 +153,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
                       src={item.image || FALLBACK_IMAGE}
                       alt={`Case study for ${item.company}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       priority={page === 1}
                       className="object-cover"
                     />

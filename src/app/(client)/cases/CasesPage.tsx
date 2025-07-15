@@ -1,6 +1,7 @@
 "use client";
 
 import Cases from "@/components/client/cases/Cases";
+import FAQ from "@/components/client/solutions/FAQ";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -17,6 +18,9 @@ const CasesPage = () => {
       </div>
       <div className="flex-1 relative">
         <Cases />
+      </div>
+      <div className="flex-1 relative">
+        <FAQ />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Hero from "@/components/client/home/Hero";
 import Process from "@/components/client/home/Process";
 import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
-import SplashScreen from "@/components/client/layout/SplashScreen";
+// import SplashScreen from "@/components/client/layout/SplashScreen";
 import Present from "@/components/client/home/Present";
 import CallToAction from "@/components/client/home/CallToAction";
 import Image from "next/image";
@@ -15,7 +15,7 @@ const HomePage = () => {
 
   return (
     <>
-      <SplashScreen />
+      {/* <SplashScreen /> */}
       <section className="h-96 md:h-[700px] relative md:static">
         <div className="background-animation-layer" />
         <div className="background-fade-bottom" />

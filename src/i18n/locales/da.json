@@ -53,12 +53,15 @@
   "cases": "Cases",
   "review": "Anmeldelse",
   "reviews": "Anmeldelser",
+  "news_more": "Nyheder",
+  "news": "Nyhed",
   "requests": "Henvendelser",
   "bookings": "Bookings",
   "request_details": "Detaljer for henvendelse",
   "request_time": "Tidspunkt for henvendelse",
   "updated_job": "Jobopslag opdateret",
   "deleted_case": "Case slettet",
+  "deleted_news": "Nyhed slettet",
   "deleted_request": "Henvendelse slettet",
   "deleted_review": "Anmeldelse slettet",
   "deleted_application": "Ansøgning slettet",
@@ -70,16 +73,21 @@
   "delete_request_prompt": "Er du sikker på, at du vil slette denne kundehenvendelse?",
   "delete_request_prompt_selected": "Er du sikker på, at du vil slette de valgte henvendelse?",
   "delete_request_warning": "Denne handling kan ikke fortrydes.",
+  "delete_news_confirmation": "Slet nyhed",
+  "delete_news_prompt": "Er du sikker på, at du vil slette denne nyhed?",
+  "delete_news_warning": "Denne handling kan ikke fortrydes.",
   "delete_review_confirmation": "Slet anmeldelse",
   "delete_review_prompt": "Er du sikker på, at du vil slette denne anmeldelse?",
   "delete_review_warning": "Denne handling kan ikke fortrydes.",
   "delete_application_confirmation": "Slet ansøgning",
+
   "delete_application_prompt": "Er du sikker på, at du vil slette denne ansøgning?",
   "delete_application_warning": "Denne handling kan ikke fortrydes.",
   "delete_job_confirmation": "Slet jobopslag",
   "delete_job_prompt": "Er du sikker på, at du vil slette dette jobopslag?",
   "delete_job_warning": "Denne handling kan ikke fortrydes.",
   "case_creation": "Oprettelse af Case",
+  "news_creation": "Oprettelse af Case",
   "review_creation": "Oprettelse af Anmeldelse",
   "case_editing": "Redigering af Case",
   "review_editing": "Redigering af Anmeldelse",
@@ -99,6 +107,9 @@
   "consent_given": "Samtykke givet",
   "consent_missing": "Samtykke mangler",
   "user": "bruger",
+  "news_created": "Nyhed oprettet",
+  "news_updated": "Nyhed opdateret",
+  "news_deleted": "Nyhed slettet",
   "user_created": "Bruger oprettet",
   "user_updated": "Bruger opdateret",
   "user_deleted": "Bruger slettet",
@@ -115,12 +126,14 @@
   "editor": "Redaktør",
   "admin": "Admin",
   "loading_cases": "Indlæser Cases...",
+  "loading_news": "Indlæser Nyheder...",
   "loading_reviews": "Indlæser Anmeldelser...",
   "loading_request": "Indlæser Henvendelser...",
   "loading_users": "Indlæser Brugere...",
   "loading_packages": "Indlæser Pakker...",
   "loading_jobs": "Indlæser jobstillinger...",
   "no_users": "Ingen brugere fundet",
+  "no_news": "Ingen nyheder fundet",
   "no_cases": "Ingen sager fundet",
   "no_reviews": "Ingen anmeldelser fundet",
   "no_requests": "Ingen henvendelser fundet",
@@ -856,16 +869,16 @@
   "faq": {
     "title": "Ofte stillede spørgsmål",
     "q1": {
-      "title": "Hvor lang tid tager det?",
+      "title": "Hvor lang tid tager et nyt projekt?",
       "answer": "Det afhænger af projektets kompleksitet. En simpel landingpage kan typisk være klar inden for 1–2 uger, mens en skræddersyet webapplikation eller løsning med 3D-elementer kan tage 4–8 uger eller mere. Vi giver altid en realistisk tidsplan ved projektstart."
     },
     "q2": {
       "title": "Er der vedligeholdelse?",
-      "answer": "Vi tilbyder både engangsløsninger og løbende vedligeholdelse. Du kan vælge en supportaftale, hvor vi står for opdateringer, sikkerhed og drift – eller vi kan overdrage det hele til dig med dokumentation."
+      "answer": "Alle vores løsninger inkluderer en serviceaftale, som dækker drift, support, hosting og vedligeholdelse. Du kan vælge mellem engangsbetaling eller en afdragsordning – og så klarer vi resten."
     },
     "q3": {
       "title": "Kan jeg selv redigere indhold?",
-      "answer": "Ja! De fleste løsninger inkluderer et brugervenligt CMS eller dashboard, hvor du selv kan redigere tekst, billeder og indhold. Hvis du ønsker det, kan vi også bygge det som statisk løsning uden behov for vedligeholdelse."
+      "answer": "Ja! Alle vores løsninger inkluderer et brugervenligt CMS eller dashboard, så du nemt kan redigere tekst, billeder og indhold selv. Ønsker du en enklere løsning, kan vi også bygge statiske sider helt uden behov for vedligeholdelse."
     },
     "q4": {
       "title": "Hvad hvis jeg har brug for nye funktioner senere?",

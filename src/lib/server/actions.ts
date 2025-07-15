@@ -577,6 +577,307 @@ export async function deleteCase(caseId: number): Promise<void> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// NEWS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function createNews({
+  title,
+  content,
+  images,
+}: {
+  title: string;
+  content: string;
+  images?: File[];
+}): Promise<void> {
+  const supabase = await createServerClientInstance();
+  const apiKey = process.env.DEEPL_API_KEY!;
+  const endpoint = "https://api-free.deepl.com/v2/translate";
+
+  // Translate title
+  const titleParams = new URLSearchParams({
+    auth_key: apiKey,
+    text: title,
+    target_lang: "EN",
+  });
+  const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
+  if (!titleRes.ok) throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
+  const {
+    translations: [titleFirst],
+  } = (await titleRes.json()) as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+  const titleSourceLang = titleFirst.detected_source_language.toLowerCase();
+
+  let title_translated = titleFirst.text;
+  if (titleSourceLang === "en") {
+    const titleParams2 = new URLSearchParams({
+      auth_key: apiKey,
+      text: title,
+      target_lang: "DA",
+    });
+    const titleR2 = await fetch(endpoint, { method: "POST", body: titleParams2 });
+    if (!titleR2.ok) throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
+    const {
+      translations: [titleSecond],
+    } = (await titleR2.json()) as {
+      translations: { text: string }[];
+    };
+    title_translated = titleSecond.text;
+  }
+
+  // Translate content
+  const params1 = new URLSearchParams({
+    auth_key: apiKey,
+    text: content,
+    target_lang: "EN",
+  });
+  const r1 = await fetch(endpoint, { method: "POST", body: params1 });
+  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
+  const {
+    translations: [first],
+  } = (await r1.json()) as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+  const sourceLang = first.detected_source_language.toLowerCase();
+
+  let content_translated = first.text;
+  if (sourceLang === "en") {
+    const params2 = new URLSearchParams({
+      auth_key: apiKey,
+      text: content,
+      target_lang: "DA",
+    });
+    const r2 = await fetch(endpoint, { method: "POST", body: params2 });
+    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+    const {
+      translations: [second],
+    } = (await r2.json()) as {
+      translations: { text: string }[];
+    };
+    content_translated = second.text;
+  }
+
+  const { data: ud, error: ue } = await supabase.auth.getUser();
+  if (ue || !ud?.user) throw new Error("Not authenticated");
+
+  const { data: newsData, error: insertError } = await supabase
+    .from("news")
+    .insert([
+      {
+        title,
+        title_translated,
+        content,
+        content_translated,
+        source_lang: sourceLang,
+        creator_id: ud.user.id,
+      },
+    ])
+    .select("id")
+    .single();
+  if (insertError || !newsData?.id) throw insertError;
+
+  if (images?.length) {
+    await Promise.all(
+      images.map(async (file, index) => {
+        const ext = "webp";
+        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+        const path = `news-images/${ud.user.id}/${name}`;
+        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+          .rotate()
+          .resize({ width: 1024, height: 768, fit: "cover" })
+          .webp({ quality: 65 })
+          .toBuffer();
+        await supabase.storage.from("news-images").upload(path, buf, {
+          contentType: "image/webp",
+        });
+        await supabase.from("news_images").insert({
+          news_id: newsData.id,
+          path,
+          sort_order: index,
+        });
+      })
+    );
+  }
+}
+
+export async function updateNews(
+  id: number,
+  title: string,
+  content: string,
+  images?: File[],
+  created_at?: string
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+  const apiKey = process.env.DEEPL_API_KEY!;
+  const endpoint = "https://api-free.deepl.com/v2/translate";
+
+  // Translate title
+  const titleParams = new URLSearchParams({
+    auth_key: apiKey,
+    text: title,
+    target_lang: "EN",
+  });
+  const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
+  if (!titleRes.ok) throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
+  const {
+    translations: [titleFirst],
+  } = (await titleRes.json()) as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+  const titleSourceLang = titleFirst.detected_source_language.toLowerCase();
+
+  let title_translated = titleFirst.text;
+  if (titleSourceLang === "en") {
+    const titleParams2 = new URLSearchParams({
+      auth_key: apiKey,
+      text: title,
+      target_lang: "DA",
+    });
+    const titleR2 = await fetch(endpoint, { method: "POST", body: titleParams2 });
+    if (!titleR2.ok) throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
+    const {
+      translations: [titleSecond],
+    } = (await titleR2.json()) as {
+      translations: { text: string }[];
+    };
+    title_translated = titleSecond.text;
+  }
+
+  // Translate content
+  const params1 = new URLSearchParams({
+    auth_key: apiKey,
+    text: content,
+    target_lang: "EN",
+  });
+  const r1 = await fetch(endpoint, { method: "POST", body: params1 });
+  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
+  const {
+    translations: [first],
+  } = (await r1.json()) as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+  const sourceLang = first.detected_source_language.toLowerCase();
+
+  let content_translated = first.text;
+  if (sourceLang === "en") {
+    const params2 = new URLSearchParams({
+      auth_key: apiKey,
+      text: content,
+      target_lang: "DA",
+    });
+    const r2 = await fetch(endpoint, { method: "POST", body: params2 });
+    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
+    const {
+      translations: [second],
+    } = (await r2.json()) as {
+      translations: { text: string }[];
+    };
+    content_translated = second.text;
+  }
+
+  const { data: ud, error: ue } = await supabase.auth.getUser();
+  if (ue || !ud?.user) throw new Error("Not authenticated");
+
+  const { error: updateError } = await supabase
+    .from("news")
+    .update({
+      title,
+      title_translated,
+      content,
+      content_translated,
+      source_lang: sourceLang,
+      creator_id: ud.user.id,
+      ...(created_at ? { created_at } : {}),
+    })
+    .eq("id", id);
+  if (updateError) throw updateError;
+
+  if (images?.length) {
+    await Promise.all(
+      images.map(async (file, index) => {
+        const ext = "webp";
+        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+        const path = `news-images/${ud.user.id}/${name}`;
+        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+          .rotate()
+          .resize({ width: 1024, height: 768, fit: "cover" })
+          .webp({ quality: 65 })
+          .toBuffer();
+        await supabase.storage.from("news-images").upload(path, buf, {
+          contentType: "image/webp",
+        });
+        await supabase.from("news_images").insert({
+          news_id: id,
+          path,
+          sort_order: index,
+        });
+      })
+    );
+  }
+}
+
+export async function getAllNews(page = 1, limit = 6) {
+  const supabase = await createServerClientInstance();
+  const offset = (page - 1) * limit;
+  const { data, count, error } = await supabase
+    .from("news")
+    .select("*, news_images(*)", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1);
+  if (error) throw new Error(error.message);
+  
+  // Transform data to include image URLs
+  const transformedNews = data?.map(newsItem => {
+    const images = newsItem.news_images
+      ?.sort((a: any, b: any) => a.sort_order - b.sort_order)
+      ?.map((img: any) => {
+        const { data: publicUrlData } = supabase.storage
+          .from("news-images")
+          .getPublicUrl(img.path);
+        return publicUrlData.publicUrl;
+      }) || [];
+    
+    return {
+      ...newsItem,
+      images,
+    };
+  }) || [];
+  
+  return { news: transformedNews, total: count ?? 0 };
+}
+
+export async function getNewsById(newsId: number) {
+  const supabase = await createServerClientInstance();
+  const { data, error } = await supabase
+    .from("news")
+    .select("*, news_images(*)")
+    .eq("id", newsId)
+    .single();
+  if (error) throw new Error(error.message);
+  
+  // Transform data to include image URLs
+  const images = data.news_images
+    ?.sort((a: any, b: any) => a.sort_order - b.sort_order)
+    ?.map((img: any) => {
+      const { data: publicUrlData } = supabase.storage
+        .from("news-images")
+        .getPublicUrl(img.path);
+      return publicUrlData.publicUrl;
+    }) || [];
+  
+  return {
+    ...data,
+    images,
+  };
+}
+
+export async function deleteNews(newsId: number): Promise<void> {
+  const supabase = await createServerClientInstance();
+  const { error } = await supabase.from("news").delete().eq("id", newsId);
+  if (error) throw new Error(error.message);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // REVIEWS
 // ─────────────────────────────────────────────────────────────────────────────
 
