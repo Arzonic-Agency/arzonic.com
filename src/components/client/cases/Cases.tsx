@@ -23,7 +23,7 @@ const Cases = () => {
   }, [page]);
 
   return (
-    <div className="flex flex-col md:items-start gap-7  w-full">
+    <div className="flex flex-col md:items-start gap-7 max-w-6xl w-full">
       <CasesList page={page} setTotal={setTotal} />
       <div className="flex w-full justify-center">
         {total > 6 && (

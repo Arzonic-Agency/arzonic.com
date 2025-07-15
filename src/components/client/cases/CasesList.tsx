@@ -76,7 +76,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 p-1 md:p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-7 lg:gap-10 p-1 md:p-4">
       {caseItems.map((item, index) => (
         <motion.article
           key={item.id}
@@ -92,7 +92,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
               t("aria.navigation.linkToCases") || "Go to customer's website"
             }
           >
-            <div className="relative h-64">
+            <div className="relative h-96">
               <Image
                 src={item.image || FALLBACK_IMAGE}
                 alt={item.company}
