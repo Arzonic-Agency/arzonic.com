@@ -709,8 +709,7 @@ export async function updateNews(
   id: number,
   title: string,
   content: string,
-  images?: File[],
-  created_at?: string
+  images?: File[]
 ): Promise<void> {
   const supabase = await createServerClientInstance();
   const apiKey = process.env.DEEPL_API_KEY!;
@@ -797,7 +796,6 @@ export async function updateNews(
       content_translated,
       source_lang: sourceLang,
       creator_id: ud.user.id,
-      ...(created_at ? { created_at } : {}),
     })
     .eq("id", id);
   if (updateError) throw updateError;
