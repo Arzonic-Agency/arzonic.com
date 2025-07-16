@@ -2,13 +2,16 @@
 
 import { signOut } from "@/lib/server/actions";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
-import { FaEllipsis, FaRightFromBracket } from "react-icons/fa6";
+import { FaEllipsis, FaFacebook, FaRightFromBracket } from "react-icons/fa6";
 
 import LanguageAdmin from "./LanguageAdmin";
 import ThemeAdmin from "./ThemeAdmin";
+import { fetchAndSetFacebookToken } from "@/lib/auth/readUserSession";
+import { createClient } from "@/utils/supabase/client";
+import { useAuthStore } from "@/lib/auth/useAuthStore";
 
 interface PageTitleMapping {
   [key: string]: string;
@@ -17,6 +20,30 @@ interface PageTitleMapping {
 const Topbar = () => {
   const pathname = usePathname();
   const { t } = useTranslation();
+  const supabase = createClient();
+
+  const facebookToken = useAuthStore((state) => state.facebookToken);
+  const [facebookChecked, setFacebookChecked] = useState(false);
+
+  useEffect(() => {
+    fetchAndSetFacebookToken().then(() => setFacebookChecked(true));
+  }, []);
+
+  const handleFacebookConnect = async () => {
+    const { error } = await supabase.auth.linkIdentity({
+      provider: "facebook",
+      options: {
+        redirectTo: "http://localhost:3000/admin",
+      },
+    });
+
+    if (error) {
+      console.error("Facebook linking fejl:", error.message);
+    } else {
+      console.log("Facebook forbundet til eksisterende bruger");
+      fetchAndSetFacebookToken();
+    }
+  };
 
   const pageTitles: PageTitleMapping = {
     "/admin": t("overview"),
@@ -48,6 +75,28 @@ const Topbar = () => {
             tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-black ring-opacity-5"
           >
+            <li>
+              {" "}
+              {facebookChecked ? (
+                facebookToken ? (
+                  <span className="pl-[14px] flex items-center gap-2 text-green-600">
+                    <FaFacebook /> {t("Forbundet til JK")}
+                  </span>
+                ) : (
+                  <button
+                    onClick={handleFacebookConnect}
+                    className="pl-[14px] flex items-center gap-2"
+                    aria-label={t("aria.topbar.facebook")}
+                  >
+                    <FaFacebook /> {t("Forbind Facebook")}
+                  </button>
+                )
+              ) : (
+                <span className="pl-[14px] flex items-center gap-2 text-gray-400">
+                  <FaFacebook /> {t("Tjekker...")}
+                </span>
+              )}
+            </li>
             <li>
               <ThemeAdmin />
             </li>

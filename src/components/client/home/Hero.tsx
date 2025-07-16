@@ -111,7 +111,7 @@ const Hero = () => {
                 />
               </div>
             </motion.div>
-            <div className="absolute bottom-45  right-20 flex flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
+            <div className="absolute bottom-45  rights-20 flex flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
               <div className="flex items-center justify-center gap-2">
                 <Image
                   src="/customer/favicon1.png"

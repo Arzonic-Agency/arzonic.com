@@ -9,6 +9,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
@@ -31,6 +32,7 @@ const LoginPage = () => {
     }
 
     setErrors(errors);
+    setServerError(""); // Clear previous server error
 
     if (valid) {
       setLoading(true);
@@ -40,6 +42,8 @@ const LoginPage = () => {
         formData.append("password", password);
 
         await login(formData);
+      } catch (err: any) {
+        setServerError(err?.message || "Login failed");
       } finally {
         setLoading(false);
       }
@@ -111,6 +115,9 @@ const LoginPage = () => {
         >
           {loading ? "Logger ind..." : "Login"}
         </button>
+        <span className="text-xs text-red-500 min-h-4 text-center">
+          {serverError}
+        </span>
       </form>
       <span className="text-zinc-400 text-[11px] items-center justify-center p-4 absolute bottom-0">
         © {new Date().getFullYear()} Powered by{" "}
