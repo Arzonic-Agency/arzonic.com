@@ -42,8 +42,12 @@ const LoginPage = () => {
         formData.append("password", password);
 
         await login(formData);
-      } catch (err: any) {
-        setServerError(err?.message || "Login failed");
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setServerError(err.message);
+        } else {
+          setServerError("Login failed");
+        }
       } finally {
         setLoading(false);
       }
