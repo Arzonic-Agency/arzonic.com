@@ -7,6 +7,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
+import { postToFacebookPage } from "./some";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTHENTICATION
@@ -34,15 +35,14 @@ export async function login(formData: FormData) {
 export async function createMember(data: {
   email: string;
   password: string;
-  role: "editor" | "admin";
+  role: "editor" | "admin" | "developer";
   name: string;
 }) {
   const supabase = await createAdminClient();
 
   try {
-    // Ensure the Supabase admin client is properly configured
     if (!supabase.auth.admin) {
-      throw new Error("Supabase admin client is not configured correctly.");
+      throw new Error("REGISTRATION_ERROR");
     }
 
     const createResult = await supabase.auth.admin.createUser({
@@ -55,51 +55,47 @@ export async function createMember(data: {
     });
 
     if (createResult.error) {
-      console.error("Failed to create user:", createResult.error.message);
+      const msg = createResult.error.message.toLowerCase();
 
-      // Provide more context for the error
-      if (createResult.error.message.includes("not allowed")) {
-        throw new Error(
-          "Failed to create user: Insufficient permissions or invalid configuration."
-        );
+      if (msg.includes("already") && msg.includes("registered")) {
+        throw new Error("EMAIL_ALREADY_EXISTS");
       }
 
-      throw new Error("Failed to create user: " + createResult.error.message);
+      if (msg.includes("not allowed")) {
+        throw new Error("REGISTRATION_ERROR");
+      }
+
+      throw new Error("REGISTRATION_ERROR");
     }
 
-    console.log("User created:", createResult.data.user);
+    const userId = createResult.data.user?.id;
+    if (!userId) {
+      throw new Error("REGISTRATION_ERROR");
+    }
 
     const memberResult = await supabase
       .from("members")
-      .insert({ name: data.name, id: createResult.data.user?.id });
+      .insert({ name: data.name, id: userId });
 
     if (memberResult.error) {
       console.error(
         "Failed to insert into members:",
         memberResult.error.message
       );
-      throw new Error(
-        "Failed to insert into members: " + memberResult.error.message
-      );
+      throw new Error("REGISTRATION_ERROR");
     }
-
-    console.log("Member inserted:", memberResult.data);
 
     const permissionsResult = await supabase
       .from("permissions")
-      .insert({ role: data.role, member_id: createResult.data.user?.id });
+      .insert({ role: data.role, member_id: userId });
 
     if (permissionsResult.error) {
       console.error(
         "Failed to insert into permissions:",
         permissionsResult.error.message
       );
-      throw new Error(
-        "Failed to insert into permissions: " + permissionsResult.error.message
-      );
+      throw new Error("REGISTRATION_ERROR");
     }
-
-    console.log("Permissions inserted:", permissionsResult.data);
 
     return createResult.data.user;
   } catch (err) {
@@ -584,11 +580,13 @@ export async function createNews({
   title,
   content,
   images,
+  postToFacebook = false,
 }: {
   title: string;
   content: string;
   images?: File[];
-}): Promise<void> {
+  postToFacebook?: boolean;
+}): Promise<{ fbPostLink?: string } | void> {
   const supabase = await createServerClientInstance();
   const apiKey = process.env.DEEPL_API_KEY!;
   const endpoint = "https://api-free.deepl.com/v2/translate";
@@ -686,7 +684,7 @@ export async function createNews({
       images.map(async (file, index) => {
         const ext = "webp";
         const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-        const path = `news-images/${ud.user.id}/${name}`;
+        const path = `${ud.user.id}/${name}`;
         const buf = await sharp(Buffer.from(await file.arrayBuffer()))
           .rotate()
           .resize({ width: 1024, height: 768, fit: "cover" })
@@ -703,6 +701,56 @@ export async function createNews({
       })
     );
   }
+
+  // Post to Facebook if requested
+  let fbPostLink: string | undefined;
+  if (postToFacebook) {
+    try {
+      const fbMessage = `${title}\n\n${content}`;
+
+      // Get public URLs for uploaded images
+      let imageUrls: string[] = [];
+      if (images?.length) {
+        try {
+          const imageData = await supabase
+            .from("news_images")
+            .select("path")
+            .eq("news_id", newsData.id)
+            .order("sort_order");
+
+          if (imageData.data) {
+            imageUrls = imageData.data.map((img) => {
+              const { data: publicUrl } = supabase.storage
+                .from("news-images")
+                .getPublicUrl(img.path);
+              return publicUrl.publicUrl;
+            });
+          }
+        } catch (error) {
+          console.error("Failed to get image URLs:", error);
+        }
+      }
+
+      const fbResult = await postToFacebookPage({
+        message: fbMessage,
+        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+      });
+      fbPostLink = fbResult.link;
+
+      // Update news record with Facebook post link
+      if (fbPostLink) {
+        await supabase
+          .from("news")
+          .update({ facebook_post_link: fbPostLink })
+          .eq("id", newsData.id);
+      }
+    } catch (error) {
+      console.error("Failed to post to Facebook:", error);
+      // Don't throw error - news creation should succeed even if Facebook posting fails
+    }
+  }
+
+  return fbPostLink ? { fbPostLink } : undefined;
 }
 
 export async function updateNews(
@@ -805,7 +853,7 @@ export async function updateNews(
       images.map(async (file, index) => {
         const ext = "webp";
         const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-        const path = `news-images/${ud.user.id}/${name}`;
+        const path = `${ud.user.id}/${name}`;
         const buf = await sharp(Buffer.from(await file.arrayBuffer()))
           .rotate()
           .resize({ width: 1024, height: 768, fit: "cover" })
@@ -889,6 +937,31 @@ export async function getNewsById(newsId: number) {
 
 export async function deleteNews(newsId: number): Promise<void> {
   const supabase = await createServerClientInstance();
+
+  // 1. Hent alle billeder tilknyttet nyheden
+  const { data: images, error: imagesError } = await supabase
+    .from("news_images")
+    .select("path")
+    .eq("news_id", newsId);
+  if (imagesError) throw new Error(imagesError.message);
+
+  // 2. Slet billeder fra storage
+  if (images && images.length > 0) {
+    const paths = images.map((img: { path: string }) => img.path);
+    const { error: storageError } = await supabase.storage
+      .from("news-images")
+      .remove(paths);
+    if (storageError) throw new Error(storageError.message);
+  }
+
+  // 3. Slet rækker fra news_images
+  const { error: deleteImagesError } = await supabase
+    .from("news_images")
+    .delete()
+    .eq("news_id", newsId);
+  if (deleteImagesError) throw new Error(deleteImagesError.message);
+
+  // 4. Slet selve nyheden
   const { error } = await supabase.from("news").delete().eq("id", newsId);
   if (error) throw new Error(error.message);
 }

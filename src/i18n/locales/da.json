@@ -87,7 +87,7 @@
   "delete_job_prompt": "Er du sikker på, at du vil slette dette jobopslag?",
   "delete_job_warning": "Denne handling kan ikke fortrydes.",
   "case_creation": "Oprettelse af Case",
-  "news_creation": "Oprettelse af Case",
+  "news_creation": "Oprettelse af Nyhed",
   "review_creation": "Oprettelse af Anmeldelse",
   "case_editing": "Redigering af Case",
   "review_editing": "Redigering af Anmeldelse",
@@ -125,6 +125,7 @@
   "select_access_level": "Vælg adgangsniveau",
   "editor": "Redaktør",
   "admin": "Admin",
+  "developer": "Udvikler",
   "loading_cases": "Indlæser Cases...",
   "loading_news": "Indlæser Nyheder...",
   "loading_reviews": "Indlæser Anmeldelser...",
@@ -145,6 +146,15 @@
   "layout_settings": "Sideopsætning",
   "packages": "Pakker",
   "bookingMeeting": "Book et møde",
+  "checking": "Tjekker...",
+  "connceted": "Forbundet",
+  "connectToFacebook": "Forbind Facebook",
+  "messages": {
+    "email_already_exists": "Der findes allerede en bruger med denne e-mail",
+    "registration_error": "Fejl ved registrering, prøv igen",
+    "password_too_short": "Adgangskode skal være mindst 6 tegn",
+    "passwords_not_matching": "Adgangskoderne matcher ikke"
+  },
   "createJob": {
     "formTitle": "Opret jobopslag",
     "title": "Jobtitel",

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
 import UpdateNews from "./updateNews/UpdateNews";
+import { useTranslation } from "react-i18next";
 
 interface NewsListProps {
   view: "cards" | "list";
@@ -21,6 +22,7 @@ interface NewsItem {
 const FALLBACK_IMAGE = "/demo.webp";
 
 const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
@@ -90,6 +92,10 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
         </div>
       ) : editingNewsId ? (
         <UpdateNews newsId={editingNewsId} onNewsUpdated={handleNewsUpdated} />
+      ) : newsItems.length === 0 ? (
+        <div className="flex justify-center items-center h-40 w-full">
+          <p className="text-gray-500">{t("no_news")}</p>
+        </div>
       ) : (
         <>
           {view === "cards" ? (
@@ -109,6 +115,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
+                            priority
                           />
                         </div>
                       ) : (
@@ -125,12 +132,13 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
+                                priority={index === 0}
                               />
                               {item.images.length > 1 && (
                                 <div className="absolute left-2 right-2 top-1/2 flex -translate-y-1/2 transform justify-between">
                                   <a
-                                    href={`#slide${item.id}-${
-                                      index === 0
+                                    href={`#slide${item.id}-$
+                                      {index === 0
                                         ? item.images.length - 1
                                         : index - 1
                                     }`}
@@ -139,8 +147,8 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                                     ❮
                                   </a>
                                   <a
-                                    href={`#slide${item.id}-${
-                                      index === item.images.length - 1
+                                    href={`#slide${item.id}-$
+                                      {index === item.images.length - 1
                                         ? 0
                                         : index + 1
                                     }`}

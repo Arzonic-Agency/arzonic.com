@@ -9,7 +9,12 @@ import { FaEllipsis, FaFacebook, FaRightFromBracket } from "react-icons/fa6";
 
 import LanguageAdmin from "./LanguageAdmin";
 import ThemeAdmin from "./ThemeAdmin";
-import { fetchAndSetFacebookToken } from "@/lib/auth/readUserSession";
+import {
+  fetchAndSetFacebookToken,
+  fetchAndSetUserSession,
+  setupFacebookTokenCapture,
+  disconnectFacebook,
+} from "@/lib/auth/clientAuth";
 import { createClient } from "@/utils/supabase/client";
 import { useAuthStore } from "@/lib/auth/useAuthStore";
 
@@ -22,26 +27,48 @@ const Topbar = () => {
   const { t } = useTranslation();
   const supabase = createClient();
 
-  const facebookToken = useAuthStore((state) => state.facebookToken);
+  const facebookLinked = useAuthStore((state) => state.facebookLinked);
   const [facebookChecked, setFacebookChecked] = useState(false);
 
   useEffect(() => {
-    fetchAndSetFacebookToken().then(() => setFacebookChecked(true));
+    const fetchAll = async () => {
+      // Setup token capture listener BEFORE any other calls
+      const subscription = setupFacebookTokenCapture();
+
+      await fetchAndSetFacebookToken();
+      await fetchAndSetUserSession();
+
+      setFacebookChecked(true);
+
+      // Cleanup subscription on unmount
+      return () => subscription?.unsubscribe();
+    };
+
+    fetchAll();
   }, []);
 
   const handleFacebookConnect = async () => {
-    const { error } = await supabase.auth.linkIdentity({
-      provider: "facebook",
-      options: {
-        redirectTo: "http://localhost:3000/admin",
-      },
-    });
+    try {
+      const { error } = await supabase.auth.linkIdentity({
+        provider: "facebook",
+        options: {
+          scopes: "public_profile,email,pages_show_list,pages_manage_posts",
+          redirectTo: `${window.location.origin}/admin`,
+        },
+      });
 
-    if (error) {
-      console.error("Facebook linking fejl:", error.message);
-    } else {
-      console.log("Facebook forbundet til eksisterende bruger");
-      fetchAndSetFacebookToken();
+      if (error) {
+        console.error("Facebook linking fejl:", error.message);
+      }
+    } catch (error) {
+      console.error("Unexpected error during Facebook linking:", error);
+    }
+  };
+
+  const handleFacebookDisconnect = async () => {
+    const result = await disconnectFacebook();
+    if (result.success) {
+      await fetchAndSetUserSession();
     }
   };
 
@@ -76,24 +103,45 @@ const Topbar = () => {
             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-black ring-opacity-5"
           >
             <li>
-              {" "}
               {facebookChecked ? (
-                facebookToken ? (
-                  <span className="pl-[14px] flex items-center gap-2 text-green-600">
-                    <FaFacebook /> {t("Forbundet til JK")}
-                  </span>
+                facebookLinked ? (
+                  <div className="dropdown dropdown-left">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="pl-[14px] flex items-center gap-2 w-full"
+                    >
+                      <FaFacebook /> {t("connceted")}
+                      <div className="inline-grid *:[grid-area:1/1]">
+                        <div className="status status-primary animate-ping"></div>
+                        <div className="status status-primary"></div>
+                      </div>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow-lg"
+                    >
+                      <li>
+                        <button
+                          onClick={handleFacebookDisconnect}
+                          className="text-error"
+                        >
+                          {t("disconnect")}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
                 ) : (
                   <button
                     onClick={handleFacebookConnect}
                     className="pl-[14px] flex items-center gap-2"
-                    aria-label={t("aria.topbar.facebook")}
                   >
-                    <FaFacebook /> {t("Forbind Facebook")}
+                    <FaFacebook /> {t("connectToFacebook")}
                   </button>
                 )
               ) : (
                 <span className="pl-[14px] flex items-center gap-2 text-gray-400">
-                  <FaFacebook /> {t("Tjekker...")}
+                  <FaFacebook /> {t("checking")}
                 </span>
               )}
             </li>

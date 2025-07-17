@@ -10,7 +10,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   const [country, setCountry] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [contact, setContact] = useState("");
-  const [website, setWebsite] = useState("");
+  const [website, setWebsite] = useState("https://");
 
   const [errors, setErrors] = useState({
     company: "",
@@ -194,8 +194,8 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
               <input
                 name="website"
                 type="url"
+                placeholder="https://"
                 className="input input-bordered input-md"
-                placeholder={t("write_website_url")}
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
                 aria-label={t("aria.createCase.websiteUrl")}

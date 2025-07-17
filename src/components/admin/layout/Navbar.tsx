@@ -67,7 +67,7 @@ const Navbar = () => {
                 {t("customers")}
               </Link>
             </li>
-            {role === "admin" && (
+            {["admin", "developer"].includes(role || "") && (
               <li>
                 <Link
                   className={

@@ -123,6 +123,7 @@
   "select_access_level": "Select Access Level",
   "editor": "Editor",
   "admin": "Admin",
+  "developer": "Developer",
   "loading_cases": "Loading Cases...",
   "loading_news": "Loading News...",
   "loading_reviews": "Loading Reviews...",
@@ -143,6 +144,15 @@
   "layout_settings": "Layout Settings",
   "packages": "Packages",
   "bookingMeeting": "Book a Meeting",
+  "checking": "Checking...",
+  "connceted": "Connected",
+  "connectToFacebook": "Connect to Facebook",
+  "messages": {
+    "email_already_exists": "A user with this email already exists",
+    "registration_error": "Registration failed, please try again",
+    "password_too_short": "Password must be at least 6 characters",
+    "passwords_not_matching": "Passwords do not match"
+  },
   "createJob": {
     "formTitle": "Create Job Posting",
     "title": "Job Title",

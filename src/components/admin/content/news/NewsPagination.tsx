@@ -22,6 +22,7 @@ const NewsPagination = ({ page, setPage, total }: NewsPaginationProps) => {
     }
   };
 
+  if (total <= 6) return null;
   return (
     <div className="join bg-base-100">
       <button

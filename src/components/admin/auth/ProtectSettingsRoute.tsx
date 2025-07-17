@@ -13,7 +13,12 @@ const ProtectSettingsRoute = ({ children }: { children: React.ReactNode }) => {
     (async () => {
       const session = await readUserSession();
       if (session) {
-        if (pathname === "/admin/settings" && session.role === "editor") {
+        // Kun giv adgang til admin og developer
+        const allowedRoles = ["admin", "developer"];
+        if (
+          pathname === "/admin/settings" &&
+          !allowedRoles.includes(session.role)
+        ) {
           setAccessDenied(true);
         }
       } else {
@@ -29,7 +34,9 @@ const ProtectSettingsRoute = ({ children }: { children: React.ReactNode }) => {
 
   if (accessDenied) {
     return (
-      <div className="flex items-center justify-center h-60 md:h-screen"></div>
+      <div className="flex items-center justify-center h-60 md:h-screen">
+        <p className="text-center text-sm text-gray-500">Adgang nægtet</p>
+      </div>
     );
   }
 

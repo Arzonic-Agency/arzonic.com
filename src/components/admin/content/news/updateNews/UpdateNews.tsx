@@ -101,7 +101,10 @@ const UpdateNews = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setImages((prev) => [...prev, ...newFiles]);
+      setImages((prev) => {
+        const combined = [...prev, ...newFiles];
+        return combined.slice(0, 10);
+      });
     }
   };
 
@@ -173,7 +176,8 @@ const UpdateNews = ({
             {(existingImages.length > 0 || images.length > 0) && (
               <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset max-w-md">
                 <legend className="fieldset-legend">
-                  Valgte billeder ( {images.length + existingImages.length} )
+                  Valgte billeder ( {images.length + existingImages.length} / 10
+                  )
                 </legend>
                 <div className="carousel rounded-box h-full gap-2">
                   {existingImages.map((url, index) => (
@@ -221,6 +225,11 @@ const UpdateNews = ({
                     );
                   })}
                 </div>
+                {images.length + existingImages.length >= 10 && (
+                  <div className="text-xs text-red-500 font-medium mt-1">
+                    Maks. 10 billeder kan vælges.
+                  </div>
+                )}
               </fieldset>
             )}
           </div>

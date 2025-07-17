@@ -9,14 +9,16 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [postToFacebook, setPostToFacebook] = useState(true);
   const [errors, setErrors] = useState({
     title: "",
     desc: "",
     images: "",
   });
   const [loading, setLoading] = useState(false);
+  const [fbPostLink, setFbPostLink] = useState<string | null>(null);
 
-  const handleCreateNews = async (e: React.FormEvent) => {
+  const handleCreateNews = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -31,26 +33,38 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
     }
 
     try {
-      await createNews({
+      // Pass postToFacebook to createNews
+      const result = await createNews({
         title,
         content: desc,
         images,
+        postToFacebook,
       });
       setTitle("");
       setDesc("");
       setImages([]);
+      setPostToFacebook(true);
       onNewsCreated();
+      // Hvis Facebook link returneres, vis det
+      const fbLink =
+        result && typeof result === "object" ? result.fbPostLink : undefined;
+      if (fbLink) {
+        setFbPostLink(fbLink);
+      } else {
+        setFbPostLink(null);
+      }
     } catch (error) {
       let msg = "Ukendt fejl";
       if (error instanceof Error) {
         msg = error.message;
+        // Special handling for Facebook authentication errors
+        if (msg.includes("Facebook token mangler")) {
+          msg = "For at dele på Facebook skal du først logge ind med Facebook. Nyheden er oprettet, men ikke delt på Facebook.";
+        }
       } else if (typeof error === "string") {
         msg = error;
       }
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        general: msg,
-      }));
+      setErrors((prev) => ({ ...prev, general: msg }));
       alert("Fejl ved oprettelse af nyhed: " + msg);
     } finally {
       setLoading(false);
@@ -66,13 +80,28 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setImages((prev) => [...prev, ...newFiles]);
+      setImages((prev) => [...prev, ...newFiles].slice(0, 10));
     }
   };
 
   return (
     <div className="flex flex-col gap-3 w-full p-3">
       <span className="text-lg font-bold">{t("news_creation")}</span>
+      {fbPostLink && (
+        <div className="alert alert-success mt-2">
+          <span>
+            Facebook opslag oprettet:{" "}
+            <a
+              href={fbPostLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link link-primary"
+            >
+              Se opslag
+            </a>
+          </span>
+        </div>
+      )}
       <form
         onSubmit={handleCreateNews}
         className="flex flex-col items-start gap-5 w-full"
@@ -96,6 +125,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                 </span>
               )}
             </fieldset>
+
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
               <legend className="fieldset-legend">Beskrivelse</legend>
               <textarea
@@ -119,6 +149,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
               )}
             </fieldset>
           </div>
+
           <div className="flex flex-col gap-5 relative">
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
               <legend className="fieldset-legend">Vælg billede(r)</legend>
@@ -136,14 +167,14 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                 </span>
               )}
             </fieldset>
+
             {images.length > 0 && (
               <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset max-w-md">
                 <legend className="fieldset-legend">
-                  Valgte billeder ( {images.length} )
+                  Valgte billeder ( {images.length} / 10 )
                 </legend>
-
                 <div className="carousel rounded-box h-full gap-2">
-                  {images.map((file, index) => {
+                  {[...images].reverse().map((file, index) => {
                     const url = URL.createObjectURL(file);
                     return (
                       <div
@@ -152,15 +183,21 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                       >
                         <Image
                           src={url}
-                          alt={`Billede ${index + 1}`}
+                          alt={`Billede ${images.length - index}`}
+                          width={192}
+                          height={128}
                           className="w-48 h-32 object-cover"
                         />
                         <button
                           type="button"
                           onClick={() =>
-                            setImages((prev) =>
-                              prev.filter((_, i) => i !== index)
-                            )
+                            setImages((prev) => {
+                              const reversed = [...prev].reverse();
+                              const filtered = reversed.filter(
+                                (_, i) => i !== index
+                              );
+                              return filtered.reverse();
+                            })
                           }
                           className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
                           title="Fjern billede"
@@ -171,10 +208,34 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                     );
                   })}
                 </div>
+                {images.length >= 10 && (
+                  <div className="text-xs text-primary font-medium mt-1">
+                    Maks. 10 billeder kan vælges.
+                  </div>
+                )}
               </fieldset>
             )}
           </div>
         </div>
+
+        <fieldset className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            name="postToFacebook"
+            className="toggle toggle-primary"
+            checked={postToFacebook}
+            onChange={(e) => setPostToFacebook(e.target.checked)}
+          />
+          <label htmlFor="postToFacebook" className="label-text">
+            Del på Facebook
+          </label>
+        </fieldset>
+        {postToFacebook && (
+          <div className="text-xs text-warning mt-1">
+            📌 For at dele på Facebook skal du være logget ind med Facebook
+          </div>
+        )}
+
         <button
           type="submit"
           className="btn btn-primary mt-2"
