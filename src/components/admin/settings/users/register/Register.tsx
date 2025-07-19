@@ -60,7 +60,7 @@ const Register = ({ onUserCreated }: { onUserCreated: () => void }) => {
           name,
         });
         onUserCreated();
-      } catch (err: any) {
+      } catch (err: unknown) {
         const errorCode =
           err instanceof Error ? err.message : "REGISTRATION_ERROR";
 

@@ -46,7 +46,7 @@ export async function disconnectFacebook() {
   if (userError || !user) return { error: "No user found" };
 
   const facebookIdentity = user.identities?.find(
-    (i: any) => i.provider === "facebook"
+    (i: { provider: string }) => i.provider === "facebook"
   );
   if (!facebookIdentity) return { error: "No Facebook identity linked" };
 

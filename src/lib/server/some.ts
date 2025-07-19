@@ -29,7 +29,8 @@ export async function postToFacebookPage({
   const pagesData = await pagesRes.json();
 
   const page = pagesData.data.find(
-    (p: any) => p.name === "Junkers køreskole" // <-- brug evt. page.id i stedet
+    (p: { name: string; access_token: string; id: string }) =>
+      p.name === "Junkers køreskole" // <-- brug evt. page.id i stedet
   );
   if (!page) throw new Error("Brugeren har ikke adgang til siden");
 
@@ -37,7 +38,7 @@ export async function postToFacebookPage({
   const pageId = page.id;
 
   // 2. Lav opslag
-  const postBody: any = {
+  const postBody: { message: string; access_token: string; url?: string } = {
     message,
     access_token: pageAccessToken,
   };
