@@ -145,8 +145,10 @@
   "packages": "Packages",
   "bookingMeeting": "Book a Meeting",
   "checking": "Checking...",
-  "connceted": "Connected",
+  "connected": "Connected",
   "connectToFacebook": "Connect to Facebook",
+  "disconnect": "Disconnect",
+  "disconnecting": "Disconnecting...",
   "messages": {
     "email_already_exists": "A user with this email already exists",
     "registration_error": "Registration failed, please try again",

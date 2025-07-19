@@ -22,13 +22,22 @@ export async function readUserSession() {
     .single();
   if (roleError || !roleResult) return null;
 
-  const isFacebookLinked =
-    (user.identities as Identity[])?.some((i) => i.provider === "facebook") ??
-    false;
+  const facebookLinked = (user.identities as Identity[]).some(
+    (i) => i.provider === "facebook"
+  );
+
+  let facebookToken: string | null = null;
+  if (facebookLinked) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession(); // kun til token
+    facebookToken = session?.provider_token ?? null;
+  }
 
   return {
     user,
     role: roleResult.role as "admin" | "editor" | "developer",
-    facebookLinked: isFacebookLinked,
+    facebookLinked,
+    facebookToken,
   };
 }

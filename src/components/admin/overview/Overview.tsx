@@ -95,13 +95,13 @@ const Overview = () => {
           </div>
         ) : data.pages.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">
-            {data.pages.map((page, index) => (
+            {data.pages.slice(0, 7).map((page, index) => (
               <li
                 key={index}
                 className="flex justify-between border-b border-zinc-600 py-2"
               >
-                <span>{page.x}</span>
-                <span className="font-bold">{page.y}</span>
+                <span className="text-sm">{page.x}</span>
+                <span className="font-semibold">{page.y}</span>
               </li>
             ))}
           </ul>
@@ -133,7 +133,7 @@ const Overview = () => {
                   key={index}
                   className="flex justify-between border-b border-zinc-600 py-2"
                 >
-                  <span>{deviceName}</span>
+                  <span className="text-sm">{deviceName}</span>
                   <span className="font-bold">{device.y}</span>
                 </li>
               );

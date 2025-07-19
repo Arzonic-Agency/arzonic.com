@@ -103,9 +103,9 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
               {newsItems.map((item) => (
                 <div
                   key={item.id}
-                  className="card card-compact shadow-lg rounded-md"
+                  className="card shadow-lg rounded-lg border-1 border-base-100"
                 >
-                  <figure className="relative w-full aspect-[4/3] h-56 md:h-40 xl:h-56 overflow-hidden">
+                  <figure className="relative w-full aspect-[4/3] h-56 md:h-48 overflow-hidden">
                     {item.images && item.images.length > 0 ? (
                       item.images.length === 1 ? (
                         <div className="relative w-full h-full">
@@ -136,26 +136,42 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                               />
                               {item.images.length > 1 && (
                                 <div className="absolute left-2 right-2 top-1/2 flex -translate-y-1/2 transform justify-between">
-                                  <a
-                                    href={`#slide${item.id}-$
-                                      {index === 0
-                                        ? item.images.length - 1
-                                        : index - 1
-                                    }`}
+                                  <button
                                     className="btn btn-circle btn-xs"
+                                    onClick={() => {
+                                      const prevSlide = document.getElementById(
+                                        `slide${item.id}-${
+                                          index === 0
+                                            ? item.images.length - 1
+                                            : index - 1
+                                        }`
+                                      );
+                                      prevSlide?.scrollIntoView({
+                                        behavior: "instant",
+                                        block: "nearest",
+                                      });
+                                    }}
                                   >
                                     ❮
-                                  </a>
-                                  <a
-                                    href={`#slide${item.id}-$
-                                      {index === item.images.length - 1
-                                        ? 0
-                                        : index + 1
-                                    }`}
+                                  </button>
+                                  <button
                                     className="btn btn-circle btn-xs"
+                                    onClick={() => {
+                                      const nextSlide = document.getElementById(
+                                        `slide${item.id}-${
+                                          index === item.images.length - 1
+                                            ? 0
+                                            : index + 1
+                                        }`
+                                      );
+                                      nextSlide?.scrollIntoView({
+                                        behavior: "instant",
+                                        block: "nearest",
+                                      });
+                                    }}
                                   >
                                     ❯
-                                  </a>
+                                  </button>
                                 </div>
                               )}
                             </div>

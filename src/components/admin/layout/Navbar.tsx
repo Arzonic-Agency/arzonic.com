@@ -40,15 +40,17 @@ const Navbar = () => {
         </div>
         <div className="hidden sm:flex">
           <ul className="menu menu-lg gap-2 rounded-box w-56 xl:w-72">
-            <li>
-              <Link
-                className={pathname === "/admin" ? "menu-active" : ""}
-                href="/admin"
-                aria-label={t("aria.navigation.linkToOverview")}
-              >
-                {t("overview")}
-              </Link>
-            </li>
+            {["admin", "developer"].includes(role || "") && (
+              <li>
+                <Link
+                  className={pathname === "/admin" ? "menu-active" : ""}
+                  href="/admin"
+                  aria-label={t("aria.navigation.linkToOverview")}
+                >
+                  {t("overview")}
+                </Link>
+              </li>
+            )}
             <li>
               <Link
                 className={pathname === "/admin/content" ? "menu-active" : ""}

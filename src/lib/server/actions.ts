@@ -27,8 +27,8 @@ export async function login(formData: FormData) {
     // Instead of redirecting, throw an error so the UI can catch and display it
     throw new Error(error.message || "Login failed");
   } else {
-    revalidatePath("/", "layout");
-    redirect("/admin");
+    // Return success instead of redirecting
+    return { success: true };
   }
 }
 

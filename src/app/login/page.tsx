@@ -3,8 +3,10 @@
 import { login } from "@/lib/server/actions";
 import React, { useState } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
@@ -41,7 +43,10 @@ const LoginPage = () => {
         formData.append("email", email);
         formData.append("password", password);
 
-        await login(formData);
+        const response = await login(formData);
+        if (response.success) {
+          router.push("/admin"); // Navigate to /admin
+        }
       } catch (err: unknown) {
         if (err instanceof Error) {
           setServerError(err.message);

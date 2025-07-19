@@ -1,8 +1,8 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import { signOut } from "@/lib/server/actions";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
 import { FaEllipsis, FaFacebook, FaRightFromBracket } from "react-icons/fa6";
@@ -10,17 +10,12 @@ import { FaEllipsis, FaFacebook, FaRightFromBracket } from "react-icons/fa6";
 import LanguageAdmin from "./LanguageAdmin";
 import ThemeAdmin from "./ThemeAdmin";
 import {
-  fetchAndSetFacebookToken,
   fetchAndSetUserSession,
-  setupFacebookTokenCapture,
   disconnectFacebook,
+  setupAuthListener,
 } from "@/lib/auth/clientAuth";
 import { createClient } from "@/utils/supabase/client";
 import { useAuthStore } from "@/lib/auth/useAuthStore";
-
-interface PageTitleMapping {
-  [key: string]: string;
-}
 
 const Topbar = () => {
   const pathname = usePathname();
@@ -28,57 +23,74 @@ const Topbar = () => {
   const supabase = createClient();
 
   const facebookLinked = useAuthStore((state) => state.facebookLinked);
-  const [facebookChecked, setFacebookChecked] = useState(false);
+  const [loadingState, setLoadingState] = useState<
+    "idle" | "connecting" | "disconnecting"
+  >("idle");
+  const [isDisconnectingView, setIsDisconnectingView] = useState(false);
 
+  const dropdownRef = useRef<HTMLUListElement>(null);
+
+  // Reset visning når facebookLinked ændrer sig
   useEffect(() => {
-    const fetchAll = async () => {
-      // Setup token capture listener BEFORE any other calls
-      const subscription = setupFacebookTokenCapture();
+    if (!facebookLinked) setIsDisconnectingView(false);
+  }, [facebookLinked]);
 
-      await fetchAndSetFacebookToken();
-      await fetchAndSetUserSession();
-
-      setFacebookChecked(true);
-
-      // Cleanup subscription on unmount
-      return () => subscription?.unsubscribe();
+  // Luk disconnect-view når man klikker udenfor dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isDisconnectingView &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDisconnectingView(false);
+      }
     };
 
-    fetchAll();
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDisconnectingView]);
+
+  useEffect(() => {
+    const sub = setupAuthListener();
+    fetchAndSetUserSession();
+    return () => sub.unsubscribe();
   }, []);
 
   const handleFacebookConnect = async () => {
+    setLoadingState("connecting");
     try {
-      const { error } = await supabase.auth.linkIdentity({
+      await supabase.auth.linkIdentity({
         provider: "facebook",
         options: {
           scopes: "public_profile,email,pages_show_list,pages_manage_posts",
           redirectTo: `${window.location.origin}/admin`,
         },
       });
-
-      if (error) {
-        console.error("Facebook linking fejl:", error.message);
-      }
-    } catch (error) {
-      console.error("Unexpected error during Facebook linking:", error);
+    } catch (error: any) {
+      console.error("Facebook linking fejl:", error.message);
+    } finally {
+      setLoadingState("idle");
     }
   };
 
   const handleFacebookDisconnect = async () => {
+    setLoadingState("disconnecting");
     const result = await disconnectFacebook();
     if (result.success) {
       await fetchAndSetUserSession();
     }
+    setLoadingState("idle");
   };
 
-  const pageTitles: PageTitleMapping = {
+  const pageTitles: Record<string, string> = {
     "/admin": t("overview"),
     "/admin/content": t("content"),
     "/admin/messages": t("customers"),
     "/admin/settings": t("settings"),
   };
-
   const currentTitle = pageTitles[pathname] || t("unknown_page");
 
   return (
@@ -93,58 +105,66 @@ const Topbar = () => {
           <div
             tabIndex={0}
             role="button"
-            className="btn btn-ghost btn-sm md:btn-md m-1 text-lg"
+            className="btn btn-ghost md:btn-md m-1 text-lg"
             aria-label={t("aria.topbar.moreOptions")}
           >
-            <FaEllipsis />
+            <FaEllipsis size={20} />
           </div>
           <ul
+            ref={dropdownRef}
             tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-black ring-opacity-5"
+            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-base-300 ring-opacity-5"
           >
             <li>
-              {facebookChecked ? (
-                facebookLinked ? (
-                  <div className="dropdown dropdown-left">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="pl-[14px] flex items-center gap-2 w-full"
-                    >
-                      <FaFacebook /> {t("connceted")}
-                      <div className="inline-grid *:[grid-area:1/1]">
-                        <div className="status status-primary animate-ping"></div>
-                        <div className="status status-primary"></div>
-                      </div>
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content menu bg-base-100 rounded-box z-[1] w-40 p-2 shadow-lg"
-                    >
-                      <li>
-                        <button
-                          onClick={handleFacebookDisconnect}
-                          className="text-error"
-                        >
-                          {t("disconnect")}
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
+              {facebookLinked ? (
+                isDisconnectingView ? (
+                  <button
+                    onClick={handleFacebookDisconnect}
+                    className={`flex items-center gap-2 btn btn-ghost text-error transition-all duration-300 ${
+                      loadingState === "disconnecting"
+                        ? "opacity-50 pointer-events-none"
+                        : ""
+                    }`}
+                  >
+                    <FaFacebook />
+                    <span className="text-xs">
+                      {loadingState === "disconnecting"
+                        ? t("disconnecting")
+                        : t("disconnect")}
+                    </span>
+                  </button>
                 ) : (
                   <button
-                    onClick={handleFacebookConnect}
-                    className="pl-[14px] flex items-center gap-2"
+                    onClick={() => setIsDisconnectingView(true)}
+                    className="flex items-center gap-2 btn transition-all duration-300"
                   >
-                    <FaFacebook /> {t("connectToFacebook")}
+                    <FaFacebook />
+                    {t("connected")}
+                    <div className="inline-grid *:[grid-area:1/1] ml-1">
+                      <div className="status status-primary animate-ping"></div>
+                      <div className="status status-primary"></div>
+                    </div>
                   </button>
                 )
               ) : (
-                <span className="pl-[14px] flex items-center gap-2 text-gray-400">
-                  <FaFacebook /> {t("checking")}
-                </span>
+                <button
+                  onClick={handleFacebookConnect}
+                  className={`flex items-center gap-2 transition-all duration-300 ${
+                    loadingState === "connecting"
+                      ? "opacity-50 pointer-events-none"
+                      : ""
+                  }`}
+                >
+                  <span className="pl-[2px] flex gap-2 items-center">
+                    <FaFacebook />
+                    {loadingState === "connecting"
+                      ? t("connecting")
+                      : t("connectToFacebook")}
+                  </span>
+                </button>
               )}
             </li>
+
             <li>
               <ThemeAdmin />
             </li>
