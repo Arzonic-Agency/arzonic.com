@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React, { useState } from "react";
 
 interface NewsListChangeProps {
@@ -19,14 +20,14 @@ const NewsListChange = ({ onViewChange }: NewsListChangeProps) => {
         className={`tab ${activeView === "cards" ? "tab-active" : ""}`}
         onClick={() => handleViewChange("cards")}
       >
-        Kort
+        {t("cards")}
       </a>
       <a
         role="tab"
         className={`tab ${activeView === "list" ? "tab-active" : ""}`}
         onClick={() => handleViewChange("list")}
       >
-        Liste
+        {t("list")}
       </a>
     </div>
   );

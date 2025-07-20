@@ -10,8 +10,8 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [postToFacebook, setPostToFacebook] = useState(true);
+  const [postToInstagram, setPostToInstagram] = useState(true);
   const [errors, setErrors] = useState({
-    title: "",
     desc: "",
     images: "",
   });
@@ -22,9 +22,8 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!title || !desc) {
+    if (!desc) {
       setErrors({
-        title: !title ? "Titel er påkrævet" : "",
         desc: !desc ? "Beskrivelse er påkrævet" : "",
         images: "",
       });
@@ -44,6 +43,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       setDesc("");
       setImages([]);
       setPostToFacebook(true);
+      setPostToInstagram(true);
       onNewsCreated();
       // Hvis Facebook link returneres, vis det
       const fbLink =
@@ -59,7 +59,8 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
         msg = error.message;
         // Special handling for Facebook authentication errors
         if (msg.includes("Facebook token mangler")) {
-          msg = "For at dele på Facebook skal du først logge ind med Facebook. Nyheden er oprettet, men ikke delt på Facebook.";
+          msg =
+            "For at dele på Facebook skal du først logge ind med Facebook. Nyheden er oprettet, men ikke delt på Facebook.";
         }
       } else if (typeof error === "string") {
         msg = error;
@@ -109,32 +110,26 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
           <div className="flex flex-col gap-5 ">
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Titel</legend>
+              <legend className="fieldset-legend">{t("title")}</legend>
               <input
                 name="title"
                 type="text"
                 className="input input-bordered input-md"
-                placeholder="Skriv en nyhedstitel..."
+                placeholder={t("write_title")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                required
               />
-              {errors.title && (
-                <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.title}
-                </span>
-              )}
             </fieldset>
 
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Beskrivelse</legend>
+              <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="desc"
                 className="textarea textarea-bordered textarea-md text"
                 value={desc}
                 onChange={handleDescChange}
                 required
-                placeholder="Skriv en mindre nyhedsartikel..."
+                placeholder={t("write_desc")}
                 style={{ resize: "none" }}
                 cols={30}
                 rows={8}
@@ -152,7 +147,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
 
           <div className="flex flex-col gap-5 relative">
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Vælg billede(r)</legend>
+              <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input
                 name="images"
                 type="file"
@@ -227,21 +222,28 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
             onChange={(e) => setPostToFacebook(e.target.checked)}
           />
           <label htmlFor="postToFacebook" className="label-text">
-            Del på Facebook
+            {t("share_fb")}
           </label>
         </fieldset>
-        {postToFacebook && (
-          <div className="text-xs text-warning mt-1">
-            📌 For at dele på Facebook skal du være logget ind med Facebook
-          </div>
-        )}
+        <fieldset className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            name="postToInstagram"
+            className="toggle toggle-primary"
+            checked={postToInstagram}
+            onChange={(e) => setPostToInstagram(e.target.checked)}
+          />
+          <label htmlFor="postToInstagram" className="label-text">
+            {t("share_instagram")}
+          </label>
+        </fieldset>
 
         <button
           type="submit"
           className="btn btn-primary mt-2"
           disabled={loading}
         >
-          {loading ? "Opretter" : "Opret nyhed"}
+          {loading ? t("creating") : t("create") + " " + t("news")}
         </button>
       </form>
     </div>

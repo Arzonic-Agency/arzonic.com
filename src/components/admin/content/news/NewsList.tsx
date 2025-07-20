@@ -88,7 +88,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
       {loading ? (
         <div className="flex justify-center gap-3 items-center">
           <span className="loading loading-spinner loading-md"></span>
-          Indhenter data...
+          {t("loading_news")}
         </div>
       ) : editingNewsId ? (
         <UpdateNews newsId={editingNewsId} onNewsUpdated={handleNewsUpdated} />
@@ -201,7 +201,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                         onClick={() => onEditNews(item.id)}
                       >
                         <FaPen />
-                        Rediger
+                        {t("edit")}
                       </button>
                       <button
                         className="btn btn-sm"
@@ -211,6 +211,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                         }}
                       >
                         <FaTrash />
+                        <span className="hidden md:block">{t("delete")}</span>
                       </button>
                     </div>
                   </div>

@@ -24,10 +24,9 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    // Instead of redirecting, throw an error so the UI can catch and display it
-    throw new Error(error.message || "Login failed");
+    // Return a generic error message
+    return { success: false, message: "Wrong credentials" };
   } else {
-    // Return success instead of redirecting
     return { success: true };
   }
 }

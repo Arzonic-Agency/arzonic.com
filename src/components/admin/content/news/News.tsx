@@ -7,8 +7,10 @@ import NewsPagination from "./NewsPagination";
 import NewsListChange from "./NewsListChange";
 import CreateNews from "./createNews/CreateNews";
 import UpdateNews from "./updateNews/UpdateNews";
+import { useTranslation } from "react-i18next";
 
 const News = () => {
+  const { t } = useTranslation();
   const [view, setView] = useState<"cards" | "list">("cards");
   const [showCreateNews, setShowCreateNews] = useState(false);
   const [showUpdateNews, setShowUpdateNews] = useState(false);
@@ -42,7 +44,7 @@ const News = () => {
             className="btn btn-ghost"
           >
             <FaAngleLeft />
-            Tilbage
+            {t("back")}
           </button>
           <CreateNews onNewsCreated={handleNewsCreated} />
         </div>
@@ -53,7 +55,7 @@ const News = () => {
             className="btn btn-ghost"
           >
             <FaAngleLeft />
-            Tilbage
+            {t("back")}
           </button>
           <UpdateNews
             newsId={selectedNewsId}
@@ -67,7 +69,7 @@ const News = () => {
               onClick={() => setShowCreateNews(true)}
               className="btn btn-primary"
             >
-              Opret nyhed
+              {t("create")} {t("news")}
             </button>
             <NewsListChange onViewChange={handleViewChange} />
           </div>
