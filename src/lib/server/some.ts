@@ -94,7 +94,7 @@ export async function postToFacebookPage({
 
   if (!page) {
     const availablePageIds =
-      pagesData.data?.map((p: any) => p.id).join(", ") || "None";
+      pagesData.data?.map((p: { id: string }) => p.id).join(", ") || "None";
     throw new Error(
       `Brugeren har ikke adgang til siden med ID ${targetPageId}. Tilgængelige sider: ${availablePageIds}. Sørg for at brugeren er admin/editor på Facebook siden og at appen har 'pages_manage_posts' permission.`
     );

@@ -52,7 +52,7 @@ const LoginPage = () => {
         } else {
           setServerError(t("messages.error_wrong")); // Display generic error message
         }
-      } catch (_) {
+      } catch (error) {
         setServerError(t("messages.error_wrong")); // Fallback error message
       } finally {
         setLoading(false);
