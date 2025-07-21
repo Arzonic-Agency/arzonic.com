@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import Language from "@/components/client/layout/Language";
 import LanguageAdmin from "@/components/admin/layout/LanguageAdmin";
 
 const LoginPage = () => {
@@ -53,7 +52,7 @@ const LoginPage = () => {
         } else {
           setServerError(t("messages.error_wrong")); // Display generic error message
         }
-      } catch (err: unknown) {
+      } catch (_) {
         setServerError(t("messages.error_wrong")); // Fallback error message
       } finally {
         setLoading(false);

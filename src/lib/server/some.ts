@@ -69,19 +69,26 @@ export async function postToFacebookPage({
   // Log alle tilgængelige sider for debugging
   console.log("📋 [SERVER] Available pages:");
   if (pagesData.data && Array.isArray(pagesData.data)) {
-    pagesData.data.forEach((p: any, index: number) => {
-      console.log(
-        `  ${index + 1}. ${p.name} (ID: ${p.id}) - Access: ${
-          p.access_token ? "Yes" : "No"
-        }`
-      );
-    });
+    pagesData.data.forEach(
+      (
+        p: { name: string; id: string; access_token?: string },
+        index: number
+      ) => {
+        console.log(
+          `  ${index + 1}. ${p.name} (ID: ${p.id}) - Access: ${
+            p.access_token ? "Yes" : "No"
+          }`
+        );
+      }
+    );
   } else {
     console.log("  No pages data or invalid format");
   }
 
   const targetPageId = pageId || "649629024895494"; // Brug den medfølgende pageId eller default
-  const page = pagesData.data?.find((p: any) => p.id === targetPageId);
+  const page = pagesData.data?.find(
+    (p: { id: string }) => p.id === targetPageId
+  );
   console.log("🔍 [SERVER] Target page found:", !!page);
   console.log("📃 [SERVER] Page details:", page);
 
@@ -99,7 +106,7 @@ export async function postToFacebookPage({
   console.log("🔐 [SERVER] Page access token exists:", !!pageAccessToken);
 
   // 2. Lav opslag
-  const postBody: any = {
+  const postBody: Record<string, string | undefined> = {
     message,
     access_token: pageAccessToken,
   };
@@ -124,8 +131,8 @@ export async function postToFacebookPage({
 
   // Convert to form data for Facebook API
   const formData = new FormData();
-  Object.keys(postBody).forEach((key) => {
-    formData.append(key, postBody[key]);
+  Object.keys(postBody).forEach((key: string) => {
+    formData.append(key, postBody[key] || "");
   });
 
   const postRes = await fetch(
