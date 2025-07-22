@@ -103,7 +103,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
               {newsItems.map((item) => (
                 <div
                   key={item.id}
-                  className="card shadow-lg rounded-lg border-1 border-base-100"
+                  className="card card-compact shadow-md border-2 border-base-100 rounded-lg"
                 >
                   <figure className="relative w-full aspect-[4/3] h-56 md:h-48 overflow-hidden">
                     {item.images && item.images.length > 0 ? (

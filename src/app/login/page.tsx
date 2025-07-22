@@ -6,6 +6,9 @@ import { FaEnvelope, FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import LanguageAdmin from "@/components/admin/layout/LanguageAdmin";
+import PolicyModal from "@/components/client/modal/PolicyModal";
+import Link from "next/link";
+import Image from "next/image";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -62,10 +65,10 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="md:h-lvh bg-base-200 h-dvh flex items-center justify-center">
+      <div className="md:h-lvh bg-base-100 h-dvh flex items-center justify-center">
         <form
           onSubmit={handleSubmit}
-          className="bg-base-100 p-11 rounded-lg shadow-lg flex flex-col gap-5"
+          className="bg-base-200 p-11 rounded-lg shadow-lg flex flex-col gap-5"
         >
           <div className="flex flex-col items-center gap-2">
             <span className="font-bold text-lg">Admin</span>
@@ -74,7 +77,7 @@ const LoginPage = () => {
           <div className="flex flex-col gap-2 relative">
             <label
               htmlFor="email"
-              className="input input-bordered flex items-center gap-2 "
+              className="input input-ghost bg-base-300 flex items-center gap-2 "
             >
               <FaEnvelope />
               <input
@@ -90,7 +93,7 @@ const LoginPage = () => {
               />
             </label>
             {errors.email && (
-              <span className=" absolute -bottom-4 text-xs text-red-500">
+              <span className="absolute -bottom-4 text-xs text-red-500">
                 {errors.email}
               </span>
             )}
@@ -98,7 +101,7 @@ const LoginPage = () => {
           <div className="flex flex-col gap-2 relative">
             <label
               htmlFor="password"
-              className="input input-bordered flex items-center gap-2"
+              className="input input-ghost bg-base-300  flex items-center gap-2"
             >
               <FaKey />
               <input
@@ -126,17 +129,41 @@ const LoginPage = () => {
           >
             {loading ? "Logger ind..." : "Login"}
           </button>
+
           <span className="text-xs text-red-500 min-h-4 text-center">
             {serverError}
           </span>
         </form>
-        <div className="absolute bottom-10 p-5 scale-95">
+        <Link
+          href="/"
+          className="pl-2 flex items-center gap-2 absolute top-6 left-4"
+          aria-label={t("aria.navigation.linkToHome")}
+        >
+          <Image
+            src="/icon-192x192.png"
+            alt={t("Header.logoAlt")}
+            width={60}
+            height={60}
+            className="h-10 w-10 rounded-full"
+            priority
+          />
+          <span className="font-bold text-xl tracking-wider">
+            {t("Header.brandName")}
+          </span>
+        </Link>
+        <div className="absolute top-6 right-4 btn btn-neutral">
           <LanguageAdmin />
         </div>
-        <span className="text-zinc-400 text-[11px] items-center justify-center p-4 absolute bottom-0">
-          © {new Date().getFullYear()} Powered by{" "}
-          <span className="font-semibold">Arzonic</span>
-        </span>
+        <div className="text-zinc-400 text-[11px] flex flex-col items-center justify-center gap-1 p-4 absolute bottom-2">
+          <span>
+            © {new Date().getFullYear()} Powered by{" "}
+            <span className="font-semibold text-[12px]">Arzonic</span>
+          </span>
+          <span>
+            {t("by_continuing")}{" "}
+            <PolicyModal buttonText={t("privacy_policy")} variant="primary" />
+          </span>
+        </div>
       </div>
     </>
   );

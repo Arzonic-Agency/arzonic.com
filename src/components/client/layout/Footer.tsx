@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { FaFacebook, FaHashtag, FaInstagram } from "react-icons/fa6";
-import ConsentModal from "../modal/ConsentModal";
+import ConsentModal from "../modal/PolicyModal";
 import TermsModal from "../modal/TermsModal";
 
 const Footer = () => {

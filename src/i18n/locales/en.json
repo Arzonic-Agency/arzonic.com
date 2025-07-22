@@ -6,6 +6,7 @@
   "delete": "Delete",
   "delete_selected": "Delete",
   "cancel": "Cancel",
+  "close": "Close",
   "create": "Create",
   "back": "Back",
   "search": "Search",
@@ -287,6 +288,7 @@
   "contact": "Contact",
   "company": "Company Name",
   "privacy_policy": "Privacy Policy",
+  "by_continuing": "By continuing, you agree to our",
   "terms_of_service": "Terms of Service",
   "cards": "Cards",
   "list": "List",
@@ -648,58 +650,67 @@
       }
     }
   },
-  "ConsentModal": {
-    "title": "Consent & Privacy Policy",
+  "Policy": {
+    "title": "Privacy Policy & Consent",
     "section1": {
       "title": "1. Collection and Processing of Personal Data",
-      "description": "When you use our price calculator or fill out a contact form on Arzonic Agency's website, we collect and process the following information:",
+      "description": "When you use our price calculator or submit a contact form on Arzonic Agency's website, we collect and process the following information:",
       "list": {
         "name": "Name",
         "phone": "Phone number",
         "email": "Email address",
-        "details": "Any details you provide in your message or request"
+        "details": "Any details you include in your message or inquiry"
       },
-      "note": "This information is used solely to respond to your inquiry, prepare a quote, and follow up if necessary."
+      "note": "This information is used solely to respond to your inquiry, prepare an offer, and follow up if necessary."
     },
     "section2": {
-      "title": "2. Data Retention and Deletion",
-      "description": "Your data is stored securely and confidentially.",
+      "title": "2. Use of Facebook and Instagram Data",
+      "description1": "If you log in or connect your Facebook Page or Instagram Business account via our system, you grant Arzonic ApS access to specific information and functionality, as approved by you via Meta (Facebook).",
       "list": {
-        "noCustomer": "If no customer relationship is established, your data will be automatically deleted after 30 days.",
-        "customer": "If you become a customer, we will retain your data only as long as necessary to provide our services or comply with legal obligations."
+        "access": "Your name and email address via Facebook Login",
+        "pages": "A list of your connected Facebook Pages and Instagram Business accounts",
+        "publish": "Permission to publish content on your behalf if granted (via 'pages_manage_posts' and 'instagram_content_publish')"
       },
-      "note": "You may request early deletion by contacting us at mail@arzonic.com."
+      "description2": "We use this data to allow you to create and publish posts directly from our dashboard. We never post automatically and only store what is necessary (e.g., access token) to make the feature work. You can revoke permissions at any time via your Facebook settings under Business Integrations."
     },
     "section3": {
-      "title": "3. Disclosure of Information",
-      "description": "We do not share your information with third parties unless it is necessary to fulfill your request (e.g., a subcontractor). If this is the case, it will only be done with your prior consent."
+      "title": "3. Data Storage and Deletion",
+      "description": "Your data is stored securely and confidentially.",
+      "list": {
+        "noCustomer": "If you do not become a customer, your data will be deleted automatically after 30 days.",
+        "customer": "If you do become a customer, we store your data only as long as necessary to provide our services or comply with legal obligations."
+      },
+      "note": "You can request earlier deletion by contacting us at mail@arzonic.com."
     },
     "section4": {
-      "title": "4. Your Rights",
-      "description": "You have the right to:",
-      "list": {
-        "access": "Access the data we hold about you",
-        "correct": "Correct inaccurate or outdated information",
-        "delete": "Request deletion of your data (unless retention is required by law)",
-        "withdraw": "Withdraw your consent to data processing"
-      },
-      "note": "To exercise your rights, contact us at mail@arzonic.com."
+      "title": "4. Disclosure of Information",
+      "description": "We do not share your data with third parties unless necessary to process your request (e.g., with a subcontractor), and only with your prior consent."
     },
     "section5": {
-      "title": "5. Consent",
-      "description1": "By submitting your information through our website, you consent to the processing of your data as described above.",
-      "description2": "You may withdraw your consent at any time by contacting us. If there is no legal reason to retain your data, it will be deleted upon request."
+      "title": "5. Your Rights",
+      "description": "You have the right at any time to:",
+      "list": {
+        "access": "Access the data we have about you",
+        "correct": "Correct inaccurate or outdated information",
+        "delete": "Request deletion of your data (unless required by law)",
+        "withdraw": "Withdraw your consent"
+      },
+      "note": "Please contact us at mail@arzonic.com to exercise your rights."
     },
     "section6": {
-      "title": "6. Data Security",
-      "description": "We implement appropriate technical and organizational measures to protect your data against unauthorized access, misuse, or disclosure."
+      "title": "6. Consent",
+      "description1": "By submitting your information through our website, you consent to our processing of your data as described above.",
+      "description2": "You may withdraw your consent at any time by contacting us. If there is no legal reason to retain your data, it will be deleted."
     },
     "section7": {
-      "title": "7. Updates to This Policy",
-      "description": "We reserve the right to update this Consent & Privacy Policy. The most recent version will always be available on our website."
+      "title": "7. Data Security",
+      "description": "We use appropriate technical and organizational measures to protect your data against unauthorized access, misuse, or disclosure."
     },
-    "lastUpdated": "Last updated: May 7, 2025",
-    "closeButton": "Close"
+    "section8": {
+      "title": "8. Changes to This Policy",
+      "description": "We reserve the right to update this privacy and consent policy. The latest version will always be available on our website."
+    },
+    "lastUpdated": "Last updated: July 22, 2025"
   },
   "TermsModal": {
     "title": "Terms of Service",

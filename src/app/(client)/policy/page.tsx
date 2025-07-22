@@ -1,7 +1,12 @@
-import React from "react";
+import { Metadata } from "next";
+import PolicyPage from "./PolicyPage";
 
-const PolicyPage = () => {
-  return <div>Policy</div>;
+export const metadata: Metadata = {
+  title: "Policy",
+  description:
+    "This page outlines the policies and terms of service for Arzonic.",
 };
 
-export default PolicyPage;
+export default function Page() {
+  return <PolicyPage />;
+}

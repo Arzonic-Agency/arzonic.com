@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FaAngleLeft } from "react-icons/fa6";
-import ConsentModal from "../modal/ConsentModal";
+import ConsentModal from "../modal/PolicyModal";
 import { useTranslation } from "react-i18next";
 import { FaRegCheckCircle } from "react-icons/fa";
 

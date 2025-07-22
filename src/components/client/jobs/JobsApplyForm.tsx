@@ -2,7 +2,7 @@
 
 import React, { useState, FormEvent } from "react";
 import { createApplication } from "@/lib/client/actions";
-import ConsentModal from "../modal/ConsentModal";
+import ConsentModal from "../modal/PolicyModal";
 import { useTranslation } from "react-i18next";
 import { FaCheckCircle } from "react-icons/fa";
 

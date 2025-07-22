@@ -3,7 +3,7 @@
 import React, { useState, FormEvent } from "react";
 import { createRequest } from "@/lib/client/actions";
 import TaskSelect from "./TaskSelect";
-import ConsentModal from "../modal/ConsentModal";
+import ConsentModal from "../modal/PolicyModal";
 import { useTranslation } from "react-i18next";
 
 const OfferForm = () => {

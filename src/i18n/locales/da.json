@@ -6,6 +6,7 @@
   "delete": "Slet",
   "delete_selected": "Slet valgte",
   "cancel": "Annuller",
+  "close": "Luk",
   "create": "Opret",
   "back": "Tilbage",
   "search": "Søg",
@@ -290,6 +291,7 @@
   "contact": "Kontakt",
   "company": "Virksomhedsnavn",
   "privacy_policy": "Privatlivspolitik",
+  "by_continuing": "Ved at fortsætte accepterer du vores",
   "terms_of_service": "Vilkår og betingelser",
   "cards": "Kort",
   "list": "Liste",
@@ -646,8 +648,8 @@
       }
     }
   },
-  "ConsentModal": {
-    "title": "Samtykke & Privatlivspolitik",
+  "Policy": {
+    "title": "Privatlivspolitik & Samtykke",
     "section1": {
       "title": "1. Indsamling og Behandling af Personoplysninger",
       "description": "Når du bruger vores prisberegner eller udfylder en kontaktformular på Arzonic Agencys hjemmeside, indsamler og behandler vi følgende oplysninger:",
@@ -660,7 +662,17 @@
       "note": "Disse oplysninger bruges udelukkende til at besvare din forespørgsel, udarbejde et tilbud og følge op, hvis nødvendigt."
     },
     "section2": {
-      "title": "2. Opbevaring og Sletning af Data",
+      "title": "2. Brug af Facebook- og Instagram-data",
+      "description1": "Hvis du logger ind eller forbinder din Facebook-side eller Instagram Business-konto via vores system, giver du Arzonic ApS adgang til specifikke oplysninger og funktioner, som du selv godkender via Meta (Facebook).",
+      "list": {
+        "access": "Dit navn og e-mailadresse via Facebook Login",
+        "pages": "En oversigt over dine tilknyttede Facebook-sider og Instagram Business-konti",
+        "publish": "Adgang til at publicere opslag på dine vegne, hvis du har givet samtykke (via 'pages_manage_posts' og 'instagram_content_publish')"
+      },
+      "description2": "Vi bruger disse data til at gøre det muligt for dig at oprette og publicere opslag direkte fra vores dashboard. Vi poster aldrig automatisk og gemmer kun de nødvendige informationer (f.eks. adgangstoken) for at funktionen kan fungere. Du kan til enhver tid tilbagekalde tilladelser i dine Facebook-indstillinger under Business Integrationer."
+    },
+    "section3": {
+      "title": "3. Opbevaring og Sletning af Data",
       "description": "Dine data opbevares sikkert og fortroligt.",
       "list": {
         "noCustomer": "Hvis du ikke bliver kunde, slettes dine oplysninger automatisk efter 30 dage.",
@@ -668,12 +680,12 @@
       },
       "note": "Du kan anmode om tidligere sletning ved at kontakte os på mail@arzonic.com."
     },
-    "section3": {
-      "title": "3. Videregivelse af Oplysninger",
+    "section4": {
+      "title": "4. Videregivelse af Oplysninger",
       "description": "Vi deler ikke dine oplysninger med tredjeparter, medmindre det er nødvendigt for at behandle din forespørgsel (f.eks. med en underleverandør). I så fald sker det kun med dit forudgående samtykke."
     },
-    "section4": {
-      "title": "4. Dine Rettigheder",
+    "section5": {
+      "title": "5. Dine Rettigheder",
       "description": "Du har til enhver tid ret til at:",
       "list": {
         "access": "Få adgang til de oplysninger, vi har om dig",
@@ -683,21 +695,20 @@
       },
       "note": "Kontakt os venligst på mail@arzonic.com for at gøre brug af dine rettigheder."
     },
-    "section5": {
-      "title": "5. Samtykke",
+    "section6": {
+      "title": "6. Samtykke",
       "description1": "Ved at indsende dine oplysninger via vores hjemmeside giver du samtykke til, at vi må behandle dine data som beskrevet ovenfor.",
       "description2": "Du kan til enhver tid trække dit samtykke tilbage ved at kontakte os. Hvis der ikke er nogen lovmæssig grund til at gemme dine data, bliver de slettet."
     },
-    "section6": {
-      "title": "6. Datasikkerhed",
+    "section7": {
+      "title": "7. Datasikkerhed",
       "description": "Vi benytter passende tekniske og organisatoriske foranstaltninger for at beskytte dine data mod uautoriseret adgang, misbrug eller offentliggørelse."
     },
-    "section7": {
-      "title": "7. Ændringer i Denne Politik",
+    "section8": {
+      "title": "8. Ændringer i Denne Politik",
       "description": "Vi forbeholder os retten til at opdatere denne samtykke- og privatlivspolitik. Den nyeste version vil altid være tilgængelig på vores hjemmeside."
     },
-    "lastUpdated": "Sidst opdateret: 7. maj 2025",
-    "closeButton": "Luk"
+    "lastUpdated": "Sidst opdateret: 22. juli 2025"
   },
   "TermsModal": {
     "title": "Vilkår og betingelser",

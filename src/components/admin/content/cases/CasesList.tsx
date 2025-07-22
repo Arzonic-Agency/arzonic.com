@@ -106,7 +106,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
           {caseItems.map((item) => (
             <div
               key={item.id}
-              className="card card-compact shadow-md bg-base-300 rounded-lg ring-base-300 ring-3 md:ring-5"
+              className="card card-compact shadow-md border-2 border-base-100 rounded-lg"
             >
               <figure className="relative w-full aspect-[4/3] overflow-hidden">
                 <Image

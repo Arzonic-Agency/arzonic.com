@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -25,14 +26,29 @@ const LanguageAdmin = () => {
         className="swap-on flex items-center gap-2"
         aria-label={t("aria.language.changeToDanish")}
       >
-        <span>🇩🇰</span>
+        <Image
+          src="/DK.png"
+          alt="Skift til dansk"
+          width={20}
+          height={20}
+          quality={100}
+          unoptimized
+        />
         <span>Dansk</span>
       </div>
       <div
         className="swap-off flex items-center gap-2"
         aria-label={t("aria.language.changeToEnglish")}
       >
-        <span>🇬🇧</span>
+        <Image
+          src="/UK.png"
+          alt="Change to English"
+          width={20}
+          height={20}
+          quality={100}
+          unoptimized
+        />
+
         <span>English</span>
       </div>
     </label>

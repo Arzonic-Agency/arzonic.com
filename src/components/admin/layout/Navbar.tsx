@@ -85,7 +85,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="flex flex-col items-center sm:hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 justify-center z-30 max-w-[300px] w-full">
-          <ul className="menu menu-horizontal bg-base-200 rounded-box flex-wrap justify-center max-w-md w-full gap-4">
+          <ul className="menu menu-horizontal bg-base-200 rounded-box flex-wrap justify-center max-w-md w-full gap-4 border-2 border-base-100">
             <li>
               <Link
                 href="/admin"
