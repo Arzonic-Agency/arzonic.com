@@ -116,7 +116,18 @@ const Policy = () => {
           <p>{t("Policy.section8.description")}</p>
         </div>
 
-        {/* Sidst opdateret */}
+        {/* Section 9 – Kontaktinformation */}
+        <div>
+          <h4 className="font-semibold md:text-base mb-2">
+            {t("Policy.section9.title")}
+          </h4>
+          <ul className="list-disc pl-5 my-2">
+            <li>{t("Policy.section9.list.company")}</li>
+            <li>{t("Policy.section9.list.access")}</li>
+            <li>{t("Policy.section9.list.email")}</li>
+            <li>{t("Policy.section9.list.phone")}</li>
+          </ul>
+        </div>
         <p className="mt-2 text-xs">{t("Policy.lastUpdated")}</p>
       </div>
     </>

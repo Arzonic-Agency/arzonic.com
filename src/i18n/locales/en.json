@@ -710,6 +710,15 @@
       "title": "8. Changes to This Policy",
       "description": "We reserve the right to update this privacy and consent policy. The latest version will always be available on our website."
     },
+    "section9": {
+      "title": "9. Contact Information",
+      "list": {
+        "company": "Arzonic ApS",
+        "access": "VAT ID: DK45630102",
+        "email": "mail@arzonic.com",
+        "phone": "+45 22 50 17 03"
+      }
+    },
     "lastUpdated": "Last updated: July 22, 2025"
   },
   "TermsModal": {

@@ -708,6 +708,15 @@
       "title": "8. Ændringer i Denne Politik",
       "description": "Vi forbeholder os retten til at opdatere denne samtykke- og privatlivspolitik. Den nyeste version vil altid være tilgængelig på vores hjemmeside."
     },
+    "section9": {
+      "title": "9. Kontaktinformation",
+      "list": {
+        "company": "Virksomhed: Arzonic ApS",
+        "access": "CVR-nr.: 45630102",
+        "email": "mail@arzonic.com",
+        "phone": "+45 22 50 17 03"
+      }
+    },
     "lastUpdated": "Sidst opdateret: 22. juli 2025"
   },
   "TermsModal": {
