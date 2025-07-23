@@ -1,6 +1,5 @@
 "use client";
 
-import Policy from "@/components/elements/Policy";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
