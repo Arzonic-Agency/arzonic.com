@@ -151,6 +151,7 @@
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
   "packages": "Pakker",
+  "from": "Fra",
   "bookingMeeting": "Book et møde",
   "checking": "Tjekker...",
   "connected": "Forbundet",
@@ -572,7 +573,7 @@
     "titleStart": "Fleksible pakker,",
     "titleEnd": "Gennemsigtige priser",
     "subtitle": "Vælg en løsning, der matcher dine behov – ingen overraskelser, kun resultater",
-    "vatNote": "Alle priser er ekskl. moms",
+    "vatNote": "Alle priser er vejledende og ekskl. moms",
     "aria": {
       "getQuoteButton": "Få et tilbud"
     },
@@ -592,7 +593,7 @@
     "title-btn": "Klar til at komme i gang?",
     "text-btn": "Find din pakke",
     "startingFrom": "Pakkepris",
-    "vatNote": "Alle priser er ekskl. moms",
+    "vatNote": "Alle priser er vejledende og ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
       "serviceFee": "Serviceaftale pr. måned",

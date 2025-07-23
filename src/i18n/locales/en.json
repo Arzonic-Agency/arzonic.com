@@ -150,6 +150,7 @@
   "site_setup": "Site Setup",
   "layout_settings": "Layout Settings",
   "packages": "Packages",
+  "from": "From",
   "bookingMeeting": "Book a Meeting",
   "checking": "Checking...",
   "connected": "Connected",
@@ -570,13 +571,13 @@
     "titleStart": "Flexible plans,",
     "titleEnd": "Transparent pricing",
     "subtitle": "Choose a solution that fits your needs – no surprises, just results",
-    "vatNote": "All prices are excluding VAT",
+    "vatNote": "All prices are indicative and exclude VAT",
     "aria": {
       "getQuoteButton": "Get a quote"
     },
     "oneTime": "One-time (excl. service agreement)",
     "monthly48": "Price per month over 48 months",
-    "paymentInfo": "All plans require service agreement, which includes maintenance, support, and hosting",
+    "paymentInfo": "All plans require service agreement, includes maintenance, support, and hosting",
     "oneTimeTab": "One-time",
     "monthlyTab": "Monthly"
   },
@@ -590,7 +591,7 @@
 
     "text-btn": "Get Started",
     "startingFrom": "Package Price",
-    "vatNote": "All prices are excl. VAT",
+    "vatNote": "All prices are indicative and exclude VAT",
     "legend": "Included | – Not included in standard package",
     "features": {
       "serviceFee": "Monthly Service Agreement",
