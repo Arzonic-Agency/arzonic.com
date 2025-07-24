@@ -95,7 +95,7 @@ const Hero = () => {
             <motion.div
               animate={{ y: [0, -30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="mockup-phone scale-65"
+              className="mockup-phone scale-60"
             >
               <div className="mockup-phone-camera"></div>
               <div className="mockup-phone-display text-white grid place-content-center">
