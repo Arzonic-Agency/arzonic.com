@@ -159,7 +159,7 @@ export async function postToFacebookPage({
   };
   console.log("🔗 [SERVER] Final result:", result);
 
-  // Returnér postData og evt. link til opslaget
+  // Return the Facebook post link
   return result;
 }
 

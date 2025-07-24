@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
 import { getAllUsers, deleteUser } from "@/lib/server/actions";
+import { readUserSession } from "@/lib/auth/readUserSession";
 import { useTranslation } from "react-i18next";
 
 interface User {
@@ -22,7 +23,21 @@ const UserList = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
   const { t } = useTranslation();
+
+  type UserRole = "admin" | "editor" | "developer";
+
+  useEffect(() => {
+    const fetchUserSession = async () => {
+      const session = await readUserSession();
+      if (session) {
+        setCurrentUserRole(session.role);
+      }
+    };
+
+    fetchUserSession();
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -77,6 +92,30 @@ const UserList = ({
     onUpdateUserClick(userId);
   };
 
+  const canEditOrDelete = (userRole: string | undefined, userId?: string) => {
+    if (
+      !userRole ||
+      !["admin", "editor", "developer"].includes(userRole) ||
+      !currentUserRole
+    ) {
+      return false;
+    }
+
+    if (currentUserRole === "developer") {
+      // Developers can edit/delete all users (admin, editor, developer)
+      return true;
+    }
+    if (currentUserRole === "admin") {
+      // Admins can edit/delete editors and other admins, but not developers
+      return userRole !== "developer";
+    }
+    if (currentUserRole === "editor") {
+      // Editors cannot edit/delete developers
+      return userRole !== "developer";
+    }
+    return false;
+  };
+
   return (
     <div>
       {loading ? (
@@ -119,24 +158,28 @@ const UserList = ({
                   </div>
 
                   <div className="flex gap-5 items-center">
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => handleUpdateClick(user.id)}
-                      aria-label={t("aria.edit_user_button", {
-                        name: user.name,
-                      })}
-                    >
-                      <FaPen size={17} />
-                    </button>
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => openModal(user)}
-                      aria-label={t("aria.delete_user_button", {
-                        name: user.name,
-                      })}
-                    >
-                      <FaTrash size={16} />
-                    </button>
+                    {canEditOrDelete(user.role, user.id) && (
+                      <>
+                        <button
+                          className="btn btn-sm"
+                          onClick={() => handleUpdateClick(user.id)}
+                          aria-label={t("aria.edit_user_button", {
+                            name: user.name,
+                          })}
+                        >
+                          <FaPen size={17} />
+                        </button>
+                        <button
+                          className="btn btn-sm"
+                          onClick={() => openModal(user)}
+                          aria-label={t("aria.delete_user_button", {
+                            name: user.name,
+                          })}
+                        >
+                          <FaTrash size={16} />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </li>
                 <hr className="border-[1px] rounded-lg border-base-200" />

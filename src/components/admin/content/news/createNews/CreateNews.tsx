@@ -9,14 +9,13 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [postToFacebook, setPostToFacebook] = useState(true);
+  const [linkFacebook, setLinkFacebook] = useState<string | null>(null);
   const [postToInstagram, setPostToInstagram] = useState(true);
   const [errors, setErrors] = useState({
     desc: "",
     images: "",
   });
   const [loading, setLoading] = useState(false);
-  const [fbPostLink, setFbPostLink] = useState<string | null>(null);
 
   const handleCreateNews = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -32,32 +31,23 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
     }
 
     try {
-      // Pass postToFacebook to createNews
-      const result = await createNews({
+      await createNews({
         title,
         content: desc,
         images,
-        postToFacebook,
       });
       setTitle("");
       setDesc("");
       setImages([]);
-      setPostToFacebook(true);
+      setLinkFacebook(null);
       setPostToInstagram(true);
       onNewsCreated();
-      // Hvis Facebook link returneres, vis det
-      const fbLink =
-        result && typeof result === "object" ? result.fbPostLink : undefined;
-      if (fbLink) {
-        setFbPostLink(fbLink);
-      } else {
-        setFbPostLink(null);
-      }
+
+      setLinkFacebook(null);
     } catch (error) {
       let msg = "Ukendt fejl";
       if (error instanceof Error) {
         msg = error.message;
-        // Special handling for Facebook authentication errors
         if (msg.includes("Facebook token mangler")) {
           msg =
             "For at dele på Facebook skal du først logge ind med Facebook. Nyheden er oprettet, men ikke delt på Facebook.";
@@ -88,12 +78,12 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   return (
     <div className="flex flex-col gap-3 w-full p-3">
       <span className="text-lg font-bold">{t("news_creation")}</span>
-      {fbPostLink && (
+      {linkFacebook && (
         <div className="alert alert-success mt-2">
           <span>
             Facebook opslag oprettet:{" "}
             <a
-              href={fbPostLink}
+              href={linkFacebook}
               target="_blank"
               rel="noopener noreferrer"
               className="link link-primary"
@@ -181,7 +171,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                           alt={`Billede ${images.length - index}`}
                           width={192}
                           height={128}
-                          className="w-48 h-32 object-cover"
+                          className="w-48 h-48 object-cover rounded-lg"
                         />
                         <button
                           type="button"
@@ -218,8 +208,8 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
             type="checkbox"
             name="postToFacebook"
             className="toggle toggle-primary"
-            checked={postToFacebook}
-            onChange={(e) => setPostToFacebook(e.target.checked)}
+            checked={!!linkFacebook}
+            onChange={(e) => setLinkFacebook(e.target.checked ? "" : null)}
           />
           <label htmlFor="postToFacebook" className="label-text">
             {t("share_fb")}

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
+import Spline from "@splinetool/react-spline";
 
 type Props = {
   slug:
@@ -31,6 +32,17 @@ const SolutionClient = ({ slug, countryName }: Props) => {
     returnObjects: true,
   }) as string[];
   const cta = t(`solutionsPage.${slug}.cta`);
+
+  const CustomContent: Partial<Record<Props["slug"], React.ReactNode>> = {
+    "3d-visualization": (
+      <Spline scene="https://prod.spline.design/7L07tDETuES9U9Si/scene.splinecode" />
+    ),
+    "web-applications": (
+      <div className="p-5 border rounded-xl bg-base-200">
+        <p className="text-sm">Example of app component or live demo</p>
+      </div>
+    ),
+  };
 
   return (
     <>
@@ -62,15 +74,15 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         </div>
       </section>
 
-      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7">
+      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7 relative">
         <p className="text-base sm:text-lg md:text-2xl font-bold">{seoHero}</p>
         <p className="text-sm md:text-lg mb-6 whitespace-pre-line">
           {seoDescription}
         </p>
 
-        <div className="flex flex-col gap-5">
-          <div className="flex justify-between items-center flex-row gap-3">
-            <div className="flex flex-col gap-5">
+        <div className="flex flex-col-reverse md:flex-row gap-5">
+          <div className="flex justify-between items-start flex-col gap-10">
+            <div className="flex flex-col gap-5 w-full">
               <h3 className="text-base sm:text-lg md:text-xl font-semibold ">
                 {seoProcessTitle}
               </h3>
@@ -82,14 +94,19 @@ const SolutionClient = ({ slug, countryName }: Props) => {
                 ))}
               </ul>
             </div>
-            <div className=""></div>
+            <div className="mt-5 flex flex-col items-start gap-5">
+              {cta}
+              <Link href="/get-started" className="btn btn-primary">
+                {seoBtn}
+              </Link>
+            </div>
           </div>
-
-          <div className="mt-5 flex flex-col items-start gap-5">
-            {cta}
-            <Link href="/get-started" className="btn btn-primary">
-              {seoBtn}
-            </Link>
+          <div className="">
+            {CustomContent[slug] && (
+              <div className="max-w-full md:absolute h-96 md:h-[450px] lg:h-[500px] right-40">
+                {CustomContent[slug]}
+              </div>
+            )}
           </div>
         </div>
 

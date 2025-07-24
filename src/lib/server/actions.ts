@@ -579,13 +579,11 @@ export async function createNews({
   title,
   content,
   images,
-  postToFacebook = false,
 }: {
   title: string;
   content: string;
   images?: File[];
-  postToFacebook?: boolean;
-}): Promise<{ fbPostLink?: string } | void> {
+}): Promise<void> {
   const supabase = await createServerClientInstance();
   const apiKey = process.env.DEEPL_API_KEY!;
   const endpoint = "https://api-free.deepl.com/v2/translate";
@@ -701,55 +699,19 @@ export async function createNews({
     );
   }
 
-  // Post to Facebook if requested
-  let fbPostLink: string | undefined;
-  if (postToFacebook) {
-    try {
-      const fbMessage = `${title}\n\n${content}`;
-
-      // Get public URLs for uploaded images
-      let imageUrls: string[] = [];
-      if (images?.length) {
-        try {
-          const imageData = await supabase
-            .from("news_images")
-            .select("path")
-            .eq("news_id", newsData.id)
-            .order("sort_order");
-
-          if (imageData.data) {
-            imageUrls = imageData.data.map((img) => {
-              const { data: publicUrl } = supabase.storage
-                .from("news-images")
-                .getPublicUrl(img.path);
-              return publicUrl.publicUrl;
-            });
-          }
-        } catch (error) {
-          console.error("Failed to get image URLs:", error);
-        }
-      }
-
-      const fbResult = await postToFacebookPage({
-        message: fbMessage,
-        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
-      });
-      fbPostLink = fbResult.link;
-
-      // Update news record with Facebook post link
-      if (fbPostLink) {
-        await supabase
-          .from("news")
-          .update({ facebook_post_link: fbPostLink })
-          .eq("id", newsData.id);
-      }
-    } catch (error) {
-      console.error("Failed to post to Facebook:", error);
-      // Don't throw error - news creation should succeed even if Facebook posting fails
+  // Post to Facebook and store the link
+  try {
+    const fbMessage = `${title}\n\n${content}`;
+    const fbResult = await postToFacebookPage({ message: fbMessage });
+    if (fbResult?.link) {
+      await supabase
+        .from("news")
+        .update({ linkFacebook: fbResult.link })
+        .eq("id", newsData.id);
     }
+  } catch (error) {
+    console.error("Failed to post to Facebook:", error);
   }
-
-  return fbPostLink ? { fbPostLink } : undefined;
 }
 
 export async function updateNews(
@@ -868,6 +830,20 @@ export async function updateNews(
         });
       })
     );
+  }
+
+  // Post to Facebook and update the link
+  try {
+    const fbMessage = `${title}\n\n${content}`;
+    const fbResult = await postToFacebookPage({ message: fbMessage });
+    if (fbResult?.link) {
+      await supabase
+        .from("news")
+        .update({ linkFacebook: fbResult.link })
+        .eq("id", id);
+    }
+  } catch (error) {
+    console.error("Failed to post to Facebook:", error);
   }
 }
 
