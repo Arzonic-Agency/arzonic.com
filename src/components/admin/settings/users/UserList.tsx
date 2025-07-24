@@ -92,7 +92,7 @@ const UserList = ({
     onUpdateUserClick(userId);
   };
 
-  const canEditOrDelete = (userRole: string | undefined, userId?: string) => {
+  const canEditOrDelete = (userRole: string | undefined) => {
     if (
       !userRole ||
       !["admin", "editor", "developer"].includes(userRole) ||
@@ -158,7 +158,7 @@ const UserList = ({
                   </div>
 
                   <div className="flex gap-5 items-center">
-                    {canEditOrDelete(user.role, user.id) && (
+                    {canEditOrDelete(user.role) && (
                       <>
                         <button
                           className="btn btn-sm"
