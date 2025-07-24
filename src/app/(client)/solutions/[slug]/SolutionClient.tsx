@@ -103,7 +103,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
           </div>
           <div className="">
             {CustomContent[slug] && (
-              <div className="max-w-full md:absolute h-96 md:h-[450px] lg:h-[500px] right-40">
+              <div className="max-w-full md:absolute h-96 md:h-[450px] lg:h-[500px] md:right-10 lg:right-40">
                 {CustomContent[slug]}
               </div>
             )}
