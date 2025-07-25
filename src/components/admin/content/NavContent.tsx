@@ -36,7 +36,7 @@ const NavContent = () => {
             "pages_manage_posts",
             "pages_read_engagement",
           ].join(","),
-          redirectTo: `https://arzonic.com/admin`,
+          redirectTo: `https://arzonic.com/admin/content`,
         },
       });
 
