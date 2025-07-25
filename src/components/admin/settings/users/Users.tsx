@@ -41,7 +41,7 @@ const Users = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 bg-base-200 rounded-box shadow-md p-5 md:p-7">
       {showRegister ? (
         <div className="flex flex-col items-start gap-5">
           <button

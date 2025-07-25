@@ -579,50 +579,77 @@ export async function createNews({
   title,
   content,
   images,
+  sharedFacebook = false,
 }: {
   title: string;
   content: string;
   images?: File[];
-}): Promise<void> {
+  sharedFacebook?: boolean;
+}): Promise<{ linkFacebook?: string }> {
   const supabase = await createServerClientInstance();
   const apiKey = process.env.DEEPL_API_KEY!;
   const endpoint = "https://api-free.deepl.com/v2/translate";
 
-  // Translate title
-  const titleParams = new URLSearchParams({
-    auth_key: apiKey,
-    text: title,
-    target_lang: "EN",
-  });
-  const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
-  if (!titleRes.ok)
-    throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
-  const {
-    translations: [titleFirst],
-  } = (await titleRes.json()) as {
-    translations: { text: string; detected_source_language: string }[];
-  };
-  const titleSourceLang = titleFirst.detected_source_language.toLowerCase();
+  // Validate Facebook page access FIRST if sharing is requested - before ANY operations
+  if (sharedFacebook) {
+    const { validateFacebookPageAccess } = await import("./some");
+    const validationResult = await validateFacebookPageAccess();
 
-  let title_translated = titleFirst.text;
-  if (titleSourceLang === "en") {
-    const titleParams2 = new URLSearchParams({
+    if (!validationResult.hasAccess) {
+      throw new Error(
+        validationResult.error ||
+          "Ingen adgang til Facebook siden. Du skal være admin/editor på den krævede Facebook side for at kunne dele opslag."
+      );
+    }
+  }
+
+  // Skip title translation if empty to save API calls
+  let title_translated = title;
+  let titleSourceLang = "da"; // Default assumption
+
+  if (title.trim()) {
+    const titleParams = new URLSearchParams({
       auth_key: apiKey,
       text: title,
-      target_lang: "DA",
+      target_lang: "EN",
     });
-    const titleR2 = await fetch(endpoint, {
+    const titleRes = await fetch(endpoint, {
       method: "POST",
-      body: titleParams2,
+      body: titleParams,
     });
-    if (!titleR2.ok)
-      throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
+    if (!titleRes.ok)
+      throw new Error(
+        `DeepL error ${titleRes.status}: ${await titleRes.text()}`
+      );
     const {
-      translations: [titleSecond],
-    } = (await titleR2.json()) as {
-      translations: { text: string }[];
+      translations: [titleFirst],
+    } = (await titleRes.json()) as {
+      translations: { text: string; detected_source_language: string }[];
     };
-    title_translated = titleSecond.text;
+    titleSourceLang = titleFirst.detected_source_language.toLowerCase();
+
+    title_translated = titleFirst.text;
+    if (titleSourceLang === "en") {
+      const titleParams2 = new URLSearchParams({
+        auth_key: apiKey,
+        text: title,
+        target_lang: "DA",
+      });
+      const titleR2 = await fetch(endpoint, {
+        method: "POST",
+        body: titleParams2,
+      });
+      if (!titleR2.ok)
+        throw new Error(
+          `DeepL error ${titleR2.status}: ${await titleR2.text()}`
+        );
+      const {
+        translations: [titleSecond],
+      } = (await titleR2.json()) as {
+        translations: { text: string }[];
+      };
+      title_translated = titleSecond.text;
+    }
   }
 
   // Translate content
@@ -676,6 +703,8 @@ export async function createNews({
     .single();
   if (insertError || !newsData?.id) throw insertError;
 
+  // Upload images and collect URLs - only after news is created
+  const imageUrls: string[] = [];
   if (images?.length) {
     await Promise.all(
       images.map(async (file, index) => {
@@ -690,6 +719,13 @@ export async function createNews({
         await supabase.storage.from("news-images").upload(path, buf, {
           contentType: "image/webp",
         });
+
+        // Get public URL for Facebook posting
+        const { data: publicUrlData } = supabase.storage
+          .from("news-images")
+          .getPublicUrl(path);
+        imageUrls.push(publicUrlData.publicUrl);
+
         await supabase.from("news_images").insert({
           news_id: newsData.id,
           path,
@@ -699,19 +735,51 @@ export async function createNews({
     );
   }
 
-  // Post to Facebook and store the link
-  try {
-    const fbMessage = `${title}\n\n${content}`;
-    const fbResult = await postToFacebookPage({ message: fbMessage });
-    if (fbResult?.link) {
-      await supabase
-        .from("news")
-        .update({ linkFacebook: fbResult.link })
-        .eq("id", newsData.id);
+  let fbResult: { link?: string } | null = null;
+
+  // Post to Facebook only if requested (validation already passed)
+  if (sharedFacebook) {
+    try {
+      const fbMessage = `${title}\n\n${content}`;
+      // No skipValidation parameter - just call normally since we validated earlier
+      fbResult = await postToFacebookPage({
+        message: fbMessage,
+        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+      });
+
+      if (fbResult?.link) {
+        await supabase
+          .from("news")
+          .update({
+            linkFacebook: fbResult.link,
+            sharedFacebook: true,
+          })
+          .eq("id", newsData.id);
+      }
+    } catch (error) {
+      console.error("Failed to post to Facebook:", error);
+      // Clean up: delete the created news since Facebook posting failed
+      await supabase.from("news").delete().eq("id", newsData.id);
+
+      // Also delete uploaded images
+      if (imageUrls.length > 0) {
+        const imagePaths = imageUrls
+          .map((url) => {
+            const pathMatch = url.match(/news-images\/(.+)$/);
+            return pathMatch ? pathMatch[1] : null;
+          })
+          .filter(Boolean);
+
+        if (imagePaths.length > 0) {
+          await supabase.storage.from("news-images").remove(imagePaths);
+        }
+      }
+
+      throw error;
     }
-  } catch (error) {
-    console.error("Failed to post to Facebook:", error);
   }
+
+  return { linkFacebook: fbResult?.link };
 }
 
 export async function updateNews(
@@ -809,6 +877,30 @@ export async function updateNews(
     .eq("id", id);
   if (updateError) throw updateError;
 
+  // Handle Facebook update automatically if post exists
+  const { data: newsData } = await supabase
+    .from("news")
+    .select("linkFacebook")
+    .eq("id", id)
+    .single();
+
+  if (newsData?.linkFacebook) {
+    try {
+      // Extract post ID from Facebook link
+      const postId = newsData.linkFacebook.split("/").pop();
+      if (postId) {
+        const { updateFacebookPost } = await import("./some");
+        await updateFacebookPost({
+          postId,
+          message: `${title}\n\n${content}`,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to update Facebook post:", error);
+      // Don't throw error here - news is updated, just Facebook update failed
+    }
+  }
+
   if (images?.length) {
     await Promise.all(
       images.map(async (file, index) => {
@@ -831,20 +923,6 @@ export async function updateNews(
       })
     );
   }
-
-  // Post to Facebook and update the link
-  try {
-    const fbMessage = `${title}\n\n${content}`;
-    const fbResult = await postToFacebookPage({ message: fbMessage });
-    if (fbResult?.link) {
-      await supabase
-        .from("news")
-        .update({ linkFacebook: fbResult.link })
-        .eq("id", id);
-    }
-  } catch (error) {
-    console.error("Failed to post to Facebook:", error);
-  }
 }
 
 interface NewsImage {
@@ -860,6 +938,7 @@ export async function getAllNews(page = 1, limit = 6) {
     .select("*, news_images(*)", { count: "exact" })
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1);
+
   if (error) throw new Error(error.message);
 
   // Transform data to include image URLs
@@ -912,6 +991,27 @@ export async function getNewsById(newsId: number) {
 
 export async function deleteNews(newsId: number): Promise<void> {
   const supabase = await createServerClientInstance();
+
+  // Get news data before deletion to check for Facebook post
+  const { data: newsData } = await supabase
+    .from("news")
+    .select("linkFacebook")
+    .eq("id", newsId)
+    .single();
+
+  // Delete Facebook post if it exists
+  if (newsData?.linkFacebook) {
+    try {
+      const postId = newsData.linkFacebook.split("/").pop();
+      if (postId) {
+        const { deleteFacebookPost } = await import("./some");
+        await deleteFacebookPost(postId);
+      }
+    } catch (error) {
+      console.error("Failed to delete Facebook post:", error);
+      // Continue with news deletion even if Facebook deletion fails
+    }
+  }
 
   // 1. Hent alle billeder tilknyttet nyheden
   const { data: images, error: imagesError } = await supabase

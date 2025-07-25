@@ -1,5 +1,5 @@
+// src/lib/auth/readUserSession.ts
 "use server";
-
 import { createServerClientInstance } from "@/utils/supabase/server";
 
 interface Identity {
@@ -15,6 +15,7 @@ export async function readUserSession() {
   } = await supabase.auth.getUser();
   if (userError || !user) return null;
 
+  // Hent role som før…
   const { data: roleResult, error: roleError } = await supabase
     .from("permissions")
     .select("role")
@@ -26,11 +27,17 @@ export async function readUserSession() {
     (i) => i.provider === "facebook"
   );
 
-  let facebookToken: string | null = null;
-  if (facebookLinked) {
+  // 1) Prøv at hente fra metadata:
+  const fbMeta = (user.user_metadata as any)?.facebook_token as
+    | string
+    | undefined;
+  let facebookToken = fbMeta ?? null;
+
+  // 2) Fald tilbage til provider_token hvis metadata var tom:
+  if (!facebookToken && facebookLinked) {
     const {
       data: { session },
-    } = await supabase.auth.getSession(); // kun til token
+    } = await supabase.auth.getSession();
     facebookToken = session?.provider_token ?? null;
   }
 

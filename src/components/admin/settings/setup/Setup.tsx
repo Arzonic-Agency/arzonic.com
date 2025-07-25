@@ -57,7 +57,7 @@ const Setup = () => {
   return (
     <div className="">
       {isEditingPackage ? (
-        <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+        <div className=" ">
           <SetupPackagesEdit
             packageData={selectedPackage}
             onSave={handleSave}
@@ -65,11 +65,11 @@ const Setup = () => {
           />
         </div>
       ) : isCreatingJob ? (
-        <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+        <div className="">
           <SetupJobsCreate onSave={handleSave} onBack={handleBackToMain} />
         </div>
       ) : isViewingJobDetails ? (
-        <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+        <div className="">
           <SetupJobsDetails
             jobId={selectedJob?.id}
             onBack={handleBackToMain}
@@ -78,10 +78,10 @@ const Setup = () => {
         </div>
       ) : (
         <div className="flex flex-col gap-5">
-          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+          <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
             <SetupPackages onEdit={handlePackageEditToggle} />
           </div>
-          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+          <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
             <SetupJobs
               onEdit={(job) => handleJobEditToggle(job)}
               onCreate={handleJobCreateToggle}

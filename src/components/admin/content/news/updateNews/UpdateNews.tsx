@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { updateNews, getNewsById } from "@/lib/server/actions";
 import { FaXmark } from "react-icons/fa6";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 interface NewsImage {
   path: string;
@@ -15,6 +16,7 @@ const UpdateNews = ({
   newsId: number;
   onNewsUpdated: () => void;
 }) => {
+  const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState<File[]>([]);
@@ -71,7 +73,7 @@ const UpdateNews = ({
       return;
     }
     try {
-      await updateNews(newsId, title, content, images);
+      await updateNews(newsId, title, content, images); // Always update Facebook
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
       onNewsUpdated();
@@ -101,16 +103,16 @@ const UpdateNews = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setImages((prev) => {
-        const combined = [...prev, ...newFiles];
-        return combined.slice(0, 10);
-      });
+      setImages((prev) => [...prev, ...newFiles]);
     }
   };
 
   return (
     <div className="flex flex-col gap-3 w-full p-3">
-      <span className="text-lg font-bold">Opdater nyhed</span>
+      <span className="text-lg font-bold">
+        {" "}
+        {t("edit")} {t("news")}
+      </span>
       <form
         onSubmit={handleUpdateNews}
         className="flex flex-col items-start gap-5 w-full"
@@ -118,12 +120,12 @@ const UpdateNews = ({
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
           <div className="flex flex-col gap-5 ">
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Titel</legend>
+              <legend className="fieldset-legend">{t("title")}</legend>
               <input
                 name="title"
                 type="text"
                 className="input input-bordered input-md"
-                placeholder="Skriv en nyhedstitel..."
+                placeholder={t("write_title")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -135,14 +137,14 @@ const UpdateNews = ({
               )}
             </fieldset>
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Beskrivelse</legend>
+              <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="content"
                 className="textarea textarea-bordered textarea-md text"
                 value={content}
                 onChange={handleContentChange}
                 required
-                placeholder="Skriv en mindre nyhedsartikel..."
+                placeholder={t("write_desc")}
                 style={{ resize: "none" }}
                 cols={30}
                 rows={8}
@@ -159,7 +161,7 @@ const UpdateNews = ({
           </div>
           <div className="flex flex-col gap-5 relative">
             <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
-              <legend className="fieldset-legend">Vælg billede(r)</legend>
+              <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input
                 name="images"
                 type="file"
@@ -176,10 +178,10 @@ const UpdateNews = ({
             {(existingImages.length > 0 || images.length > 0) && (
               <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset max-w-md">
                 <legend className="fieldset-legend">
-                  Valgte billeder ( {images.length + existingImages.length} / 10
+                  {t("chosen_images")} ( {images.length + existingImages.length}{" "}
                   )
                 </legend>
-                <div className="carousel rounded-box h-full gap-2">
+                <div className="carousel rounded-box h-full gap-3">
                   {existingImages.map((url, index) => (
                     <div
                       key={"existing-" + index}
@@ -188,11 +190,22 @@ const UpdateNews = ({
                       <Image
                         src={url}
                         alt={`Billede ${index + 1}`}
-                        className="w-48 h-32 object-cover"
+                        className="w-48 h-48 object-cover rounded-lg"
                         width={192}
                         height={128}
                       />
-                      {/* Optionally, add a remove button for existing images if supported */}
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
+                        onClick={() =>
+                          setImages((prev) =>
+                            prev.filter((_, i) => i !== index)
+                          )
+                        }
+                        title="Fjern billede"
+                      >
+                        <FaXmark />
+                      </button>
                     </div>
                   ))}
                   {images.map((file, index) => {
@@ -205,7 +218,7 @@ const UpdateNews = ({
                         <Image
                           src={url}
                           alt={`Billede ${existingImages.length + index + 1}`}
-                          className="w-48 h-32 object-cover"
+                          className="w-48 h-48 object-cover rounded-lg"
                           width={192}
                           height={128}
                         />
@@ -225,11 +238,6 @@ const UpdateNews = ({
                     );
                   })}
                 </div>
-                {images.length + existingImages.length >= 10 && (
-                  <div className="text-xs text-red-500 font-medium mt-1">
-                    Maks. 10 billeder kan vælges.
-                  </div>
-                )}
               </fieldset>
             )}
           </div>
@@ -239,7 +247,14 @@ const UpdateNews = ({
           className="btn btn-primary mt-2"
           disabled={loading}
         >
-          {loading ? "Opdaterer" : "Opdater nyhed"}
+          {loading ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              {t("updating")}
+            </>
+          ) : (
+            t("update") + " " + t("news")
+          )}
         </button>
       </form>
       {showToast && (

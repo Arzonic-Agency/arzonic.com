@@ -62,7 +62,8 @@ const Topbar = () => {
   const handleFacebookConnect = async () => {
     setLoadingState("connecting");
     try {
-      await supabase.auth.linkIdentity({
+      // 1) Link identity – dette returnerer også den nye session
+      const { data, error } = await supabase.auth.linkIdentity({
         provider: "facebook",
         options: {
           scopes: [
@@ -71,18 +72,25 @@ const Topbar = () => {
             "pages_show_list",
             "pages_manage_posts",
             "pages_read_engagement",
-            "instagram_basic",
-            "instagram_content_publish",
           ].join(","),
           redirectTo: `${window.location.origin}/admin`,
         },
       });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error("Facebook linking fejl:", error.message);
-      } else {
-        console.error("An unknown error occurred during Facebook linking.");
+      if (error) throw error;
+
+      const session = (data as any).session;
+      const fbToken = session?.provider_token;
+      if (fbToken) {
+        // 2) Gem token i user_metadata på serveren
+        await supabase.auth.updateUser({
+          data: { facebook_token: fbToken },
+        });
       }
+
+      // 3) Refresh zustand med ny session
+      await fetchAndSetUserSession();
+    } catch (err: unknown) {
+      console.error("Facebook linking fejl:", err);
     } finally {
       setLoadingState("idle");
     }

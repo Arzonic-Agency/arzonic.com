@@ -9,6 +9,7 @@ import LanguageAdmin from "@/components/admin/layout/LanguageAdmin";
 import PolicyModal from "@/components/client/modal/PolicyModal";
 import Link from "next/link";
 import Image from "next/image";
+import { readUserSession } from "@/lib/auth/readUserSession";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -51,7 +52,13 @@ const LoginPage = () => {
 
         const response = await login(formData);
         if (response.success) {
-          router.push("/admin"); // Navigate to /admin
+          // Read user session to get role and route accordingly
+          const session = await readUserSession();
+          if (session?.role === "editor") {
+            router.push("/admin/content");
+          } else {
+            router.push("/admin");
+          }
         } else {
           setServerError(t("messages.error_wrong")); // Display generic error message
         }
@@ -151,7 +158,7 @@ const LoginPage = () => {
             {t("Header.brandName")}
           </span>
         </Link>
-        <div className="absolute top-6 right-4 btn btn-neutral">
+        <div className="absolute top-6 right-4 btn">
           <LanguageAdmin />
         </div>
         <div className="text-zinc-400 text-[11px] flex flex-col items-center justify-center gap-1 p-4 absolute bottom-2">

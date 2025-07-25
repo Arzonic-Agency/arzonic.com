@@ -7,8 +7,8 @@
   prefersdark: true;
   color-scheme: "dark";
   --color-base-100: #111;
-  --color-base-200: #171717;
-  --color-base-300: #202020;
+  --color-base-200: #131313;
+  --color-base-300: #171717;
   --color-base-content: #E4E4E4;
   --color-primary: #048179;
   --color-primary-content: oklch(98% 0.003 247.858);
@@ -16,7 +16,7 @@
   --color-secondary-content: #E4E4E4;
   --color-accent: oklch(27% 0.046 192.524);
   --color-accent-content: oklch(98% 0 0);
-  --color-neutral: #111;
+  --color-neutral: #202020;
   --color-neutral-content: #E4E4E4;
   --color-info: oklch(50% 0.134 242.749);
   --color-info-content: oklch(29% 0.066 243.157);
@@ -43,7 +43,7 @@
   color-scheme: "light";
   --color-base-100: #EAEAEB;
   --color-base-200: #F8FAFC;
-  --color-base-300: oklch(87% 0.006 286.286);
+  --color-base-300: #E2E2E2;
   --color-base-content: #171717;
   --color-primary: oklch(51% 0.096 186.391);
   --color-primary-content: oklch(98% 0.003 247.858);
@@ -112,6 +112,7 @@
   background-size: 200% 200%;
   animation: moveBackground 15s ease-in-out infinite;
   pointer-events: none;
+  color: #454545;
 }
 
 

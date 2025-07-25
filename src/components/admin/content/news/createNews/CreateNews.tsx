@@ -9,23 +9,27 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [linkFacebook, setLinkFacebook] = useState<string | null>(null);
+  const [postToFacebook, setPostToFacebook] = useState(true);
   const [postToInstagram, setPostToInstagram] = useState(true);
-  const [errors, setErrors] = useState({
-    desc: "",
-    images: "",
-  });
+  const [errors, setErrors] = useState<{
+    desc?: string;
+    general?: string;
+    facebook?: string;
+  }>({});
   const [loading, setLoading] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
 
-  const handleCreateNews = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Prevent multiple submissions
+    if (loading || isValidating) return;
+
     setLoading(true);
+    setErrors({});
 
     if (!desc) {
-      setErrors({
-        desc: !desc ? "Beskrivelse er påkrævet" : "",
-        images: "",
-      });
+      setErrors({ desc: "Beskrivelse er påkrævet" });
       setLoading(false);
       return;
     }
@@ -35,37 +39,42 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
         title,
         content: desc,
         images,
+        sharedFacebook: postToFacebook,
       });
+
+      // Clear form
       setTitle("");
       setDesc("");
       setImages([]);
-      setLinkFacebook(null);
+      setPostToFacebook(true);
       setPostToInstagram(true);
+      setErrors({});
       onNewsCreated();
-
-      setLinkFacebook(null);
     } catch (error) {
-      let msg = "Ukendt fejl";
-      if (error instanceof Error) {
-        msg = error.message;
-        if (msg.includes("Facebook token mangler")) {
-          msg =
-            "For at dele på Facebook skal du først logge ind med Facebook. Nyheden er oprettet, men ikke delt på Facebook.";
-        }
-      } else if (typeof error === "string") {
-        msg = error;
+      const msg =
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+          ? error
+          : "Ukendt fejl";
+
+      // Check if it's a Facebook-specific error
+      if (
+        msg.includes("Facebook") ||
+        msg.includes("admin/editor") ||
+        msg.includes("siden")
+      ) {
+        setErrors({ facebook: msg });
+      } else {
+        setErrors({ general: msg });
       }
-      setErrors((prev) => ({ ...prev, general: msg }));
-      alert("Fejl ved oprettelse af nyhed: " + msg);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= 250) {
-      setDesc(e.target.value);
-    }
+    if (e.target.value.length <= 250) setDesc(e.target.value);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,28 +87,14 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   return (
     <div className="flex flex-col gap-3 w-full p-3">
       <span className="text-lg font-bold">{t("news_creation")}</span>
-      {linkFacebook && (
-        <div className="alert alert-success mt-2">
-          <span>
-            Facebook opslag oprettet:{" "}
-            <a
-              href={linkFacebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link link-primary"
-            >
-              Se opslag
-            </a>
-          </span>
-        </div>
-      )}
+
       <form
         onSubmit={handleCreateNews}
         className="flex flex-col items-start gap-5 w-full"
       >
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
-          <div className="flex flex-col gap-5 ">
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+          <div className="flex flex-col gap-5">
+            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full">
               <legend className="fieldset-legend">{t("title")}</legend>
               <input
                 name="title"
@@ -111,20 +106,20 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
               />
             </fieldset>
 
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full relative">
               <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="desc"
-                className="textarea textarea-bordered textarea-md text"
+                className="textarea textarea-bordered textarea-md"
                 value={desc}
                 onChange={handleDescChange}
                 required
                 placeholder={t("write_desc")}
-                style={{ resize: "none" }}
                 cols={30}
                 rows={8}
-              ></textarea>
-              <div className="text-right text-xs font-medium text-gray-500">
+                style={{ resize: "none" }}
+              />
+              <div className="text-right text-xs text-gray-500">
                 {desc.length} / 250
               </div>
               {errors.desc && (
@@ -135,8 +130,8 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
             </fieldset>
           </div>
 
-          <div className="flex flex-col gap-5 relative">
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+          <div className="flex flex-col gap-5">
+            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full relative">
               <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input
                 name="images"
@@ -144,22 +139,16 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                 className="file-input file-input-bordered file-input-md w-full"
                 onChange={handleImageChange}
                 multiple
-                required
               />
-              {errors.images && (
-                <span className="absolute -bottom-4 text-xs text-red-500">
-                  {errors.images}
-                </span>
-              )}
             </fieldset>
 
             {images.length > 0 && (
-              <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset max-w-md">
+              <fieldset className="fieldset w-full max-w-md flex flex-col gap-3">
                 <legend className="fieldset-legend">
-                  Valgte billeder ( {images.length} / 10 )
+                  {t("chosen_images")} ( {images.length} / 10 )
                 </legend>
-                <div className="carousel rounded-box h-full gap-2">
-                  {[...images].reverse().map((file, index) => {
+                <div className="carousel gap-3">
+                  {images.map((file, index) => {
                     const url = URL.createObjectURL(file);
                     return (
                       <div
@@ -168,36 +157,27 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                       >
                         <Image
                           src={url}
-                          alt={`Billede ${images.length - index}`}
+                          alt={`Billede ${index + 1}`}
                           width={192}
                           height={128}
-                          className="w-48 h-48 object-cover rounded-lg"
+                          className="rounded-lg object-cover w-48 h-48"
                         />
                         <button
                           type="button"
-                          onClick={() =>
-                            setImages((prev) => {
-                              const reversed = [...prev].reverse();
-                              const filtered = reversed.filter(
-                                (_, i) => i !== index
-                              );
-                              return filtered.reverse();
-                            })
-                          }
                           className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
+                          onClick={() =>
+                            setImages((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            )
+                          }
                           title="Fjern billede"
                         >
-                          <FaXmark className="" />
+                          <FaXmark />
                         </button>
                       </div>
                     );
                   })}
                 </div>
-                {images.length >= 10 && (
-                  <div className="text-xs text-primary font-medium mt-1">
-                    Maks. 10 billeder kan vælges.
-                  </div>
-                )}
               </fieldset>
             )}
           </div>
@@ -208,32 +188,56 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
             type="checkbox"
             name="postToFacebook"
             className="toggle toggle-primary"
-            checked={!!linkFacebook}
-            onChange={(e) => setLinkFacebook(e.target.checked ? "" : null)}
+            checked={postToFacebook}
+            onChange={(e) => setPostToFacebook(e.target.checked)}
           />
           <label htmlFor="postToFacebook" className="label-text">
             {t("share_fb")}
           </label>
         </fieldset>
-        <fieldset className="flex items-center gap-3">
+
+        <fieldset className="flex items-center gap-3 opacity-50">
           <input
             type="checkbox"
             name="postToInstagram"
             className="toggle toggle-primary"
             checked={postToInstagram}
             onChange={(e) => setPostToInstagram(e.target.checked)}
+            disabled
           />
           <label htmlFor="postToInstagram" className="label-text">
             {t("share_instagram")}
           </label>
         </fieldset>
 
+        {errors.facebook && (
+          <div className="text-error">
+            {/* <span className="text-sm">{errors.facebook}</span> */}
+            <div className="text-sm mt-1">
+              Du er ikke tilknyttet den korrekte Facebook-side, eller også
+              mangler du de nødvendige rettigheder. Prøv at tilknytte din konto
+              igen.
+            </div>
+          </div>
+        )}
+
+        {errors.general && (
+          <span className="text-sm text-red-500">{errors.general}</span>
+        )}
+
         <button
           type="submit"
           className="btn btn-primary mt-2"
-          disabled={loading}
+          disabled={loading || isValidating}
         >
-          {loading ? t("creating") : t("create") + " " + t("news")}
+          {loading ? (
+            <>
+              <span className="loading loading-spinner loading-sm"></span>
+              {t("creating")}
+            </>
+          ) : (
+            t("create") + " " + t("news")
+          )}
         </button>
       </form>
     </div>

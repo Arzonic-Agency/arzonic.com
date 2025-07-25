@@ -164,7 +164,6 @@ const UpdateUser = ({
             placeholder={t("password")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
             aria-label={t("aria.password_input")}
           />
         </label>
@@ -185,7 +184,6 @@ const UpdateUser = ({
             placeholder={t("confirm_password")}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required
             aria-label={t("aria.confirm_password_input")}
           />
         </label>

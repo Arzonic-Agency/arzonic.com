@@ -46,12 +46,12 @@ const NavSettings = () => {
 
       <div className="mt-3 md:mt-5">
         {activeTab === "setup" && (
-          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+          <div className="">
             <Setup />
           </div>
         )}
         {activeTab === "users" && (
-          <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">
+          <div className="">
             <Users />
           </div>
         )}

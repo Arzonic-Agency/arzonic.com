@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { FaPen, FaTrash } from "react-icons/fa6";
+import { FaPen, FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
 import UpdateNews from "./updateNews/UpdateNews";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 interface NewsListProps {
   view: "cards" | "list";
@@ -17,6 +18,9 @@ interface NewsItem {
   title: string;
   content: string | null;
   images: string[];
+  sharedFacebook?: boolean;
+  sharedInstagram?: boolean;
+  linkFacebook?: string;
 }
 
 const FALLBACK_IMAGE = "/demo.webp";
@@ -28,6 +32,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
   const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
   const [deletingNewsId, setDeletingNewsId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
 
   const fetchNews = useCallback(async () => {
     try {
@@ -68,12 +73,15 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
   const handleDelete = async () => {
     if (deletingNewsId !== null) {
       try {
+        setDeleting(true);
         await deleteNews(deletingNewsId);
         setDeletingNewsId(null);
         setIsModalOpen(false);
         fetchNews();
       } catch (error) {
         console.error("Failed to delete news:", error);
+      } finally {
+        setDeleting(false);
       }
     }
   };
@@ -86,7 +94,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
   return (
     <div className="w-full">
       {loading ? (
-        <div className="flex justify-center gap-3 items-center">
+        <div className="flex justify-center gap-3 items-center h-40">
           <span className="loading loading-spinner loading-md"></span>
           {t("loading_news")}
         </div>
@@ -99,13 +107,13 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
       ) : (
         <>
           {view === "cards" ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
               {newsItems.map((item) => (
                 <div
                   key={item.id}
-                  className="card card-compact shadow-md border-2 border-base-100 rounded-lg"
+                  className="card card-compact shadow-md border-2 border-base-100 rounded-lg h-full lg:h-[450px]"
                 >
-                  <figure className="relative w-full aspect-[4/3] h-56 md:h-48 overflow-hidden">
+                  <figure className="relative w-full aspect-[1/1] overflow-hidden h-72 lg:h-68">
                     {item.images && item.images.length > 0 ? (
                       item.images.length === 1 ? (
                         <div className="relative w-full h-full">
@@ -195,24 +203,48 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                     <p className="text-xs">
                       {truncateDescription(item.content, 100)}
                     </p>
-                    <div className="card-actions justify-end mt-2">
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => onEditNews(item.id)}
-                      >
-                        <FaPen />
-                        {t("edit")}
-                      </button>
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => {
-                          setDeletingNewsId(item.id);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <FaTrash />
-                        <span className="hidden md:block">{t("delete")}</span>
-                      </button>
+                    <div className="card-actions justify-between items-center mt-2">
+                      <div className="flex gap-2">
+                        {item.linkFacebook && (
+                          <Link
+                            href={item.linkFacebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn md:btn-sm"
+                            title="Se Facebook opslag"
+                          >
+                            <FaFacebook />
+                            <span className=" font-normal text-base-content ">
+                              Facebook
+                            </span>
+                          </Link>
+                        )}
+                        {item.sharedInstagram && (
+                          <FaInstagram
+                            size={20}
+                            className="text-purple-600 drop-shadow"
+                          />
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          className="btn md:btn-sm"
+                          onClick={() => onEditNews(item.id)}
+                        >
+                          <FaPen />
+                          {t("edit")}
+                        </button>
+                        <button
+                          className="btn md:btn-sm"
+                          onClick={() => {
+                            setDeletingNewsId(item.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <FaTrash />
+                          <span className="hidden md:block">{t("delete")}</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -225,7 +257,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                   <li>
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2 items-center">
-                        <div className="relative w-12 h-10 rounded-md overflow-hidden">
+                        <div className="relative w-12 aspect-[1/1] rounded-md overflow-hidden">
                           <Image
                             src={
                               item.images && item.images.length > 0
@@ -234,7 +266,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                             }
                             alt={item.title}
                             fill
-                            style={{ objectFit: "cover" }}
+                            className="object-cover"
                           />
                         </div>
                         <h3 className="font-semibold text-xs hidden sm:block">
@@ -250,7 +282,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                           onClick={() => onEditNews(item.id)}
                         >
                           <FaPen />
-                          <span className="md:flex hidden"> Rediger </span>
+                          <span className="md:flex hidden"> {t("edit")} </span>
                         </button>
                         <button
                           className="btn btn-sm"
@@ -275,16 +307,37 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
       {isModalOpen && (
         <div className="modal modal-open">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Bekræft sletning</h3>
-            <p className="py-4">
-              Er du sikker på, at du vil slette denne nyhed?
-            </p>
+            <h3 className="font-bold text-lg">
+              {" "}
+              {t("delete_news_confirmation")}
+            </h3>
+            <div className="py-4">
+              <p className="mb-2">{t("delete_news_prompt")}</p>
+              {deletingNewsId &&
+                newsItems.find((item) => item.id === deletingNewsId)
+                  ?.sharedFacebook && (
+                  <div className="text-warning">
+                    <span className="text-sm">{t("delete_news_warning")}</span>
+                  </div>
+                )}
+            </div>
             <div className="modal-action">
               <button className="btn" onClick={closeModal}>
-                Annuller
+                {t("cancel")}
               </button>
-              <button className="btn btn-error" onClick={handleDelete}>
-                Slet
+              <button
+                className="btn btn-error"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    {t("deleting")}
+                  </>
+                ) : (
+                  t("delete")
+                )}
               </button>
             </div>
           </div>

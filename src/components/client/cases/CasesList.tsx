@@ -76,14 +76,14 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-7 lg:gap-10 p-1 md:p-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 p-1 md:p-4">
       {caseItems.map((item, index) => (
         <motion.article
           key={item.id}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
-          className="rounded-xl overflow-hidden bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-300"
+          className="rounded-xl overflow-hidden bg-base-200 ring-2 p-2 ring-base-200 md:hover:bg-base-300 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-shadow duration-300 ease-in-out shadow-md hover:shadow-xl "
         >
           <Link
             href={item.website || "/cases"}
@@ -100,9 +100,9 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
                 className="object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300"
               />
             </div>
-            <div className="p-5 flex flex-col justify-evenly h-52">
+            <div className="p-5 flex flex-col justify-evenly h-60">
               <h2 className="text-lg font-bold">{item.company}</h2>
-              <p className="text-sm text-zinc-400 line-clamp-3">{item.desc}</p>
+              <p className="text-sm text-zinc-400 line-clamp-4">{item.desc}</p>
               <div className="text-xs text-zinc-500 flex justify-between pt-4">
                 <span>{formatDate(item.created_at)}</span>
                 <span className="flex items-center gap-1">

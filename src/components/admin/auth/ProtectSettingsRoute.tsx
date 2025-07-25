@@ -13,10 +13,9 @@ const ProtectSettingsRoute = ({ children }: { children: React.ReactNode }) => {
     (async () => {
       const session = await readUserSession();
       if (session) {
-        // Kun giv adgang til admin og developer
         const allowedRoles = ["admin", "developer"];
         if (
-          pathname === "/admin/settings" &&
+          (pathname === "/admin/settings" || pathname === "/admin") &&
           !allowedRoles.includes(session.role)
         ) {
           setAccessDenied(true);

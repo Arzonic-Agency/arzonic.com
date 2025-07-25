@@ -32,7 +32,7 @@ const SetupPackagesList = ({ onEdit }) => {
   }
 
   return (
-    <ul className="list bg-base-200 rounded-box shadow-md">
+    <ul className="list">
       {packages.map((pkg) => (
         <li key={pkg.id} className="list-row">
           <div>
