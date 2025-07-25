@@ -17,13 +17,12 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
     facebook?: string;
   }>({});
   const [loading, setLoading] = useState(false);
-  const [isValidating, setIsValidating] = useState(false);
 
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Prevent multiple submissions
-    if (loading || isValidating) return;
+    if (loading) return;
 
     setLoading(true);
     setErrors({});
@@ -228,7 +227,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
         <button
           type="submit"
           className="btn btn-primary mt-2"
-          disabled={loading || isValidating}
+          disabled={loading}
         >
           {loading ? (
             <>
