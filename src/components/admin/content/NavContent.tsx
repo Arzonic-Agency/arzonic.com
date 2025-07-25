@@ -41,10 +41,17 @@ const NavContent = () => {
       });
       if (error) throw error;
 
-      // Hvis vi kommer hertil uden redirect, håndter token direkte
-      const session = (data as any).session;
-      const fbToken = session?.provider_token;
-      if (fbToken) {
+      // Refine `data` type to safely access `provider_token`
+      if (
+        typeof data === "object" &&
+        data !== null &&
+        "session" in data &&
+        typeof data.session === "object" &&
+        data.session !== null &&
+        "provider_token" in data.session
+      ) {
+        const fbToken = (data.session as { provider_token: string })
+          .provider_token;
         await supabase.auth.updateUser({
           data: { facebook_token: fbToken },
         });

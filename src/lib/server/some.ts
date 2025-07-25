@@ -280,11 +280,9 @@ export async function publishMessage(formData: FormData) {
 export async function updateFacebookPost({
   postId,
   message,
-  imageUrls,
 }: {
   postId: string;
   message: string;
-  imageUrls?: string[];
 }): Promise<{ success: boolean; link?: string }> {
   console.log("🔄 [SERVER] Starting Facebook post update...");
   console.log("🆔 [SERVER] Post ID:", postId);

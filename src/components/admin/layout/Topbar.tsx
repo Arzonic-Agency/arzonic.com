@@ -78,7 +78,8 @@ const Topbar = () => {
       });
       if (error) throw error;
 
-      const session = (data as any).session;
+      const session = (data as { session?: { provider_token?: string } })
+        .session;
       const fbToken = session?.provider_token;
       if (fbToken) {
         // 2) Gem token i user_metadata på serveren

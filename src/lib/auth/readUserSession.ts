@@ -28,9 +28,8 @@ export async function readUserSession() {
   );
 
   // 1) Prøv at hente fra metadata:
-  const fbMeta = (user.user_metadata as any)?.facebook_token as
-    | string
-    | undefined;
+  const fbMeta = (user.user_metadata as { facebook_token?: string })
+    ?.facebook_token;
   let facebookToken = fbMeta ?? null;
 
   // 2) Fald tilbage til provider_token hvis metadata var tom:

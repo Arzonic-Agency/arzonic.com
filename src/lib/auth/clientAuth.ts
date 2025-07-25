@@ -5,9 +5,17 @@ import { useAuthStore } from "./useAuthStore";
 import { readUserSession } from "./readUserSession";
 
 // Cache to prevent duplicate validation calls
-let validationCache: { [key: string]: { result: any; timestamp: number } } = {};
+const validationCache: {
+  [key: string]: {
+    result: { hasAccess: boolean; pageName?: string };
+    timestamp: number;
+  };
+} = {};
 let validationInProgress = false;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Feature flag to disable validation when API endpoint doesn't exist
+const FACEBOOK_PAGE_VALIDATION_ENABLED = false; // Set to true when API endpoint is ready
 
 // Henter ALT fra server og sætter i Zustand
 export const fetchAndSetUserSession = async () => {
@@ -60,6 +68,15 @@ export const fetchAndSetUserSession = async () => {
 
 // Separate function for Facebook validation with caching
 async function validateFacebookPageAccess(userId: string) {
+  // Skip validation if feature is disabled
+  if (!FACEBOOK_PAGE_VALIDATION_ENABLED) {
+    console.log(
+      "🔍 [CLIENT] Facebook page validation disabled - API endpoint not implemented yet"
+    );
+    useAuthStore.getState().setFacebookPageAccess(false);
+    return;
+  }
+
   const cacheKey = `fb_validation_${userId}`;
   const now = Date.now();
 
@@ -113,10 +130,16 @@ async function validateFacebookPageAccess(userId: string) {
         .getState()
         .setFacebookPageAccess(validation.hasAccess, validation.pageName);
     } else {
-      console.error(
-        "🔍 [CLIENT] Page validation failed - response not ok:",
-        response.status
-      );
+      if (response.status === 404) {
+        console.warn(
+          "🔍 [CLIENT] Page validation endpoint not found (404). Set FACEBOOK_PAGE_VALIDATION_ENABLED to false to disable this warning."
+        );
+      } else {
+        console.error(
+          "🔍 [CLIENT] Page validation failed - response not ok:",
+          response.status
+        );
+      }
       useAuthStore.getState().setFacebookPageAccess(false);
     }
   } catch (error) {
@@ -140,7 +163,7 @@ export function setupAuthListener() {
   const supabase = createClient();
   const {
     data: { subscription },
-  } = supabase.auth.onAuthStateChange(async (event, session) => {
+  } = supabase.auth.onAuthStateChange(async (event) => {
     console.log("🔍 [CLIENT] Auth state change:", event);
 
     // Skip if it's the same event repeated
