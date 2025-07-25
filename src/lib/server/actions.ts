@@ -586,200 +586,262 @@ export async function createNews({
   images?: File[];
   sharedFacebook?: boolean;
 }): Promise<{ linkFacebook?: string }> {
-  const supabase = await createServerClientInstance();
-  const apiKey = process.env.DEEPL_API_KEY!;
-  const endpoint = "https://api-free.deepl.com/v2/translate";
-
-  // Validate Facebook page access FIRST if sharing is requested - before ANY operations
-  if (sharedFacebook) {
-    const { validateFacebookPageAccess } = await import("./some");
-    const validationResult = await validateFacebookPageAccess();
-
-    if (!validationResult.hasAccess) {
-      throw new Error(
-        validationResult.error ||
-          "Ingen adgang til Facebook siden. Du skal være admin/editor på den krævede Facebook side for at kunne dele opslag."
-      );
+  try {
+    // Input validation
+    if (!content || content.trim().length === 0) {
+      throw new Error("Content is required");
     }
-  }
 
-  // Skip title translation if empty to save API calls
-  let title_translated = title;
-  let titleSourceLang = "da"; // Default assumption
-
-  if (title.trim()) {
-    const titleParams = new URLSearchParams({
-      auth_key: apiKey,
-      text: title,
-      target_lang: "EN",
-    });
-    const titleRes = await fetch(endpoint, {
-      method: "POST",
-      body: titleParams,
-    });
-    if (!titleRes.ok)
-      throw new Error(
-        `DeepL error ${titleRes.status}: ${await titleRes.text()}`
-      );
-    const {
-      translations: [titleFirst],
-    } = (await titleRes.json()) as {
-      translations: { text: string; detected_source_language: string }[];
-    };
-    titleSourceLang = titleFirst.detected_source_language.toLowerCase();
-
-    title_translated = titleFirst.text;
-    if (titleSourceLang === "en") {
-      const titleParams2 = new URLSearchParams({
-        auth_key: apiKey,
-        text: title,
-        target_lang: "DA",
-      });
-      const titleR2 = await fetch(endpoint, {
-        method: "POST",
-        body: titleParams2,
-      });
-      if (!titleR2.ok)
-        throw new Error(
-          `DeepL error ${titleR2.status}: ${await titleR2.text()}`
-        );
-      const {
-        translations: [titleSecond],
-      } = (await titleR2.json()) as {
-        translations: { text: string }[];
-      };
-      title_translated = titleSecond.text;
+    const supabase = await createServerClientInstance();
+    const apiKey = process.env.DEEPL_API_KEY;
+    
+    if (!apiKey) {
+      throw new Error("Translation service not configured");
     }
-  }
 
-  // Translate content
-  const params1 = new URLSearchParams({
-    auth_key: apiKey,
-    text: content,
-    target_lang: "EN",
-  });
-  const r1 = await fetch(endpoint, { method: "POST", body: params1 });
-  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-  const {
-    translations: [first],
-  } = (await r1.json()) as {
-    translations: { text: string; detected_source_language: string }[];
-  };
-  const sourceLang = first.detected_source_language.toLowerCase();
+    const endpoint = "https://api-free.deepl.com/v2/translate";
 
-  let content_translated = first.text;
-  if (sourceLang === "en") {
-    const params2 = new URLSearchParams({
-      auth_key: apiKey,
-      text: content,
-      target_lang: "DA",
-    });
-    const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-    const {
-      translations: [second],
-    } = (await r2.json()) as {
-      translations: { text: string }[];
-    };
-    content_translated = second.text;
-  }
+    // Validate Facebook page access FIRST if sharing is requested - before ANY operations
+    if (sharedFacebook) {
+      try {
+        const { validateFacebookPageAccess } = await import("./some");
+        const validationResult = await validateFacebookPageAccess();
 
-  const { data: ud, error: ue } = await supabase.auth.getUser();
-  if (ue || !ud?.user) throw new Error("Not authenticated");
-
-  const { data: newsData, error: insertError } = await supabase
-    .from("news")
-    .insert([
-      {
-        title,
-        title_translated,
-        content,
-        content_translated,
-        source_lang: sourceLang,
-        creator_id: ud.user.id,
-      },
-    ])
-    .select("id")
-    .single();
-  if (insertError || !newsData?.id) throw insertError;
-
-  // Upload images and collect URLs - only after news is created
-  const imageUrls: string[] = [];
-  if (images?.length) {
-    await Promise.all(
-      images.map(async (file, index) => {
-        const ext = "webp";
-        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-        const path = `${ud.user.id}/${name}`;
-        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
-          .rotate()
-          .resize({ width: 1024, height: 768, fit: "cover" })
-          .webp({ quality: 65 })
-          .toBuffer();
-        await supabase.storage.from("news-images").upload(path, buf, {
-          contentType: "image/webp",
-        });
-
-        // Get public URL for Facebook posting
-        const { data: publicUrlData } = supabase.storage
-          .from("news-images")
-          .getPublicUrl(path);
-        imageUrls.push(publicUrlData.publicUrl);
-
-        await supabase.from("news_images").insert({
-          news_id: newsData.id,
-          path,
-          sort_order: index,
-        });
-      })
-    );
-  }
-
-  let fbResult: { link?: string } | null = null;
-
-  // Post to Facebook only if requested (validation already passed)
-  if (sharedFacebook) {
-    try {
-      const fbMessage = `${title}\n\n${content}`;
-      // No skipValidation parameter - just call normally since we validated earlier
-      fbResult = await postToFacebookPage({
-        message: fbMessage,
-        imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
-      });
-
-      if (fbResult?.link) {
-        await supabase
-          .from("news")
-          .update({
-            linkFacebook: fbResult.link,
-            sharedFacebook: true,
-          })
-          .eq("id", newsData.id);
+        if (!validationResult.hasAccess) {
+          throw new Error(
+            validationResult.error ||
+              "Ingen adgang til Facebook siden. Du skal være admin/editor på den krævede Facebook side for at kunne dele opslag."
+          );
+        }
+      } catch (fbError) {
+        console.error("Facebook validation error:", fbError);
+        throw new Error("Facebook validation failed");
       }
-    } catch (error) {
-      console.error("Failed to post to Facebook:", error);
-      // Clean up: delete the created news since Facebook posting failed
-      await supabase.from("news").delete().eq("id", newsData.id);
+    }
 
-      // Also delete uploaded images
-      if (imageUrls.length > 0) {
-        const imagePaths = imageUrls
-          .map((url) => {
-            const pathMatch = url.match(/news-images\/(.+)$/);
-            return pathMatch ? pathMatch[1] : null;
-          })
-          .filter(Boolean);
+    // Authenticate user
+    const { data: ud, error: ue } = await supabase.auth.getUser();
+    if (ue || !ud?.user) {
+      throw new Error("Not authenticated");
+    }
 
-        if (imagePaths.length > 0) {
-          await supabase.storage.from("news-images").remove(imagePaths);
+    // Skip title translation if empty to save API calls
+    let title_translated = title;
+    let titleSourceLang = "da"; // Default assumption
+
+    if (title && title.trim()) {
+      try {
+        const titleParams = new URLSearchParams({
+          auth_key: apiKey,
+          text: title,
+          target_lang: "EN",
+        });
+        const titleRes = await fetch(endpoint, {
+          method: "POST",
+          body: titleParams,
+        });
+        if (!titleRes.ok) {
+          const errorText = await titleRes.text();
+          throw new Error(`Translation error ${titleRes.status}: ${errorText}`);
+        }
+        const titleResult = await titleRes.json();
+        const titleFirst = titleResult.translations?.[0];
+        
+        if (titleFirst) {
+          titleSourceLang = titleFirst.detected_source_language?.toLowerCase() || "da";
+          title_translated = titleFirst.text;
+          
+          if (titleSourceLang === "en") {
+            const titleParams2 = new URLSearchParams({
+              auth_key: apiKey,
+              text: title,
+              target_lang: "DA",
+            });
+            const titleR2 = await fetch(endpoint, {
+              method: "POST",
+              body: titleParams2,
+            });
+            if (titleR2.ok) {
+              const titleResult2 = await titleR2.json();
+              const titleSecond = titleResult2.translations?.[0];
+              if (titleSecond) {
+                title_translated = titleSecond.text;
+              }
+            }
+          }
+        }
+      } catch (titleError) {
+        console.error("Title translation error:", titleError);
+        // Continue with original title if translation fails
+        title_translated = title;
+      }
+    }
+
+    // Translate content
+    let content_translated = content;
+    let sourceLang = "da";
+    
+    try {
+      const params1 = new URLSearchParams({
+        auth_key: apiKey,
+        text: content,
+        target_lang: "EN",
+      });
+      const r1 = await fetch(endpoint, { method: "POST", body: params1 });
+      if (!r1.ok) {
+        const errorText = await r1.text();
+        throw new Error(`Translation error ${r1.status}: ${errorText}`);
+      }
+      const result1 = await r1.json();
+      const first = result1.translations?.[0];
+      
+      if (first) {
+        sourceLang = first.detected_source_language?.toLowerCase() || "da";
+        content_translated = first.text;
+
+        if (sourceLang === "en") {
+          const params2 = new URLSearchParams({
+            auth_key: apiKey,
+            text: content,
+            target_lang: "DA",
+          });
+          const r2 = await fetch(endpoint, { method: "POST", body: params2 });
+          if (r2.ok) {
+            const result2 = await r2.json();
+            const second = result2.translations?.[0];
+            if (second) {
+              content_translated = second.text;
+            }
+          }
         }
       }
+    } catch (contentError) {
+      console.error("Content translation error:", contentError);
+      // Continue with original content if translation fails
+      content_translated = content;
+    }
 
-      throw error;
+    // Insert news into database
+    const { data: newsData, error: insertError } = await supabase
+      .from("news")
+      .insert([
+        {
+          title: title || "",
+          title_translated,
+          content,
+          content_translated,
+          source_lang: sourceLang,
+          creator_id: ud.user.id,
+        },
+      ])
+      .select("id")
+      .single();
+      
+    if (insertError || !newsData?.id) {
+      console.error("Database insert error:", insertError);
+      throw new Error("Failed to create news in database");
+    }
+
+    // Upload images and collect URLs - only after news is created
+    const imageUrls: string[] = [];
+    if (images?.length) {
+      try {
+        await Promise.all(
+          images.map(async (file, index) => {
+            const ext = "webp";
+            const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+            const path = `${ud.user.id}/${name}`;
+            
+            const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+              .rotate()
+              .resize({ width: 1024, height: 768, fit: "cover" })
+              .webp({ quality: 65 })
+              .toBuffer();
+              
+            const { error: uploadError } = await supabase.storage
+              .from("news-images")
+              .upload(path, buf, {
+                contentType: "image/webp",
+              });
+              
+            if (uploadError) {
+              console.error("Image upload error:", uploadError);
+              return; // Skip this image but continue with others
+            }
+
+            // Get public URL for Facebook posting
+            const { data: publicUrlData } = supabase.storage
+              .from("news-images")
+              .getPublicUrl(path);
+            imageUrls.push(publicUrlData.publicUrl);
+
+            await supabase.from("news_images").insert({
+              news_id: newsData.id,
+              path,
+              sort_order: index,
+            });
+          })
+        );
+      } catch (imageError) {
+        console.error("Image processing error:", imageError);
+        // Continue without images if upload fails
+      }
+    }
+
+    let fbResult: { link?: string } | null = null;
+
+    // Post to Facebook only if requested (validation already passed)
+    if (sharedFacebook) {
+      try {
+        const fbMessage = title ? `${title}\n\n${content}` : content;
+        fbResult = await postToFacebookPage({
+          message: fbMessage,
+          imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+        });
+
+        if (fbResult?.link) {
+          await supabase
+            .from("news")
+            .update({
+              linkFacebook: fbResult.link,
+              sharedFacebook: true,
+            })
+            .eq("id", newsData.id);
+        }
+      } catch (fbError) {
+        console.error("Failed to post to Facebook:", fbError);
+        // Clean up: delete the created news since Facebook posting failed
+        await supabase.from("news").delete().eq("id", newsData.id);
+
+        // Also delete uploaded images
+        if (imageUrls.length > 0) {
+          const imagePaths = imageUrls
+            .map((url) => {
+              const pathMatch = url.match(/news-images\/(.+)$/);
+              return pathMatch ? pathMatch[1] : null;
+            })
+            .filter(Boolean) as string[];
+
+          if (imagePaths.length > 0) {
+            await supabase.storage.from("news-images").remove(imagePaths);
+          }
+        }
+
+        throw fbError;
+      }
+    }
+
+    return { linkFacebook: fbResult?.link };
+  } catch (error) {
+    console.error("createNews error:", error);
+    
+    // Re-throw with a sanitized error message for production
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("An unexpected error occurred while creating news");
     }
   }
-
-  return { linkFacebook: fbResult?.link };
 }
 
 export async function updateNews(

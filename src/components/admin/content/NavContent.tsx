@@ -39,7 +39,11 @@ const NavContent = () => {
           redirectTo: `https://arzonic.com/admin`,
         },
       });
-      if (error) throw error;
+
+      if (error) {
+        console.error("Facebook linking error:", error);
+        throw error;
+      }
 
       // Refine `data` type to safely access `provider_token`
       if (
@@ -63,6 +67,7 @@ const NavContent = () => {
     } catch (err: unknown) {
       console.error("Facebook linking fejl:", err);
       setLoadingFacebook(false);
+      // You could add a toast notification here to inform the user
     }
   };
 
