@@ -135,7 +135,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
               <input
                 name="images"
                 type="file"
-                className="file-input file-input-bordered file-input-md w-full"
+                className="file-input file-input-bordered file-input-lg md:file-input-md w-full"
                 onChange={handleImageChange}
                 multiple
               />
