@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createNews } from "@/lib/server/actions";
 import { FaXmark } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [postToFacebook, setPostToFacebook] = useState(true);
   const [postToInstagram, setPostToInstagram] = useState(true);
   const [errors, setErrors] = useState<{
@@ -17,6 +18,30 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
     facebook?: string;
   }>({});
   const [loading, setLoading] = useState(false);
+
+  // Cleanup object URLs when component unmounts or images change
+  useEffect(() => {
+    return () => {
+      imageUrls.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [imageUrls]);
+
+  // Create object URLs for images (client-side only)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const newUrls = images.map((file) => URL.createObjectURL(file));
+      setImageUrls(newUrls);
+
+      // Cleanup previous URLs
+      return () => {
+        newUrls.forEach((url) => URL.revokeObjectURL(url));
+      };
+    }
+  }, [images]);
 
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +70,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       setTitle("");
       setDesc("");
       setImages([]);
+      setImageUrls([]);
       setPostToFacebook(true);
       setPostToInstagram(true);
       setErrors({});
@@ -81,6 +107,10 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       const newFiles = Array.from(e.target.files);
       setImages((prev) => [...prev, ...newFiles].slice(0, 10));
     }
+  };
+
+  const removeImage = (indexToRemove: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== indexToRemove));
   };
 
   return (
@@ -148,7 +178,9 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                 </legend>
                 <div className="carousel gap-3">
                   {images.map((file, index) => {
-                    const url = URL.createObjectURL(file);
+                    const url = imageUrls[index];
+                    if (!url) return null;
+
                     return (
                       <div
                         key={index}
@@ -164,11 +196,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                         <button
                           type="button"
                           className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
-                          onClick={() =>
-                            setImages((prev) =>
-                              prev.filter((_, i) => i !== index)
-                            )
-                          }
+                          onClick={() => removeImage(index)}
                           title="Fjern billede"
                         >
                           <FaXmark />
