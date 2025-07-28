@@ -657,62 +657,62 @@
   "Policy": {
     "title": "Privacy Policy & Consent",
     "section1": {
-      "title": "1. Collection and Processing of Personal Data",
-      "description": "When you use our price calculator or submit a contact form on Arzonic Agency's website, we collect and process the following information:",
+      "title": "1. Information Collection",
+      "description": "When you use our price calculator or contact form on Arzonic ApS's website, we request the following information:",
       "list": {
-        "name": "Name",
+        "name": "Your name",
         "phone": "Phone number",
         "email": "Email address",
-        "details": "Any details you include in your message or inquiry"
+        "details": "Details you voluntarily provide in your message"
       },
-      "note": "This information is used solely to respond to your inquiry, prepare an offer, and follow up if necessary."
+      "note": "We only use this information to respond to your inquiry and prepare an offer if requested."
     },
     "section2": {
-      "title": "2. Use of Facebook and Instagram Data",
-      "description1": "If you log in or connect your Facebook Page or Instagram Business account via our system, you grant Arzonic ApS access to specific information and functionality, as approved by you via Meta (Facebook).",
+      "title": "2. Facebook and Instagram Integration",
+      "description1": "The option to connect a Facebook Page or Instagram Business account is only available to registered users through our admin panel. If you choose to enable this feature, you will be asked to authorize the connection via Meta (Facebook). This may provide access to a few necessary details, which are used solely to support manual publishing and always require your active confirmation and permission.:",
       "list": {
         "access": "Your name and email address via Facebook Login",
-        "pages": "A list of your connected Facebook Pages and Instagram Business accounts",
-        "publish": "Permission to publish content on your behalf if granted (via 'pages_manage_posts' and 'instagram_content_publish')"
+        "pages": "A list of your connected Facebook Pages or Instagram accounts",
+        "publish": "The ability to manually share content through our platform (only with your clear approval)"
       },
-      "description2": "We use this data to allow you to create and publish posts directly from our dashboard. We never post automatically and only store what is necessary (e.g., access token) to make the feature work. You can revoke permissions at any time via your Facebook settings under Business Integrations."
+      "description2": "This connection simply allows you to manage your social content in one place. Nothing is shared or posted automatically, and no information is stored longer than necessary to support the functionality. You are always in control and can disconnect at any time through your Facebook settings."
     },
     "section3": {
-      "title": "3. Data Storage and Deletion",
+      "title": "3. Data Storage",
       "description": "Your data is stored securely and confidentially.",
       "list": {
-        "noCustomer": "If you do not become a customer, your data will be deleted automatically after 30 days.",
-        "customer": "If you do become a customer, we store your data only as long as necessary to provide our services or comply with legal obligations."
+        "noCustomer": "If you do not become a customer, your data will be deleted within 30 days.",
+        "customer": "If you become a customer, we retain your data only as long as legally required or necessary to provide our services."
       },
-      "note": "You can request earlier deletion by contacting us at mail@arzonic.com."
+      "note": "To request earlier deletion, contact us at mail@arzonic.com."
     },
     "section4": {
-      "title": "4. Disclosure of Information",
-      "description": "We do not share your data with third parties unless necessary to process your request (e.g., with a subcontractor), and only with your prior consent."
+      "title": "4. Sharing with Third Parties",
+      "description": "We never share your data with third parties without your prior consent unless it is necessary to provide a requested service."
     },
     "section5": {
       "title": "5. Your Rights",
-      "description": "You have the right at any time to:",
+      "description": "You have the right to:",
       "list": {
-        "access": "Access the data we have about you",
-        "correct": "Correct inaccurate or outdated information",
-        "delete": "Request deletion of your data (unless required by law)",
-        "withdraw": "Withdraw your consent"
+        "access": "Request access to your data",
+        "correct": "Correct inaccuracies in your information",
+        "delete": "Request deletion of your data if permitted by law",
+        "withdraw": "Withdraw previously given consent"
       },
-      "note": "Please contact us at mail@arzonic.com to exercise your rights."
+      "note": "Please contact mail@arzonic.com to exercise these rights."
     },
     "section6": {
       "title": "6. Consent",
-      "description1": "By submitting your information through our website, you consent to our processing of your data as described above.",
-      "description2": "You may withdraw your consent at any time by contacting us. If there is no legal reason to retain your data, it will be deleted."
+      "description1": "By submitting information via our website, you consent to us processing your data as described.",
+      "description2": "You may withdraw your consent at any time. We will then delete your data unless legally required to retain it."
     },
     "section7": {
       "title": "7. Data Security",
-      "description": "We use appropriate technical and organizational measures to protect your data against unauthorized access, misuse, or disclosure."
+      "description": "We use technical and organizational measures to protect your data from unauthorized access or misuse."
     },
     "section8": {
-      "title": "8. Changes to This Policy",
-      "description": "We reserve the right to update this privacy and consent policy. The latest version will always be available on our website."
+      "title": "8. Policy Updates",
+      "description": "We regularly update this policy. The latest version is always available on our website."
     },
     "section9": {
       "title": "9. Contact Information",
@@ -723,7 +723,7 @@
         "phone": "+45 22 50 17 03"
       }
     },
-    "lastUpdated": "Last updated: July 22, 2025"
+    "lastUpdated": "Last updated: July 28, 2025"
   },
   "TermsModal": {
     "title": "Terms of Service",

@@ -655,73 +655,73 @@
   "Policy": {
     "title": "Privatlivspolitik & Samtykke",
     "section1": {
-      "title": "1. Indsamling og Behandling af Personoplysninger",
-      "description": "Når du bruger vores prisberegner eller udfylder en kontaktformular på Arzonic Agencys hjemmeside, indsamler og behandler vi følgende oplysninger:",
+      "title": "1. Indsamling af oplysninger",
+      "description": "Når du bruger prisberegneren eller kontaktformularen på Arzonic ApS' hjemmeside, beder vi dig om følgende oplysninger:",
       "list": {
-        "name": "Navn",
+        "name": "Dit navn",
         "phone": "Telefonnummer",
         "email": "E-mailadresse",
-        "details": "Eventuelle detaljer, du angiver i din besked eller forespørgsel"
+        "details": "Detaljer du selv vælger at skrive i beskedfeltet"
       },
-      "note": "Disse oplysninger bruges udelukkende til at besvare din forespørgsel, udarbejde et tilbud og følge op, hvis nødvendigt."
+      "note": "Oplysningerne bruges kun til at besvare din henvendelse og udarbejde et eventuelt tilbud."
     },
     "section2": {
-      "title": "2. Brug af Facebook- og Instagram-data",
-      "description1": "Hvis du logger ind eller forbinder din Facebook-side eller Instagram Business-konto via vores system, giver du Arzonic ApS adgang til specifikke oplysninger og funktioner, som du selv godkender via Meta (Facebook).",
+      "title": "2. Integration med Facebook og Instagram",
+      "description1": "Funktionen til at forbinde en Facebook-side eller en Instagram Business-konto er kun tilgængelig for registrerede brugere via vores administrationspanel. Hvis du vælger at aktivere denne funktion, vil du blive bedt om at godkende forbindelsen gennem Meta (Facebook). Dette kan give adgang til enkelte nødvendige oplysninger, som bruges til at understøtte manuelle opslag og kræver altid din aktive handling og tilladelse.",
       "list": {
-        "access": "Dit navn og e-mailadresse via Facebook Login",
-        "pages": "En oversigt over dine tilknyttede Facebook-sider og Instagram Business-konti",
-        "publish": "Adgang til at publicere opslag på dine vegne, hvis du har givet samtykke (via 'pages_manage_posts' og 'instagram_content_publish')"
+        "access": "Dit navn og e-mailadresse fra Facebook Login",
+        "pages": "Liste over dine Facebook-sider eller Instagram-konti",
+        "publish": "Valgfri funktion til at dele indhold manuelt via vores platform (aktiveres kun af dig selv)"
       },
-      "description2": "Vi bruger disse data til at gøre det muligt for dig at oprette og publicere opslag direkte fra vores dashboard. Vi poster aldrig automatisk og gemmer kun de nødvendige informationer (f.eks. adgangstoken) for at funktionen kan fungere. Du kan til enhver tid tilbagekalde tilladelser i dine Facebook-indstillinger under Business Integrationer."
+      "description2": "Vi tilbyder dig muligheden for at forbinde din Facebook- eller Instagram-konto, så du kan oprette og håndtere indhold direkte fra vores platform. Funktionen aktiveres kun, hvis du selv vælger det, og alle handlinger sker manuelt med din godkendelse. Du kan til enhver tid fjerne forbindelsen igen via dine Facebook-indstillinger."
     },
     "section3": {
-      "title": "3. Opbevaring og Sletning af Data",
-      "description": "Dine data opbevares sikkert og fortroligt.",
+      "title": "3. Opbevaring af oplysninger",
+      "description": "Dine oplysninger gemmes sikkert og fortroligt.",
       "list": {
-        "noCustomer": "Hvis du ikke bliver kunde, slettes dine oplysninger automatisk efter 30 dage.",
-        "customer": "Hvis du bliver kunde, opbevarer vi dine oplysninger kun så længe, det er nødvendigt for at levere vores ydelser eller overholde lovgivningen."
+        "noCustomer": "Hvis du ikke bliver kunde, slettes dine data inden for 30 dage.",
+        "customer": "Hvis du bliver kunde, gemmes dine data kun så længe, det er nødvendigt ifølge lovgivning eller for at levere vores service."
       },
-      "note": "Du kan anmode om tidligere sletning ved at kontakte os på mail@arzonic.com."
+      "note": "Ønsker du dine data slettet tidligere, kontakt os på mail@arzonic.com."
     },
     "section4": {
-      "title": "4. Videregivelse af Oplysninger",
-      "description": "Vi deler ikke dine oplysninger med tredjeparter, medmindre det er nødvendigt for at behandle din forespørgsel (f.eks. med en underleverandør). I så fald sker det kun med dit forudgående samtykke."
+      "title": "4. Deling med tredjeparter",
+      "description": "Vi videregiver aldrig dine data til tredjeparter uden din forudgående accept, medmindre det er nødvendigt for at levere en ydelse til dig."
     },
     "section5": {
-      "title": "5. Dine Rettigheder",
-      "description": "Du har til enhver tid ret til at:",
+      "title": "5. Dine rettigheder",
+      "description": "Du har altid ret til at:",
       "list": {
-        "access": "Få adgang til de oplysninger, vi har om dig",
-        "correct": "Få rettet forkerte eller forældede oplysninger",
-        "delete": "Anmode om sletning af dine data (medmindre lovgivningen kræver opbevaring)",
-        "withdraw": "Trække dit samtykke tilbage"
+        "access": "Anmode om at se dine data",
+        "correct": "Få rettet fejl i dine oplysninger",
+        "delete": "Få slettet dine data, hvis lovgivningen tillader det",
+        "withdraw": "Trække tidligere givet samtykke tilbage"
       },
-      "note": "Kontakt os venligst på mail@arzonic.com for at gøre brug af dine rettigheder."
+      "note": "Kontakt os via mail@arzonic.com, hvis du vil benytte dig af disse rettigheder."
     },
     "section6": {
       "title": "6. Samtykke",
-      "description1": "Ved at indsende dine oplysninger via vores hjemmeside giver du samtykke til, at vi må behandle dine data som beskrevet ovenfor.",
-      "description2": "Du kan til enhver tid trække dit samtykke tilbage ved at kontakte os. Hvis der ikke er nogen lovmæssig grund til at gemme dine data, bliver de slettet."
+      "description1": "Ved at indsende data via hjemmesiden accepterer du, at vi behandler dine oplysninger som beskrevet her.",
+      "description2": "Du kan altid trække dit samtykke tilbage. Vi sletter derefter dine data, medmindre lovgivningen kræver opbevaring."
     },
     "section7": {
       "title": "7. Datasikkerhed",
-      "description": "Vi benytter passende tekniske og organisatoriske foranstaltninger for at beskytte dine data mod uautoriseret adgang, misbrug eller offentliggørelse."
+      "description": "Vi bruger tekniske og organisatoriske tiltag for at sikre dine oplysninger mod uautoriseret adgang eller misbrug."
     },
     "section8": {
-      "title": "8. Ændringer i Denne Politik",
-      "description": "Vi forbeholder os retten til at opdatere denne samtykke- og privatlivspolitik. Den nyeste version vil altid være tilgængelig på vores hjemmeside."
+      "title": "8. Opdateringer af politikken",
+      "description": "Vi opdaterer løbende denne politik. Nyeste version er altid tilgængelig på vores hjemmeside."
     },
     "section9": {
-      "title": "9. Kontaktinformation",
+      "title": "9. Kontakt os",
       "list": {
-        "company": "Virksomhed: Arzonic ApS",
+        "company": "Arzonic ApS",
         "access": "CVR-nr.: 45630102",
         "email": "mail@arzonic.com",
         "phone": "+45 22 50 17 03"
       }
     },
-    "lastUpdated": "Sidst opdateret: 22. juli 2025"
+    "lastUpdated": "Sidst opdateret: 28. juli 2025"
   },
   "TermsModal": {
     "title": "Vilkår og betingelser",
