@@ -594,7 +594,7 @@ export async function createNews({
 
     const supabase = await createServerClientInstance();
     const apiKey = process.env.DEEPL_API_KEY;
-    
+
     if (!apiKey) {
       throw new Error("Translation service not configured");
     }
@@ -646,11 +646,12 @@ export async function createNews({
         }
         const titleResult = await titleRes.json();
         const titleFirst = titleResult.translations?.[0];
-        
+
         if (titleFirst) {
-          titleSourceLang = titleFirst.detected_source_language?.toLowerCase() || "da";
+          titleSourceLang =
+            titleFirst.detected_source_language?.toLowerCase() || "da";
           title_translated = titleFirst.text;
-          
+
           if (titleSourceLang === "en") {
             const titleParams2 = new URLSearchParams({
               auth_key: apiKey,
@@ -680,7 +681,7 @@ export async function createNews({
     // Translate content
     let content_translated = content;
     let sourceLang = "da";
-    
+
     try {
       const params1 = new URLSearchParams({
         auth_key: apiKey,
@@ -694,7 +695,7 @@ export async function createNews({
       }
       const result1 = await r1.json();
       const first = result1.translations?.[0];
-      
+
       if (first) {
         sourceLang = first.detected_source_language?.toLowerCase() || "da";
         content_translated = first.text;
@@ -736,7 +737,7 @@ export async function createNews({
       ])
       .select("id")
       .single();
-      
+
     if (insertError || !newsData?.id) {
       console.error("Database insert error:", insertError);
       throw new Error("Failed to create news in database");
@@ -751,19 +752,19 @@ export async function createNews({
             const ext = "webp";
             const name = `${Math.random().toString(36).slice(2)}.${ext}`;
             const path = `${ud.user.id}/${name}`;
-            
+
             const buf = await sharp(Buffer.from(await file.arrayBuffer()))
               .rotate()
               .resize({ width: 1024, height: 768, fit: "cover" })
               .webp({ quality: 65 })
               .toBuffer();
-              
+
             const { error: uploadError } = await supabase.storage
               .from("news-images")
               .upload(path, buf, {
                 contentType: "image/webp",
               });
-              
+
             if (uploadError) {
               console.error("Image upload error:", uploadError);
               return; // Skip this image but continue with others
@@ -834,7 +835,7 @@ export async function createNews({
     return { linkFacebook: fbResult?.link };
   } catch (error) {
     console.error("createNews error:", error);
-    
+
     // Re-throw with a sanitized error message for production
     if (error instanceof Error) {
       throw new Error(error.message);

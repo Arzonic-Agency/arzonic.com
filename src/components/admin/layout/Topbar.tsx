@@ -73,7 +73,7 @@ const Topbar = () => {
             "pages_manage_posts",
             "pages_read_engagement",
           ].join(","),
-          redirectTo: `https://arzonic.com/admin`,
+          redirectTo: `http://localhost:3000/admin`,
         },
       });
       if (error) throw error;

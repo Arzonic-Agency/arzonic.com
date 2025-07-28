@@ -70,7 +70,6 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       setTitle("");
       setDesc("");
       setImages([]);
-      setImageUrls([]);
       setPostToFacebook(true);
       setPostToInstagram(true);
       setErrors({});
@@ -107,10 +106,6 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       const newFiles = Array.from(e.target.files);
       setImages((prev) => [...prev, ...newFiles].slice(0, 10));
     }
-  };
-
-  const removeImage = (indexToRemove: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== indexToRemove));
   };
 
   return (
@@ -178,9 +173,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                 </legend>
                 <div className="carousel gap-3">
                   {images.map((file, index) => {
-                    const url = imageUrls[index];
-                    if (!url) return null;
-
+                    const url = URL.createObjectURL(file);
                     return (
                       <div
                         key={index}
@@ -196,7 +189,11 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
                         <button
                           type="button"
                           className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
-                          onClick={() => removeImage(index)}
+                          onClick={() =>
+                            setImages((prev) =>
+                              prev.filter((_, i) => i !== index)
+                            )
+                          }
                           title="Fjern billede"
                         >
                           <FaXmark />
