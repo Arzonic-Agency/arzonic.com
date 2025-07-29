@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createCase } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
+import Image from "next/image";
+import { FaXmark } from "react-icons/fa6";
 
 const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   const { t } = useTranslation();
@@ -9,6 +11,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const [contact, setContact] = useState("");
   const [website, setWebsite] = useState("https://");
 
@@ -22,6 +25,32 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
     website: "",
   });
   const [loading, setLoading] = useState(false);
+
+  // Cleanup object URL when component unmounts or image changes
+  useEffect(() => {
+    return () => {
+      if (imageUrl && imageUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(imageUrl);
+      }
+    };
+  }, [imageUrl]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setImage(file);
+
+    if (file) {
+      // Cleanup previous URL
+      if (imageUrl && imageUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(imageUrl);
+      }
+      // Create new URL
+      const newUrl = URL.createObjectURL(file);
+      setImageUrl(newUrl);
+    } else {
+      setImageUrl("");
+    }
+  };
 
   const handleCreateCase = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +88,8 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
       setCountry("");
       setContact("");
       setImage(null);
-      setWebsite("");
+      setImageUrl("");
+      setWebsite("https://");
       onCaseCreated();
     } catch (error) {
       console.error(error);
@@ -81,7 +111,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full p-3">
+    <div className="flex flex-col gap-3 w-full p-1 md:p-3">
       <span className="text-lg font-bold">{t("case_creation")}</span>
       <form
         onSubmit={handleCreateCase}
@@ -127,7 +157,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
               )}
             </fieldset>
 
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset">
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset ">
               <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="desc"
@@ -141,7 +171,7 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 rows={8}
                 aria-label={t("aria.createCase.description")}
               ></textarea>
-              <div className="text-right text-xs font-medium text-zinc-500">
+              <div className="text-right text-xs font-medium text-zinc-500 max-w-xs ">
                 {desc.length} / 500
               </div>
               {errors.desc && (
@@ -212,8 +242,9 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 name="image"
                 type="file"
                 className="file-input file-input-bordered file-input-md w-full"
-                onChange={(e) => setImage(e.target.files?.[0] || null)}
+                onChange={handleImageChange}
                 required
+                accept="image/*"
                 aria-label={t("aria.createCase.chooseImage")}
               />
               {errors.image && (
@@ -222,6 +253,39 @@ const CreateCase = ({ onCaseCreated }: { onCaseCreated: () => void }) => {
                 </span>
               )}
             </fieldset>
+
+            {imageUrl && (
+              <fieldset className="fieldset w-full flex flex-col gap-3">
+                <legend className="fieldset-legend">
+                  {t("image_preview")}
+                </legend>
+                <div className="relative group w-fit">
+                  <Image
+                    src={imageUrl}
+                    alt="Selected image preview"
+                    width={200}
+                    height={150}
+                    className="rounded-lg object-cover border border-base-300"
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 btn btn-xs btn-circle btn-error opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => {
+                      setImage(null);
+                      setImageUrl("");
+                      // Reset file input
+                      const fileInput = document.querySelector(
+                        'input[name="image"]'
+                      ) as HTMLInputElement;
+                      if (fileInput) fileInput.value = "";
+                    }}
+                    title="Fjern billede"
+                  >
+                    <FaXmark />
+                  </button>
+                </div>
+              </fieldset>
+            )}
           </div>
         </div>
         <button

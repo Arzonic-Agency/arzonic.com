@@ -59,7 +59,7 @@ const Reviews = () => {
         <div className="flex flex-col items-start gap-5">
           <button
             onClick={() => setShowCreateReview(false)}
-            className="btn btn-ghost"
+            className="btn"
             aria-label={t("aria.reviews.backButton")}
           >
             <FaAngleLeft />
@@ -71,7 +71,7 @@ const Reviews = () => {
         <div className="flex flex-col items-start gap-5">
           <button
             onClick={() => setShowUpdateReview(false)}
-            className="btn btn-ghost"
+            className="btn"
             aria-label={t("aria.reviews.backButton")}
           >
             <FaAngleLeft />

@@ -108,7 +108,7 @@ const UpdateNews = ({
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full p-3">
+    <div className="flex flex-col gap-3 w-full p-1 md:p-3">
       <span className="text-lg font-bold">
         {" "}
         {t("edit")} {t("news")}
@@ -118,13 +118,13 @@ const UpdateNews = ({
         className="flex flex-col items-start gap-5 w-full"
       >
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
-          <div className="flex flex-col gap-5 ">
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+          <div className="flex flex-col gap-5 w-full">
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset md:max-w-sm">
               <legend className="fieldset-legend">{t("title")}</legend>
               <input
                 name="title"
                 type="text"
-                className="input input-bordered input-md"
+                className="input input-md w-full"
                 placeholder={t("write_title")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -136,11 +136,11 @@ const UpdateNews = ({
                 </span>
               )}
             </fieldset>
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset md:max-w-sm">
               <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="content"
-                className="textarea textarea-bordered textarea-md text"
+                className="textarea textarea-md w-full"
                 value={content}
                 onChange={handleContentChange}
                 required
@@ -159,13 +159,13 @@ const UpdateNews = ({
               )}
             </fieldset>
           </div>
-          <div className="flex flex-col gap-5 relative">
-            <fieldset className="flex flex-col gap-2 relative w-full fieldset max-w-xs">
+          <div className="flex flex-col gap-5 relative  w-full">
+            <fieldset className="flex flex-col gap-2 relative w-full fieldset md:max-w-sm">
               <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input
                 name="images"
                 type="file"
-                className="file-input file-input-bordered file-input-md w-full"
+                className="file-input file-input-md w-full"
                 onChange={handleImageChange}
                 multiple
               />
@@ -176,7 +176,7 @@ const UpdateNews = ({
               )}
             </fieldset>
             {(existingImages.length > 0 || images.length > 0) && (
-              <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset max-w-md">
+              <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset md:max-w-sm">
                 <legend className="fieldset-legend">
                   {t("chosen_images")} ( {images.length + existingImages.length}{" "}
                   )

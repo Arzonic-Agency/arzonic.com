@@ -2,15 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { FaPen, FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
-import UpdateNews from "./updateNews/UpdateNews";
 import { useTranslation } from "react-i18next";
-import Link from "next/link";
 
 interface NewsListProps {
   view: "cards" | "list";
   page: number;
   setTotal: (total: number) => void;
   onEditNews: (newsId: number) => void;
+  newsItems: NewsItem[];
+  setNews: React.Dispatch<React.SetStateAction<NewsItem[]>>;
+  fetchNews?: () => void;
 }
 
 interface NewsItem {
@@ -25,11 +26,17 @@ interface NewsItem {
 
 const FALLBACK_IMAGE = "/demo.webp";
 
-const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
+const NewsList = ({
+  view,
+  page,
+  setTotal,
+  onEditNews,
+  newsItems,
+  setNews,
+  fetchNews: externalFetchNews,
+}: NewsListProps) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
-  const [editingNewsId, setEditingNewsId] = useState<number | null>(null);
   const [deletingNewsId, setDeletingNewsId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
@@ -38,7 +45,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
     try {
       setLoading(true);
       const { news, total } = await getAllNews(page);
-      setNewsItems(news || []);
+      setNews(news || []);
       setTotal(total);
     } catch (error) {
       console.error("Failed to fetch news:", error);
@@ -63,11 +70,6 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
   const truncateTitle = (title: string, maxLength: number) => {
     if (title.length <= maxLength) return title;
     return title.substring(0, maxLength) + "...";
-  };
-
-  const handleNewsUpdated = () => {
-    setEditingNewsId(null);
-    fetchNews();
   };
 
   const handleDelete = async () => {
@@ -98,8 +100,6 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
           <span className="loading loading-spinner loading-md"></span>
           {t("loading_news")}
         </div>
-      ) : editingNewsId ? (
-        <UpdateNews newsId={editingNewsId} onNewsUpdated={handleNewsUpdated} />
       ) : newsItems.length === 0 ? (
         <div className="flex justify-center items-center h-40 w-full">
           <p className="text-gray-500">{t("no_news")}</p>
@@ -124,6 +124,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
                             priority
+                            loading="eager"
                           />
                         </div>
                       ) : (
@@ -141,6 +142,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
                                 priority={index === 0}
+                                loading="eager"
                               />
                               {item.images.length > 1 && (
                                 <div className="absolute left-2 right-2 top-1/2 flex -translate-y-1/2 transform justify-between">
@@ -194,6 +196,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover"
+                          loading="eager"
                         />
                       </div>
                     )}
@@ -206,7 +209,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                     <div className="card-actions justify-between items-center mt-2">
                       <div className="flex gap-2">
                         {item.linkFacebook && (
-                          <Link
+                          <a
                             href={item.linkFacebook}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -217,7 +220,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                             <span className=" font-normal text-base-content ">
                               Facebook
                             </span>
-                          </Link>
+                          </a>
                         )}
                         {item.sharedInstagram && (
                           <FaInstagram
@@ -267,6 +270,7 @@ const NewsList = ({ view, page, setTotal, onEditNews }: NewsListProps) => {
                             alt={item.title}
                             fill
                             className="object-cover"
+                            loading="eager"
                           />
                         </div>
                         <h3 className="font-semibold text-xs hidden sm:block">

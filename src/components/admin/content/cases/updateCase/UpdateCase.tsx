@@ -131,7 +131,7 @@ const UpdateCase = ({
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full p-3">
+    <div className="flex flex-col gap-3 w-full p-1 md:p-3">
       <span className="text-lg font-bold">{t("case_editing")}</span>
 
       <form

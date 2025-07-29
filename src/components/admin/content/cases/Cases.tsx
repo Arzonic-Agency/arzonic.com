@@ -41,7 +41,7 @@ const Cases = () => {
         <div className="flex flex-col items-start gap-5">
           <button
             onClick={() => setShowCreateCase(false)}
-            className="btn btn-ghost"
+            className="btn"
             aria-label={t("aria.cases.back")}
           >
             <FaAngleLeft />
@@ -53,7 +53,7 @@ const Cases = () => {
         <div className="flex flex-col items-start gap-5">
           <button
             onClick={() => setShowUpdateCase(false)}
-            className="btn btn-ghost"
+            className="btn"
             aria-label={t("aria.cases.back")}
           >
             <FaAngleLeft />

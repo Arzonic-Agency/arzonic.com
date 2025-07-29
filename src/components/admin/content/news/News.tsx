@@ -18,6 +18,11 @@ const News = () => {
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
+  const [news, setNews] = useState<any[]>([]);
+
+  const fetchNews = async () => {
+    // This will be used by the NewsList component to refresh data
+  };
 
   const handleViewChange = (view: "cards" | "list") => {
     setView(view);
@@ -39,21 +44,19 @@ const News = () => {
     <div className="flex flex-col md:items-start gap-7">
       {showCreateNews ? (
         <div className="flex flex-col items-start gap-5">
-          <button
-            onClick={() => setShowCreateNews(false)}
-            className="btn btn-ghost"
-          >
+          <button onClick={() => setShowCreateNews(false)} className="btn">
             <FaAngleLeft />
             {t("back")}
           </button>
-          <CreateNews onNewsCreated={handleNewsCreated} />
+          <CreateNews
+            onNewsCreated={handleNewsCreated}
+            setShowCreateNews={setShowCreateNews}
+            fetchNews={fetchNews}
+          />
         </div>
       ) : showUpdateNews && selectedNewsId !== null ? (
         <div className="flex flex-col items-start gap-5">
-          <button
-            onClick={() => setShowUpdateNews(false)}
-            className="btn btn-ghost"
-          >
+          <button onClick={() => setShowUpdateNews(false)} className="btn">
             <FaAngleLeft />
             {t("back")}
           </button>
@@ -75,12 +78,15 @@ const News = () => {
           </div>
           <NewsList
             view={view}
+            newsItems={news}
             page={page}
             setTotal={setTotal}
             onEditNews={(newsId: number) => {
               setSelectedNewsId(newsId);
               setShowUpdateNews(true);
             }}
+            setNews={setNews}
+            fetchNews={fetchNews}
           />
           <div className="flex w-full justify-center">
             <NewsPagination page={page} setPage={setPage} total={total} />

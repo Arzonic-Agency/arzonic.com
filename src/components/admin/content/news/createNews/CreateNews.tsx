@@ -4,7 +4,15 @@ import { FaXmark } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
 
-const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
+const CreateNews = ({
+  onNewsCreated,
+  setShowCreateNews,
+  fetchNews,
+}: {
+  onNewsCreated: () => void;
+  setShowCreateNews: (show: boolean) => void;
+  fetchNews?: () => void;
+}) => {
   const { t } = useTranslation();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -46,17 +54,15 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Prevent multiple submissions
     if (loading) return;
-
-    setLoading(true);
-    setErrors({});
 
     if (!desc) {
       setErrors({ desc: "Beskrivelse er påkrævet" });
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
+    setErrors({});
 
     try {
       await createNews({
@@ -73,7 +79,11 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
       setPostToFacebook(true);
       setPostToInstagram(true);
       setErrors({});
+      setShowCreateNews(false);
       onNewsCreated();
+
+      // Refresh data
+      if (fetchNews) fetchNews();
     } catch (error) {
       const msg =
         error instanceof Error
@@ -82,7 +92,6 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
           ? error
           : "Ukendt fejl";
 
-      // Check if it's a Facebook-specific error
       if (
         msg.includes("Facebook") ||
         msg.includes("admin/editor") ||
@@ -109,7 +118,7 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full p-3">
+    <div className="flex flex-col gap-3 w-full p-1 md:p-3">
       <span className="text-lg font-bold">{t("news_creation")}</span>
 
       <form
@@ -117,33 +126,34 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
         className="flex flex-col items-start gap-5 w-full"
       >
         <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
-          <div className="flex flex-col gap-5">
-            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full">
+          <div className="flex flex-col gap-5 w-full">
+            <fieldset className="flex flex-col gap-2 fieldset w-full md:max-w-sm">
               <legend className="fieldset-legend">{t("title")}</legend>
               <input
                 name="title"
                 type="text"
-                className="input input-bordered input-md"
+                className="input input-md w-full"
                 placeholder={t("write_title")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
             </fieldset>
 
-            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full relative">
+            <fieldset className="flex flex-col gap-2 fieldset w-full relative md:max-w-sm">
               <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
                 name="desc"
-                className="textarea textarea-bordered textarea-md"
+                className="textarea textarea-md  w-full"
                 value={desc}
                 onChange={handleDescChange}
                 required
                 placeholder={t("write_desc")}
+                maxLength={250}
                 cols={30}
                 rows={8}
                 style={{ resize: "none" }}
               />
-              <div className="text-right text-xs text-gray-500">
+              <div className="text-right text-xs font-medium text-zinc-500">
                 {desc.length} / 250
               </div>
               {errors.desc && (
@@ -154,26 +164,26 @@ const CreateNews = ({ onNewsCreated }: { onNewsCreated: () => void }) => {
             </fieldset>
           </div>
 
-          <div className="flex flex-col gap-5">
-            <fieldset className="flex flex-col gap-2 fieldset max-w-xs w-full relative">
+          <div className="flex flex-col gap-5 w-full">
+            <fieldset className="flex flex-col gap-2 fieldset w-full relative md:max-w-sm">
               <legend className="fieldset-legend">{t("choose_images")}</legend>
               <input
                 name="images"
                 type="file"
-                className="file-input file-input-bordered file-input-lg md:file-input-md w-full"
+                className="file-input file-input-md w-full"
                 onChange={handleImageChange}
                 multiple
               />
             </fieldset>
 
             {images.length > 0 && (
-              <fieldset className="fieldset w-full max-w-md flex flex-col gap-3">
+              <fieldset className="fieldset w-full flex flex-col gap-3 md:max-w-sm">
                 <legend className="fieldset-legend">
                   {t("chosen_images")} ( {images.length} / 10 )
                 </legend>
                 <div className="carousel gap-3">
                   {images.map((file, index) => {
-                    const url = URL.createObjectURL(file);
+                    const url = imageUrls[index] || URL.createObjectURL(file);
                     return (
                       <div
                         key={index}

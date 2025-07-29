@@ -53,7 +53,7 @@ const CreateReview = ({ onReviewCreated }: CreateReviewProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full p-3">
+    <div className="flex flex-col gap-3 w-full p-1 md:p-3">
       <span className="text-lg font-bold">{t("review_creation")}</span>
       <form
         onSubmit={handleSubmit}
