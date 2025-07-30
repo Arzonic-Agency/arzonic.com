@@ -83,7 +83,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
-          className="rounded-xl overflow-hidden bg-base-200 ring-2 p-2 ring-base-200 md:hover:bg-base-300 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-shadow duration-300 ease-in-out shadow-md hover:shadow-xl "
+          className="rounded-xl overflow-hidden bg-accent ring-2 p-2 ring-base-200 md:hover:bg-base-200 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-shadow duration-300 ease-in-out shadow-md hover:shadow-xl "
         >
           <Link
             href={item.website || "/cases"}

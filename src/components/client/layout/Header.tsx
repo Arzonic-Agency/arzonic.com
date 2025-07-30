@@ -43,7 +43,7 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-[1536px] mx-auto md:px-5 md:py-5 py-7 bg-base-100 md:bg-transparent">
+    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-[1536px] mx-auto md:px-5 md:py-5 py-7 md:bg-transparent">
       <div className="flex-1">
         <Link
           href="/"

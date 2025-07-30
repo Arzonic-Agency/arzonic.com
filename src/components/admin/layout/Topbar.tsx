@@ -62,7 +62,7 @@ const Topbar = () => {
   const handleFacebookConnect = async () => {
     setLoadingState("connecting");
     try {
-      // 1) Link identity – dette returnerer også den nye session
+      // 1) Link Facebook identity via Supabase
       const { data, error } = await supabase.auth.linkIdentity({
         provider: "facebook",
         options: {
@@ -73,24 +73,48 @@ const Topbar = () => {
             "pages_manage_posts",
             "pages_read_engagement",
           ].join(","),
-          redirectTo: `http://localhost:3000/admin`,
+          redirectTo: `${window.location.origin}/admin`,
         },
       });
+
       if (error) throw error;
 
       const session = (data as { session?: { provider_token?: string } })
         .session;
-      const fbToken = session?.provider_token;
-      if (fbToken) {
-        // 2) Gem token i user_metadata på serveren
-        await supabase.auth.updateUser({
-          data: { facebook_token: fbToken },
-        });
+      const shortLivedToken = session?.provider_token;
+
+      if (!shortLivedToken) throw new Error("Mangler provider_token");
+
+      // 2) Byt til long-lived token via Facebook API
+      const tokenExchange = await fetch(
+        `https://graph.facebook.com/v19.0/oauth/access_token?` +
+          new URLSearchParams({
+            grant_type: "fb_exchange_token",
+            client_id: process.env.NEXT_PUBLIC_FB_APP_ID!, // du skal bruge NEXT_PUBLIC_ prefix
+            client_secret: process.env.NEXT_PUBLIC_FB_APP_SECRET!,
+            fb_exchange_token: shortLivedToken,
+          })
+      );
+
+      const tokenResponse = await tokenExchange.json();
+
+      if (!tokenResponse.access_token) {
+        console.error("Token exchange fejl:", tokenResponse);
+        throw new Error("Kunne ikke bytte token til long-lived version");
       }
 
-      // 3) Refresh zustand med ny session
+      const longLivedToken = tokenResponse.access_token;
+
+      // 3) Gem long-lived token i Supabase user_metadata
+      await supabase.auth.updateUser({
+        data: {
+          facebook_token: longLivedToken,
+        },
+      });
+
+      // 4) Refresh Zustand eller session
       await fetchAndSetUserSession();
-    } catch (err: unknown) {
+    } catch (err) {
       console.error("Facebook linking fejl:", err);
     } finally {
       setLoadingState("idle");

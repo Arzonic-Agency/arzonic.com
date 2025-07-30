@@ -16,6 +16,7 @@ const nextConfig = {
       bodySizeLimit: "50mb",
     },
   },
+  generateBuildId: () => String(Date.now()),
 };
 
 module.exports = nextConfig;

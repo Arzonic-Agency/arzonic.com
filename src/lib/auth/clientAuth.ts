@@ -70,9 +70,6 @@ export const fetchAndSetUserSession = async () => {
 async function validateFacebookPageAccess(userId: string) {
   // Skip validation if feature is disabled
   if (!FACEBOOK_PAGE_VALIDATION_ENABLED) {
-    console.log(
-      "🔍 [CLIENT] Facebook page validation disabled - API endpoint not implemented yet"
-    );
     useAuthStore.getState().setFacebookPageAccess(false);
     return;
   }
@@ -186,7 +183,6 @@ export function setupAuthListener() {
       "USER_UPDATED",
     ];
     if (!relevantEvents.includes(event)) {
-      console.log("🔍 [CLIENT] Irrelevant auth event, skipping");
       return;
     }
 

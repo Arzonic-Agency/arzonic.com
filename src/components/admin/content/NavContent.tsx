@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaRegNewspaper,
   FaStar,
@@ -23,10 +23,55 @@ const NavContent = () => {
 
   const [loadingFacebook, setLoadingFacebook] = useState(false);
 
+  // Håndter token-udveksling efter Facebook redirect (server-side)
+  const exchangeTokenAfterAuth = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.provider_token) {
+        return;
+      }
+
+      // Kald server-side API til sikker token-udveksling
+      const response = await fetch("/api/exchange-facebook-token", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        console.log("✅ Long-term Facebook token gemt");
+        await fetchAndSetUserSession();
+      }
+    } catch (err) {
+      // Silent error handling
+    }
+  };
+
+  // Tjek for Facebook token ved hver auth state ændring
+  useEffect(() => {
+    const checkForFacebookAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.provider_token && !facebookLinked) {
+        await exchangeTokenAfterAuth();
+      }
+    };
+
+    checkForFacebookAuth();
+
+    // Lyt på auth state ændringer
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session?.provider_token && !facebookLinked) {
+        exchangeTokenAfterAuth();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [facebookLinked]);
+
   const handleFacebookConnect = async () => {
     setLoadingFacebook(true);
     try {
-      const { data, error } = await supabase.auth.linkIdentity({
+      const { error } = await supabase.auth.linkIdentity({
         provider: "facebook",
         options: {
           scopes: [
@@ -36,38 +81,15 @@ const NavContent = () => {
             "pages_manage_posts",
             "pages_read_engagement",
           ].join(","),
-          redirectTo: `http://localhost:3000/admin/content`,
+          redirectTo: `${window.location.origin}/admin`,
         },
       });
 
       if (error) {
-        console.error("Facebook linking error:", error);
         throw error;
       }
-
-      // Refine `data` type to safely access `provider_token`
-      if (
-        typeof data === "object" &&
-        data !== null &&
-        "session" in data &&
-        typeof data.session === "object" &&
-        data.session !== null &&
-        "provider_token" in data.session
-      ) {
-        const fbToken = (data.session as { provider_token: string })
-          .provider_token;
-        await supabase.auth.updateUser({
-          data: { facebook_token: fbToken },
-        });
-        await fetchAndSetUserSession();
-      }
-
-      // Hvis linkIdentity ikke redirecter (sjældent), stop loading
+    } catch (err) {
       setLoadingFacebook(false);
-    } catch (err: unknown) {
-      console.error("Facebook linking fejl:", err);
-      setLoadingFacebook(false);
-      // You could add a toast notification here to inform the user
     }
   };
 

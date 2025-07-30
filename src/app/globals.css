@@ -11,20 +11,20 @@
   --color-base-300: #202020;
   --color-base-content: #E4E4E4;
   --color-primary: #048179;
-  --color-primary-content: oklch(98% 0.003 247.858);
+  --color-primary-content: #E4E4E4;
   --color-secondary: #0AA197;
   --color-secondary-content: #E4E4E4;
-  --color-accent: oklch(27% 0.046 192.524);
-  --color-accent-content: oklch(98% 0 0);
+  --color-accent: #131313;
+  --color-accent-content: #E4E4E4;
   --color-neutral: #202020;
   --color-neutral-content: #E4E4E4;
-  --color-info: oklch(50% 0.134 242.749);
-  --color-info-content: oklch(29% 0.066 243.157);
+  --color-info: #3B82F6;
+  --color-info-content: #E4E4E4;
   --color-success: #177512;
-  --color-success-content: oklch(27% 0.072 132.109);
+  --color-success-content: #E4E4E4;
   --color-warning: #AE9F17;
-  --color-warning-content: oklch(28% 0.066 53.813);
-  --color-error: oklch(45% 0.188 13.697);
+  --color-warning-content: #E4E4E4;
+  --color-error: #D82E2E;
   --color-error-content: #E4E4E4;
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
@@ -105,9 +105,9 @@
   background-color: #111;
 
   background-image:
-    radial-gradient(circle at 30% 40%, #3b938d18 0%, transparent 15%),
-    radial-gradient(circle at 20% 70%, #3B938D44 0%, transparent 15%),
-    radial-gradient(circle at 40% 50%, #3B938D22 0%, transparent 17%);
+    radial-gradient(circle at 30% 40%, #3b938d44 0%, transparent 15%),
+    radial-gradient(circle at 20% 70%, #3b938d55 0%, transparent 15%),
+    radial-gradient(circle at 40% 50%, #3b938d4a 0%, transparent 17%);
   background-repeat: no-repeat;
   background-size: 200% 200%;
   animation: moveBackground 15s ease-in-out infinite;
@@ -131,7 +131,7 @@
   }
 }
 
-/* .background-fade-bottom {
+.background-fade-bottom {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -142,7 +142,7 @@
   pointer-events: none;
 }
 
-.bg-one,
+/* .bg-one,
 .bg-two {
   background-image: url('/backgrounds/noise.svg');
   background-size: cover;

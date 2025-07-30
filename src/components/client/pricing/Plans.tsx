@@ -139,7 +139,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
     },
   ].map(({ key, title, desc, features, tFeature }) => (
     <div key={key} className="relative" aria-label={title}>
-      <div className="flex flex-col justify-between shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-base-200 ring-2 shadow-base-300 ring-base-300">
+      <div className="flex flex-col justify-between shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-accent  shadow-base-200 ring-2 ring-base-200">
         <div className="flex flex-col gap-5">
           <h3 className="text-3xl font-bold tracking-wide">{title}</h3>
           <p className="text-sm sm:text-base">{desc}</p>
