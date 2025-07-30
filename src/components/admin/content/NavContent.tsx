@@ -26,8 +26,10 @@ const NavContent = () => {
   // Håndter token-udveksling efter Facebook redirect (server-side)
   const exchangeTokenAfterAuth = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (!session?.provider_token) {
         return;
       }
@@ -42,14 +44,16 @@ const NavContent = () => {
         await fetchAndSetUserSession();
       }
     } catch (err) {
-      // Silent error handling
+      console.error("Error during token exchange:", err); // Log the error
     }
   };
 
   // Tjek for Facebook token ved hver auth state ændring
   useEffect(() => {
     const checkForFacebookAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       if (session?.provider_token && !facebookLinked) {
         await exchangeTokenAfterAuth();
@@ -59,14 +63,16 @@ const NavContent = () => {
     checkForFacebookAuth();
 
     // Lyt på auth state ændringer
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session?.provider_token && !facebookLinked) {
         exchangeTokenAfterAuth();
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [facebookLinked]);
+  }, [facebookLinked, exchangeTokenAfterAuth, supabase.auth]); // Add missing dependencies
 
   const handleFacebookConnect = async () => {
     setLoadingFacebook(true);
@@ -89,6 +95,7 @@ const NavContent = () => {
         throw error;
       }
     } catch (err) {
+      console.error("Error during Facebook connect:", err); // Log the error
       setLoadingFacebook(false);
     }
   };

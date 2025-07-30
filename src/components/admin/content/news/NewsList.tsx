@@ -11,7 +11,6 @@ interface NewsListProps {
   onEditNews: (newsId: number) => void;
   newsItems: NewsItem[];
   setNews: React.Dispatch<React.SetStateAction<NewsItem[]>>;
-  fetchNews?: () => void;
 }
 
 interface NewsItem {
@@ -33,7 +32,6 @@ const NewsList = ({
   onEditNews,
   newsItems,
   setNews,
-  fetchNews: externalFetchNews,
 }: NewsListProps) => {
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
@@ -52,7 +50,7 @@ const NewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [page, setTotal]);
+  }, [page, setTotal, setNews]);
 
   useEffect(() => {
     fetchNews();

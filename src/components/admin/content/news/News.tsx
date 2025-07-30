@@ -9,6 +9,15 @@ import CreateNews from "./createNews/CreateNews";
 import UpdateNews from "./updateNews/UpdateNews";
 import { useTranslation } from "react-i18next";
 
+// Define a type for news items
+interface NewsItem {
+  id: number;
+  title: string;
+  content: string;
+  images: string[]; // Add the 'images' property
+  // Add other fields as needed
+}
+
 const News = () => {
   const { t } = useTranslation();
   const [view, setView] = useState<"cards" | "list">("cards");
@@ -18,7 +27,7 @@ const News = () => {
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
-  const [news, setNews] = useState<any[]>([]);
+  const [news, setNews] = useState<NewsItem[]>([]); // Use the updated type
 
   const fetchNews = async () => {
     // This will be used by the NewsList component to refresh data
@@ -86,7 +95,6 @@ const News = () => {
               setShowUpdateNews(true);
             }}
             setNews={setNews}
-            fetchNews={fetchNews}
           />
           <div className="flex w-full justify-center">
             <NewsPagination page={page} setPage={setPage} total={total} />
