@@ -3,10 +3,11 @@ import { updateNews, getNewsById } from "@/lib/server/actions";
 import { FaXmark } from "react-icons/fa6";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { FaInfoCircle } from "react-icons/fa";
 
 interface NewsImage {
+  url: string;
   path: string;
-  sort_order?: number;
 }
 
 const UpdateNews = ({
@@ -20,7 +21,10 @@ const UpdateNews = ({
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<NewsImage[]>([]);
+  const [removedExistingImages, setRemovedExistingImages] = useState<string[]>(
+    []
+  );
   const [errors, setErrors] = useState({
     title: "",
     content: "",
@@ -39,17 +43,48 @@ const UpdateNews = ({
         }
         setTitle(news.title || "");
         setContent(news.content || news.desc || "");
-        // If your backend supports multiple images, adapt this accordingly
+
         if (Array.isArray(news.images)) {
-          // Map to string[] if images are objects with a 'path' property
-          const urls = news.images
-            .map((img: string | NewsImage) =>
-              typeof img === "string" ? img : img?.path || ""
-            )
-            .filter(Boolean);
-          setExistingImages(urls);
+          const imageObjects = news.images
+            .map((img: string | NewsImage) => {
+              if (typeof img === "string") {
+                // Legacy format - extract path from URL
+                // URL format: https://[project].supabase.co/storage/v1/object/public/news-images/[user_id]/[filename]
+                const urlParts = img.split("/");
+                const newsImageIndex = urlParts.indexOf("news-images");
+                if (
+                  newsImageIndex !== -1 &&
+                  newsImageIndex < urlParts.length - 1
+                ) {
+                  // Get everything after 'news-images/' as the path
+                  const path = urlParts.slice(newsImageIndex + 1).join("/");
+                  return { url: img, path };
+                }
+                // Fallback to just filename
+                return { url: img, path: urlParts[urlParts.length - 1] || img };
+              } else if (
+                img &&
+                typeof img === "object" &&
+                img.url &&
+                img.path
+              ) {
+                return img;
+              }
+              return null;
+            })
+            .filter(Boolean) as NewsImage[];
+          setExistingImages(imageObjects);
         } else if (news.image) {
-          setExistingImages([news.image]);
+          // Handle single image (legacy)
+          const urlParts = news.image.split("/");
+          const newsImageIndex = urlParts.indexOf("news-images");
+          let path = news.image;
+          if (newsImageIndex !== -1 && newsImageIndex < urlParts.length - 1) {
+            path = urlParts.slice(newsImageIndex + 1).join("/");
+          } else {
+            path = urlParts[urlParts.length - 1] || news.image;
+          }
+          setExistingImages([{ url: news.image, path }]);
         } else {
           setExistingImages([]);
         }
@@ -73,7 +108,20 @@ const UpdateNews = ({
       return;
     }
     try {
-      await updateNews(newsId, title, content, images); // Always update Facebook
+      // Combine existing images (minus removed ones) and new images
+      const imagesToKeep = existingImages.filter(
+        (img) => !removedExistingImages.includes(img.path)
+      );
+      const imagePaths = imagesToKeep.map((img) => img.path);
+
+      console.log("🔍 [UpdateNews] Existing images:", existingImages);
+      console.log("🔍 [UpdateNews] Removed images:", removedExistingImages);
+      console.log("🔍 [UpdateNews] Images to keep:", imagesToKeep);
+      console.log("🔍 [UpdateNews] Image paths to send:", imagePaths);
+      console.log("🔍 [UpdateNews] New images:", images);
+
+      // Send both existing image paths and new images to updateNews
+      await updateNews(newsId, title, content, images, imagePaths);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
       onNewsUpdated();
@@ -112,6 +160,10 @@ const UpdateNews = ({
       <span className="text-lg font-bold">
         {" "}
         {t("edit")} {t("news")}
+      </span>
+      <span className="alert">
+        <FaInfoCircle className="inline-block text-primary" />
+        Changes will repost it as a new post.
       </span>
       <form
         onSubmit={handleUpdateNews}
@@ -178,36 +230,41 @@ const UpdateNews = ({
             {(existingImages.length > 0 || images.length > 0) && (
               <fieldset className="w-full flex flex-col justify-center gap-3 relative fieldset md:max-w-sm">
                 <legend className="fieldset-legend">
-                  {t("chosen_images")} ( {images.length + existingImages.length}{" "}
+                  {t("chosen_images")} ({" "}
+                  {images.length +
+                    (existingImages.length - removedExistingImages.length)}{" "}
                   )
                 </legend>
                 <div className="carousel rounded-box h-full gap-3">
-                  {existingImages.map((url, index) => (
-                    <div
-                      key={"existing-" + index}
-                      className="carousel-item relative group h-full"
-                    >
-                      <Image
-                        src={url}
-                        alt={`Billede ${index + 1}`}
-                        className="w-48 h-48 object-cover rounded-lg"
-                        width={192}
-                        height={128}
-                      />
-                      <button
-                        type="button"
-                        className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
-                        onClick={() =>
-                          setImages((prev) =>
-                            prev.filter((_, i) => i !== index)
-                          )
-                        }
-                        title="Fjern billede"
+                  {existingImages
+                    .filter((img) => !removedExistingImages.includes(img.path))
+                    .map((img, index) => (
+                      <div
+                        key={"existing-" + index}
+                        className="carousel-item relative group h-full"
                       >
-                        <FaXmark />
-                      </button>
-                    </div>
-                  ))}
+                        <Image
+                          src={img.url}
+                          alt={`Billede ${index + 1}`}
+                          className="w-48 h-48 object-cover rounded-lg"
+                          width={192}
+                          height={128}
+                        />
+                        <button
+                          type="button"
+                          className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
+                          onClick={() =>
+                            setRemovedExistingImages((prev) => [
+                              ...prev,
+                              img.path,
+                            ])
+                          }
+                          title="Fjern billede"
+                        >
+                          <FaXmark />
+                        </button>
+                      </div>
+                    ))}
                   {images.map((file, index) => {
                     const url = URL.createObjectURL(file);
                     return (

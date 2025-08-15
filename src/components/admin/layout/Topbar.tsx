@@ -1,134 +1,20 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { signOut } from "@/lib/server/actions";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
-import { FaEllipsis, FaFacebook, FaRightFromBracket } from "react-icons/fa6";
+import { FaEllipsis, FaRightFromBracket } from "react-icons/fa6";
 
 import LanguageAdmin from "./LanguageAdmin";
 import ThemeAdmin from "./ThemeAdmin";
-import {
-  fetchAndSetUserSession,
-  disconnectFacebook,
-  setupAuthListener,
-} from "@/lib/auth/clientAuth";
-import { createClient } from "@/utils/supabase/client";
-import { useAuthStore } from "@/lib/auth/useAuthStore";
 
 const Topbar = () => {
   const pathname = usePathname();
   const { t } = useTranslation();
-  const supabase = createClient();
-
-  const facebookLinked = useAuthStore((state) => state.facebookLinked);
-  const [loadingState, setLoadingState] = useState<
-    "idle" | "connecting" | "disconnecting"
-  >("idle");
-  const [isDisconnectingView, setIsDisconnectingView] = useState(false);
 
   const dropdownRef = useRef<HTMLUListElement>(null);
-
-  // Reset visning når facebookLinked ændrer sig
-  useEffect(() => {
-    if (!facebookLinked) setIsDisconnectingView(false);
-  }, [facebookLinked]);
-
-  // Luk disconnect-view når man klikker udenfor dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isDisconnectingView &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDisconnectingView(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isDisconnectingView]);
-
-  useEffect(() => {
-    const sub = setupAuthListener();
-    fetchAndSetUserSession();
-    return () => sub.unsubscribe();
-  }, []);
-
-  const handleFacebookConnect = async () => {
-    setLoadingState("connecting");
-    try {
-      // 1) Link Facebook identity via Supabase
-      const { data, error } = await supabase.auth.linkIdentity({
-        provider: "facebook",
-        options: {
-          scopes: [
-            "public_profile",
-            "email",
-            "pages_show_list",
-            "pages_manage_posts",
-            "pages_read_engagement",
-          ].join(","),
-          redirectTo: `${window.location.origin}/admin`,
-        },
-      });
-
-      if (error) throw error;
-
-      const session = (data as { session?: { provider_token?: string } })
-        .session;
-      const shortLivedToken = session?.provider_token;
-
-      if (!shortLivedToken) throw new Error("Mangler provider_token");
-
-      // 2) Byt til long-lived token via Facebook API
-      const tokenExchange = await fetch(
-        `https://graph.facebook.com/v19.0/oauth/access_token?` +
-          new URLSearchParams({
-            grant_type: "fb_exchange_token",
-            client_id: process.env.NEXT_PUBLIC_FB_APP_ID!, // du skal bruge NEXT_PUBLIC_ prefix
-            client_secret: process.env.NEXT_PUBLIC_FB_APP_SECRET!,
-            fb_exchange_token: shortLivedToken,
-          })
-      );
-
-      const tokenResponse = await tokenExchange.json();
-
-      if (!tokenResponse.access_token) {
-        console.error("Token exchange fejl:", tokenResponse);
-        throw new Error("Kunne ikke bytte token til long-lived version");
-      }
-
-      const longLivedToken = tokenResponse.access_token;
-
-      // 3) Gem long-lived token i Supabase user_metadata
-      await supabase.auth.updateUser({
-        data: {
-          facebook_token: longLivedToken,
-        },
-      });
-
-      // 4) Refresh Zustand eller session
-      await fetchAndSetUserSession();
-    } catch (err) {
-      console.error("Facebook linking fejl:", err);
-    } finally {
-      setLoadingState("idle");
-    }
-  };
-
-  const handleFacebookDisconnect = async () => {
-    setLoadingState("disconnecting");
-    const result = await disconnectFacebook();
-    if (result.success) {
-      await fetchAndSetUserSession();
-    }
-    setLoadingState("idle");
-  };
 
   const pageTitles: Record<string, string> = {
     "/admin": t("overview"),
@@ -160,56 +46,6 @@ const Topbar = () => {
             tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-base-300 ring-opacity-5"
           >
-            <li>
-              {facebookLinked ? (
-                isDisconnectingView ? (
-                  <button
-                    onClick={handleFacebookDisconnect}
-                    className={`flex items-center gap-2 btn btn-ghost text-error transition-all duration-300 ${
-                      loadingState === "disconnecting"
-                        ? "opacity-50 pointer-events-none"
-                        : ""
-                    }`}
-                  >
-                    <FaFacebook />
-                    <span className="text-xs">
-                      {loadingState === "disconnecting"
-                        ? t("disconnecting")
-                        : t("disconnect")}
-                    </span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setIsDisconnectingView(true)}
-                    className="flex items-center gap-2 btn transition-all duration-300"
-                  >
-                    <FaFacebook />
-                    {t("connected")}
-                    <div className="inline-grid *:[grid-area:1/1] ml-1">
-                      <div className="status status-primary animate-ping"></div>
-                      <div className="status status-primary"></div>
-                    </div>
-                  </button>
-                )
-              ) : (
-                <button
-                  onClick={handleFacebookConnect}
-                  className={`flex items-center gap-2 transition-all duration-300 ${
-                    loadingState === "connecting"
-                      ? "opacity-50 pointer-events-none"
-                      : ""
-                  }`}
-                >
-                  <span className="pl-[2px] flex gap-2 items-center">
-                    <FaFacebook />
-                    {loadingState === "connecting"
-                      ? t("connecting")
-                      : t("connectToFacebook")}
-                  </span>
-                </button>
-              )}
-            </li>
-
             <li>
               <ThemeAdmin />
             </li>

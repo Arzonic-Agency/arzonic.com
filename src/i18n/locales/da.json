@@ -1,4 +1,6 @@
 {
+  "login": "Login",
+  "logging_in": "Logger ind...",
   "edit": "Rediger",
   "save": "Gem",
   "update": "Opdater",
@@ -83,7 +85,7 @@
   "delete_request_warning": "Denne handling kan ikke fortrydes.",
   "delete_news_confirmation": "Slet nyhed",
   "delete_news_prompt": "Er du sikker på, at du vil slette denne nyhed?",
-  "delete_news_warning": "Denne handling kan ikke fortrydes.",
+  "delete_news_warning": "Instagram opslaget skal slettes manuelt.",
   "delete_review_confirmation": "Slet anmeldelse",
   "delete_review_prompt": "Er du sikker på, at du vil slette denne anmeldelse?",
   "delete_review_warning": "Denne handling kan ikke fortrydes.",

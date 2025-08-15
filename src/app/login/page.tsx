@@ -134,9 +134,8 @@ const LoginPage = () => {
             className="btn btn-primary mt-2"
             disabled={loading}
           >
-            {loading ? "Logger ind..." : "Login"}
+            {loading ? t("logging_in") : t("login")}
           </button>
-
           <span className="text-xs text-red-500 min-h-4 text-center">
             {serverError}
           </span>

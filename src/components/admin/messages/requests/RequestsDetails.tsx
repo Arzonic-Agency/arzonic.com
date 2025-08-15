@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { format, differenceInDays, addDays } from "date-fns";
-import { da } from "date-fns/locale";
-import RequestNote from "./createNote/RequestNote";
+
 import {
   FaCircleCheck,
   FaCircleXmark,
@@ -12,6 +11,7 @@ import RequestsActions from "./RequestsActions";
 import UpdateRequest from "./updateRequest/UpdateRequest";
 import { Request } from "./RequestsList";
 import { useTranslation } from "react-i18next";
+import RequestNote from "./createNote/RequestNote";
 
 interface RequestsDetailsProps {
   name: string;
@@ -186,9 +186,7 @@ const RequestsDetails = ({
             </span>
             <span className="text-lg font-semibold">
               {created_at
-                ? format(new Date(created_at), "d. MMMM yyyy 'kl.' HH:mm", {
-                    locale: da,
-                  })
+                ? format(new Date(created_at), "d. MMMM yyyy 'kl.' HH:mm")
                 : t("invalid_date")}
             </span>
           </div>

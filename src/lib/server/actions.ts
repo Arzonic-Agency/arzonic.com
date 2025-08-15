@@ -7,7 +7,12 @@ import {
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import sharp from "sharp";
-import { postToFacebookPage } from "./some";
+import {
+  postToFacebookPage,
+  deleteFacebookPost,
+  postToInstagram,
+  updateFacebookPost,
+} from "./some";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AUTHENTICATION
@@ -580,12 +585,14 @@ export async function createNews({
   content,
   images,
   sharedFacebook = false,
+  sharedInstagram = false,
 }: {
   title: string;
   content: string;
   images?: File[];
   sharedFacebook?: boolean;
-}): Promise<{ linkFacebook?: string }> {
+  sharedInstagram?: boolean;
+}): Promise<{ linkFacebook?: string; linkInstagram?: string }> {
   try {
     // Input validation
     if (!content || content.trim().length === 0) {
@@ -600,24 +607,6 @@ export async function createNews({
     }
 
     const endpoint = "https://api-free.deepl.com/v2/translate";
-
-    // Validate Facebook page access FIRST if sharing is requested - before ANY operations
-    if (sharedFacebook) {
-      try {
-        const { validateFacebookPageAccess } = await import("./some");
-        const validationResult = await validateFacebookPageAccess();
-
-        if (!validationResult.hasAccess) {
-          throw new Error(
-            validationResult.error ||
-              "Ingen adgang til Facebook siden. Du skal være admin/editor på den krævede Facebook side for at kunne dele opslag."
-          );
-        }
-      } catch (fbError) {
-        console.error("Facebook validation error:", fbError);
-        throw new Error("Facebook validation failed");
-      }
-    }
 
     // Authenticate user
     const { data: ud, error: ue } = await supabase.auth.getUser();
@@ -753,47 +742,71 @@ export async function createNews({
             const name = `${Math.random().toString(36).slice(2)}.${ext}`;
             const path = `${ud.user.id}/${name}`;
 
-            const buf = await sharp(Buffer.from(await file.arrayBuffer()))
-              .rotate()
-              .resize({ width: 1024, height: 768, fit: "cover" })
-              .webp({ quality: 65 })
-              .toBuffer();
-
-            const { error: uploadError } = await supabase.storage
-              .from("news-images")
-              .upload(path, buf, {
-                contentType: "image/webp",
+            try {
+              // Log file details before processing
+              console.log("Processing file:", {
+                name: file.name,
+                size: file.size,
+                type: file.type,
               });
 
-            if (uploadError) {
-              console.error("Image upload error:", uploadError);
-              return; // Skip this image but continue with others
+              const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+                .rotate()
+                .resize({ width: 1080, height: 1350, fit: "cover" })
+                .webp({ quality: 80 })
+                .toBuffer();
+
+              // Log buffer size after processing
+              console.log("Buffer size after processing:", buf.length);
+
+              const { error: uploadError } = await supabase.storage
+                .from("news-images")
+                .upload(path, buf, {
+                  contentType: "image/webp",
+                });
+
+              if (uploadError) {
+                console.error("Image upload error:", uploadError);
+                return; // Skip this image but continue with others
+              }
+
+              // Get public URL
+              const publicUrlData = supabase.storage
+                .from("news-images")
+                .getPublicUrl(path);
+
+              if (!publicUrlData.data?.publicUrl) {
+                console.error("Public URL generation failed for path:", path);
+                return; // Skip this image but continue with others
+              }
+
+              console.log(
+                "Public URL generated:",
+                publicUrlData.data.publicUrl
+              );
+              imageUrls.push(publicUrlData.data.publicUrl);
+
+              await supabase.from("news_images").insert({
+                news_id: newsData.id,
+                path,
+                sort_order: index,
+              });
+            } catch (imageProcessingError) {
+              console.error("Image processing error:", imageProcessingError);
             }
-
-            // Get public URL for Facebook posting
-            const { data: publicUrlData } = supabase.storage
-              .from("news-images")
-              .getPublicUrl(path);
-            imageUrls.push(publicUrlData.publicUrl);
-
-            await supabase.from("news_images").insert({
-              news_id: newsData.id,
-              path,
-              sort_order: index,
-            });
           })
         );
       } catch (imageError) {
-        console.error("Image processing error:", imageError);
+        console.error("General image upload error:", imageError);
         // Continue without images if upload fails
       }
     }
 
+    // Post to Facebook if requested
     let fbResult: { link?: string } | null = null;
-
-    // Post to Facebook only if requested (validation already passed)
     if (sharedFacebook) {
       try {
+        console.log("🔄 [SERVER] Attempting Facebook post...");
         const fbMessage = title ? `${title}\n\n${content}` : content;
         fbResult = await postToFacebookPage({
           message: fbMessage,
@@ -801,6 +814,9 @@ export async function createNews({
         });
 
         if (fbResult?.link) {
+          console.log(
+            "✅ [SERVER] Facebook post successful, updating database..."
+          );
           await supabase
             .from("news")
             .update({
@@ -810,29 +826,61 @@ export async function createNews({
             .eq("id", newsData.id);
         }
       } catch (fbError) {
-        console.error("Failed to post to Facebook:", fbError);
-        // Clean up: delete the created news since Facebook posting failed
-        await supabase.from("news").delete().eq("id", newsData.id);
-
-        // Also delete uploaded images
-        if (imageUrls.length > 0) {
-          const imagePaths = imageUrls
-            .map((url) => {
-              const pathMatch = url.match(/news-images\/(.+)$/);
-              return pathMatch ? pathMatch[1] : null;
-            })
-            .filter(Boolean) as string[];
-
-          if (imagePaths.length > 0) {
-            await supabase.storage.from("news-images").remove(imagePaths);
-          }
-        }
-
-        throw fbError;
+        console.error("❌ [SERVER] Failed to post to Facebook:", fbError);
+        // Don't fail the entire news creation if Facebook fails
+        // Just log the error and continue
       }
     }
 
-    return { linkFacebook: fbResult?.link };
+    // Post to Instagram if requested (requires at least one image)
+    let igResult: { success: boolean; id?: string; permalink?: string } | null =
+      null;
+    if (sharedInstagram) {
+      if (imageUrls.length === 0) {
+        throw new Error(
+          "Instagram kræver mindst ét billede for at dele et opslag"
+        );
+      }
+
+      try {
+        console.log("🔄 [SERVER] Attempting Instagram post...");
+        const igCaption = title ? `${title}\n\n${content}` : content;
+        igResult = await postToInstagram({
+          caption: igCaption,
+          imageUrl: imageUrls[0], // Instagram only supports single image for now
+        });
+
+        if (igResult?.success && igResult?.id) {
+          console.log(
+            "✅ [SERVER] Instagram post successful, updating database..."
+          );
+
+          // Use permalink if available, otherwise just store the ID (we'll handle display in the frontend)
+          const instagramLink =
+            igResult.permalink || `Instagram Media ID: ${igResult.id}`;
+
+          await supabase
+            .from("news")
+            .update({
+              linkInstagram: instagramLink,
+              sharedInstagram: true,
+            })
+            .eq("id", newsData.id);
+        }
+      } catch (igError) {
+        console.error("❌ [SERVER] Failed to post to Instagram:", igError);
+        // Re-throw Instagram errors since they are likely validation errors
+        throw igError;
+      }
+    }
+
+    return {
+      linkFacebook: fbResult?.link,
+      linkInstagram:
+        igResult?.success && igResult?.id
+          ? igResult.permalink || `Instagram Media ID: ${igResult.id}`
+          : undefined,
+    };
   } catch (error) {
     console.error("createNews error:", error);
 
@@ -849,7 +897,8 @@ export async function updateNews(
   id: number,
   title: string,
   content: string,
-  images?: File[]
+  images?: File[],
+  existingImages?: string[]
 ): Promise<void> {
   const supabase = await createServerClientInstance();
   const apiKey = process.env.DEEPL_API_KEY!;
@@ -927,6 +976,13 @@ export async function updateNews(
   const { data: ud, error: ue } = await supabase.auth.getUser();
   if (ue || !ud?.user) throw new Error("Not authenticated");
 
+  // Get existing news data to check for Facebook post
+  const { data: existingNews } = await supabase
+    .from("news")
+    .select("linkFacebook")
+    .eq("id", id)
+    .single();
+
   const { error: updateError } = await supabase
     .from("news")
     .update({
@@ -940,51 +996,211 @@ export async function updateNews(
     .eq("id", id);
   if (updateError) throw updateError;
 
-  // Handle Facebook update automatically if post exists
-  const { data: newsData } = await supabase
-    .from("news")
-    .select("linkFacebook")
-    .eq("id", id)
-    .single();
-
-  if (newsData?.linkFacebook) {
+  // Handle Facebook update if post exists
+  if (existingNews?.linkFacebook) {
     try {
-      // Extract post ID from Facebook link
-      const postId = newsData.linkFacebook.split("/").pop();
+      const postId = existingNews.linkFacebook.split("/").pop();
       if (postId) {
-        const { updateFacebookPost } = await import("./some");
-        await updateFacebookPost({
-          postId,
-          message: `${title}\n\n${content}`,
-        });
-      }
-    } catch (error) {
-      console.error("Failed to update Facebook post:", error);
-      // Don't throw error here - news is updated, just Facebook update failed
-    }
-  }
+        const imageUrls: string[] = [];
 
-  if (images?.length) {
-    await Promise.all(
-      images.map(async (file, index) => {
-        const ext = "webp";
-        const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-        const path = `${ud.user.id}/${name}`;
-        const buf = await sharp(Buffer.from(await file.arrayBuffer()))
-          .rotate()
-          .resize({ width: 1024, height: 768, fit: "cover" })
-          .webp({ quality: 65 })
-          .toBuffer();
-        await supabase.storage.from("news-images").upload(path, buf, {
-          contentType: "image/webp",
+        // Handle image updates
+        if (images?.length || existingImages?.length) {
+          // Get current images from database
+          const { data: currentImages } = await supabase
+            .from("news_images")
+            .select("path")
+            .eq("news_id", id);
+
+          // Delete all current images first
+          if (currentImages && currentImages.length > 0) {
+            const filesToDelete = currentImages.map((img) => img.path);
+            await supabase.storage.from("news-images").remove(filesToDelete);
+            await supabase.from("news_images").delete().eq("news_id", id);
+          }
+
+          // Keep existing images that weren't removed
+          if (existingImages?.length) {
+            console.log(
+              "📋 [updateNews] Processing existing images:",
+              existingImages
+            );
+
+            for (let index = 0; index < existingImages.length; index++) {
+              const imagePath = existingImages[index];
+
+              // Check if image exists in storage using download method
+              const { data: fileData, error: fileError } =
+                await supabase.storage.from("news-images").download(imagePath);
+
+              const { data: publicUrlData } = supabase.storage
+                .from("news-images")
+                .getPublicUrl(imagePath);
+
+              console.log(
+                `📋 [updateNews] Existing image ${
+                  index + 1
+                }: path=${imagePath}, url=${publicUrlData.publicUrl}, exists=${
+                  !fileError && fileData
+                }`
+              );
+
+              if (!fileError && fileData) {
+                imageUrls.push(publicUrlData.publicUrl);
+              } else {
+                console.warn(
+                  `⚠️ [updateNews] Image not found in storage: ${imagePath}`
+                );
+              }
+            }
+
+            // Re-insert existing images
+            await Promise.all(
+              existingImages.map(async (imagePath, index) => {
+                await supabase.from("news_images").insert({
+                  news_id: id,
+                  path: imagePath,
+                  sort_order: index,
+                });
+              })
+            );
+          }
+
+          // Upload new images
+          if (images?.length) {
+            const startIndex = existingImages?.length || 0;
+            await Promise.all(
+              images.map(async (file, index) => {
+                const ext = "webp";
+                const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+                const path = `${ud.user.id}/${name}`;
+                const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+                  .rotate()
+                  .resize({ width: 1080, height: 1350, fit: "cover" })
+                  .webp({ quality: 80 })
+                  .toBuffer();
+                await supabase.storage.from("news-images").upload(path, buf, {
+                  contentType: "image/webp",
+                });
+                await supabase.from("news_images").insert({
+                  news_id: id,
+                  path,
+                  sort_order: startIndex + index,
+                });
+
+                // Get public URL for Facebook
+                const { data: publicUrlData } = supabase.storage
+                  .from("news-images")
+                  .getPublicUrl(path);
+                imageUrls.push(publicUrlData.publicUrl);
+              })
+            );
+          }
+
+          console.log(
+            "🔄 [updateNews] Images updated, will recreate Facebook post"
+          );
+        } else {
+          // No new images and no existing images to keep - get current images
+          const { data: currentImages } = await supabase
+            .from("news_images")
+            .select("path")
+            .eq("news_id", id)
+            .order("sort_order");
+
+          if (currentImages && currentImages.length > 0) {
+            currentImages.forEach((img) => {
+              const { data: publicUrlData } = supabase.storage
+                .from("news-images")
+                .getPublicUrl(img.path);
+              imageUrls.push(publicUrlData.publicUrl);
+            });
+          }
+
+          console.log(
+            "🔄 [updateNews] No image changes, will only update text if needed"
+          );
+        }
+
+        const fbMessage =
+          sourceLang === "da"
+            ? `${title}\n\n${content}`
+            : `${title_translated}\n\n${content_translated}`;
+
+        // Always send imageUrls array for proper comparison
+        console.log("🔍 [updateNews] Image URLs for Facebook:", imageUrls);
+        const updatedPost = await updateFacebookPost({
+          postId,
+          message: fbMessage,
+          imageUrls: imageUrls,
         });
-        await supabase.from("news_images").insert({
-          news_id: id,
-          path,
-          sort_order: index,
-        });
-      })
-    );
+
+        // Update the news record with new Facebook link if needed
+        if (
+          updatedPost?.link &&
+          updatedPost.link !== existingNews.linkFacebook
+        ) {
+          await supabase
+            .from("news")
+            .update({ linkFacebook: updatedPost.link })
+            .eq("id", id);
+        }
+      }
+    } catch (fbError) {
+      console.error("Facebook update failed:", fbError);
+      // Don't throw error - allow news update to succeed even if Facebook update fails
+    }
+  } else if (images?.length || existingImages?.length) {
+    // Handle image uploads only if there's no Facebook post
+    // Get current images from database
+    const { data: currentImages } = await supabase
+      .from("news_images")
+      .select("path")
+      .eq("news_id", id);
+
+    // Delete all current images first
+    if (currentImages && currentImages.length > 0) {
+      const filesToDelete = currentImages.map((img) => img.path);
+      await supabase.storage.from("news-images").remove(filesToDelete);
+      await supabase.from("news_images").delete().eq("news_id", id);
+    }
+
+    // Re-insert existing images that should be kept
+    if (existingImages?.length) {
+      await Promise.all(
+        existingImages.map(async (imagePath, index) => {
+          await supabase.from("news_images").insert({
+            news_id: id,
+            path: imagePath,
+            sort_order: index,
+          });
+        })
+      );
+    }
+
+    // Upload new images
+    if (images?.length) {
+      const startIndex = existingImages?.length || 0;
+      await Promise.all(
+        images.map(async (file, index) => {
+          const ext = "webp";
+          const name = `${Math.random().toString(36).slice(2)}.${ext}`;
+          const path = `${ud.user.id}/${name}`;
+          const buf = await sharp(Buffer.from(await file.arrayBuffer()))
+            .rotate()
+            .resize({ width: 1024, height: 768, fit: "cover" })
+            .webp({ quality: 65 })
+            .toBuffer();
+          await supabase.storage.from("news-images").upload(path, buf, {
+            contentType: "image/webp",
+          });
+          await supabase.from("news_images").insert({
+            news_id: id,
+            path,
+            sort_order: startIndex + index,
+          });
+        })
+      );
+    }
   }
 }
 
@@ -1035,7 +1251,7 @@ export async function getNewsById(newsId: number) {
     .single();
   if (error) throw new Error(error.message);
 
-  // Transform data to include image URLs
+  // Transform data to include image URLs and paths
   const images =
     (data.news_images as NewsImage[] | undefined)
       ?.sort((a, b) => a.sort_order - b.sort_order)
@@ -1043,7 +1259,10 @@ export async function getNewsById(newsId: number) {
         const { data: publicUrlData } = supabase.storage
           .from("news-images")
           .getPublicUrl(img.path);
-        return publicUrlData.publicUrl;
+        return {
+          url: publicUrlData.publicUrl,
+          path: img.path,
+        };
       }) || [];
 
   return {
@@ -1055,25 +1274,47 @@ export async function getNewsById(newsId: number) {
 export async function deleteNews(newsId: number): Promise<void> {
   const supabase = await createServerClientInstance();
 
-  // Get news data before deletion to check for Facebook post
+  // Get news data before deletion to check for Facebook and Instagram posts
   const { data: newsData } = await supabase
     .from("news")
-    .select("linkFacebook")
+    .select("linkFacebook, linkInstagram")
     .eq("id", newsId)
     .single();
 
   // Delete Facebook post if it exists
   if (newsData?.linkFacebook) {
     try {
+      console.log(
+        "🔍 [deleteNews] Found Facebook link:",
+        newsData.linkFacebook
+      );
       const postId = newsData.linkFacebook.split("/").pop();
       if (postId) {
-        const { deleteFacebookPost } = await import("./some");
+        console.log(
+          "🗑️ [deleteNews] Attempting to delete Facebook post:",
+          postId
+        );
         await deleteFacebookPost(postId);
+      } else {
+        console.log("⚠️ [deleteNews] Could not extract Facebook post ID");
       }
     } catch (error) {
       console.error("Failed to delete Facebook post:", error);
       // Continue with news deletion even if Facebook deletion fails
     }
+  }
+
+  // Delete Instagram post if it exists
+  if (newsData?.linkInstagram) {
+    console.log(
+      "⚠️ [deleteNews] Instagram post found but cannot be deleted automatically via API"
+    );
+    console.log("🔍 [deleteNews] Instagram link:", newsData.linkInstagram);
+    console.log(
+      "ℹ️ [deleteNews] Please manually delete the Instagram post if needed"
+    );
+    // Note: Instagram API does not support programmatic deletion of posts
+    // The post will need to be manually deleted on Instagram
   }
 
   // 1. Hent alle billeder tilknyttet nyheden

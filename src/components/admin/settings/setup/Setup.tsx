@@ -57,7 +57,7 @@ const Setup = () => {
   return (
     <div className="">
       {isEditingPackage ? (
-        <div className=" ">
+        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7 ">
           <SetupPackagesEdit
             packageData={selectedPackage}
             onSave={handleSave}
@@ -65,11 +65,11 @@ const Setup = () => {
           />
         </div>
       ) : isCreatingJob ? (
-        <div className="">
+        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
           <SetupJobsCreate onSave={handleSave} onBack={handleBackToMain} />
         </div>
       ) : isViewingJobDetails ? (
-        <div className="">
+        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
           <SetupJobsDetails
             jobId={selectedJob?.id}
             onBack={handleBackToMain}

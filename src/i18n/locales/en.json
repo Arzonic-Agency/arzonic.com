@@ -1,4 +1,6 @@
 {
+  "login": "Login",
+  "logging_in": "Logging in...",
   "edit": "Edit",
   "save": "Save",
   "update": "Update",
@@ -79,7 +81,7 @@
   "delete_case_warning": "This action cannot be undone.",
   "delete_news_confirmation": "Delete News",
   "delete_news_prompt": "Are you sure you want to delete this news?",
-  "delete_news_warning": "This action cannot be undone.",
+  "delete_news_warning": "Instagram post must be deleted manually.",
   "delete_request_confirmation": "Delete Requests",
   "delete_request_prompt": "Are you sure you want to delete the this customer request?",
   "delete_request_prompt_selected": "Are you sure you want to delete the selected requests?",

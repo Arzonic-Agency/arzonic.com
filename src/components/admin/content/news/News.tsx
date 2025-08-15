@@ -105,7 +105,7 @@ const News = () => {
         <div className="toast bottom-20 md:bottom-0 toast-end">
           <div className="alert alert-success text-neutral-content">
             <span className="text-base md:text-lg">
-              {showCreateNews ? "Nyhed oprettet" : "Nyhed opdateret"}
+              {showCreateNews ? t("news_created") : t("news_updated")}
             </span>
           </div>
         </div>

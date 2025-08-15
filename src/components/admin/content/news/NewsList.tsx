@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaPen, FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
+import { FaInfoCircle } from "react-icons/fa";
 
 interface NewsListProps {
   view: "cards" | "list";
@@ -21,6 +22,7 @@ interface NewsItem {
   sharedFacebook?: boolean;
   sharedInstagram?: boolean;
   linkFacebook?: string;
+  linkInstagram?: string;
 }
 
 const FALLBACK_IMAGE = "/demo.webp";
@@ -134,7 +136,7 @@ const NewsList = ({
                               className="carousel-item relative w-full h-full"
                             >
                               <Image
-                                src={image}
+                                src={image || "/demo.png"}
                                 alt={`${item.title} - billede ${index + 1}`}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -220,11 +222,57 @@ const NewsList = ({
                             </span>
                           </a>
                         )}
-                        {item.sharedInstagram && (
-                          <FaInstagram
-                            size={20}
-                            className="text-purple-600 drop-shadow"
-                          />
+                        {item.linkInstagram && (
+                          <a
+                            href={
+                              item.linkInstagram.startsWith(
+                                "Instagram post ID:"
+                              )
+                                ? `https://www.instagram.com/p/${item.linkInstagram.replace(
+                                    "Instagram post ID: ",
+                                    ""
+                                  )}/`
+                                : item.linkInstagram.startsWith(
+                                    "Instagram Media ID:"
+                                  )
+                                ? "#" // Can't convert media ID to URL, show disabled link
+                                : item.linkInstagram
+                            }
+                            target={
+                              item.linkInstagram.startsWith(
+                                "Instagram Media ID:"
+                              )
+                                ? "_self"
+                                : "_blank"
+                            }
+                            rel="noopener noreferrer"
+                            className={`btn md:btn-sm ${
+                              item.linkInstagram.startsWith(
+                                "Instagram Media ID:"
+                              )
+                                ? "btn-disabled opacity-50"
+                                : ""
+                            }`}
+                            title={
+                              item.linkInstagram.startsWith(
+                                "Instagram Media ID:"
+                              )
+                                ? "Instagram opslag kunne ikke linkes direkte"
+                                : "Se Instagram opslag"
+                            }
+                            onClick={
+                              item.linkInstagram.startsWith(
+                                "Instagram Media ID:"
+                              )
+                                ? (e) => e.preventDefault()
+                                : undefined
+                            }
+                          >
+                            <FaInstagram />
+                            <span className=" font-normal text-base-content ">
+                              Instagram
+                            </span>
+                          </a>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -316,10 +364,15 @@ const NewsList = ({
             <div className="py-4">
               <p className="mb-2">{t("delete_news_prompt")}</p>
               {deletingNewsId &&
-                newsItems.find((item) => item.id === deletingNewsId)
-                  ?.sharedFacebook && (
+                (newsItems.find((item) => item.id === deletingNewsId)
+                  ?.linkFacebook ||
+                  newsItems.find((item) => item.id === deletingNewsId)
+                    ?.linkInstagram) && (
                   <div className="text-warning">
-                    <span className="text-sm">{t("delete_news_warning")}</span>
+                    <div className="flex items-center gap-2 text-sm">
+                      <FaInfoCircle size={17} />
+                      {t("delete_news_warning")}
+                    </div>
                   </div>
                 )}
             </div>

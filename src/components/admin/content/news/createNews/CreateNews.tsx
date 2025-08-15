@@ -23,7 +23,7 @@ const CreateNews = ({
   const [errors, setErrors] = useState<{
     desc?: string;
     general?: string;
-    facebook?: string;
+    instagram?: string;
   }>({});
   const [loading, setLoading] = useState(false);
 
@@ -61,16 +61,34 @@ const CreateNews = ({
       return;
     }
 
+    // Validate Instagram sharing
+    if (postToInstagram && images.length === 0) {
+      setErrors({
+        instagram:
+          "Instagram kræver mindst ét billede. Tilføj et billede eller slå Instagram deling fra.",
+      });
+      return;
+    }
+
     setLoading(true);
     setErrors({});
 
     try {
-      await createNews({
+      const result = await createNews({
         title,
         content: desc,
         images,
         sharedFacebook: postToFacebook,
+        sharedInstagram: postToInstagram,
       });
+
+      // Log posting results if available
+      if (result?.linkFacebook) {
+        console.log("News posted to Facebook:", result.linkFacebook);
+      }
+      if (result?.linkInstagram) {
+        console.log("News posted to Instagram:", result.linkInstagram);
+      }
 
       // Clear form
       setTitle("");
@@ -92,15 +110,7 @@ const CreateNews = ({
           ? error
           : "Ukendt fejl";
 
-      if (
-        msg.includes("Facebook") ||
-        msg.includes("admin/editor") ||
-        msg.includes("siden")
-      ) {
-        setErrors({ facebook: msg });
-      } else {
-        setErrors({ general: msg });
-      }
+      setErrors({ general: msg });
     } finally {
       setLoading(false);
     }
@@ -230,29 +240,26 @@ const CreateNews = ({
           </label>
         </fieldset>
 
-        <fieldset className="flex items-center gap-3 opacity-50">
+        <fieldset className="flex items-center gap-3">
           <input
             type="checkbox"
             name="postToInstagram"
             className="toggle toggle-primary"
             checked={postToInstagram}
             onChange={(e) => setPostToInstagram(e.target.checked)}
-            disabled
           />
           <label htmlFor="postToInstagram" className="label-text">
             {t("share_instagram")}
+            {postToInstagram && images.length === 0 && (
+              <span className="ml-2 text-xs text-primary">
+                (kræver billede)
+              </span>
+            )}
           </label>
         </fieldset>
 
-        {errors.facebook && (
-          <div className="text-error">
-            {/* <span className="text-sm">{errors.facebook}</span> */}
-            <div className="text-sm mt-1">
-              Du er ikke tilknyttet den korrekte Facebook-side, eller også
-              mangler du de nødvendige rettigheder. Prøv at tilknytte din konto
-              igen.
-            </div>
-          </div>
+        {errors.instagram && (
+          <span className="text-sm text-red-500">{errors.instagram}</span>
         )}
 
         {errors.general && (
