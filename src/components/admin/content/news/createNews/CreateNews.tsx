@@ -14,7 +14,6 @@ const CreateNews = ({
   fetchNews?: () => void;
 }) => {
   const { t } = useTranslation();
-  const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -27,24 +26,21 @@ const CreateNews = ({
   }>({});
   const [loading, setLoading] = useState(false);
 
-  // Cleanup object URLs when component unmounts or images change
+  // Create object URLs for images (client-side only)
   useEffect(() => {
-    return () => {
+    if (typeof window !== "undefined") {
+      // Clean up old URLs first
       imageUrls.forEach((url) => {
         if (url.startsWith("blob:")) {
           URL.revokeObjectURL(url);
         }
       });
-    };
-  }, [imageUrls]);
 
-  // Create object URLs for images (client-side only)
-  useEffect(() => {
-    if (typeof window !== "undefined") {
+      // Create new URLs
       const newUrls = images.map((file) => URL.createObjectURL(file));
       setImageUrls(newUrls);
 
-      // Cleanup previous URLs
+      // Cleanup function for when component unmounts or dependencies change
       return () => {
         newUrls.forEach((url) => URL.revokeObjectURL(url));
       };
@@ -75,7 +71,6 @@ const CreateNews = ({
 
     try {
       const result = await createNews({
-        title,
         content: desc,
         images,
         sharedFacebook: postToFacebook,
@@ -91,7 +86,6 @@ const CreateNews = ({
       }
 
       // Clear form
-      setTitle("");
       setDesc("");
       setImages([]);
       setPostToFacebook(true);
@@ -135,20 +129,8 @@ const CreateNews = ({
         onSubmit={handleCreateNews}
         className="flex flex-col items-start gap-5 w-full"
       >
-        <div className="flex flex-col lg:flex-row gap-5 lg:gap-14 w-full">
+        <div className="flex flex-col lg:flex-row gap-7 lg:gap-14 w-full">
           <div className="flex flex-col gap-5 w-full">
-            <fieldset className="flex flex-col gap-2 fieldset w-full md:max-w-sm">
-              <legend className="fieldset-legend">{t("title")}</legend>
-              <input
-                name="title"
-                type="text"
-                className="input input-md w-full"
-                placeholder={t("write_title")}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </fieldset>
-
             <fieldset className="flex flex-col gap-2 fieldset w-full relative md:max-w-sm">
               <legend className="fieldset-legend">{t("desc")}</legend>
               <textarea
@@ -163,7 +145,7 @@ const CreateNews = ({
                 rows={8}
                 style={{ resize: "none" }}
               />
-              <div className="text-right text-xs font-medium text-zinc-500">
+              <div className="text-right text-xs font-medium text-zinc-500 absolute right-1 -bottom-5">
                 {desc.length} / 250
               </div>
               {errors.desc && (
@@ -204,16 +186,16 @@ const CreateNews = ({
                           alt={`Billede ${index + 1}`}
                           width={192}
                           height={128}
-                          className="rounded-lg object-cover w-48 h-48"
+                          className="rounded-lg object-cover w-48 h-56"
                         />
                         <button
                           type="button"
-                          className="absolute top-1 right-1 btn btn-xs btn-soft hidden group-hover:block"
-                          onClick={() =>
+                          className="absolute top-1 right-1 btn md:btn-xs btn-sm btn-soft md:hidden md:group-hover:block text-lg"
+                          onClick={() => {
                             setImages((prev) =>
                               prev.filter((_, i) => i !== index)
-                            )
-                          }
+                            );
+                          }}
                           title="Fjern billede"
                         >
                           <FaXmark />
@@ -225,46 +207,47 @@ const CreateNews = ({
               </fieldset>
             )}
           </div>
+          <div className="flex flex-col gap-5">
+            <fieldset className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                name="postToFacebook"
+                className="toggle toggle-primary"
+                checked={postToFacebook}
+                onChange={(e) => setPostToFacebook(e.target.checked)}
+              />
+              <label htmlFor="postToFacebook" className="label-text">
+                {t("share_fb")}
+              </label>
+            </fieldset>
+
+            <fieldset className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                name="postToInstagram"
+                className="toggle toggle-primary"
+                checked={postToInstagram}
+                onChange={(e) => setPostToInstagram(e.target.checked)}
+              />
+              <label htmlFor="postToInstagram" className="label-text">
+                {t("share_instagram")}
+                {postToInstagram && images.length === 0 && (
+                  <span className="ml-2 text-xs text-primary">
+                    (kræver billede)
+                  </span>
+                )}
+              </label>
+            </fieldset>
+          </div>
+
+          {errors.instagram && (
+            <span className="text-sm text-red-500">{errors.instagram}</span>
+          )}
+
+          {errors.general && (
+            <span className="text-sm text-red-500">{errors.general}</span>
+          )}
         </div>
-
-        <fieldset className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            name="postToFacebook"
-            className="toggle toggle-primary"
-            checked={postToFacebook}
-            onChange={(e) => setPostToFacebook(e.target.checked)}
-          />
-          <label htmlFor="postToFacebook" className="label-text">
-            {t("share_fb")}
-          </label>
-        </fieldset>
-
-        <fieldset className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            name="postToInstagram"
-            className="toggle toggle-primary"
-            checked={postToInstagram}
-            onChange={(e) => setPostToInstagram(e.target.checked)}
-          />
-          <label htmlFor="postToInstagram" className="label-text">
-            {t("share_instagram")}
-            {postToInstagram && images.length === 0 && (
-              <span className="ml-2 text-xs text-primary">
-                (kræver billede)
-              </span>
-            )}
-          </label>
-        </fieldset>
-
-        {errors.instagram && (
-          <span className="text-sm text-red-500">{errors.instagram}</span>
-        )}
-
-        {errors.general && (
-          <span className="text-sm text-red-500">{errors.general}</span>
-        )}
 
         <button
           type="submit"

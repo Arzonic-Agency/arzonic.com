@@ -4,8 +4,6 @@ import { getAllNews } from "@/lib/server/actions";
 
 interface NewsRow {
   id: number;
-  title: string;
-  title_translated: string | null;
   content: string;
   content_translated: string | null;
   source_lang: string;
@@ -16,7 +14,6 @@ interface NewsRow {
 
 interface NewsResponse {
   id: number;
-  title: string;
   content: string;
   creator_id: string;
   created_at: string;
@@ -33,10 +30,6 @@ export async function GET(request: Request) {
     const raw = news as NewsRow[];
 
     const transformed: NewsResponse[] = raw.map((n) => {
-      // choose the right title
-      const title =
-        n.source_lang === uiLang ? n.title : n.title_translated ?? n.title;
-
       // choose the right content
       const content =
         n.source_lang === uiLang
@@ -46,7 +39,6 @@ export async function GET(request: Request) {
       // explicitly return only the props we need
       return {
         id: n.id,
-        title,
         content,
         creator_id: n.creator_id,
         created_at: n.created_at,

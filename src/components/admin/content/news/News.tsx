@@ -6,7 +6,6 @@ import NewsList from "./NewsList";
 import NewsPagination from "./NewsPagination";
 import NewsListChange from "./NewsListChange";
 import CreateNews from "./createNews/CreateNews";
-import UpdateNews from "./updateNews/UpdateNews";
 import { useTranslation } from "react-i18next";
 
 // Define a type for news items
@@ -22,8 +21,6 @@ const News = () => {
   const { t } = useTranslation();
   const [view, setView] = useState<"cards" | "list">("cards");
   const [showCreateNews, setShowCreateNews] = useState(false);
-  const [showUpdateNews, setShowUpdateNews] = useState(false);
-  const [selectedNewsId, setSelectedNewsId] = useState<number | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
@@ -43,12 +40,6 @@ const News = () => {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleNewsUpdated = () => {
-    setShowUpdateNews(false);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
-
   return (
     <div className="flex flex-col md:items-start gap-7">
       {showCreateNews ? (
@@ -61,17 +52,6 @@ const News = () => {
             onNewsCreated={handleNewsCreated}
             setShowCreateNews={setShowCreateNews}
             fetchNews={fetchNews}
-          />
-        </div>
-      ) : showUpdateNews && selectedNewsId !== null ? (
-        <div className="flex flex-col items-start gap-5">
-          <button onClick={() => setShowUpdateNews(false)} className="btn">
-            <FaAngleLeft />
-            {t("back")}
-          </button>
-          <UpdateNews
-            newsId={selectedNewsId}
-            onNewsUpdated={handleNewsUpdated}
           />
         </div>
       ) : (
@@ -90,10 +70,6 @@ const News = () => {
             newsItems={news}
             page={page}
             setTotal={setTotal}
-            onEditNews={(newsId: number) => {
-              setSelectedNewsId(newsId);
-              setShowUpdateNews(true);
-            }}
             setNews={setNews}
           />
           <div className="flex w-full justify-center">
@@ -105,7 +81,7 @@ const News = () => {
         <div className="toast bottom-20 md:bottom-0 toast-end">
           <div className="alert alert-success text-neutral-content">
             <span className="text-base md:text-lg">
-              {showCreateNews ? t("news_created") : t("news_updated")}
+              {t("news_created")}
             </span>
           </div>
         </div>

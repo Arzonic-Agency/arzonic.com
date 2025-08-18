@@ -11,7 +11,6 @@ import {
   postToFacebookPage,
   deleteFacebookPost,
   postToInstagram,
-  updateFacebookPost,
 } from "./some";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -581,13 +580,11 @@ export async function deleteCase(caseId: number): Promise<void> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function createNews({
-  title,
   content,
   images,
   sharedFacebook = false,
   sharedInstagram = false,
 }: {
-  title: string;
   content: string;
   images?: File[];
   sharedFacebook?: boolean;
@@ -612,59 +609,6 @@ export async function createNews({
     const { data: ud, error: ue } = await supabase.auth.getUser();
     if (ue || !ud?.user) {
       throw new Error("Not authenticated");
-    }
-
-    // Skip title translation if empty to save API calls
-    let title_translated = title;
-    let titleSourceLang = "da"; // Default assumption
-
-    if (title && title.trim()) {
-      try {
-        const titleParams = new URLSearchParams({
-          auth_key: apiKey,
-          text: title,
-          target_lang: "EN",
-        });
-        const titleRes = await fetch(endpoint, {
-          method: "POST",
-          body: titleParams,
-        });
-        if (!titleRes.ok) {
-          const errorText = await titleRes.text();
-          throw new Error(`Translation error ${titleRes.status}: ${errorText}`);
-        }
-        const titleResult = await titleRes.json();
-        const titleFirst = titleResult.translations?.[0];
-
-        if (titleFirst) {
-          titleSourceLang =
-            titleFirst.detected_source_language?.toLowerCase() || "da";
-          title_translated = titleFirst.text;
-
-          if (titleSourceLang === "en") {
-            const titleParams2 = new URLSearchParams({
-              auth_key: apiKey,
-              text: title,
-              target_lang: "DA",
-            });
-            const titleR2 = await fetch(endpoint, {
-              method: "POST",
-              body: titleParams2,
-            });
-            if (titleR2.ok) {
-              const titleResult2 = await titleR2.json();
-              const titleSecond = titleResult2.translations?.[0];
-              if (titleSecond) {
-                title_translated = titleSecond.text;
-              }
-            }
-          }
-        }
-      } catch (titleError) {
-        console.error("Title translation error:", titleError);
-        // Continue with original title if translation fails
-        title_translated = title;
-      }
     }
 
     // Translate content
@@ -716,8 +660,6 @@ export async function createNews({
       .from("news")
       .insert([
         {
-          title: title || "",
-          title_translated,
           content,
           content_translated,
           source_lang: sourceLang,
@@ -807,7 +749,7 @@ export async function createNews({
     if (sharedFacebook) {
       try {
         console.log("🔄 [SERVER] Attempting Facebook post...");
-        const fbMessage = title ? `${title}\n\n${content}` : content;
+        const fbMessage = content;
         fbResult = await postToFacebookPage({
           message: fbMessage,
           imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
@@ -844,7 +786,7 @@ export async function createNews({
 
       try {
         console.log("🔄 [SERVER] Attempting Instagram post...");
-        const igCaption = title ? `${title}\n\n${content}` : content;
+        const igCaption = content;
         igResult = await postToInstagram({
           caption: igCaption,
           imageUrl: imageUrls[0], // Instagram only supports single image for now
@@ -889,317 +831,6 @@ export async function createNews({
       throw new Error(error.message);
     } else {
       throw new Error("An unexpected error occurred while creating news");
-    }
-  }
-}
-
-export async function updateNews(
-  id: number,
-  title: string,
-  content: string,
-  images?: File[],
-  existingImages?: string[]
-): Promise<void> {
-  const supabase = await createServerClientInstance();
-  const apiKey = process.env.DEEPL_API_KEY!;
-  const endpoint = "https://api-free.deepl.com/v2/translate";
-
-  // Translate title
-  const titleParams = new URLSearchParams({
-    auth_key: apiKey,
-    text: title,
-    target_lang: "EN",
-  });
-  const titleRes = await fetch(endpoint, { method: "POST", body: titleParams });
-  if (!titleRes.ok)
-    throw new Error(`DeepL error ${titleRes.status}: ${await titleRes.text()}`);
-  const {
-    translations: [titleFirst],
-  } = (await titleRes.json()) as {
-    translations: { text: string; detected_source_language: string }[];
-  };
-  const titleSourceLang = titleFirst.detected_source_language.toLowerCase();
-
-  let title_translated = titleFirst.text;
-  if (titleSourceLang === "en") {
-    const titleParams2 = new URLSearchParams({
-      auth_key: apiKey,
-      text: title,
-      target_lang: "DA",
-    });
-    const titleR2 = await fetch(endpoint, {
-      method: "POST",
-      body: titleParams2,
-    });
-    if (!titleR2.ok)
-      throw new Error(`DeepL error ${titleR2.status}: ${await titleR2.text()}`);
-    const {
-      translations: [titleSecond],
-    } = (await titleR2.json()) as {
-      translations: { text: string }[];
-    };
-    title_translated = titleSecond.text;
-  }
-
-  // Translate content
-  const params1 = new URLSearchParams({
-    auth_key: apiKey,
-    text: content,
-    target_lang: "EN",
-  });
-  const r1 = await fetch(endpoint, { method: "POST", body: params1 });
-  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-  const {
-    translations: [first],
-  } = (await r1.json()) as {
-    translations: { text: string; detected_source_language: string }[];
-  };
-  const sourceLang = first.detected_source_language.toLowerCase();
-
-  let content_translated = first.text;
-  if (sourceLang === "en") {
-    const params2 = new URLSearchParams({
-      auth_key: apiKey,
-      text: content,
-      target_lang: "DA",
-    });
-    const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-    const {
-      translations: [second],
-    } = (await r2.json()) as {
-      translations: { text: string }[];
-    };
-    content_translated = second.text;
-  }
-
-  const { data: ud, error: ue } = await supabase.auth.getUser();
-  if (ue || !ud?.user) throw new Error("Not authenticated");
-
-  // Get existing news data to check for Facebook post
-  const { data: existingNews } = await supabase
-    .from("news")
-    .select("linkFacebook")
-    .eq("id", id)
-    .single();
-
-  const { error: updateError } = await supabase
-    .from("news")
-    .update({
-      title,
-      title_translated,
-      content,
-      content_translated,
-      source_lang: sourceLang,
-      creator_id: ud.user.id,
-    })
-    .eq("id", id);
-  if (updateError) throw updateError;
-
-  // Handle Facebook update if post exists
-  if (existingNews?.linkFacebook) {
-    try {
-      const postId = existingNews.linkFacebook.split("/").pop();
-      if (postId) {
-        const imageUrls: string[] = [];
-
-        // Handle image updates
-        if (images?.length || existingImages?.length) {
-          // Get current images from database
-          const { data: currentImages } = await supabase
-            .from("news_images")
-            .select("path")
-            .eq("news_id", id);
-
-          // Delete all current images first
-          if (currentImages && currentImages.length > 0) {
-            const filesToDelete = currentImages.map((img) => img.path);
-            await supabase.storage.from("news-images").remove(filesToDelete);
-            await supabase.from("news_images").delete().eq("news_id", id);
-          }
-
-          // Keep existing images that weren't removed
-          if (existingImages?.length) {
-            console.log(
-              "📋 [updateNews] Processing existing images:",
-              existingImages
-            );
-
-            for (let index = 0; index < existingImages.length; index++) {
-              const imagePath = existingImages[index];
-
-              // Check if image exists in storage using download method
-              const { data: fileData, error: fileError } =
-                await supabase.storage.from("news-images").download(imagePath);
-
-              const { data: publicUrlData } = supabase.storage
-                .from("news-images")
-                .getPublicUrl(imagePath);
-
-              console.log(
-                `📋 [updateNews] Existing image ${
-                  index + 1
-                }: path=${imagePath}, url=${publicUrlData.publicUrl}, exists=${
-                  !fileError && fileData
-                }`
-              );
-
-              if (!fileError && fileData) {
-                imageUrls.push(publicUrlData.publicUrl);
-              } else {
-                console.warn(
-                  `⚠️ [updateNews] Image not found in storage: ${imagePath}`
-                );
-              }
-            }
-
-            // Re-insert existing images
-            await Promise.all(
-              existingImages.map(async (imagePath, index) => {
-                await supabase.from("news_images").insert({
-                  news_id: id,
-                  path: imagePath,
-                  sort_order: index,
-                });
-              })
-            );
-          }
-
-          // Upload new images
-          if (images?.length) {
-            const startIndex = existingImages?.length || 0;
-            await Promise.all(
-              images.map(async (file, index) => {
-                const ext = "webp";
-                const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-                const path = `${ud.user.id}/${name}`;
-                const buf = await sharp(Buffer.from(await file.arrayBuffer()))
-                  .rotate()
-                  .resize({ width: 1080, height: 1350, fit: "cover" })
-                  .webp({ quality: 80 })
-                  .toBuffer();
-                await supabase.storage.from("news-images").upload(path, buf, {
-                  contentType: "image/webp",
-                });
-                await supabase.from("news_images").insert({
-                  news_id: id,
-                  path,
-                  sort_order: startIndex + index,
-                });
-
-                // Get public URL for Facebook
-                const { data: publicUrlData } = supabase.storage
-                  .from("news-images")
-                  .getPublicUrl(path);
-                imageUrls.push(publicUrlData.publicUrl);
-              })
-            );
-          }
-
-          console.log(
-            "🔄 [updateNews] Images updated, will recreate Facebook post"
-          );
-        } else {
-          // No new images and no existing images to keep - get current images
-          const { data: currentImages } = await supabase
-            .from("news_images")
-            .select("path")
-            .eq("news_id", id)
-            .order("sort_order");
-
-          if (currentImages && currentImages.length > 0) {
-            currentImages.forEach((img) => {
-              const { data: publicUrlData } = supabase.storage
-                .from("news-images")
-                .getPublicUrl(img.path);
-              imageUrls.push(publicUrlData.publicUrl);
-            });
-          }
-
-          console.log(
-            "🔄 [updateNews] No image changes, will only update text if needed"
-          );
-        }
-
-        const fbMessage =
-          sourceLang === "da"
-            ? `${title}\n\n${content}`
-            : `${title_translated}\n\n${content_translated}`;
-
-        // Always send imageUrls array for proper comparison
-        console.log("🔍 [updateNews] Image URLs for Facebook:", imageUrls);
-        const updatedPost = await updateFacebookPost({
-          postId,
-          message: fbMessage,
-          imageUrls: imageUrls,
-        });
-
-        // Update the news record with new Facebook link if needed
-        if (
-          updatedPost?.link &&
-          updatedPost.link !== existingNews.linkFacebook
-        ) {
-          await supabase
-            .from("news")
-            .update({ linkFacebook: updatedPost.link })
-            .eq("id", id);
-        }
-      }
-    } catch (fbError) {
-      console.error("Facebook update failed:", fbError);
-      // Don't throw error - allow news update to succeed even if Facebook update fails
-    }
-  } else if (images?.length || existingImages?.length) {
-    // Handle image uploads only if there's no Facebook post
-    // Get current images from database
-    const { data: currentImages } = await supabase
-      .from("news_images")
-      .select("path")
-      .eq("news_id", id);
-
-    // Delete all current images first
-    if (currentImages && currentImages.length > 0) {
-      const filesToDelete = currentImages.map((img) => img.path);
-      await supabase.storage.from("news-images").remove(filesToDelete);
-      await supabase.from("news_images").delete().eq("news_id", id);
-    }
-
-    // Re-insert existing images that should be kept
-    if (existingImages?.length) {
-      await Promise.all(
-        existingImages.map(async (imagePath, index) => {
-          await supabase.from("news_images").insert({
-            news_id: id,
-            path: imagePath,
-            sort_order: index,
-          });
-        })
-      );
-    }
-
-    // Upload new images
-    if (images?.length) {
-      const startIndex = existingImages?.length || 0;
-      await Promise.all(
-        images.map(async (file, index) => {
-          const ext = "webp";
-          const name = `${Math.random().toString(36).slice(2)}.${ext}`;
-          const path = `${ud.user.id}/${name}`;
-          const buf = await sharp(Buffer.from(await file.arrayBuffer()))
-            .rotate()
-            .resize({ width: 1024, height: 768, fit: "cover" })
-            .webp({ quality: 65 })
-            .toBuffer();
-          await supabase.storage.from("news-images").upload(path, buf, {
-            contentType: "image/webp",
-          });
-          await supabase.from("news_images").insert({
-            news_id: id,
-            path,
-            sort_order: startIndex + index,
-          });
-        })
-      );
     }
   }
 }

@@ -181,66 +181,6 @@ export async function deleteFacebookPost(
   return { success: true };
 }
 
-export async function updateFacebookPost({
-  postId,
-  message,
-  imageUrls = [],
-}: {
-  postId: string;
-  message: string;
-  imageUrls?: string[];
-}): Promise<{ link?: string } | null> {
-  try {
-    console.log("🔄 [SERVER] Updating Facebook post...");
-    const accessToken = await getPageAccessToken();
-
-    // Try to edit message first
-    try {
-      console.log("✏️ [SERVER] Attempting to edit message only...");
-
-      const body = new URLSearchParams({ message, access_token: accessToken });
-      const editRes = await fetch(
-        `https://graph.facebook.com/v21.0/${postId}`,
-        {
-          method: "POST",
-          body,
-        }
-      );
-
-      if (!editRes.ok) {
-        const t = await editRes.text();
-        throw new Error(`Failed to edit message: ${editRes.status} ${t}`);
-      }
-
-      // Get permalink to the updated post
-      const permalinkRes = await fetch(
-        `https://graph.facebook.com/v21.0/${postId}?fields=permalink_url&access_token=${accessToken}`
-      );
-
-      if (!permalinkRes.ok) {
-        const t = await permalinkRes.text();
-        throw new Error(
-          `Failed to fetch permalink: ${permalinkRes.status} ${t}`
-        );
-      }
-
-      const permalinkData = (await permalinkRes.json()) as {
-        permalink_url?: string;
-      };
-      console.log("✅ [SERVER] Facebook post message updated successfully!");
-      return { link: permalinkData.permalink_url };
-    } catch (error) {
-      console.log("⚠️ [SERVER] Message edit failed, recreating post:", error);
-      // Fallback: delete and recreate post
-      await deleteFacebookPost(postId);
-      return await postToFacebookPage({ message, imageUrls });
-    }
-  } catch (error) {
-    console.error("❌ [SERVER] Error updating Facebook post:", error);
-    throw error;
-  }
-}
-
 export async function postToInstagram({
   caption,
   imageUrl,
@@ -321,7 +261,7 @@ export async function postToInstagram({
         const permalinkRes = await fetch(
           `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
         );
-        
+
         if (permalinkRes.ok) {
           const permalinkData = await permalinkRes.json();
           permalink = permalinkData.permalink;
@@ -330,7 +270,10 @@ export async function postToInstagram({
           console.warn("⚠️ [SERVER] Could not fetch Instagram permalink");
         }
       } catch (permalinkError) {
-        console.warn("⚠️ [SERVER] Error fetching Instagram permalink:", permalinkError);
+        console.warn(
+          "⚠️ [SERVER] Error fetching Instagram permalink:",
+          permalinkError
+        );
       }
     }
 

@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import { FaPen, FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
+import { FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
 import { FaInfoCircle } from "react-icons/fa";
+import { openSocialLink } from "@/lib/server/socialLinks";
 
 interface NewsListProps {
   view: "cards" | "list";
   page: number;
   setTotal: (total: number) => void;
-  onEditNews: (newsId: number) => void;
   newsItems: NewsItem[];
   setNews: React.Dispatch<React.SetStateAction<NewsItem[]>>;
 }
 
 interface NewsItem {
   id: number;
-  title: string;
   content: string | null;
   images: string[];
   sharedFacebook?: boolean;
@@ -31,7 +30,6 @@ const NewsList = ({
   view,
   page,
   setTotal,
-  onEditNews,
   newsItems,
   setNews,
 }: NewsListProps) => {
@@ -65,11 +63,6 @@ const NewsList = ({
     if (!description || description.length <= maxLength)
       return description || "";
     return description.substring(0, maxLength) + "...";
-  };
-
-  const truncateTitle = (title: string, maxLength: number) => {
-    if (title.length <= maxLength) return title;
-    return title.substring(0, maxLength) + "...";
   };
 
   const handleDelete = async () => {
@@ -119,7 +112,7 @@ const NewsList = ({
                         <div className="relative w-full h-full">
                           <Image
                             src={item.images[0]}
-                            alt={item.title}
+                            alt="News image"
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
@@ -137,7 +130,7 @@ const NewsList = ({
                             >
                               <Image
                                 src={image || "/demo.png"}
-                                alt={`${item.title} - billede ${index + 1}`}
+                                alt={`News image ${index + 1}`}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
@@ -192,7 +185,7 @@ const NewsList = ({
                       <div className="relative w-full h-full">
                         <Image
                           src={FALLBACK_IMAGE}
-                          alt={item.title}
+                          alt="News image"
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover"
@@ -202,51 +195,50 @@ const NewsList = ({
                     )}
                   </figure>
                   <div className="card-body">
-                    <h2 className="card-title text-lg">{item.title}</h2>
+                    <p className="text-sm font-semibold">
+                      {truncateDescription(item.content, 60)}
+                    </p>
                     <p className="text-xs">
                       {truncateDescription(item.content, 100)}
                     </p>
                     <div className="card-actions justify-between items-center mt-2">
                       <div className="flex gap-2">
                         {item.linkFacebook && (
-                          <a
-                            href={item.linkFacebook}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn md:btn-sm"
+                          <button
+                            onClick={() =>
+                              openSocialLink(item.linkFacebook!, "facebook")
+                            }
+                            className="btn md:btn-sm text-lg"
                             title="Se Facebook opslag"
                           >
                             <FaFacebook />
-                            <span className=" font-normal text-base-content ">
+                            <span className=" font-normal text-base-content hidden md:block">
                               Facebook
                             </span>
-                          </a>
+                          </button>
                         )}
                         {item.linkInstagram && (
-                          <a
-                            href={
-                              item.linkInstagram.startsWith(
-                                "Instagram post ID:"
-                              )
-                                ? `https://www.instagram.com/p/${item.linkInstagram.replace(
-                                    "Instagram post ID: ",
-                                    ""
-                                  )}/`
-                                : item.linkInstagram.startsWith(
-                                    "Instagram Media ID:"
-                                  )
-                                ? "#" // Can't convert media ID to URL, show disabled link
-                                : item.linkInstagram
-                            }
-                            target={
-                              item.linkInstagram.startsWith(
-                                "Instagram Media ID:"
-                              )
-                                ? "_self"
-                                : "_blank"
-                            }
-                            rel="noopener noreferrer"
-                            className={`btn md:btn-sm ${
+                          <button
+                            onClick={() => {
+                              const instagramUrl =
+                                item.linkInstagram!.startsWith(
+                                  "Instagram post ID:"
+                                )
+                                  ? `https://www.instagram.com/p/${item.linkInstagram!.replace(
+                                      "Instagram post ID: ",
+                                      ""
+                                    )}/`
+                                  : item.linkInstagram!.startsWith(
+                                      "Instagram Media ID:"
+                                    )
+                                  ? "#" // Can't convert media ID to URL, show disabled
+                                  : item.linkInstagram!;
+
+                              if (instagramUrl !== "#") {
+                                openSocialLink(instagramUrl, "instagram");
+                              }
+                            }}
+                            className={`btn md:btn-sm text-lg ${
                               item.linkInstagram.startsWith(
                                 "Instagram Media ID:"
                               )
@@ -260,29 +252,18 @@ const NewsList = ({
                                 ? "Instagram opslag kunne ikke linkes direkte"
                                 : "Se Instagram opslag"
                             }
-                            onClick={
-                              item.linkInstagram.startsWith(
-                                "Instagram Media ID:"
-                              )
-                                ? (e) => e.preventDefault()
-                                : undefined
-                            }
+                            disabled={item.linkInstagram.startsWith(
+                              "Instagram Media ID:"
+                            )}
                           >
                             <FaInstagram />
-                            <span className=" font-normal text-base-content ">
+                            <span className="font-normal text-base-content hidden md:block">
                               Instagram
                             </span>
-                          </a>
+                          </button>
                         )}
                       </div>
                       <div className="flex gap-2">
-                        <button
-                          className="btn md:btn-sm"
-                          onClick={() => onEditNews(item.id)}
-                        >
-                          <FaPen />
-                          {t("edit")}
-                        </button>
                         <button
                           className="btn md:btn-sm"
                           onClick={() => {
@@ -291,7 +272,7 @@ const NewsList = ({
                           }}
                         >
                           <FaTrash />
-                          <span className="hidden md:block">{t("delete")}</span>
+                          <span className="">{t("delete")}</span>
                         </button>
                       </div>
                     </div>
@@ -313,27 +294,20 @@ const NewsList = ({
                                 ? item.images[0]
                                 : FALLBACK_IMAGE
                             }
-                            alt={item.title}
+                            alt="News image"
                             fill
                             className="object-cover"
                             loading="eager"
                           />
                         </div>
                         <h3 className="font-semibold text-xs hidden sm:block">
-                          {item.title}
+                          {truncateDescription(item.content, 40)}
                         </h3>
                         <h3 className="font-semibold text-xs block sm:hidden">
-                          {truncateTitle(item.title, 20)}
+                          {truncateDescription(item.content, 20)}
                         </h3>
                       </div>
                       <div className="flex gap-5 md:gap-2">
-                        <button
-                          className="btn btn-sm"
-                          onClick={() => onEditNews(item.id)}
-                        >
-                          <FaPen />
-                          <span className="md:flex hidden"> {t("edit")} </span>
-                        </button>
                         <button
                           className="btn btn-sm"
                           onClick={() => {
