@@ -2,14 +2,25 @@ name: Deploy Arzonic to VPS
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
 
     steps:
-      - name: 🔄 Pull latest code from GitHub (SSH)
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: 🧰 Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: 🔄 Pull latest code from GitHub
         run: |
           echo "⚠️ Pulling latest changes..."
           cd /home/arzonic/htdocs/arzonic.com
@@ -18,11 +29,13 @@ jobs:
 
       - name: 🧹 Clean previous Next.js build
         run: |
+          echo "🧹 Removing old .next and public/_next folders..."
           cd /home/arzonic/htdocs/arzonic.com
           rm -rf .next .next/cache public/_next || true
 
       - name: 📦 Install fresh dependencies
         run: |
+          echo "📦 Installing dependencies cleanly..."
           cd /home/arzonic/htdocs/arzonic.com
           npm ci
 
@@ -33,6 +46,7 @@ jobs:
 
       - name: 🔧 Build Next.js project
         run: |
+          echo "⚡ Building Next.js app..."
           cd /home/arzonic/htdocs/arzonic.com
           npm run build
           if [ ! -d ".next" ]; then
@@ -42,11 +56,20 @@ jobs:
 
       - name: 🚀 Restart PM2 process
         run: |
+          echo "🔄 Restarting PM2 process..."
           export PATH=$PATH:/home/arzonic/.npm-global/bin
           cd /home/arzonic/htdocs/arzonic.com
+
+          echo "🧹 Cleaning up old PM2 instance if any..."
           pm2 delete arzonic-app || true
+
+          echo "🚀 Starting app with PM2 on port 7000..."
           PORT=7000 pm2 start npm --name "arzonic-app" -- start
+
+          echo "💾 Saving PM2 state..."
           pm2 save
+
+          echo "📋 Active PM2 apps:"
           pm2 list
 
       - name: ✅ Deployment completed
