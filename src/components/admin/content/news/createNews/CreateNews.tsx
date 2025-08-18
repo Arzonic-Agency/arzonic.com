@@ -39,8 +39,13 @@ const CreateNews = ({
       // Create new URLs
       const newUrls = images.map((file) => URL.createObjectURL(file));
       setImageUrls(newUrls);
+
+      // Cleanup function for when component unmounts or dependencies change
+      return () => {
+        newUrls.forEach((url) => URL.revokeObjectURL(url));
+      };
     }
-  }, [images, imageUrls]);
+  }, [images]);
 
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,7 +111,7 @@ const CreateNews = ({
   };
 
   const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= 250) setDesc(e.target.value);
+    if (e.target.value.length <= 350) setDesc(e.target.value);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +129,7 @@ const CreateNews = ({
         onSubmit={handleCreateNews}
         className="flex flex-col items-start gap-5 w-full"
       >
-        <div className="flex flex-col lg:flex-row gap-7 lg:gap-14 w-full">
+        <div className="flex flex-col gap-7 w-full">
           <div className="flex flex-col gap-5 w-full">
             <fieldset className="flex flex-col gap-2 fieldset w-full relative md:max-w-sm">
               <legend className="fieldset-legend">{t("desc")}</legend>
@@ -135,13 +140,13 @@ const CreateNews = ({
                 onChange={handleDescChange}
                 required
                 placeholder={t("write_desc")}
-                maxLength={250}
+                maxLength={350}
                 cols={30}
                 rows={8}
                 style={{ resize: "none" }}
               />
               <div className="text-right text-xs font-medium text-zinc-500 absolute right-1 -bottom-5">
-                {desc.length} / 250
+                {desc.length} / 350
               </div>
               {errors.desc && (
                 <span className="absolute -bottom-4 text-xs text-red-500">
@@ -202,38 +207,6 @@ const CreateNews = ({
               </fieldset>
             )}
           </div>
-          <div className="flex flex-col gap-5">
-            <fieldset className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                name="postToFacebook"
-                className="toggle toggle-primary"
-                checked={postToFacebook}
-                onChange={(e) => setPostToFacebook(e.target.checked)}
-              />
-              <label htmlFor="postToFacebook" className="label-text">
-                {t("share_fb")}
-              </label>
-            </fieldset>
-
-            <fieldset className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                name="postToInstagram"
-                className="toggle toggle-primary"
-                checked={postToInstagram}
-                onChange={(e) => setPostToInstagram(e.target.checked)}
-              />
-              <label htmlFor="postToInstagram" className="label-text">
-                {t("share_instagram")}
-                {postToInstagram && images.length === 0 && (
-                  <span className="ml-2 text-xs text-primary">
-                    (kræver billede)
-                  </span>
-                )}
-              </label>
-            </fieldset>
-          </div>
 
           {errors.instagram && (
             <span className="text-sm text-red-500">{errors.instagram}</span>
@@ -242,6 +215,38 @@ const CreateNews = ({
           {errors.general && (
             <span className="text-sm text-red-500">{errors.general}</span>
           )}
+        </div>
+        <div className="flex flex-col gap-5">
+          <fieldset className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              name="postToFacebook"
+              className="toggle toggle-primary"
+              checked={postToFacebook}
+              onChange={(e) => setPostToFacebook(e.target.checked)}
+            />
+            <label htmlFor="postToFacebook" className="label-text">
+              {t("share_fb")}
+            </label>
+          </fieldset>
+
+          <fieldset className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              name="postToInstagram"
+              className="toggle toggle-primary"
+              checked={postToInstagram}
+              onChange={(e) => setPostToInstagram(e.target.checked)}
+            />
+            <label htmlFor="postToInstagram" className="label-text">
+              {t("share_instagram")}
+              {postToInstagram && images.length === 0 && (
+                <span className="ml-2 text-xs text-primary">
+                  (kræver billede)
+                </span>
+              )}
+            </label>
+          </fieldset>
         </div>
 
         <button
