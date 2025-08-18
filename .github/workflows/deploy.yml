@@ -2,60 +2,62 @@ name: Deploy Arzonic to VPS
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
 
 jobs:
   deploy:
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
+        working-directory: /home/arzonic/htdocs/arzonic.com
 
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-
-      - name: 🔄 Pull latest code from GitHub
+      - name: 🔧 Git setup (HTTPS + token, no SSH)
+        env:
+          REPO: ${{ github.repository }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "⚠️ Pulling latest changes..."
-          cd /home/arzonic/htdocs/arzonic.com
-          git fetch --all
-          git reset --hard origin/main
+          set -euo pipefail
+          if [ ! -d .git ]; then
+            git init .
+            git remote add origin "https://github.com/${REPO}.git"
+          fi
+          # Brug GITHUB_TOKEN til at autentificere alle fetch/push (push bruger du ikke her)
+          git config http."https://github.com/".extraheader "AUTHORIZATION: basic $(printf x-access-token:${TOKEN} | base64 -w0 2>/dev/null || printf x-access-token:${TOKEN} | base64)"
+          git config pull.ff only
+
+      - name: 🔄 Sync til præcis commit
+        env:
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          echo "Fetching ${SHA}…"
+          git fetch --no-tags --depth=1 origin "${SHA}"
+          git checkout --force "${SHA}"
+          git rev-parse HEAD
 
       - name: 📦 Install dependencies
-        run: |
-          set -e
-          echo "📦 Installing dependencies..."
-          cd /home/arzonic/htdocs/arzonic.com
-          npm ci
+        run: npm ci
+        timeout-minutes: 10
 
       - name: 🔧 Build Next.js project
-        run: |
-          set -e
-          cd /home/arzonic/htdocs/arzonic.com
-          echo "⚡ Building Next.js app..."
-          npm run build
-          if [ ! -d ".next" ]; then
-            echo "❌ ERROR: .next/ folder not found after build"
-            exit 1
-          fi
+        run: npm run build
+        timeout-minutes: 20
 
       - name: 🚀 Restart PM2 process
         run: |
           set -e
-          echo "🔄 Restarting PM2 process..."
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-          cd /home/arzonic/htdocs/arzonic.com
-
-          echo "🧹 Cleaning up old PM2 instance if any..."
           pm2 delete arzonic-app || true
-
-          echo "🚀 Starting app with PM2 on port 7000..."
           PORT=7000 pm2 start npm --name "arzonic-app" -- start
           pm2 save
           pm2 list
 
-      - name: ✅ Deployment completed
+      - name: ✅ Done
         run: echo "🚀 Deployment successful!"
