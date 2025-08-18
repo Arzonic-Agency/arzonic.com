@@ -8,6 +8,7 @@ const PolicyPage = () => {
 
   return (
     <div className="p-5 sm:p-7 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20">
+      {/* Title */}
       <div className="max-w-xl md:max-w-3xl">
         <h1 className="text-2xl md:text-5xl font-bold text-center">
           {t("Policy.title")}
