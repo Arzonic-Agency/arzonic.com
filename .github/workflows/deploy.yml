@@ -10,6 +10,16 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: 🧰 Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
       - name: 🔄 Pull latest code from GitHub
         run: |
           echo "⚠️ Pulling latest changes..."
@@ -17,18 +27,27 @@ jobs:
           git fetch --all
           git reset --hard origin/main
 
-      - name: 📦 Install dependencies
+      - name: 🧹 Clean previous Next.js build
         run: |
-          set -e
-          echo "📦 Installing dependencies..."
+          echo "🧹 Removing old .next and public/_next folders..."
+          cd /home/arzonic/htdocs/arzonic.com
+          rm -rf .next .next/cache public/_next || true
+
+      - name: 📦 Install fresh dependencies
+        run: |
+          echo "📦 Installing dependencies cleanly..."
           cd /home/arzonic/htdocs/arzonic.com
           npm ci
 
+      - name: 🔇 Disable Next.js telemetry
+        run: |
+          cd /home/arzonic/htdocs/arzonic.com
+          npx next telemetry disable
+
       - name: 🔧 Build Next.js project
         run: |
-          set -e
-          cd /home/arzonic/htdocs/arzonic.com
           echo "⚡ Building Next.js app..."
+          cd /home/arzonic/htdocs/arzonic.com
           npm run build
           if [ ! -d ".next" ]; then
             echo "❌ ERROR: .next/ folder not found after build"
@@ -37,11 +56,8 @@ jobs:
 
       - name: 🚀 Restart PM2 process
         run: |
-          set -e
           echo "🔄 Restarting PM2 process..."
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
+          export PATH=$PATH:/home/arzonic/.npm-global/bin
           cd /home/arzonic/htdocs/arzonic.com
 
           echo "🧹 Cleaning up old PM2 instance if any..."
@@ -49,8 +65,12 @@ jobs:
 
           echo "🚀 Starting app with PM2 on port 7000..."
           PORT=7000 pm2 start npm --name "arzonic-app" -- start
+
+          echo "💾 Saving PM2 state..."
           pm2 save
+
+          echo "📋 Active PM2 apps:"
           pm2 list
 
       - name: ✅ Deployment completed
-        run: echo "🚀 Deployment successful!"
+        run: echo "✅ Deployment successful!"
