@@ -2,53 +2,57 @@ name: Deploy Arzonic to VPS
 
 on:
   push:
-    branches: [main]
-
-concurrency:
-  group: deploy-main
-  cancel-in-progress: true
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: self-hosted
-    defaults:
-      run:
-        shell: bash
-        working-directory: /home/arzonic/htdocs/arzonic.com
 
     steps:
-      - name: 🧭 Ensure repo & remote (SSH)
-        env:
-          REPO: ${{ github.repository }}
-        run: |
-          if [ ! -d .git ]; then
-            git init .
-            git remote add origin git@github.com:${REPO}.git
-          fi
-          git remote set-url origin git@github.com:${REPO}.git
-          git config pull.ff only
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
-      - name: 🔄 Sync to pushed commit
-        env:
-          GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=accept-new"
-          SHA: ${{ github.sha }}
+      - name: 🔄 Pull latest code from GitHub
         run: |
-          git fetch --depth=1 origin ${SHA}
-          git checkout --force ${SHA}
+          echo "⚠️ Pulling latest changes..."
+          cd /home/arzonic/htdocs/arzonic.com
+          git fetch --all
+          git reset --hard origin/main
 
       - name: 📦 Install dependencies
-        run: npm ci
-        timeout-minutes: 10
+        run: |
+          set -e
+          echo "📦 Installing dependencies..."
+          cd /home/arzonic/htdocs/arzonic.com
+          npm ci
 
       - name: 🔧 Build Next.js project
-        run: npm run build
-        timeout-minutes: 20
+        run: |
+          set -e
+          cd /home/arzonic/htdocs/arzonic.com
+          echo "⚡ Building Next.js app..."
+          npm run build
+          if [ ! -d ".next" ]; then
+            echo "❌ ERROR: .next/ folder not found after build"
+            exit 1
+          fi
 
       - name: 🚀 Restart PM2 process
         run: |
+          set -e
+          echo "🔄 Restarting PM2 process..."
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+          cd /home/arzonic/htdocs/arzonic.com
+
+          echo "🧹 Cleaning up old PM2 instance if any..."
           pm2 delete arzonic-app || true
+
+          echo "🚀 Starting app with PM2 on port 7000..."
           PORT=7000 pm2 start npm --name "arzonic-app" -- start
           pm2 save
           pm2 list
