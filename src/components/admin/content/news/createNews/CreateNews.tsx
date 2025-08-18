@@ -39,13 +39,8 @@ const CreateNews = ({
       // Create new URLs
       const newUrls = images.map((file) => URL.createObjectURL(file));
       setImageUrls(newUrls);
-
-      // Cleanup function for when component unmounts or dependencies change
-      return () => {
-        newUrls.forEach((url) => URL.revokeObjectURL(url));
-      };
     }
-  }, [images]);
+  }, [images, imageUrls]);
 
   const handleCreateNews = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -25,7 +25,7 @@ export const openFacebookLink = (url: string) => {
       setTimeout(() => {
         window.open(url, "_blank", "noopener,noreferrer");
       }, 1000);
-    } catch (error) {
+    } catch {
       // If deep link fails, go directly to web
       window.open(url, "_blank", "noopener,noreferrer");
     }
@@ -55,7 +55,7 @@ export const openInstagramLink = (url: string) => {
       setTimeout(() => {
         window.open(url, "_blank", "noopener,noreferrer");
       }, 1000);
-    } catch (error) {
+    } catch {
       // If deep link fails, go directly to web
       window.open(url, "_blank", "noopener,noreferrer");
     }
