@@ -87,7 +87,7 @@ const NewsList = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-3">
       {loading ? (
         <div className="flex justify-center gap-3 items-center h-40">
           <span className="loading loading-spinner loading-md"></span>
@@ -195,9 +195,6 @@ const NewsList = ({
                     )}
                   </figure>
                   <div className="card-body">
-                    <p className="text-sm font-semibold">
-                      {truncateDescription(item.content, 60)}
-                    </p>
                     <p className="text-xs">
                       {truncateDescription(item.content, 100)}
                     </p>
@@ -208,10 +205,10 @@ const NewsList = ({
                             onClick={() =>
                               openSocialLink(item.linkFacebook!, "facebook")
                             }
-                            className="btn md:btn-sm text-lg"
+                            className="btn md:btn-sm"
                             title="Se Facebook opslag"
                           >
-                            <FaFacebook />
+                            <FaFacebook className="text-lg  md:text-base" />
                             <span className=" font-normal text-base-content hidden md:block">
                               Facebook
                             </span>
@@ -219,44 +216,13 @@ const NewsList = ({
                         )}
                         {item.linkInstagram && (
                           <button
-                            onClick={() => {
-                              const instagramUrl =
-                                item.linkInstagram!.startsWith(
-                                  "Instagram post ID:"
-                                )
-                                  ? `https://www.instagram.com/p/${item.linkInstagram!.replace(
-                                      "Instagram post ID: ",
-                                      ""
-                                    )}/`
-                                  : item.linkInstagram!.startsWith(
-                                      "Instagram Media ID:"
-                                    )
-                                  ? "#" // Can't convert media ID to URL, show disabled
-                                  : item.linkInstagram!;
-
-                              if (instagramUrl !== "#") {
-                                openSocialLink(instagramUrl, "instagram");
-                              }
-                            }}
-                            className={`btn md:btn-sm text-lg ${
-                              item.linkInstagram.startsWith(
-                                "Instagram Media ID:"
-                              )
-                                ? "btn-disabled opacity-50"
-                                : ""
-                            }`}
-                            title={
-                              item.linkInstagram.startsWith(
-                                "Instagram Media ID:"
-                              )
-                                ? "Instagram opslag kunne ikke linkes direkte"
-                                : "Se Instagram opslag"
+                            onClick={() =>
+                              openSocialLink(item.linkInstagram!, "instagram")
                             }
-                            disabled={item.linkInstagram.startsWith(
-                              "Instagram Media ID:"
-                            )}
+                            className="btn md:btn-sm"
+                            title="Se Instagram opslag"
                           >
-                            <FaInstagram />
+                            <FaInstagram className="text-lg  md:text-base" />
                             <span className="font-normal text-base-content hidden md:block">
                               Instagram
                             </span>
@@ -281,44 +247,66 @@ const NewsList = ({
               ))}
             </div>
           ) : (
-            <ul className="flex flex-col gap-3">
+            <ul className="list">
               {newsItems.map((item) => (
                 <React.Fragment key={item.id}>
-                  <li>
-                    <div className="flex justify-between items-center">
-                      <div className="flex gap-2 items-center">
-                        <div className="relative w-12 aspect-[1/1] rounded-md overflow-hidden">
-                          <Image
-                            src={
-                              item.images && item.images.length > 0
-                                ? item.images[0]
-                                : FALLBACK_IMAGE
-                            }
-                            alt="News image"
-                            fill
-                            className="object-cover"
-                            loading="eager"
-                          />
-                        </div>
-                        <h3 className="font-semibold text-xs hidden sm:block">
-                          {truncateDescription(item.content, 40)}
-                        </h3>
-                        <h3 className="font-semibold text-xs block sm:hidden">
-                          {truncateDescription(item.content, 20)}
-                        </h3>
-                      </div>
-                      <div className="flex gap-5 md:gap-2">
+                  <li className="list-row py-6">
+                    <div className="relative w-14 aspect-[1/1] rounded-md overflow-hidden">
+                      <Image
+                        src={
+                          item.images && item.images.length > 0
+                            ? item.images[0]
+                            : FALLBACK_IMAGE
+                        }
+                        alt="News image"
+                        fill
+                        className="object-cover"
+                        loading="eager"
+                      />
+                    </div>
+                    <div></div>
+                    <div></div>
+
+                    <div className="flex gap-2">
+                      {item.linkFacebook && (
                         <button
+                          onClick={() =>
+                            openSocialLink(item.linkFacebook!, "facebook")
+                          }
                           className="btn btn-sm"
-                          onClick={() => {
-                            setDeletingNewsId(item.id);
-                            setIsModalOpen(true);
-                          }}
+                          title="Se Facebook opslag"
                         >
-                          <FaTrash />
-                          <span className="md:flex hidden"> Slet </span>
+                          <FaFacebook className="text-[15px] md:text-base" />
+                          <span className=" font-normal text-base-content hidden md:block">
+                            Facebook
+                          </span>
                         </button>
-                      </div>
+                      )}
+                      {item.linkInstagram && (
+                        <button
+                          onClick={() =>
+                            openSocialLink(item.linkInstagram!, "instagram")
+                          }
+                          className="btn btn-sm"
+                          title="Se Instagram opslag"
+                        >
+                          <FaInstagram className="text-base" />
+                          <span className="font-normal text-base-content hidden md:block">
+                            Instagram
+                          </span>
+                        </button>
+                      )}
+
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => {
+                          setDeletingNewsId(item.id);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        <FaTrash />
+                        <span className=""> Slet </span>
+                      </button>
                     </div>
                   </li>
                   <hr className="border-[1px] rounded-lg border-base-200" />

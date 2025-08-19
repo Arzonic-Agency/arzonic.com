@@ -100,7 +100,7 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-3">
       {view === "cards" ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
           {caseItems.map((item) => (
@@ -143,47 +143,44 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
           ))}
         </div>
       ) : (
-        <ul className="flex flex-col gap-5">
+        <ul className="list">
           {caseItems.map((item) => (
-            <li key={item.id}>
-              <div className="flex justify-between items-center">
-                <div className="flex gap-2 items-center">
-                  <div className="relative w-12 h-10 rounded-md overflow-hidden">
-                    <Image
-                      src={item.image || FALLBACK_IMAGE}
-                      alt={`Case study for ${item.company}`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      priority={page === 1}
-                      className="object-cover"
-                    />
-                  </div>
-                  <h3 className="font-semibold text-xs hidden sm:block">
-                    {item.company}
-                  </h3>
-                  <h3 className="font-semibold text-xs block sm:hidden">
-                    {truncate(item.company, 20)}
-                  </h3>
-                </div>
-                <div className="flex gap-5 md:gap-2">
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => onEditCase(item.id)}
-                  >
-                    <FaPen />{" "}
-                    <span className="md:flex hidden">{t("edit")}</span>
-                  </button>
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      setDeletingCaseId(item.id);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <FaTrash />{" "}
-                    <span className="md:flex hidden">{t("delete")}</span>
-                  </button>
-                </div>
+            <li key={item.id} className="list-row py-6">
+              <div className="relative w-14 h-10 rounded-md overflow-hidden">
+                <Image
+                  src={item.image || FALLBACK_IMAGE}
+                  alt={`Case study for ${item.company}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={page === 1}
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex items-center">
+                <h3 className="font-semibold text-xs hidden sm:block">
+                  {item.company}
+                </h3>
+                <h3 className="font-semibold text-xs block sm:hidden">
+                  {truncate(item.company, 20)}
+                </h3>
+              </div>
+              <div className="flex gap-5 md:gap-2">
+                <button
+                  className="btn btn-sm"
+                  onClick={() => onEditCase(item.id)}
+                >
+                  <FaPen /> <span className="md:flex hidden">{t("edit")}</span>
+                </button>
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    setDeletingCaseId(item.id);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <FaTrash />{" "}
+                  <span className="md:flex hidden">{t("delete")}</span>
+                </button>
               </div>
             </li>
           ))}
