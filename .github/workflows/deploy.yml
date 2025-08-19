@@ -21,14 +21,12 @@ jobs:
           cd /home/arzonic/htdocs/arzonic.com
           git fetch --all
           git reset --hard origin/main
-
       - name: 📦 Install dependencies
         run: |
           set -e
           echo "📦 Installing dependencies..."
           cd /home/arzonic/htdocs/arzonic.com
           npm ci
-
       - name: 🔧 Build Next.js project
         run: |
           set -e
@@ -39,23 +37,18 @@ jobs:
             echo "❌ ERROR: .next/ folder not found after build"
             exit 1
           fi
-
       - name: 🚀 Restart PM2 process
         run: |
           set -e
           echo "🔄 Restarting PM2 process..."
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
           cd /home/arzonic/htdocs/arzonic.com
-
           echo "🧹 Cleaning up old PM2 instance if any..."
           pm2 delete arzonic-app || true
-
           echo "🚀 Starting app with PM2 on port 7000..."
           PORT=7000 pm2 start npm --name "arzonic-app" -- start
           pm2 save
           pm2 list
-
       - name: ✅ Deployment completed
         run: echo "🚀 Deployment successful!"
