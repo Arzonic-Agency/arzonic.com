@@ -11,23 +11,48 @@ jobs:
     env:
       APP_DIR: /home/arzonic/htdocs/arzonic.com
       PM2_NAME: arzonic-app
-      PORT: 7000
+      PORT: 3000
+      SSH_KEY: /home/arzonic/.ssh/id_arzonic # ← din private deploy key
 
     defaults:
       run:
         shell: bash
 
     steps:
-      - name: 📥 Checkout repository into APP_DIR
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          path: ${{ env.APP_DIR }}
-
       - name: 🧰 Setup Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: "20"
+
+      - name: 🔑 Verify SSH access to GitHub
+        run: |
+          # Sørg for known_hosts indeholder GitHub (kør én gang, harmless hvis gentaget)
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          # Test auth (non-fatal)
+          ssh -i "$SSH_KEY" -T git@github.com || true
+
+      - name: 🔄 Get latest code via SSH
+        run: |
+          set -e
+          mkdir -p "$APP_DIR"
+          cd "$APP_DIR"
+
+          # Brug specifik nøgle ved git-kommandoer
+          export GIT_SSH_COMMAND="ssh -i $SSH_KEY -o StrictHostKeyChecking=yes"
+
+          if [ ! -d ".git" ]; then
+            echo "📥 Cloning fresh repo..."
+            git clone git@github.com:MarcMadeIt/arzonic.git "$APP_DIR"
+          else
+            echo "⚠️ Fetching latest changes..."
+            git fetch --all
+            git reset --hard origin/main
+          fi
+
+          # Sikr korrekt remote (i tilfælde af gammel HTTPS-remote)
+          git remote set-url origin git@github.com:MarcMadeIt/arzonic.git
 
       - name: 🧹 Clean previous Next.js build
         run: |
@@ -49,7 +74,7 @@ jobs:
           cd "$APP_DIR"
           echo "⚡ Building Next.js app..."
           npm run build
-          [ -d ".next" ] || { echo "❌ .next mangler"; exit 1; }
+          [ -d ".next" ] || { echo "❌ .next mangler efter build"; exit 1; }
 
       - name: 🚀 Restart PM2 process
         run: |
