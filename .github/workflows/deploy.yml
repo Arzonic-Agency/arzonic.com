@@ -2,43 +2,61 @@ name: Deploy Arzonic to VPS
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
-    runs-on: [self-hosted, arzonic] # brug label hvis du satte den på runneren
+    runs-on: self-hosted
+
+    env:
+      APP_DIR: /home/arzonic/htdocs/arzonic.com
+      PM2_NAME: arzonic-app
+      PORT: 7000
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
       - name: 🧰 Setup Node.js 20
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      - name: 🔄 Pull latest code from GitHub (SSH)
+      - name: 🔄 Pull latest code from GitHub
         run: |
           echo "⚠️ Pulling latest changes..."
-          cd /home/arzonic/htdocs/arzonic.com
+          cd "$APP_DIR"
           git fetch --all
           git reset --hard origin/main
 
       - name: 🧹 Clean previous Next.js build
         run: |
-          cd /home/arzonic/htdocs/arzonic.com
+          echo "🧹 Removing old .next and public/_next folders..."
+          cd "$APP_DIR"
           rm -rf .next .next/cache public/_next || true
 
       - name: 📦 Install fresh dependencies
         run: |
-          cd /home/arzonic/htdocs/arzonic.com
+          echo "📦 Installing dependencies cleanly..."
+          cd "$APP_DIR"
           npm ci
 
       - name: 🔇 Disable Next.js telemetry
         run: |
-          cd /home/arzonic/htdocs/arzonic.com
+          cd "$APP_DIR"
           npx next telemetry disable
 
       - name: 🔧 Build Next.js project
         run: |
-          cd /home/arzonic/htdocs/arzonic.com
+          echo "⚡ Building Next.js app..."
+          cd "$APP_DIR"
           npm run build
           if [ ! -d ".next" ]; then
             echo "❌ ERROR: .next/ folder not found after build"
@@ -47,11 +65,20 @@ jobs:
 
       - name: 🚀 Restart PM2 process
         run: |
+          echo "🔄 Restarting PM2 process..."
           export PATH=$PATH:/home/arzonic/.npm-global/bin
-          cd /home/arzonic/htdocs/arzonic.com
-          pm2 delete arzonic-app || true
-          PORT=7000 pm2 start npm --name "arzonic-app" -- start
+          cd "$APP_DIR"
+
+          echo "🧹 Cleaning up old PM2 instance if any..."
+          pm2 delete "$PM2_NAME" || true
+
+          echo "🚀 Starting app with PM2 on port $PORT..."
+          PORT=$PORT pm2 start npm --name "$PM2_NAME" -- start
+
+          echo "💾 Saving PM2 state..."
           pm2 save
+
+          echo "📋 Active PM2 apps:"
           pm2 list
 
       - name: ✅ Deployment completed
