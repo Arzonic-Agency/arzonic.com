@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaStripe } from "react-icons/fa6";
 
 const Hero = () => {
   const { t } = useTranslation();

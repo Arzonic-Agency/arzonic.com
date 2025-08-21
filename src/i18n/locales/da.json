@@ -1257,5 +1257,17 @@
       "last30DaysTab": "Vis statistik for de seneste 30 dage",
       "loadingSpinner": "Indlæser statistik"
     }
+  },
+  "seo": {
+    "defaultTitle": "Arzonic",
+    "titleTemplate": "%s - Arzonic",
+    "description": "Vi udvikler intelligente webapps til ambitiøse virksomheder. Specialister i skræddersyede løsninger, kraftfulde dashboards og engagerende 3D-oplevelser.",
+    "keywords": "webapps, dashboard, cms, softwarebureau, udvikling, integrationer, 3D, digital løsning",
+    "siteName": "Arzonic",
+    "locale": "da_DK",
+    "twitter": {
+      "handle": "@arzonic",
+      "site": "@arzonic"
+    }
   }
 }

@@ -1253,5 +1253,17 @@
       "emailInput": "Enter your email address",
       "passwordInput": "Enter your password"
     }
+  },
+  "seo": {
+    "defaultTitle": "Arzonic",
+    "titleTemplate": "%s - Arzonic",
+    "description": "We develop intelligent web apps for ambitious companies. Specialists in custom solutions, powerful dashboards and engaging 3D experiences.",
+    "keywords": "web apps, dashboard, cms, software agency, development, integrations, 3D, digital solution",
+    "siteName": "Arzonic",
+    "locale": "en_US",
+    "twitter": {
+      "handle": "@arzonic",
+      "site": "@arzonic"
+    }
   }
 }

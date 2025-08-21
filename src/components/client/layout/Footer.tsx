@@ -2,12 +2,10 @@ import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  FaCopyright,
   FaFacebook,
   FaHashtag,
   FaInstagram,
   FaLinkedin,
-  FaLinkedinIn,
   FaRegCopyright,
 } from "react-icons/fa6";
 import ConsentModal from "../modal/PolicyModal";

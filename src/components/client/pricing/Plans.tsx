@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaCartArrowDown, FaCheck, FaPlus, FaStar } from "react-icons/fa6";
+import { FaCheck, FaStar } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { getPackages } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
