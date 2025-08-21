@@ -29,16 +29,17 @@ const CreateNews = ({
   // Create object URLs for images (client-side only)
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Clean up old URLs first
-      imageUrls.forEach((url) => {
-        if (url.startsWith("blob:")) {
-          URL.revokeObjectURL(url);
-        }
-      });
-
       // Create new URLs
       const newUrls = images.map((file) => URL.createObjectURL(file));
-      setImageUrls(newUrls);
+      setImageUrls((prevUrls) => {
+        // Clean up old URLs first
+        prevUrls.forEach((url) => {
+          if (url.startsWith("blob:")) {
+            URL.revokeObjectURL(url);
+          }
+        });
+        return newUrls;
+      });
 
       // Cleanup function for when component unmounts or dependencies change
       return () => {

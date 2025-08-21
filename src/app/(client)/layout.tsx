@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
-import SEO, { generateSeoConfig } from "@/lib/config/next-seo.config";
+import { generateSeoConfig } from "@/lib/config/next-seo.config";
 import ScreenFade from "@/components/client/layout/ScreenFade";
 import DynamicHtmlLang from "@/components/client/layout/DynamicHtmlLang";
 import { useTranslation } from "react-i18next";
@@ -17,7 +17,7 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   const [showScroll, setShowScroll] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Generate SEO config based on current language
   const seoConfig = generateSeoConfig(t('seo', { returnObjects: true }));

@@ -28,25 +28,27 @@ const config: DefaultSeoProps = {
 
 // Function to generate SEO config based on language and translations
 export function generateSeoConfig(seoTranslations: any): DefaultSeoProps {
+  const twitter = seoTranslations?.twitter || {};
+
   return {
-    titleTemplate: seoTranslations.titleTemplate,
-    defaultTitle: seoTranslations.defaultTitle,
-    description: seoTranslations.description,
+    titleTemplate: seoTranslations?.titleTemplate as string,
+    defaultTitle: seoTranslations?.defaultTitle as string,
+    description: seoTranslations?.description as string,
     openGraph: {
       type: "website",
-      locale: seoTranslations.locale,
+      locale: seoTranslations?.locale as string,
       url: "https://arzonic.com",
-      siteName: seoTranslations.siteName,
+      siteName: seoTranslations?.siteName as string,
     },
     additionalMetaTags: [
       {
         name: "keywords",
-        content: seoTranslations.keywords,
+        content: seoTranslations?.keywords as string,
       },
     ],
     twitter: {
-      handle: seoTranslations.twitter.handle,
-      site: seoTranslations.twitter.site,
+      handle: twitter?.handle as string,
+      site: twitter?.site as string,
       cardType: "summary_large_image",
     },
   };
