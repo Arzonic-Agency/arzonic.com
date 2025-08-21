@@ -6,10 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
-import { generateSeoConfig } from "@/lib/config/next-seo.config";
 import ScreenFade from "@/components/client/layout/ScreenFade";
-import DynamicHtmlLang from "@/components/client/layout/DynamicHtmlLang";
-import { useTranslation } from "react-i18next";
 
 export default function ClientLayout({
   children,
@@ -17,10 +14,6 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   const [showScroll, setShowScroll] = useState(false);
-  const { t } = useTranslation();
-
-  // Generate SEO config based on current language
-  const seoConfig = generateSeoConfig(t('seo', { returnObjects: true }));
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,14 +30,23 @@ export default function ClientLayout({
 
   return (
     <>
-      <DynamicHtmlLang />
       <Script
         async
         defer
         src="https://stats.arzonic.com/script.js"
         data-website-id="3226dc67-1feb-4d8c-9f6d-75f7dd0d23d7"
       />
-      <DefaultSeo {...seoConfig} />
+      <DefaultSeo
+        titleTemplate="%s - Arzonic"
+        defaultTitle="Arzonic - Software Agency"
+        description="We develop intelligent web apps for ambitious businesses. Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology."
+        openGraph={{
+          type: "website",
+          locale: "en_US",
+          url: "https://arzonic.com",
+          siteName: "Arzonic",
+        }}
+      />
       <div className="sm:h-lvh h-dvh max-w-screen-xl mx-auto pt-[101px]">
         <header>
           <Header />
