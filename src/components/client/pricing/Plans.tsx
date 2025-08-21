@@ -194,10 +194,31 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       </div>
 
       {/* Tab knapper */}
-
+      <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
+        <button
+          onClick={() => setPricingType("oneTime")}
+          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+            pricingType === "oneTime"
+              ? "bg-primary text-white "
+              : "bg-transparent text-primary"
+          }`}
+        >
+          {t("PricingPage.oneTimeTab")}
+        </button>
+        <button
+          onClick={() => setPricingType("monthly")}
+          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+            pricingType === "monthly"
+              ? "bg-primary text-white"
+              : "bg-transparent text-primary"
+          }`}
+        >
+          {t("PricingPage.monthlyTab")}
+        </button>
+      </div>
       {/* Desktop grid visning */}
       <motion.div
-        className="hidden lg:flex flex-row items-center justify-between w-full h-full z-10 gap-4"
+        className="hidden lg:flex flex-row items-center justify-between  w-full h-full z-10 gap-4"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
@@ -220,28 +241,6 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         {t("PricingPage.vatNote")}
         <br />
         {t("PricingPage.paymentInfo")}
-      </div>
-      <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
-        <button
-          onClick={() => setPricingType("oneTime")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            pricingType === "oneTime"
-              ? "bg-primary text-white "
-              : "bg-transparent text-primary"
-          }`}
-        >
-          {t("PricingPage.oneTimeTab")}
-        </button>
-        <button
-          onClick={() => setPricingType("monthly")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            pricingType === "monthly"
-              ? "bg-primary text-white"
-              : "bg-transparent text-primary"
-          }`}
-        >
-          {t("PricingPage.monthlyTab")}
-        </button>
       </div>
     </div>
   );

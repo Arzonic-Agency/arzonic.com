@@ -130,7 +130,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .background-animation-layer-left {
     height: 60%;
     background-size: 160% 160%;
@@ -194,14 +194,14 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .background-animation-layer-right {
     height: 100%;
     background-size: 180% 180%;
     background-image:
-      radial-gradient(circle at 50% 50%, #3b938d66 0%, transparent 28%),
-      radial-gradient(circle at 55% 60%, #3b938d77 0%, transparent 29%),
-      radial-gradient(circle at 65% 45%, #3b938d88 0%, transparent 30%);
+      radial-gradient(circle at 50% 50%, #3b938d66 0%, transparent 20%),
+      radial-gradient(circle at 55% 60%, #3b938d77 0%, transparent 25%),
+      radial-gradient(circle at 65% 45%, #3b938d88 0%, transparent 27%);
     animation: moveBackgroundMobileRight 18s ease-in-out infinite;
   }
 
@@ -242,9 +242,17 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .background-fade-bottom {
     height: 200px;
+    bottom: 380px;
+
+  }
+}
+
+@media (max-width: 768px) {
+  .background-fade-bottom {
+    height: 300px;
     bottom: 320px;
 
   }
