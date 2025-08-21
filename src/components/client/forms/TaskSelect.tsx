@@ -31,14 +31,18 @@ const TaskSelect = ({ onChange }: ContactSelectProps) => {
           <option value="" disabled>
             {t("TaskSelect.placeholder")}
           </option>
-          <option value="Website">{t("TaskSelect.options.website")}</option>
-          <option value="Web App">{t("TaskSelect.options.webApp")}</option>
-          <option value="3D Visualization">
+          <option value="website">{t("TaskSelect.options.website")}</option>
+          <option value="webshop">{t("TaskSelect.options.webshop")}</option>
+          <option value="booking">{t("TaskSelect.options.booking")}</option>
+          <option value="dashboard">{t("TaskSelect.options.dashboard")}</option>
+          <option value="events">{t("TaskSelect.options.events")}</option>
+          <option value="integration">
+            {t("TaskSelect.options.integration")}
+          </option>
+          <option value="visualization">
             {t("TaskSelect.options.visualization")}
           </option>
-          <option value="Branding">{t("TaskSelect.options.branding")}</option>
-          <option value="Marketing">{t("TaskSelect.options.marketing")}</option>
-          <option value="Other">{t("TaskSelect.options.other")}</option>
+          <option value="other">{t("TaskSelect.options.other")}</option>
         </select>
       </label>
     </fieldset>

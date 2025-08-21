@@ -1,4 +1,5 @@
 {
+  "AllRightReserved": "Alle rettigheder forbeholdes",
   "login": "Login",
   "logging_in": "Logger ind...",
   "edit": "Rediger",
@@ -329,38 +330,7 @@
     "getInTouch": "Kontakt os",
     "disclaimer": "Ansvarsfraskrivelse: Prisen er kun et estimat og kan variere. Endelig pris bekræftes ved konsultation."
   },
-  "Starter": {
-    "title": "Starter",
-    "description": "Perfekt til mindre virksomheder eller personlige brands",
-    "features": {
-      "customDesign": "Skræddersyet design",
-      "responsiveFast": "Responsivt og hurtigt",
-      "basicSEO": "Grundlæggende SEO-opsætning",
-      "simpleCMS": "Simpelt CMS eller statisk indhold"
-    }
-  },
-  "Pro": {
-    "title": "Pro",
-    "including": "Inkluderet",
-    "description": "Ideel til digitale produkter og funktionelle løsninger",
-    "features": {
-      "bespokeUIUX": "Unikt UI/UX design",
-      "featureRich": "Avanceret funktionalitet",
-      "databaseIntegration": "Databaseintegration",
-      "adminDashboard": "Admin dashboard"
-    }
-  },
-  "Premium": {
-    "title": "Premium",
-    "including": "Inkluderet",
-    "description": "Alt samlet – premium funktioner, visuelle effekter og 3D",
-    "features": {
-      "sleekLayout": "Elegant og animeret layout",
-      "parallaxEffects": "Parallax og bevægelseseffekter",
-      "integrated3D": "Integrerede 3D-elementer",
-      "performance": "Optimeret til høj ydeevne"
-    }
-  },
+
   "startingFrom": "Starter fra",
   "customQuotePrompt": "Få dit tilpassede tilbud på få sekunder",
   "getQuote": "Prisberegner",
@@ -375,6 +345,7 @@
     "followUs": "Følg os",
     "facebook": "Facebook",
     "instagram": "Instagram",
+    "linkedIn": "LinkedIn",
     "dropdown": {
       "customWebsites": "Tilpassede hjemmesider",
       "webApplications": "Webapplikationer",
@@ -394,7 +365,7 @@
   },
   "Hero": {
     "title": "SOFTWARE AGENCY",
-    "description": "Specialister i skræddersyede webapps, kraftfulde dashboards og engagerende 3D-løsninger, udviklet med nyeste teknologi.",
+    "description": "Vi udvikler intelligente webapps til ambitiøse virksomheder",
     "customWebsites": "Hjemmesider",
     "visualization": "3D-Design",
     "webApplications": "Webapplikationer",
@@ -422,7 +393,7 @@
   },
   "Preview": {
     "title": "Dit Dashboard, Din Måde",
-    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasses dig",
+    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasset til jer",
     "aria": {
       "imageAlt": "Eksempel på løsning"
     }
@@ -553,11 +524,13 @@
     "legend": "Hvilken løsning er du interesseret i?",
     "placeholder": "Vælg løsning",
     "options": {
-      "website": "Website",
-      "webApp": "Webapp",
-      "visualization": "3D-visualisering",
-      "branding": "Branding",
-      "marketing": "Markedsføring",
+      "website": "Website / Hjemmeside",
+      "webshop": "Webshop",
+      "booking": "Booking system",
+      "dashboard": "Dashboard / CMS",
+      "events": "Event system",
+      "integration": "Integrationer (API, Facebook, Instagram, osv.)",
+      "visualization": "3D & Animation",
       "other": "Andet"
     },
     "aria": {
@@ -570,7 +543,7 @@
     "readyTitle": "Klar til at komme i gang?",
     "contactPrompt": "Kontakt os i dag – vi vender hurtigt tilbage med et estimat eller en snak om løsningen.",
     "ambitionMessage": "Vi elsker ambitiøse idéer og hjælper gerne med at gøre dem til virkelighed.",
-    "callPrompt": "Ring til os på",
+    "callPrompt": "Giv os et kald på",
     "phoneNumber": "+45 22 50 17 03",
     "bookPrompt": "eller klar til et møde?",
     "imageAlt": "hero"
@@ -590,7 +563,7 @@
     "oneTimeTab": "Engangsbetaling",
     "monthlyTab": "Månedlig løsning"
   },
-  "PlansComparison": {
+  "plansComparison": {
     "title": "Sammenlign vores pakker",
     "table": {
       "featureColumn": "Funktion / Pakke"
@@ -606,6 +579,7 @@
       "customDesign": "Tilpasset design",
       "responsive": "Responsiv og hurtig",
       "contactForm": "Kontaktformular",
+      "SoMe": "Social Media integration",
       "seo": "SEO-opsætning",
       "cms": "CMS / Redigerbart indhold",
       "login": "Login og brugerstyring",
@@ -616,25 +590,49 @@
       "analytics": "Statistikker og analyse",
       "3d": "3D-elementer og animation",
       "scroll": "Scroll-effekter og parallax"
+    }
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter",
+      "title": "Starter",
+      "description": "Perfekt til mindre virksomheder eller personlige brands",
+      "seo": "Grundlæggende",
+      "adminDashboard": "Admin dashboard",
+      "cms": "Simpelt",
+      "features": {
+        "customDesign": "Skræddersyet design",
+        "responsiveFast": "Responsivt og hurtigt",
+        "basicSEO": "Grundlæggende SEO-opsætning",
+        "simpleCMS": "CMS / Redigerbart indhold"
+      }
     },
-    "plans": {
-      "starter": {
-        "name": "Starter",
-        "price": "7.000 kr.",
-        "seo": "Grundlæggende",
-        "cms": "Simpelt"
-      },
-      "pro": {
-        "name": "Pro",
-        "price": "13.000 kr.",
-        "seo": "Udvidet",
-        "cms": "Avanceret"
-      },
-      "premium": {
-        "name": "Premium",
-        "price": "16.000 kr.",
-        "seo": "Udvidet",
-        "cms": "Avanceret"
+    "pro": {
+      "name": "Pro",
+      "title": "Pro",
+      "description": "Ideel til digitale produkter og funktionelle løsninger",
+      "including": "Inkluderet",
+      "seo": "Udvidet",
+      "cms": "Avanceret",
+      "features": {
+        "bespokeUIUX": "Unikt UI/UX design",
+        "featureRich": "Avanceret funktionalitet",
+        "databaseIntegration": "Databaseintegration",
+        "socialMedia": "Social Media integration"
+      }
+    },
+    "premium": {
+      "name": "Premium",
+      "title": "Premium",
+      "description": "Alt samlet – premium funktioner, visuelle effekter og 3D",
+      "including": "Inkluderet",
+      "seo": "Udvidet",
+      "cms": "Avanceret",
+      "features": {
+        "sleekLayout": "Elegant og animeret layout",
+        "parallaxEffects": "Parallax og bevægelseseffekter",
+        "integrated3D": "Integrerede 3D-elementer",
+        "customer": "Kundelogin og Profilsider"
       }
     }
   },

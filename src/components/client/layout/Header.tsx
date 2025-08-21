@@ -4,7 +4,13 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaFacebook, FaGripLines, FaInstagram, FaXmark } from "react-icons/fa6";
+import {
+  FaFacebook,
+  FaGripLines,
+  FaInstagram,
+  FaLinkedin,
+  FaXmark,
+} from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Language from "./Language";
@@ -43,11 +49,11 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-[1536px] mx-auto md:px-5 md:py-5 py-7 md:bg-transparent">
+    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-screen-xl mx-auto md:px-5 md:py-5 py-7">
       <div className="flex-1">
         <Link
           href="/"
-          className="pl-4 flex items-center gap-2"
+          className="pl-3 flex items-center gap-2"
           aria-label={t("aria.navigation.linkToHome")}
         >
           <Image
@@ -215,10 +221,10 @@ const Header = () => {
                     href="https://www.facebook.com/profile.php?id=61575249251500"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-1"
+                    className="flex flex-col items-center"
                   >
                     <div className="w-14 h-14 shadow-lg rounded-full flex items-center justify-center">
-                      <FaFacebook className="text-3xl text-secondary" />
+                      <FaFacebook className="text-4xl text-secondary" />
                     </div>
                     <span className="text-secondary font-bold">
                       {t("Header.facebook")}
@@ -228,13 +234,26 @@ const Header = () => {
                     href="https://www.instagram.com/arzonic.agency/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex flex-col items-center gap-1"
+                    className="flex flex-col items-center"
                   >
                     <div className="w-14 h-14 shadow-lg rounded-full flex items-center justify-center">
-                      <FaInstagram className="text-3xl text-secondary" />
+                      <FaInstagram className="text-4xl text-secondary" />
                     </div>
                     <span className="text-secondary font-bold">
                       {t("Header.instagram")}
+                    </span>
+                  </Link>
+                  <Link
+                    href="https://www.linkedin.com/company/arzonic"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center "
+                  >
+                    <div className="w-14 h-14 shadow-lg rounded-full flex items-center justify-center">
+                      <FaLinkedin className="text-4xl text-secondary" />
+                    </div>
+                    <span className="text-secondary font-bold">
+                      {t("Header.linkedIn")}
                     </span>
                   </Link>
                 </div>

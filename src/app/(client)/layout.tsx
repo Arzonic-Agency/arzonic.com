@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
+import ScreenFade from "@/components/client/layout/ScreenFade";
 
 export default function ClientLayout({
   children,
@@ -37,8 +38,8 @@ export default function ClientLayout({
       />
       <DefaultSeo
         titleTemplate="%s - Arzonic"
-        defaultTitle="Arzonic"
-        description="We build blazing-fast websites and immersive 3D experiences."
+        defaultTitle="Arzonic - Software Agency"
+        description="We develop intelligent web apps for ambitious businesses. Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology."
         openGraph={{
           type: "website",
           locale: "en_US",
@@ -46,7 +47,7 @@ export default function ClientLayout({
           siteName: "Arzonic",
         }}
       />
-      <div className="sm:h-lvh h-dvh max-w-screen-2xl mx-auto pt-[64px] md:pt-[101px] ">
+      <div className="sm:h-lvh h-dvh max-w-screen-xl mx-auto pt-[101px]">
         <header>
           <Header />
         </header>
@@ -62,6 +63,7 @@ export default function ClientLayout({
             <FaAngleUp size={17} />
           </button>
         )}
+        <ScreenFade />
       </div>
     </>
   );

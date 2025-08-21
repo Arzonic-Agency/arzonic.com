@@ -37,7 +37,7 @@ const SolutionCards = () => {
         >
           <Link
             href={solution.href}
-            className="flex flex-row rounded-xl bg-accent ring-2 p-2 ring-base-200 md:hover:bg-base-200 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-all duration-300 ease-in-out gap-3 shadow-lg relative max-w-[650px] xl:max-w-[500px]"
+            className="flex flex-row rounded-xl bg-base-200 ring-2 p-2 ring-base-200 md:hover:bg-base-200 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-all duration-300 ease-in-out gap-3 shadow-lg relative max-w-[650px] xl:max-w-[500px]"
             aria-label={t(
               `aria.solutionCards.${solution.key}`,
               `Go to ${solution.key} solution`

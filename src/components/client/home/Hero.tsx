@@ -1,22 +1,15 @@
 "use client";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-// import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { motion } from "framer-motion";
-
-// const MobileAnimation = dynamic(
-//   () => import("../../animation/MobileAnimation"),
-//   {
-//     ssr: false,
-//   }
-// );
+import { FaStripe } from "react-icons/fa6";
 
 const Hero = () => {
   const { t } = useTranslation();
 
-  // Billedskift state
   const [isFirstImage, setIsFirstImage] = useState(true);
 
   useEffect(() => {
@@ -29,37 +22,39 @@ const Hero = () => {
   return (
     <>
       <div className="relative h-full w-full overflow-visible md:pl-4 lg:pl-8">
-        <div className="relative z-10 flex items-center justify-center md:justify-between h-full px-6 pt-20 lg:pt-0">
-          <div className="lg:w-[50%] flex flex-col gap-5 md:gap-7">
-            <div className="flex gap-1 md:gap-3 items-center">
+        <div className="relative z-10 flex  items-center justify-center md:justify-between h-full px-6 pt-20 lg:pt-0">
+          <div className="flex-2/3 flex flex-col gap-5 md:gap-7">
+            <div className="flex sm:gap-1 md:gap-3 items-center">
               <div className="flex relative w-10 h-6 md:w-14 md:h-9">
                 <Image
                   src="/danmark.png"
                   alt={t("flags.danish", "Dansk flag")}
-                  width={40}
-                  height={24}
-                  className="w-9 h-6 md:w-14 md:h-9 object-contain"
+                  width={50}
+                  height={40}
+                  className="w-7 sm:w-9 h-auto md:w-14 md:h-auto object-contain"
                   priority
                 />
               </div>
-              <h1 className="text-2xl md:text-4xl font-medium">
+              <h1 className="text-base md:text-2xl  font-medium tracking-wide">
                 {t("Hero.title")}
               </h1>
             </div>
-            <div className="max-w-xl flex flex-col gap-3">
-              <p className="text-sm sm:text-lg">{t("Hero.description")} </p>
+            <div className=" flex flex-col gap-3 max-w-[340px] sm:max-w-[425px] md:max-w-[690px] lg:max-w-[530px] xl:max-w-[700px]">
+              <p className="text-2xl sm:text-3xl md:text-5xl lg:text-4xl xl:text-5xl md:font-light ">
+                {t("Hero.description")}{" "}
+              </p>
             </div>
-            <div className="flex gap-3 sm:items-center text-[11px] md:text-sm lg:text-base xl:text-lg  font-semibold tracking-wide">
+            <div className="flex gap-3 sm:items-center    font-semibold tracking-wide">
               <Link
                 href={"/solutions/web-applications"}
-                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
+                className="badge badge-secondary badge-soft badge-sm lg:badge-md xl:badge-lg"
                 aria-label={t("aria.badges.webApplications")}
               >
                 {t("Hero.webApplications")}
               </Link>
               <Link
                 href={"/solutions/3d-visualization"}
-                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
+                className="badge badge-secondary badge-soft badge-sm lg:badge-md xl:badge-lg"
                 aria-label={t("aria.badges.visualization")}
               >
                 {t("Hero.visualization")}
@@ -67,7 +62,7 @@ const Hero = () => {
 
               <Link
                 href={"/solutions/custom-websites"}
-                className="badge badge-secondary badge-soft badge-xs md:badge-md lg:badge-lg"
+                className="badge badge-secondary badge-soft badge-sm lg:badge-md xl:badge-lg"
                 aria-label={t("aria.badges.customWebsites")}
               >
                 {t("Hero.customWebsites")}
@@ -76,7 +71,7 @@ const Hero = () => {
             <div className="mt-2 flex items-center gap-3">
               <Link
                 href="/solutions"
-                className="btn btn-soft"
+                className="btn btn-soft "
                 aria-label={t("aria.navigation.seeMoreSolutions")}
               >
                 {t("Hero.seeMore")}
@@ -91,11 +86,11 @@ const Hero = () => {
             </div>
           </div>
 
-          <div className="lg:w-[50%] h-full lg:flex hidden items-center justify-center relative">
+          <div className="flex-1/3 h-full lg:flex hidden items-center justify-center relative">
             <motion.div
               animate={{ y: [0, -30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="mockup-phone scale-60"
+              className="mockup-phone scale-55 lg:scale-60"
             >
               <div className="mockup-phone-camera"></div>
               <div className="mockup-phone-display text-white grid place-content-center">
@@ -108,10 +103,12 @@ const Hero = () => {
                   }
                   width={400}
                   height={800}
+                  className="object-cover w-full h-full"
+                  priority
                 />
               </div>
             </motion.div>
-            <div className="absolute bottom-45  right-20 flex flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
+            <div className="absolute bottom-45 right-10 lg:flex hidden flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
               <div className="flex items-center justify-center gap-2">
                 <Image
                   src="/customer/favicon1.png"

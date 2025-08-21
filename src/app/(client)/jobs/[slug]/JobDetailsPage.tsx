@@ -43,7 +43,7 @@ const JobDetailsPage = ({ job }: Props) => {
         </div>
       </section>
 
-      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7">
+      <section className="p-5 md:p-8 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7">
         <aside className="mb-5 flex justify-between items-stat md:items-center w-full pr-0 md:pr-10">
           <ul className="list-none flex gap-3 md:gap-5 items-start flex-col md:flex-row">
             <li>

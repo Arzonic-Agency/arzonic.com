@@ -63,7 +63,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-tranparent to-transparent z-10" />
-        <div className="relative z-20 text-center text-white px-4 max-w-4xl pt-10">
+        <div className="relative z-20 text-center text-white px-4 w-full pt-10">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             {seoTitleStart}
             <span className="text-secondary"> {seoTitleEnd}</span>
@@ -74,7 +74,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         </div>
       </section>
 
-      <section className="p-5 sm:p-7 w-full flex flex-col items-start gap-10 max-w-6xl mx-auto my-10 md:my-7 relative">
+      <section className="p-5 md:p-8 w-full flex flex-col items-start gap-10  mx-auto my-10 md:my-7 relative">
         <p className="text-base sm:text-lg md:text-2xl font-bold">{seoHero}</p>
         <p className="text-sm md:text-lg mb-6 whitespace-pre-line">
           {seoDescription}

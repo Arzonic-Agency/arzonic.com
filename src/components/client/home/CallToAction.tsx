@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import OfferForm from "../forms/OfferForm";
 import EuropeMap from "@/components/elements/EuropeMap";
 import BookingButton from "@/components/elements/BookingButton";
+import { FaPhone } from "react-icons/fa6";
 
 const CallToAction = () => {
   const { t } = useTranslation();
@@ -12,12 +13,15 @@ const CallToAction = () => {
         <div className="flex-initial lg:w-4/7 flex justify-center">
           <OfferForm />
         </div>
-        <div className="flex-1 lg:w-3/7 relative flex justify-center">
-          <div className=" rounded-lg shadow-md p-5 md:p-10 flex flex-col gap-4 max-w-sm">
+        <div className="flex-1 relative flex justify-center">
+          <div className=" rounded-lg shadow-md p-5 flex flex-col gap-4 max-w-sm">
             <h3 className="text-xl font-bold">{t("ContactPage.readyTitle")}</h3>
             <p className="font-medium">{t("ContactPage.contactPrompt")}</p>
             <p>{t("ContactPage.ambitionMessage")}</p>
-            <p className="font-medium">{t("ContactPage.callPrompt")}</p>
+            <p className="font-medium flex items-center gap-2">
+              {" "}
+              <FaPhone size={15} /> {t("ContactPage.callPrompt")}
+            </p>
             <a
               href="tel:+4522501703"
               className="flex items-center gap-2 text-secondary text-lg

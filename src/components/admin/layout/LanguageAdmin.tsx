@@ -29,10 +29,12 @@ const LanguageAdmin = () => {
         <Image
           src="/DK.png"
           alt="Skift til dansk"
-          width={20}
+          width={30}
           height={20}
           quality={100}
           unoptimized
+          className="w-5"
+          style={{ height: "auto" }}
         />
         <span>Dansk</span>
       </div>
@@ -43,10 +45,12 @@ const LanguageAdmin = () => {
         <Image
           src="/UK.png"
           alt="Change to English"
-          width={20}
+          width={30}
           height={20}
           quality={100}
           unoptimized
+          className="w-5"
+          style={{ height: "auto" }}
         />
 
         <span>English</span>

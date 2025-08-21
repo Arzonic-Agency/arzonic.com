@@ -1,7 +1,15 @@
 import Link from "next/link";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FaFacebook, FaHashtag, FaInstagram } from "react-icons/fa6";
+import {
+  FaCopyright,
+  FaFacebook,
+  FaHashtag,
+  FaInstagram,
+  FaLinkedin,
+  FaLinkedinIn,
+  FaRegCopyright,
+} from "react-icons/fa6";
 import ConsentModal from "../modal/PolicyModal";
 import TermsModal from "../modal/TermsModal";
 
@@ -10,7 +18,7 @@ const Footer = () => {
 
   return (
     <div>
-      <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-10 border-base-300 border-t">
+      <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-5 md:p-9 mt-12 border-base-300 border-t">
         <nav>
           <h5 className="footer-title">{t("Footer.solutions")}</h5>
           <Link
@@ -84,14 +92,20 @@ const Footer = () => {
           <ConsentModal buttonText={t("privacy_policy")} variant="hover" />
         </nav>
       </footer>
-      <footer className="footer bg-base-100 text-base-content px-10 py-4">
-        <aside className="flex items-center">
-          <FaHashtag className="text-3xl -rotate-12 text-secondary" />
-          <p>
-            {t("Footer.brandName", "Arzonic Agency")}
-            <br />
-            {t("Footer.reliableTech", "Providing reliable tech since 2024")}
-          </p>
+      <footer className="footer bg-base-100 text-base-content px-5 md:px-10 py-4">
+        <aside className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <FaHashtag className="text-3xl -rotate-12 text-secondary" />
+            <p>
+              {t("Footer.brandName", "Arzonic Agency")}
+              <br />
+              {t("Footer.reliableTech", "Providing reliable tech since 2024")}
+            </p>
+          </div>
+          <span className="ml-2 text-xs text-zinc-500 flex items-center gap-2">
+            <FaRegCopyright /> {new Date().getFullYear()} Arzonic ApS -{" "}
+            {t("AllRightReserved")}
+          </span>
         </aside>
         <nav className="md:place-self-center md:justify-self-end mb-5">
           <div className="grid grid-flow-col gap-4 text-3xl items-center">
@@ -113,6 +127,15 @@ const Footer = () => {
               aria-label={t("aria.footer.linkToInstagram", "Go to Instagram")}
             >
               <FaInstagram size={33} />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/company/arzonic"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="md:hover:text-secondary md:transition-colors md:duration-300"
+              aria-label={t("aria.footer.linkToLinkedIn", "Go to LinkedIn")}
+            >
+              <FaLinkedin size={32} />
             </Link>
           </div>
         </nav>

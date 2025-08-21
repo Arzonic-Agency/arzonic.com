@@ -25,26 +25,27 @@ interface DBExtraService {
   price_eur: number;
 }
 
-type PlanKey = "Starter" | "Pro" | "Premium";
+type PlanKey = "starter" | "pro" | "premium";
 
 const featureKeys = [
   "serviceFee",
   "customDesign",
+  "dashboard",
   "responsive",
   "contactForm",
   "seo",
   "cms",
+  "SoMe",
+  "analytics",
   "login",
   "mail",
-  "dashboard",
   "database",
   "users",
-  "analytics",
   "3d",
   "scroll",
 ] as const;
 
-const planKeys: PlanKey[] = ["Starter", "Pro", "Premium"];
+const planKeys: PlanKey[] = ["starter", "pro", "premium"];
 
 interface PlansComparisonProps {
   pricingType: "oneTime" | "monthly";
@@ -52,7 +53,7 @@ interface PlansComparisonProps {
 
 const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   const { t, i18n } = useTranslation();
-  const translate = (key: string) => t(`PlansComparison.${key}`);
+  const translate = (key: string) => t(`plansComparison.${key}`);
   const translateAria = (key: string) =>
     t(`aria.plansComparison.${key}`, {
       defaultValue: "Get started with pricing comparison",
@@ -61,7 +62,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   const [pkgMap, setPkgMap] = useState<Partial<Record<PlanKey, DBPackage>>>({});
   const [extraServices, setExtraServices] = useState<DBExtraService[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState<PlanKey>("Starter");
+  const [selectedPlan, setSelectedPlan] = useState<PlanKey>("starter");
 
   const isDanish = i18n.language.startsWith("da");
 
@@ -76,10 +77,10 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
         const map: Partial<Record<PlanKey, DBPackage>> = {};
         packageData.forEach((p) => {
           const lab = p.label.toLowerCase();
-          if (lab.includes("starter")) map.Starter = p;
-          else if (lab.includes("pro")) map.Pro = p;
+          if (lab.includes("starter")) map.starter = p;
+          else if (lab.includes("pro")) map.pro = p;
           else if (lab.includes("premium") || lab.includes("3"))
-            map.Premium = p;
+            map.premium = p;
         });
 
         setPkgMap(map);
@@ -126,6 +127,11 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
     );
   };
 
+  const isBlockedForPro = (label: string) => {
+    const blocked = ["webshop"];
+    return label.toLowerCase().includes(blocked[0]);
+  };
+
   const getFee = (key: PlanKey) => {
     if (loading) return "…";
     const pkg = pkgMap[key];
@@ -143,26 +149,33 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   };
 
   const features = featureKeys.map((k) => translate(`features.${k}`));
+  const tp = (key: string) => t(`plans.${key}`);
 
   const rawPlans = planKeys.map((key) => {
     const shortKey =
-      key === "Starter" ? "starter" : key === "Pro" ? "pro" : "premium";
+      key === "starter" ? "starter" : key === "pro" ? "pro" : "premium";
+
     return {
       key,
-      name: translate(`plans.${shortKey}.name`),
+      // FIX: hent navn fra `plans.*`
+      name: tp(`${shortKey}.name`),
+
       values: featureKeys.map((fk) => {
         if (fk === "serviceFee") return getFee(key);
-        if (fk === "seo" || fk === "cms")
-          return translate(`plans.${shortKey}.${fk}`);
+
+        // FIX: hent seo/cms fra `plans.*`
+        if (fk === "seo" || fk === "cms") return tp(`${shortKey}.${fk}`);
+
         const has = (() => {
-          if (key === "Starter")
-            return [0, 1, 2, 3].includes(featureKeys.indexOf(fk));
-          if (key === "Pro")
-            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].includes(
+          if (key === "starter")
+            return [0, 1, 2, 3, 4].includes(featureKeys.indexOf(fk));
+          if (key === "pro")
+            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(
               featureKeys.indexOf(fk)
             );
           return true;
         })();
+
         return has ? (
           <FaSquareCheck
             key={`${key}-${fk}`}
@@ -260,8 +273,11 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                           key={`extra-cell-${plan.key}-${idx}`}
                           className="p-3 text-sm"
                         >
-                          {plan.key === "Starter" &&
+                          {plan.key === "starter" &&
                           isBlockedForStarter(service.label_en)
+                            ? "–"
+                            : plan.key === "pro" &&
+                              isBlockedForPro(service.label_en)
                             ? "–"
                             : getExtraServicePrice(
                                 service.price_dkk,
@@ -365,7 +381,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                         )}
                       </td>
                       <td className="px-3 py-3">
-                        {selectedPlan === "Starter" &&
+                        {selectedPlan === "starter" &&
                         isBlockedForStarter(service.label_en)
                           ? "–"
                           : getExtraServicePrice(

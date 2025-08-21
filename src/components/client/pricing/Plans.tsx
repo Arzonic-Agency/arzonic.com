@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaCheck, FaPlus } from "react-icons/fa6";
+import { FaCartArrowDown, FaCheck, FaPlus, FaStar } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { getPackages } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
@@ -23,9 +23,9 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
 
-  const tStarter = (key: string) => t(`Starter.${key}`);
-  const tPro = (key: string) => t(`Pro.${key}`);
-  const tPremium = (key: string) => t(`Premium.${key}`);
+  const tStarter = (key: string) => t(`plans.starter.${key}`);
+  const tPro = (key: string) => t(`plans.pro.${key}`);
+  const tPremium = (key: string) => t(`plans.premium.${key}`);
 
   const [packages, setPackages] = useState<Record<string, Package>>({});
   const [loading, setLoading] = useState(true);
@@ -98,7 +98,18 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       key: "Starter",
       title: tStarter("title"),
       desc: tStarter("description"),
-      features: ["customDesign", "responsiveFast", "basicSEO", "simpleCMS"],
+      features: [
+        <span
+          key="base"
+          className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
+        >
+          <FaStar size={17} /> {tStarter("adminDashboard")}
+        </span>,
+        "customDesign",
+        "responsiveFast",
+        "simpleCMS",
+        "basicSEO",
+      ],
       tFeature: tStarter,
     },
     {
@@ -108,14 +119,16 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       features: [
         <span
           key="base"
-          className="text-xs font-semibold text-secondary flex items-center gap-1"
+          className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
         >
-          <FaPlus size={12} /> {tStarter("title")} {tPro("including")}
+          <FaStar size={17} className="" /> {tStarter("title")}{" "}
+          {tPro("including")}
         </span>,
         "bespokeUIUX",
+        "socialMedia",
         "featureRich",
         "databaseIntegration",
-        "adminDashboard",
+        ,
       ],
       tFeature: tPro,
     },
@@ -126,24 +139,25 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       features: [
         <span
           key="base"
-          className="text-xs font-semibold text-secondary flex items-center gap-1"
+          className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
         >
-          <FaPlus size={12} /> {tPro("title")} {tPremium("including")}
+          <FaStar size={17} /> {tPro("title")} {tPremium("including")}
         </span>,
         "sleekLayout",
         "parallaxEffects",
         "integrated3D",
-        "performance",
+        "customer",
       ],
       tFeature: tPremium,
     },
   ].map(({ key, title, desc, features, tFeature }) => (
     <div key={key} className="relative" aria-label={title}>
-      <div className="flex flex-col justify-between shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-accent  shadow-base-200 ring-2 ring-base-200">
+      <div className="flex flex-col justify-evenly gap-10 shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-accent  shadow-base-200 ring-2 ring-base-200">
         <div className="flex flex-col gap-5">
           <h3 className="text-3xl font-bold tracking-wide">{title}</h3>
           <p className="text-sm sm:text-base">{desc}</p>
         </div>
+
         <ul className="flex flex-col gap-4">
           {features.map((f, idx) =>
             typeof f === "string" ? (
@@ -160,7 +174,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
             )
           )}
         </ul>
-        <div className="flex flex-col gap-1 items-start mt-2">
+        <div className="flex flex-col gap-1 items-start">
           <span className="text-xs text-zinc-500">{getTabLabel()}</span>
           <span className="text-2xl sm:text-3xl  font-semibold tracking-wide">
             {getPrice(key)}
@@ -180,28 +194,6 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       </div>
 
       {/* Tab knapper */}
-      <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
-        <button
-          onClick={() => setPricingType("oneTime")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            pricingType === "oneTime"
-              ? "bg-primary text-white "
-              : "bg-transparent text-primary"
-          }`}
-        >
-          {t("PricingPage.oneTimeTab")}
-        </button>
-        <button
-          onClick={() => setPricingType("monthly")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            pricingType === "monthly"
-              ? "bg-primary text-white"
-              : "bg-transparent text-primary"
-          }`}
-        >
-          {t("PricingPage.monthlyTab")}
-        </button>
-      </div>
 
       {/* Desktop grid visning */}
       <motion.div
@@ -228,6 +220,28 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         {t("PricingPage.vatNote")}
         <br />
         {t("PricingPage.paymentInfo")}
+      </div>
+      <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
+        <button
+          onClick={() => setPricingType("oneTime")}
+          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+            pricingType === "oneTime"
+              ? "bg-primary text-white "
+              : "bg-transparent text-primary"
+          }`}
+        >
+          {t("PricingPage.oneTimeTab")}
+        </button>
+        <button
+          onClick={() => setPricingType("monthly")}
+          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+            pricingType === "monthly"
+              ? "bg-primary text-white"
+              : "bg-transparent text-primary"
+          }`}
+        >
+          {t("PricingPage.monthlyTab")}
+        </button>
       </div>
     </div>
   );

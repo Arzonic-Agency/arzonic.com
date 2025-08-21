@@ -16,30 +16,21 @@ const HomePage = () => {
   return (
     <>
       {/* <SplashScreen /> */}
-      <section className="h-96 md:h-[700px] relative md:static">
-        <div className="background-animation-layer" />
+      <section className="h-full md:h-[700px] static">
+        <div className="background-animation-layer-left" />
         <div className="background-fade-bottom" />
         <Hero />
       </section>
       <section className="h-[700px] md:h-[800px]">
         <Present />
       </section>
-      <section className="relative h-full md:h-[850px] 2xl:h-[1100px] mb-40 overflow-visible xl:grid xl:place-items-center">
-        <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:top-0 xl:w-screen w-full h-full opacity-55 z-0">
-          <Image
-            src="/backgrounds/lines.svg"
-            alt=""
-            fill
-            className="hidden md:block object-cover"
-          />
-          <Image
-            src="/backgrounds/lines2.svg"
-            alt=""
-            fill
-            className="block md:hidden object-cover"
-          />
+      <section className="relative h-full md:h-[800px] xl:h-[900px] mb-30 overflow-visible flex items-center">
+        <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:w-screen w-full h-full">
+          <div className="background-fade-top" />
+          <div className="background-animation-layer-right" />
+          <div className="background-fade-bottom" />
         </div>
-        <div className="relative z-10 w-full max-w-screen-xl px-6">
+        <div className="relative z-10 w-full max-w-screen-xl px-6 ">
           <Preview />
         </div>
       </section>

@@ -76,31 +76,35 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 p-1 md:p-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 ">
       {caseItems.map((item, index) => (
         <motion.article
           key={item.id}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
-          className="rounded-xl overflow-hidden bg-accent ring-2 p-2 ring-base-200 md:hover:bg-base-200 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-shadow duration-300 ease-in-out shadow-md hover:shadow-xl "
+          className="rounded-xl overflow-hidden p-2 bg-accent  md:hover:bg-base-200 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-primary transition-shadow duration-300 ease-in-out shadow-md hover:shadow-xl "
         >
           <Link
             href={item.website || "/cases"}
-            className="w-full h-full block"
+            className="w-full block"
             aria-label={
               t("aria.navigation.linkToCases") || "Go to customer's website"
             }
           >
-            <div className="relative  h-72 sm:h-96">
+            {/* Billedet */}
+            <div className="relative w-[full] aspect-[16/13] mx-4">
               <Image
                 src={item.image || FALLBACK_IMAGE}
                 alt={item.company}
                 fill
-                className="object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300"
+                className="object-cover opacity-80 hover:opacity-100 hover:scale-102 transition-all duration-300"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
-            <div className="p-5 flex flex-col justify-evenly h-60">
+
+            {/* Tekst */}
+            <div className="p-5 flex flex-col justify-evenly min-h-[200px]">
               <h2 className="text-lg font-bold">{item.company}</h2>
               <p className="text-sm text-zinc-400 line-clamp-4">{item.desc}</p>
               <div className="text-xs text-zinc-500 flex justify-between pt-4">

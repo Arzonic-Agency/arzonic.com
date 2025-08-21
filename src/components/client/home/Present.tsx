@@ -1,12 +1,13 @@
 import React from "react";
-import { FaArrowUpRightDots, FaPalette } from "react-icons/fa6";
+import { FaArrowUpRightDots } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import { FaPaintBrush } from "react-icons/fa";
 
 const Present = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex items-center justify-center h-full w-full p-3">
+    <div className="flex items-center justify-center h-full w-full p-3 ">
       <div className="max-w-5xl flex flex-col gap-7 ">
         <h2 className="text-xl sm:text-xl md:text-3xl font-light text-center z-20 mb-3 md:mb-10  max-w-xs sm:max-w-full mx-auto ">
           {t("Present.title")}
@@ -20,7 +21,7 @@ const Present = () => {
               {t("Present.customDesign.description")}
             </p>
             <div className="absolute bottom-4 right-4 text-secondary">
-              <FaPalette className="text-4xl md:text-5xl" />
+              <FaPaintBrush className="text-4xl md:text-5xl" />
             </div>
           </div>
           <div className="flex-2/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-two">

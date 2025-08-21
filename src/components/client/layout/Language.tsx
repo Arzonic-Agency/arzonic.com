@@ -24,7 +24,13 @@ const Language = () => {
           "Change language to Danish"
         )}
       >
-        <Image src="/DK.png" alt="" width={35} height={35} />
+        <Image
+          src="/DK.png"
+          alt="Skift til Dansk"
+          width={35}
+          height={35}
+          className="w-9 h-auto"
+        />
       </div>
       <div
         className="swap-off flex items-center gap-2 text-3xl opacity-90"
@@ -33,7 +39,13 @@ const Language = () => {
           "Change language to English"
         )}
       >
-        <Image src="/UK.png" alt="" width={35} height={35} />
+        <Image
+          src="/UK.png"
+          alt="Change to English"
+          width={35}
+          height={35}
+          className="w-9 h-auto"
+        />
       </div>
     </label>
   );

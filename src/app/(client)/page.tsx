@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     absolute: "Arzonic – Danish Software Agency ",
   },
   description:
-    "We specialize in building high-performance webapplications and immersive 3D experiences using modern technologies.",
+    "We develop intelligent web apps for ambitious businesses. Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology.",
 };
 
 export default function Page() {

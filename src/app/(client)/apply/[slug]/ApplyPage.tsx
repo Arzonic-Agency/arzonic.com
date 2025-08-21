@@ -15,7 +15,7 @@ const ApplyPage = ({ job }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <div className="p-5 sm:p-7 w-full h-full flex flex-col justify-center items-center relative my-20">
+    <div className="p-5 md:p-8 w-full h-full flex flex-col justify-center items-center relative my-20">
       <div className="md:max-w-[470px]">
         <h1 className="text-lg font-bold mb-6 flex md:flex-row flex-col gap-2 items-center">
           <span className="text-primary text-xl">

@@ -244,17 +244,18 @@ const OfferForm = () => {
 
           {errorText && <p className="text-error">{errorText}</p>}
           {successText && <p className="text-success">{successText}</p>}
-
-          <button
-            type="submit"
-            className="btn btn-primary mt-5"
-            disabled={isLoading}
-            aria-label={t("OfferForm.aria.submitButton")}
-          >
-            {isLoading
-              ? t("OfferForm.buttons.sending")
-              : t("OfferForm.buttons.submit")}
-          </button>
+          <div>
+            <button
+              type="submit"
+              className="btn btn-primary mt-5"
+              disabled={isLoading}
+              aria-label={t("OfferForm.aria.submitButton")}
+            >
+              {isLoading
+                ? t("OfferForm.buttons.sending")
+                : t("OfferForm.buttons.submit")}
+            </button>
+          </div>
         </form>
       )}
     </div>

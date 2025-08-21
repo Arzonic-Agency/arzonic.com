@@ -1,4 +1,5 @@
 {
+  "AllRightReserved": "All rights reserved",
   "login": "Login",
   "logging_in": "Logging in...",
   "edit": "Edit",
@@ -328,38 +329,6 @@
     "getInTouch": "Get in Touch",
     "disclaimer": "Disclaimer: The price shown is only an estimation and may vary. Final pricing will be confirmed upon consultation."
   },
-  "Starter": {
-    "title": "Starter",
-    "description": "Perfect for small businesses or personal brands",
-    "features": {
-      "customDesign": "Custom Design",
-      "responsiveFast": "Responsive and fast",
-      "basicSEO": "Basic SEO setup",
-      "simpleCMS": "Simple CMS or static content"
-    }
-  },
-  "Pro": {
-    "title": "Pro",
-    "including": "Included",
-    "description": "Ideal for digital products and feature-rich solutions",
-    "features": {
-      "bespokeUIUX": "Bespoke UI/UX design",
-      "featureRich": "Feature-rich functionality",
-      "databaseIntegration": "Database integration",
-      "adminDashboard": "Admin dashboard"
-    }
-  },
-  "Premium": {
-    "title": "Premium",
-    "including": "Included",
-    "description": "Everything included – premium features, visuals, and 3D",
-    "features": {
-      "sleekLayout": "Sleek, animated layout",
-      "parallaxEffects": "Subtle parallax & motion effects",
-      "integrated3D": "Integrated 3D elements",
-      "performance": "Built for performance"
-    }
-  },
 
   "startingFrom": "Starting from",
   "customQuotePrompt": "Get your custom quote in few seconds",
@@ -375,6 +344,7 @@
     "followUs": "Follow us",
     "facebook": "Facebook",
     "instagram": "Instagram",
+    "linkedIn": "LinkedIn",
     "dropdown": {
       "customWebsites": "Custom Websites",
       "webApplications": "Web Applications",
@@ -398,9 +368,9 @@
   },
   "Hero": {
     "title": "SOFTWARE AGENCY",
-    "description": "Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology.",
+    "description": "We develop intelligent web apps for ambitious businesses",
     "customWebsites": "Custom Websites",
-    "visualization": "3D Visualization",
+    "visualization": "3D Design",
     "webApplications": "Web Applications",
     "seeMore": "See Solutions",
     "customerFeedback": "Efficient, user-friendly system – Arzonic always delivers professional, fast service."
@@ -552,10 +522,12 @@
     "placeholder": "Choose Solution",
     "options": {
       "website": "Website",
-      "webApp": "Web App",
-      "visualization": "3D Visualization",
-      "branding": "Branding",
-      "marketing": "Marketing",
+      "webshop": "Webshop",
+      "booking": "Booking system",
+      "dashboard": "Dashboard / CMS",
+      "events": "Event system",
+      "integration": "Integrations (API, Facebook, Instagram, etc.)",
+      "visualization": "3D & Animation",
       "other": "Other"
     },
     "aria": {
@@ -568,7 +540,7 @@
     "readyTitle": "Ready to get started?",
     "contactPrompt": "Contact us today – we will quickly get back to you with an estimate or a discussion about the solution.",
     "ambitionMessage": "We love ambitious ideas and are happy to help make them a reality.",
-    "callPrompt": "Call us at",
+    "callPrompt": "Give us a call at",
     "phoneNumber": "+45 22 50 17 03",
     "bookPrompt": "or you ready for a meeting?",
     "imageAlt": "hero"
@@ -604,6 +576,7 @@
       "customDesign": "Custom design",
       "responsive": "Responsive and fast",
       "contactForm": "Contact form",
+      "SoMe": "Social Media integration",
       "seo": "SEO setup",
       "cms": "CMS / Editable content",
       "login": "User login and access",
@@ -614,30 +587,51 @@
       "analytics": "Statistics and analytics",
       "3d": "3D elements and animations",
       "scroll": "Scroll effects and parallax"
-    },
-    "plans": {
-      "starter": {
-        "name": "Starter",
-        "price": "7,000 DKK",
-        "seo": "Basic",
-        "cms": "Simple"
-      },
-      "pro": {
-        "name": "Pro",
-        "price": "13,000 DKK",
-        "seo": "Advanced",
-        "cms": "Advanced"
-      },
-      "premium": {
-        "name": "Premium",
-        "price": "16,000 DKK",
-        "seo": "Advanced",
-        "cms": "Advanced"
+    }
+  },
+  "plans": {
+    "starter": {
+      "name": "Starter",
+      "title": "Starter",
+      "description": "Perfect for small businesses or personal brands",
+      "including": " Included",
+      "adminDashboard": "Admin dashboard",
+      "seo": "Basic",
+      "cms": "Simple",
+      "features": {
+        "customDesign": "Custom design",
+        "responsiveFast": "Responsive and fast",
+        "basicSEO": "Basic SEO setup",
+        "simpleCMS": "CMS / Editable content"
       }
     },
-
-    "aria": {
-      "getStartedButton": "Get started with pricing comparison"
+    "pro": {
+      "name": "Pro",
+      "title": "Pro",
+      "description": "Ideal for digital products and functional solutions",
+      "including": "Included",
+      "seo": "Extended",
+      "cms": "Advanced",
+      "features": {
+        "bespokeUIUX": "Unique UI/UX design",
+        "featureRich": "Advanced functionality",
+        "databaseIntegration": "Database integration",
+        "socialMedia": "Social Media integration"
+      }
+    },
+    "premium": {
+      "name": "Premium",
+      "title": "Premium",
+      "description": "Everything combined – premium features, visual effects, and 3D",
+      "including": "Included",
+      "seo": "Extended",
+      "cms": "Advanced",
+      "features": {
+        "sleekLayout": "Elegant and animated layout",
+        "parallaxEffects": "Parallax and motion effects",
+        "integrated3D": "Integrated 3D elements",
+        "performance": "Optimized for high performance"
+      }
     }
   },
   "Support": {
