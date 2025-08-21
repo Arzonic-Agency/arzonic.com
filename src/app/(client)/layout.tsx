@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
+import SEO from "@/lib/config/next-seo.config";
 import ScreenFade from "@/components/client/layout/ScreenFade";
 
 export default function ClientLayout({
@@ -36,17 +37,7 @@ export default function ClientLayout({
         src="https://stats.arzonic.com/script.js"
         data-website-id="3226dc67-1feb-4d8c-9f6d-75f7dd0d23d7"
       />
-      <DefaultSeo
-        titleTemplate="%s - Arzonic"
-        defaultTitle="Arzonic - Software Agency"
-        description="We develop intelligent web apps for ambitious businesses. Specializing in custom web applications, powerful dashboards, and stunning 3D experiences powered by cutting-edge technology."
-        openGraph={{
-          type: "website",
-          locale: "en_US",
-          url: "https://arzonic.com",
-          siteName: "Arzonic",
-        }}
-      />
+      <DefaultSeo {...SEO} />
       <div className="sm:h-lvh h-dvh max-w-screen-xl mx-auto pt-[101px]">
         <header>
           <Header />
