@@ -28,7 +28,7 @@ const SolutionsPage = () => {
           ],
         }}
       />
-      <div className="p-7 sm:p-10 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20 z-50">
+      <div className="p-7 sm:p-10 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20 ">
         <div className="max-w-[290px] md:max-w-[470px]">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
             {t("SolutionsPage.title")}
@@ -43,8 +43,6 @@ const SolutionsPage = () => {
           <FAQ />
         </div>
       </div>
-      <div className="background-animation-layer" />
-      <div className="background-fade-bottom" />
     </>
   );
 };
