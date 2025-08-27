@@ -1,12 +1,12 @@
-// src/lib/server/estimate.ts
 import { createServerClientInstance } from "@/utils/supabase/server";
 
 export async function calculateEstimateFromAnswers(
-  answers: number[][]
+  answers: number[][],
+  packageOptionIdFromCaller?: number
 ): Promise<string> {
   const supabase = await createServerClientInstance();
-
-  const packageOptionId = answers[1]?.[0];
+  // allow caller (route) to explicitly pass the package-option id
+  const packageOptionId = packageOptionIdFromCaller ?? answers[1]?.[0];
   if (!packageOptionId) {
     throw new Error("No package selected");
   }
@@ -15,13 +15,19 @@ export async function calculateEstimateFromAnswers(
     .from("options")
     .select("package_id, text")
     .eq("id", packageOptionId)
-    .single();
+    .maybeSingle();
   if (optErr) {
     throw new Error("Failed to load package mapping: " + optErr.message);
   }
-  if (!optRow?.package_id) {
+  if (!optRow) {
+    throw new Error(`No option found with id="${packageOptionId}"`);
+  }
+
+  if (!optRow.package_id) {
     throw new Error(
-      `Option ${packageOptionId} (“${optRow.text}”) has no linked package`
+      `Option ${packageOptionId} ("${
+        optRow.text ?? "unknown"
+      }") has no linked package`
     );
   }
   const packageId = optRow.package_id;

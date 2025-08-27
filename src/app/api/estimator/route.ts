@@ -36,7 +36,8 @@ export async function POST(req: Request) {
   const nestedAnswers = answers.map((q) => q.optionIds);
   let estimate: string;
   try {
-    estimate = await calculateEstimateFromAnswers(nestedAnswers);
+    const pkgOptId = answers.find((q) => q.questionId === 2)?.optionIds?.[0];
+    estimate = await calculateEstimateFromAnswers(nestedAnswers, pkgOptId);
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("Estimate computation failed:", err);

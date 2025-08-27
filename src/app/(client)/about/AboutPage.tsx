@@ -32,7 +32,7 @@ const AboutPage = () => {
         }}
       />
 
-      <div className="p-5 md:p-8 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-20">
+      <div className="p-5 md:p-8 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center relative my-10 md:my-20">
         <div className="max-w-[260px] md:max-w-3xl">
           <h1 className="text-3xl md:text-5xl font-bold text-center">
             {t("aboutPage.titleStart")}

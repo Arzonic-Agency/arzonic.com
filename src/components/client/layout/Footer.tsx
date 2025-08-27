@@ -88,6 +88,13 @@ const Footer = () => {
           <h5 className="footer-title">{t("Footer.legal", "Legal")}</h5>
           <TermsModal buttonText={t("terms_of_service")} variant="hover" />
           <ConsentModal buttonText={t("privacy_policy")} variant="hover" />
+          <Link
+            href="/pricing"
+            className="link link-hover"
+            aria-label={t("aria.footer.linkToPriser", "Go to priser")}
+          >
+            {t("Footer.priser", "Priser")}
+          </Link>
         </nav>
       </footer>
       <footer className="footer bg-base-100 text-base-content px-5 md:px-10 py-4">
@@ -100,7 +107,7 @@ const Footer = () => {
               {t("Footer.reliableTech", "Providing reliable tech since 2024")}
             </p>
           </div>
-          <span className="ml-2 text-xs text-zinc-500 flex items-center gap-2">
+          <span className="ml-2 text-xs text-zinc-500 flex items-center gap-[5px]">
             <FaRegCopyright /> {new Date().getFullYear()} Arzonic ApS -{" "}
             {t("AllRightReserved")}
           </span>

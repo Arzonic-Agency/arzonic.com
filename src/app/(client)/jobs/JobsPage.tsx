@@ -10,7 +10,7 @@ const JobsPage = () => {
   const [hasJobs, setHasJobs] = useState(true); // Assume jobs exist initially
 
   return (
-    <div className="p-5 md:p-8 w-full h-full flex flex-col gap-12 md:gap-20 xl:gap-32 justify-center items-center my-20">
+    <div className="p-5 md:p-8 w-full h-full flex flex-col gap-10 md:gap-15 xl:gap-28 justify-center items-center my-10 md:my-20">
       <div className="max-w-[300px] md:max-w-[460px]">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
           {t("jobsPage.titleStart")}

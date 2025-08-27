@@ -57,14 +57,14 @@ const Header = () => {
           aria-label={t("aria.navigation.linkToHome")}
         >
           <Image
-            src="/icon-192x192.png"
+            src="/icon-300x300.png"
             alt={t("Header.logoAlt")}
-            width={60}
-            height={60}
-            className="h-10 w-10 md:h-14 md:w-14 rounded-full"
+            width={300}
+            height={300}
+            className="h-10 w-10 md:h-14 md:w-14 "
             priority
           />
-          <span className="font-bold text-2xl md:text-3xl tracking-wider">
+          <span className="font-semibold text-2xl md:text-3xl tracking-wider">
             {t("Header.brandName")}
           </span>
         </Link>
