@@ -13,7 +13,7 @@ const Present = () => {
           {t("Present.title")}
         </h2>
         <div className="flex gap-7 relative md:flex-row flex-col">
-          <div className="flex-3/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 flex flex-col gap-3 shadow-lg relative">
+          <div className="flex-3/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 flex flex-col gap-3 shadow-lg relative z-20">
             <h3 className="text-base md:text-xl font-bold shadow-xl">
               {t("Present.customDesign.title")}
             </h3>
@@ -24,7 +24,7 @@ const Present = () => {
               <FaPaintBrush className="text-4xl md:text-5xl" />
             </div>
           </div>
-          <div className="flex-2/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-two">
+          <div className="flex-2/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-two z-20">
             <h3 className="text-base  md:text-xl font-bold">
               {t("Present.easyToManage.title")}
             </h3>
@@ -34,7 +34,7 @@ const Present = () => {
           </div>
         </div>
         <div className="flex gap-7 md:flex-row flex-col">
-          <div className="flex-2/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-one">
+          <div className="flex-2/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 hidden md:flex flex-col gap-3 shadow-lg bg-one z-20">
             <h3 className="text-base md:text-xl font-bold">
               {t("Present.blazingFast.title")}
             </h3>
@@ -42,7 +42,7 @@ const Present = () => {
               {t("Present.blazingFast.description")}
             </p>
           </div>
-          <div className="flex-3/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 flex flex-col gap-3 shadow-lg border-present relative">
+          <div className="flex-3/5 rounded-xl bg-accent ring-2 ring-base-200 h-48 p-7 flex flex-col gap-3 shadow-lg border-present relative z-20">
             <h3 className="text-base md:text-xl font-bold shadow-xl">
               {t("Present.builtToGrow.title")}
             </h3>

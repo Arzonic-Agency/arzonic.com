@@ -18,10 +18,10 @@ const HomePage = () => {
       {/* <SplashScreen /> */}
       <section className="h-full lg:h-[700px] static">
         <div className="background-animation-layer-left" />
-        <div className="background-fade-bottom" />
+        <div className="background-fade-bottom " />
         <Hero />
       </section>
-      <section className="h-[700px] md:h-[800px]">
+      <section className="h-[700px] md:h-[700px]">
         <Present />
       </section>
       <section className="relative h-full md:h-[800px] xl:h-[900px] mb-30 overflow-visible flex items-center">
