@@ -789,7 +789,7 @@ export async function createNews({
         const igCaption = content;
         igResult = await postToInstagram({
           caption: igCaption,
-          imageUrl: imageUrls[0], // Instagram only supports single image for now
+          imageUrls: imageUrls, // Send alle billeder til Instagram
         });
 
         if (igResult?.success && igResult?.id) {

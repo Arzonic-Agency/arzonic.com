@@ -83,38 +83,74 @@ export async function postToFacebookPage({
       access_token: pageAccessToken,
     };
 
-    // Hvis flere billeder - upload dem først som published photos, så del dem
+    // Hvis flere billeder - opret et album post med alle billeder
     if (imageUrls && imageUrls.length > 1) {
-      const photoIds: string[] = [];
+      const mediaIds: string[] = [];
 
-      for (const url of imageUrls) {
+      // Upload alle billeder som unpublished media
+      for (let i = 0; i < imageUrls.length; i++) {
+        const url = imageUrls[i];
+
         const res = await fetch(
           `https://graph.facebook.com/v20.0/${selectedPageId}/photos`,
           {
             method: "POST",
             body: new URLSearchParams({
               url,
-              published: "true", // Publiser direkte
-              no_story: "true", // Undgå at lave separate posts
+              published: "false", // Unpublished så vi kan bruge dem i album
               access_token: pageAccessToken,
             }),
           }
         );
         const data = await res.json();
+
         if (!res.ok) {
           console.error("Photo upload error:", data);
-          throw new Error(`Kunne ikke uploade billede: ${data.error?.message}`);
+          throw new Error(
+            `Kunne ikke uploade billede ${i + 1}: ${data.error?.message}`
+          );
         }
-        photoIds.push(data.id);
+
+        mediaIds.push(data.id);
+        console.log(
+          `✅ [SERVER] Facebook photo ${i + 1} uploaded as media:`,
+          data.id
+        );
       }
 
-      // Opret samlende post der refererer til billederne
-      postBody.child_attachments = JSON.stringify(
-        photoIds.map((id) => ({ media_fbid: id }))
+      // Opret album post med alle billeder
+      const albumRes = await fetch(
+        `https://graph.facebook.com/v20.0/${selectedPageId}/feed`,
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            message,
+            attached_media: JSON.stringify(
+              mediaIds.map((id) => ({ media_fbid: id }))
+            ),
+            access_token: pageAccessToken,
+          }),
+        }
       );
-    }
 
-    // Opret post (kun hvis ikke single photo)
+      const albumData = await albumRes.json();
+
+      if (!albumRes.ok) {
+        console.error("Facebook album post error:", albumData);
+        throw new Error(`Fejl ved album opslag: ${albumData.error?.message}`);
+      }
+
+      console.log(
+        "✅ [SERVER] Facebook album post created successfully:",
+        albumData.id
+      );
+
+      return {
+        link: albumData.id
+          ? `https://www.facebook.com/${albumData.id}`
+          : undefined,
+      };
+    } // Opret post (kun hvis ikke single photo)
     if (!imageUrls || imageUrls.length !== 1) {
       const postRes = await fetch(
         `https://graph.facebook.com/v20.0/${selectedPageId}/feed`,
@@ -183,13 +219,14 @@ export async function deleteFacebookPost(
 
 export async function postToInstagram({
   caption,
-  imageUrl,
+  imageUrls,
 }: {
   caption: string;
-  imageUrl?: string;
+  imageUrls?: string[];
 }): Promise<{ success: boolean; id?: string; permalink?: string }> {
   console.log("🚀 [SERVER] Starting Instagram post...");
   console.log("📝 Caption:", caption);
+  console.log("🖼️ Images:", imageUrls?.length || 0);
 
   const instagramBusinessId = process.env.INSTAGRAM_BUSINESS_ID!;
   if (!instagramBusinessId) throw new Error("INSTAGRAM_BUSINESS_ID mangler");
@@ -199,85 +236,263 @@ export async function postToInstagram({
     throw new Error("FB_SYSTEM_USER_TOKEN mangler");
   }
 
-  if (!imageUrl) throw new Error("Instagram kræver mindst ét billede");
-  if (!/^https:\/\//i.test(imageUrl)) {
-    throw new Error("imageUrl skal være en offentligt tilgængelig HTTPS-URL");
+  if (!imageUrls || imageUrls.length === 0) {
+    throw new Error("Instagram kræver mindst ét billede");
+  }
+
+  // Validate all URLs
+  for (const url of imageUrls) {
+    if (!/^https:\/\//i.test(url)) {
+      throw new Error(
+        "Alle billede URLs skal være offentligt tilgængelige HTTPS-URLs"
+      );
+    }
   }
 
   try {
-    // 1) Opret media-container
-    const mediaRes = await fetch(
+    // Hvis kun ét billede - brug single image post
+    if (imageUrls.length === 1) {
+      const mediaRes = await fetch(
+        `https://graph.facebook.com/v20.0/${instagramBusinessId}/media`,
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            image_url: imageUrls[0],
+            caption,
+            access_token: accessToken,
+          }),
+        }
+      );
+
+      const mediaData = await mediaRes.json();
+      if (!mediaRes.ok) {
+        console.error("Instagram single media upload error:", mediaData);
+        const msg = mediaData?.error?.message || "Ukendt fejl ved upload";
+        throw new Error(`Kunne ikke uploade billede: ${msg}`);
+      }
+
+      const creationId = mediaData.id as string | undefined;
+      if (!creationId) {
+        throw new Error("Creation ID mangler efter media-upload");
+      }
+
+      console.log("✅ [SERVER] Instagram single media uploaded:", creationId);
+
+      // Publicér single image
+      const publishRes = await fetch(
+        `https://graph.facebook.com/v20.0/${instagramBusinessId}/media_publish`,
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            creation_id: creationId,
+            access_token: accessToken,
+          }),
+        }
+      );
+
+      const publishData = await publishRes.json();
+      if (!publishRes.ok) {
+        console.error("Instagram single publish error:", publishData);
+        const msg = publishData?.error?.message || "Ukendt fejl ved publish";
+        throw new Error(`Kunne ikke publicere opslag: ${msg}`);
+      }
+
+      const publishedId = publishData.id as string | undefined;
+      console.log("✅ [SERVER] Instagram single post published:", publishedId);
+
+      // Fetch permalink
+      let permalink: string | undefined;
+      if (publishedId) {
+        try {
+          const permalinkRes = await fetch(
+            `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
+          );
+
+          if (permalinkRes.ok) {
+            const permalinkData = await permalinkRes.json();
+            permalink = permalinkData.permalink;
+            console.log(
+              "✅ [SERVER] Instagram permalink retrieved:",
+              permalink
+            );
+          } else {
+            console.warn("⚠️ [SERVER] Could not fetch Instagram permalink");
+          }
+        } catch (permalinkError) {
+          console.warn(
+            "⚠️ [SERVER] Error fetching Instagram permalink:",
+            permalinkError
+          );
+        }
+      }
+
+      return { success: true, id: publishedId, permalink };
+    }
+
+    // Hvis flere billeder - brug carousel post
+    console.log(
+      "🔄 [SERVER] Creating Instagram carousel with",
+      imageUrls.length,
+      "images"
+    );
+
+    // 1) Upload alle billeder som carousel items
+    const carouselItemIds: string[] = [];
+
+    for (let i = 0; i < imageUrls.length; i++) {
+      const itemRes = await fetch(
+        `https://graph.facebook.com/v20.0/${instagramBusinessId}/media`,
+        {
+          method: "POST",
+          body: new URLSearchParams({
+            image_url: imageUrls[i],
+            is_carousel_item: "true",
+            access_token: accessToken,
+          }),
+        }
+      );
+
+      const itemData = await itemRes.json();
+      if (!itemRes.ok) {
+        console.error(
+          `Instagram carousel item ${i + 1} upload error:`,
+          itemData
+        );
+        const msg = itemData?.error?.message || "Ukendt fejl ved upload";
+        throw new Error(`Kunne ikke uploade billede ${i + 1}: ${msg}`);
+      }
+
+      const itemId = itemData.id as string | undefined;
+      if (!itemId) {
+        throw new Error(`Item ID mangler for billede ${i + 1}`);
+      }
+
+      carouselItemIds.push(itemId);
+      console.log(
+        `✅ [SERVER] Instagram carousel item ${i + 1} uploaded:`,
+        itemId
+      );
+    }
+
+    // 2) Opret carousel container
+    const carouselRes = await fetch(
       `https://graph.facebook.com/v20.0/${instagramBusinessId}/media`,
       {
         method: "POST",
         body: new URLSearchParams({
-          image_url: imageUrl,
+          media_type: "CAROUSEL",
+          children: carouselItemIds.join(","),
           caption,
           access_token: accessToken,
         }),
       }
     );
 
-    const mediaData = await mediaRes.json();
-    if (!mediaRes.ok) {
-      console.error("Instagram media upload error:", mediaData);
-      const msg = mediaData?.error?.message || "Ukendt fejl ved upload";
-      throw new Error(`Kunne ikke uploade billede: ${msg}`);
+    const carouselData = await carouselRes.json();
+    if (!carouselRes.ok) {
+      console.error("Instagram carousel creation error:", carouselData);
+      const msg =
+        carouselData?.error?.message || "Ukendt fejl ved carousel oprettelse";
+      throw new Error(`Kunne ikke oprette carousel: ${msg}`);
     }
 
-    const creationId = mediaData.id as string | undefined;
-    if (!creationId) {
-      throw new Error("Creation ID mangler efter media-upload");
+    const carouselId = carouselData.id as string | undefined;
+    if (!carouselId) {
+      throw new Error("Carousel ID mangler efter oprettelse");
     }
 
-    console.log("✅ [SERVER] Instagram media uploaded:", creationId);
+    console.log("✅ [SERVER] Instagram carousel created:", carouselId);
 
-    // 2) Publicér
-    const publishRes = await fetch(
-      `https://graph.facebook.com/v20.0/${instagramBusinessId}/media_publish`,
-      {
-        method: "POST",
-        body: new URLSearchParams({
-          creation_id: creationId,
-          access_token: accessToken,
-        }),
-      }
-    );
+    // 3) Publicér carousel (med retry logic for Instagram processing)
+    let publishAttempts = 0;
+    const maxAttempts = 5;
+    const retryDelay = 3000; // 3 sekunder
 
-    const publishData = await publishRes.json();
-    if (!publishRes.ok) {
-      console.error("Instagram publish error:", publishData);
-      const msg = publishData?.error?.message || "Ukendt fejl ved publish";
-      throw new Error(`Kunne ikke publicere opslag: ${msg}`);
-    }
+    while (publishAttempts < maxAttempts) {
+      publishAttempts++;
 
-    const publishedId = publishData.id as string | undefined;
-    console.log("✅ [SERVER] Instagram post published:", publishedId);
-
-    // 3) Fetch permalink
-    let permalink: string | undefined;
-    if (publishedId) {
       try {
-        const permalinkRes = await fetch(
-          `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
+        const publishRes = await fetch(
+          `https://graph.facebook.com/v20.0/${instagramBusinessId}/media_publish`,
+          {
+            method: "POST",
+            body: new URLSearchParams({
+              creation_id: carouselId,
+              access_token: accessToken,
+            }),
+          }
         );
 
-        if (permalinkRes.ok) {
-          const permalinkData = await permalinkRes.json();
-          permalink = permalinkData.permalink;
-          console.log("✅ [SERVER] Instagram permalink retrieved:", permalink);
-        } else {
-          console.warn("⚠️ [SERVER] Could not fetch Instagram permalink");
+        const publishData = await publishRes.json();
+
+        if (publishRes.ok) {
+          const publishedId = publishData.id as string | undefined;
+          console.log("✅ [SERVER] Instagram carousel published:", publishedId);
+
+          // 4) Fetch permalink
+          let permalink: string | undefined;
+          if (publishedId) {
+            try {
+              const permalinkRes = await fetch(
+                `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
+              );
+
+              if (permalinkRes.ok) {
+                const permalinkData = await permalinkRes.json();
+                permalink = permalinkData.permalink;
+                console.log(
+                  "✅ [SERVER] Instagram carousel permalink retrieved:",
+                  permalink
+                );
+              } else {
+                console.warn(
+                  "⚠️ [SERVER] Could not fetch Instagram carousel permalink"
+                );
+              }
+            } catch (permalinkError) {
+              console.warn(
+                "⚠️ [SERVER] Error fetching Instagram carousel permalink:",
+                permalinkError
+              );
+            }
+          }
+
+          return { success: true, id: publishedId, permalink };
         }
-      } catch (permalinkError) {
-        console.warn(
-          "⚠️ [SERVER] Error fetching Instagram permalink:",
-          permalinkError
+
+        // Check if it's a retryable error
+        if (
+          publishData?.error?.code === 9007 &&
+          publishData?.error?.error_subcode === 2207027
+        ) {
+          console.log(
+            `⏳ [SERVER] Instagram media not ready, attempt ${publishAttempts}/${maxAttempts}. Waiting ${retryDelay}ms...`
+          );
+
+          if (publishAttempts < maxAttempts) {
+            await new Promise((resolve) => setTimeout(resolve, retryDelay));
+            continue; // Retry
+          } else {
+            throw new Error(
+              "Media blev ikke klar til publicering efter flere forsøg. Prøv igen senere."
+            );
+          }
+        } else {
+          // Non-retryable error
+          console.error("Instagram carousel publish error:", publishData);
+          const msg = publishData?.error?.message || "Ukendt fejl ved publish";
+          throw new Error(`Kunne ikke publicere carousel: ${msg}`);
+        }
+      } catch (fetchError) {
+        if (publishAttempts >= maxAttempts) {
+          throw fetchError;
+        }
+        console.log(
+          `⏳ [SERVER] Network error, attempt ${publishAttempts}/${maxAttempts}. Retrying...`
         );
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
       }
     }
-
-    return { success: true, id: publishedId, permalink };
   } catch (error) {
     console.error("❌ [SERVER] Instagram posting failed:", error);
     throw error;
