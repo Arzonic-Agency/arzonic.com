@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import Setup from "./setup/Setup";
 import Users from "./users/Users";
 import { FaExternalLinkAlt } from "react-icons/fa";
-import { FaUsers } from "react-icons/fa6";
+import { FaFileZipper, FaUsers } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
+import Docs from "./docs/Docs";
 
 const NavSettings = () => {
   const [activeTab, setActiveTab] = useState("setup");
@@ -14,7 +15,7 @@ const NavSettings = () => {
     <div className="w-full">
       <div
         role="tablist"
-        className="tabs sm:tabs-lg w-full md:w-96 text-[15px]"
+        className="tabs sm:tabs-lg w-full text-[15px]"
       >
         <button
           role="tab"
@@ -40,7 +41,20 @@ const NavSettings = () => {
           aria-label={t("aria.nav_settings_users_tab")}
         >
           <FaUsers />
-          {t("user_control")}
+          {t("user_settings")}
+        </button>
+         <button
+          role="tab"
+          className={`tab gap-2  ${
+            activeTab === "Docs"
+              ? "tab-active bg-base-200 rounded-lg shadow-md"
+              : ""
+          }`}
+          onClick={() => setActiveTab("docs")}
+          aria-label={t("aria.nav_settings_docs_tab")}
+        >
+          <FaFileZipper  />
+          {t("docs_settings")}
         </button>
       </div>
 
@@ -53,6 +67,11 @@ const NavSettings = () => {
         {activeTab === "users" && (
           <div className="">
             <Users />
+          </div>
+        )}
+        {activeTab === "docs" && (
+          <div className="">
+            <Docs />
           </div>
         )}
       </div>

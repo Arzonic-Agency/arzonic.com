@@ -1663,3 +1663,49 @@ export async function updatePackage(
     throw err;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Documentation
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getAllTopics() {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data, error } = await supabase
+      .from("doc_topics")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw new Error(`Failed to fetch topics: ${error.message}`);
+    }
+
+    return { topics: data || [] };
+  } catch (err) {
+    console.error("Unexpected error during fetching topics:", err);
+    throw err;
+  }
+}
+
+export async function createDocsTopic(title: string, slug: string) {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { error } = await supabase.from("doc_topics").insert([
+      {
+        title,
+        slug,
+      },
+    ]);
+
+    if (error) {
+      throw new Error(`Failed to create topic: ${error.message}`);
+    }
+  } catch (err) {
+    console.error("Unexpected error during topic creation:", err);
+    throw err;
+  }
+}
+
+
