@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next';
-import { FaAngleLeft } from 'react-icons/fa6';
-import DocsTopicList from './DocsTopicList';
-import DocsTopicCreate from './DocsTopicCreate';
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { FaAngleLeft } from "react-icons/fa6";
+import DocsTopicList from "./DocsTopicList";
+import DocsTopicCreate from "./DocsTopicCreate";
 
 const Docs = () => {
   const [showRegister, setShowRegister] = useState(false);
@@ -15,13 +15,6 @@ const Docs = () => {
   const handleDocsCreated = () => {
     setShowRegister(false);
     setToastMessage(t("docs_created"));
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
-
-  const handleDocsUpdated = () => {
-    setShowUpdate(false);
-    setToastMessage(t("docs_updated"));
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
   };
@@ -48,7 +41,7 @@ const Docs = () => {
             <FaAngleLeft />
             {t("back")}
           </button>
-          <DocsTopicCreate onSave={handleDocsCreated} onBack={() => setShowRegister(false)} />
+          <DocsTopicCreate onSave={handleDocsCreated} />
         </div>
       ) : showUpdate && selectedDocsId ? (
         <div className="flex flex-col items-start gap-5">
@@ -59,7 +52,6 @@ const Docs = () => {
             <FaAngleLeft />
             {t("back")}
           </button>
-
         </div>
       ) : (
         <>
@@ -91,4 +83,4 @@ const Docs = () => {
   );
 };
 
-export default Docs
+export default Docs;

@@ -1,15 +1,8 @@
-import { createDocsTopic } from '@/lib/server/actions';
-import React, {useState } from 'react'
-import { FaAngleLeft } from 'react-icons/fa6';
-import { useTranslation } from 'react-i18next';
+import { createDocsTopic } from "@/lib/server/actions";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const DocsTopicCreate = ({
-  onSave,
-  onBack,
-}: {
-  onSave: () => void;
-  onBack: () => void;
-}) => {
+const DocsTopicCreate = ({ onSave }: { onSave: () => void }) => {
   const { t } = useTranslation();
 
   const [title, setTitle] = useState("");
@@ -28,7 +21,6 @@ const DocsTopicCreate = ({
       setErrors({
         title: !title ? t("createJob.errors.title") : "",
         slug: !slug ? t("createJob.errors.slug") : "",
-
       });
       setLoading(false);
       return;
@@ -45,10 +37,8 @@ const DocsTopicCreate = ({
     }
   };
 
-
   return (
     <div className="flex flex-col gap-3 w-full p-3 pt-5">
-
       <span className="text-lg font-bold">{t("createJob.formTitle")}</span>
 
       <form onSubmit={handleSave} className="flex flex-col gap-5 w-full">
@@ -85,9 +75,8 @@ const DocsTopicCreate = ({
                 <span className="text-xs text-red-500">{errors.slug}</span>
               )}
             </fieldset>
-
           </div>
-</div>
+        </div>
         <div>
           <button
             type="submit"
@@ -102,4 +91,4 @@ const DocsTopicCreate = ({
   );
 };
 
-export default DocsTopicCreate
+export default DocsTopicCreate;
