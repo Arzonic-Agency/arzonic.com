@@ -13,17 +13,10 @@ interface Topic {
 
 interface DocsTopicListProps {
   onEdit?: (topic: Topic) => void;
-  onUpdateDocsClick?: (docsId: string) => void;
-  onDocsDeleted?: () => void;
   t?: (key: string) => string;
 }
 
-const DocsTopicList = ({
-  onEdit,
-  onUpdateDocsClick,
-  onDocsDeleted,
-  t,
-}: DocsTopicListProps) => {
+const DocsTopicList = ({ onEdit, t }: DocsTopicListProps) => {
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
 

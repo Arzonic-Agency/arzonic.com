@@ -65,10 +65,7 @@ const Docs = () => {
           </div>
 
           <div>
-            <DocsTopicList
-              onUpdateDocsClick={handleUpdateDocsClick}
-              onDocsDeleted={handleDocsDeleted}
-            />
+            <DocsTopicList />
           </div>
         </>
       )}
