@@ -6,9 +6,7 @@ import DocsTopicCreate from "./DocsTopicCreate";
 
 const Docs = () => {
   const [showRegister, setShowRegister] = useState(false);
-  const [showUpdate, setShowUpdate] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [selectedDocsId, setSelectedDocsId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const { t } = useTranslation();
 
@@ -19,16 +17,7 @@ const Docs = () => {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleDocsDeleted = () => {
-    setToastMessage(t("docs_deleted"));
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
-
-  const handleUpdateDocsClick = (docsId: string) => {
-    setSelectedDocsId(docsId);
-    setShowUpdate(true);
-  };
+  // Future handlers for delete/update can be added here when feature implemented
 
   return (
     <div className="flex flex-col gap-8 bg-base-200 rounded-box shadow-md p-5 md:p-7">
@@ -42,16 +31,6 @@ const Docs = () => {
             {t("back")}
           </button>
           <DocsTopicCreate onSave={handleDocsCreated} />
-        </div>
-      ) : showUpdate && selectedDocsId ? (
-        <div className="flex flex-col items-start gap-5">
-          <button
-            onClick={() => setShowUpdate(false)}
-            className="btn btn-ghost "
-          >
-            <FaAngleLeft />
-            {t("back")}
-          </button>
         </div>
       ) : (
         <>
