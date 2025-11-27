@@ -147,6 +147,9 @@
   "no_cases": "No cases available",
   "no_reviews": "No reviews available",
   "no_requests": "No requests available",
+  "sidebar_content_amount_news": "Total news posts: {{count}}",
+  "sidebar_content_amount_cases": "Total cases: {{count}}",
+  "sidebar_content_amount_reviews": "Total reviews: {{count}}",
   "overview": "Overview",
   "content": "Content",
   "settings": "Settings",
@@ -164,6 +167,7 @@
   "connecting": "Connecting...",
   "disconnect": "Disconnect",
   "disconnecting": "Disconnecting...",
+  "go_website": "Go to Website",
   "messages": {
     "email_already_exists": "A user with this email already exists",
     "registration_error": "Registration failed, please try again",

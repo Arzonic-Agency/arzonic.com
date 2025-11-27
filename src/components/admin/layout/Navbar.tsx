@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FaComment, FaGear, FaHouse, FaList } from "react-icons/fa6";
+import {
+  FaComment,
+  FaGear,
+  FaHouse,
+  FaList,
+  FaRightFromBracket,
+} from "react-icons/fa6";
 import { readUserSession } from "@/lib/auth/readUserSession";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -128,6 +134,15 @@ const Navbar = () => {
             )}
           </ul>
         </div>
+      </div>
+      <div className="flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-12 hidden sm:flex">
+        <Link
+          href="/"
+          className="btn btn-sm md:btn-md btn-soft flex items-center gap-2"
+        >
+          <span>{t("go_website")}</span>
+          <FaRightFromBracket className="text-sm md:text-base" />
+        </Link>
       </div>
       <div className="flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-0 hidden sm:flex">
         <span className="text-zinc-500 text-[11px] flex items-center justify-center gap-0.5">

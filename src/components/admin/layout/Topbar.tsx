@@ -53,6 +53,9 @@ const Topbar = () => {
               <LanguageAdmin />
             </li>
             <li>
+              <LanguageAdmin />
+            </li>
+            <li>
               <button
                 onClick={signOut}
                 className="pl-[14px] flex items-center gap-2"

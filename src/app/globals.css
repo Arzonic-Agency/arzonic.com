@@ -1,4 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 140rem;
+}
+
 @plugin "daisyui";
 
 @plugin "daisyui/theme" {

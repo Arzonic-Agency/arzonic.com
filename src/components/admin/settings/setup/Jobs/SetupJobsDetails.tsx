@@ -203,7 +203,7 @@ const SetupJobsDetails = ({
             <span className="text-xs font-medium text-gray-400">
               {t("jobsDetails.applications.title")}
             </span>
-            <ul className="list w-full">
+            <ul className="list w-full max-w-xl">
               {applications.length > 0 ? (
                 applications.map((application) => (
                   <li

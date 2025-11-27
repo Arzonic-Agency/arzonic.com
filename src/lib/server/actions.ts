@@ -558,6 +558,16 @@ export async function getAllCases(page = 1, limit = 6) {
   return { cases: data, total: count ?? 0 };
 }
 
+export async function getCasesCount() {
+  const supabase = await createServerClientInstance();
+  const { count, error } = await supabase
+    .from("cases")
+    .select("*", { count: "exact", head: true });
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
 export async function getCaseById(caseId: number) {
   const supabase = await createServerClientInstance();
   const { data, error } = await supabase
@@ -873,6 +883,16 @@ export async function getAllNews(page = 1, limit = 6) {
   return { news: transformedNews, total: count ?? 0 };
 }
 
+export async function getNewsCount() {
+  const supabase = await createServerClientInstance();
+  const { count, error } = await supabase
+    .from("news")
+    .select("*", { count: "exact", head: true });
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
 export async function getNewsById(newsId: number) {
   const supabase = await createServerClientInstance();
   const { data, error } = await supabase
@@ -1052,6 +1072,16 @@ export async function getAllReviews(page = 1, limit = 6) {
 
   if (error) throw new Error(error.message);
   return { reviews: data, total: count ?? 0 };
+}
+
+export async function getReviewsCount() {
+  const supabase = await createServerClientInstance();
+  const { count, error } = await supabase
+    .from("reviews")
+    .select("*", { count: "exact", head: true });
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
 }
 
 export async function deleteReview(reviewId: number): Promise<void> {
@@ -1707,5 +1737,3 @@ export async function createDocsTopic(title: string, slug: string) {
     throw err;
   }
 }
-
-

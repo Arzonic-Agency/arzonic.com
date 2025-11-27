@@ -148,6 +148,9 @@
   "no_cases": "Ingen sager fundet",
   "no_reviews": "Ingen anmeldelser fundet",
   "no_requests": "Ingen henvendelser fundet",
+  "sidebar_content_amount_news": "Antal nyheder i alt: {{count}}",
+  "sidebar_content_amount_cases": "Antal cases i alt: {{count}}",
+  "sidebar_content_amount_reviews": "Antal anmeldelser i alt: {{count}}",
   "overview": "Overblik",
   "content": "Indhold",
   "settings": "Indstillinger",
@@ -165,6 +168,7 @@
   "connecting": "Forbinder...",
   "disconnect": "Afbryd forbindelse",
   "disconnecting": "Afbryder forbindelse...",
+  "go_website": "Gå til hjemmeside",
   "messages": {
     "email_already_exists": "Der findes allerede en bruger med denne e-mail",
     "registration_error": "Fejl ved registrering, prøv igen",

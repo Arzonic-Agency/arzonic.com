@@ -13,10 +13,7 @@ const NavSettings = () => {
   const { t } = useTranslation();
   return (
     <div className="w-full">
-      <div
-        role="tablist"
-        className="tabs sm:tabs-lg w-full text-[15px]"
-      >
+      <div role="tablist" className="tabs sm:tabs-lg w-full text-[15px]">
         <button
           role="tab"
           className={`tab gap-2  ${
@@ -43,7 +40,7 @@ const NavSettings = () => {
           <FaUsers />
           {t("user_settings")}
         </button>
-         <button
+        <button
           role="tab"
           className={`tab gap-2  ${
             activeTab === "Docs"
@@ -53,27 +50,31 @@ const NavSettings = () => {
           onClick={() => setActiveTab("docs")}
           aria-label={t("aria.nav_settings_docs_tab")}
         >
-          <FaFileZipper  />
+          <FaFileZipper />
           {t("docs_settings")}
         </button>
       </div>
-
-      <div className="mt-3 md:mt-5">
-        {activeTab === "setup" && (
-          <div className="">
-            <Setup />
-          </div>
-        )}
-        {activeTab === "users" && (
-          <div className="">
-            <Users />
-          </div>
-        )}
-        {activeTab === "docs" && (
-          <div className="">
-            <Docs />
-          </div>
-        )}
+      <div className="mt-3 md:mt-5 2xl:flex gap-3">
+        <div className="flex-3/4 4xl:flex-3/5">
+          {activeTab === "setup" && (
+            <div className="">
+              <Setup />
+            </div>
+          )}
+          {activeTab === "users" && (
+            <div className="">
+              <Users />
+            </div>
+          )}
+          {activeTab === "docs" && (
+            <div className="">
+              <Docs />
+            </div>
+          )}
+        </div>
+        <div className="hidden 2xl:flex flex-1/4 4xl:flex-2/5 bg-base-200 rounded-box shadow-md p-5 md:p-7 h-fit">
+          test
+        </div>
       </div>
     </div>
   );
