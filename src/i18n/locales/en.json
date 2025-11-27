@@ -409,8 +409,8 @@
   "NavProcess": {
     "header": {
       "title": "This is how our customer process looks like!",
-      "description-first": "We guide you ",
-      "description-second": "through every step with clarity, creativity, and care."
+      "description-first": "With you ",
+      "description-second": "at the center, we create results – step by step"
     },
     "steps": {
       "discoveryStrategy": "Discovery & Strategy",
@@ -1038,7 +1038,7 @@
     "team": [
       {
         "name": "Marc Møller",
-        "role": "PM & Frontend Developer",
+        "role": "PM & Software Engineer",
         "image": "/team/marc2.png"
       },
       {

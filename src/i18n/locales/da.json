@@ -406,8 +406,8 @@
   "NavProcess": {
     "header": {
       "title": "Sådan forløber et samarbejde hos os",
-      "description-first": "Vi guider dig",
-      "description-second": "gennem hvert trin – effektivt og målrettet"
+      "description-first": "Med dig ",
+      "description-second": "i centrum skaber vi resultater – trin for trin"
     },
     "steps": {
       "discoveryStrategy": "Indsigt & Strategi",
@@ -1042,7 +1042,7 @@
     "team": [
       {
         "name": "Marc Møller",
-        "role": "PM & Frontend udvikler",
+        "role": "PM & Software Engineer",
         "image": "/team/marc2.png"
       },
       {
