@@ -1,11 +1,19 @@
 "use client";
 
-import Cases from "@/components/client/cases/Cases";
+import Cases, { RawCase } from "@/components/client/cases/Cases";
 import FAQ from "@/components/client/solutions/FAQ";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-const CasesPage = () => {
+interface CasesPageProps {
+  initialCases: RawCase[];
+  initialTotal: number;
+}
+
+const CasesPage: React.FC<CasesPageProps> = ({
+  initialCases,
+  initialTotal,
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -17,7 +25,7 @@ const CasesPage = () => {
         </h1>
       </div>
       <div className="flex-1 relative">
-        <Cases />
+        <Cases initialCases={initialCases} initialTotal={initialTotal} />
       </div>
       <div className="flex-1 relative">
         <FAQ />

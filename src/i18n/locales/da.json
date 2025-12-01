@@ -660,6 +660,7 @@
   },
   "Policy": {
     "title": "Privatlivspolitik & Samtykke",
+
     "section1": {
       "title": "1. Indsamling af oplysninger",
       "description": "Når du bruger prisberegneren eller kontaktformularen på Arzonic ApS' hjemmeside, beder vi dig om følgende oplysninger:",
@@ -671,16 +672,17 @@
       },
       "note": "Oplysningerne bruges kun til at besvare din henvendelse og udarbejde et eventuelt tilbud."
     },
+
     "section2": {
-      "title": "2. Integration med Facebook og Instagram",
-      "description1": "Funktionen til at forbinde en Facebook-side eller en Instagram Business-konto er kun tilgængelig for registrerede brugere via vores administrationspanel. Hvis du vælger at aktivere denne funktion, vil du blive bedt om at godkende forbindelsen gennem Meta (Facebook). Dette kan give adgang til enkelte nødvendige oplysninger, som bruges til at understøtte manuelle opslag og kræver altid din aktive handling og tilladelse.",
+      "title": "2. Forbindelse til Facebook og Instagram (System User)",
+      "description1": "For at kunne udgive opslag på din Facebook-side eller Instagram Business-konto via vores platform, anvender vi en såkaldt Meta System User. Denne forbindelse gives kun, hvis du som kunde aktivt vælger det.",
       "list": {
-        "access": "Dit navn og e-mailadresse fra Facebook Login",
-        "pages": "Liste over dine Facebook-sider eller Instagram-konti",
-        "publish": "Valgfri funktion til at dele indhold manuelt via vores platform (aktiveres kun af dig selv)"
+        "pages": "Adgang til de sider eller konti, du specifikt vælger at godkende i Meta Business",
+        "publish": "Mulighed for at udgive opslag på dine godkendte sider/konti via vores platform"
       },
-      "description2": "Vi tilbyder dig muligheden for at forbinde din Facebook- eller Instagram-konto, så du kan oprette og håndtere indhold direkte fra vores platform. Funktionen aktiveres kun, hvis du selv vælger det, og alle handlinger sker manuelt med din godkendelse. Du kan til enhver tid fjerne forbindelsen igen via dine Facebook-indstillinger."
+      "description2": "Denne integration henter ingen personlige oplysninger om dig (fx navn, privat profil eller e-mail). Tilgangen er udelukkende teknisk og bruges kun til at understøtte udsendelse af indhold, du selv vælger at publicere. Du kan til enhver tid fjerne adgangen igen via dine Meta Business-indstillinger."
     },
+
     "section3": {
       "title": "3. Opbevaring af oplysninger",
       "description": "Dine oplysninger gemmes sikkert og fortroligt.",
@@ -690,10 +692,12 @@
       },
       "note": "Ønsker du dine data slettet tidligere, kontakt os på mail@arzonic.com."
     },
+
     "section4": {
       "title": "4. Deling med tredjeparter",
       "description": "Vi videregiver aldrig dine data til tredjeparter uden din forudgående accept, medmindre det er nødvendigt for at levere en ydelse til dig."
     },
+
     "section5": {
       "title": "5. Dine rettigheder",
       "description": "Du har altid ret til at:",
@@ -705,19 +709,23 @@
       },
       "note": "Kontakt os via mail@arzonic.com, hvis du vil benytte dig af disse rettigheder."
     },
+
     "section6": {
       "title": "6. Samtykke",
       "description1": "Ved at indsende data via hjemmesiden accepterer du, at vi behandler dine oplysninger som beskrevet her.",
       "description2": "Du kan altid trække dit samtykke tilbage. Vi sletter derefter dine data, medmindre lovgivningen kræver opbevaring."
     },
+
     "section7": {
       "title": "7. Datasikkerhed",
       "description": "Vi bruger tekniske og organisatoriske tiltag for at sikre dine oplysninger mod uautoriseret adgang eller misbrug."
     },
+
     "section8": {
       "title": "8. Opdateringer af politikken",
       "description": "Vi opdaterer løbende denne politik. Nyeste version er altid tilgængelig på vores hjemmeside."
     },
+
     "section9": {
       "title": "9. Kontakt os",
       "list": {
@@ -727,49 +735,74 @@
         "phone": "+45 22 50 17 03"
       }
     },
-    "lastUpdated": "Sidst opdateret: 28. juli 2025"
+
+    "lastUpdated": "Sidst opdateret: 28. november 2025"
   },
   "TermsModal": {
-    "title": "Vilkår og betingelser",
+    "title": "Handelsbetingelser",
     "closeButton": "Luk",
-    "effectiveFrom": "Gyldig fra: 7. maj 2025",
-    "lastUpdated": "Sidst opdateret: 7. maj 2025",
-    "effectiveNote": "Disse vilkår gælder for alle aftaler indgået efter denne dato.",
+    "effectiveFrom": "Gældende fra: 7. maj 2025",
+    "lastUpdated": "Senest opdateret: 29. november 2025",
+    "effectiveNote": "Disse betingelser gælder for alle aftaler indgået efter denne dato.",
+
     "section1": {
       "title": "1. Introduktion",
-      "description": "Disse vilkår gælder for alle ydelser og produkter leveret af Arzonic Agency til vores kunder. Ved at bruge vores hjemmeside eller tjenester accepterer du disse vilkår."
+      "description": "Disse vilkår gælder for alle digitale tjenester, software og produkter leveret af Arzonic ApS ('Arzonic', 'vi', 'os'). Ved brug af vores hjemmeside, platform eller ydelser accepterer du disse handelsbetingelser."
     },
+
     "section2": {
-      "title": "2. Ydelser",
-      "description": "Vi tilbyder digitale konsulentydelser og færdige løsninger, herunder webudvikling, 3D-design og vedligeholdelse. Omfanget aftales individuelt."
+      "title": "2. Tjenesteydelser",
+      "description": "Vi leverer webudvikling, UI/UX, digital rådgivning, integrationer, hosting, design og andre digitale løsninger. Omfang, funktioner, deadlines og leverancer fastlægges i tilbud, aftaler eller dokumenteret kommunikation."
     },
+
     "section3": {
       "title": "3. Betaling og fakturering",
-      "description": "Betaling sker efter fremsendt faktura. Betalingsfrist: 8 dage netto. Ved forsinket betaling pålægges gebyr og renter jf. lovgivning."
+      "description": "Medmindre andet er aftalt, er betalingen 8 dage netto fra fakturadato. Ved større eller fastprisaftaler kan der kræves depositum. Ved forsinket eller manglende betaling kan der pålægges renter, gebyrer eller midlertidig suspension af ydelser. Arbejde udført indtil opsigelse eller stop faktureres."
     },
+
     "section4": {
-      "title": "4. Immaterielle rettigheder",
-      "description": "Alt materiale udviklet af Arzonic forbliver vores ejendom, medmindre andet er skriftligt aftalt. Kunden får brugsret til løsningen."
+      "title": "4. Ophavsret og kildekode",
+      "description": "Medmindre andet er aftalt skriftligt, forbliver ejerskab af kildekode, backend, designstrukturer og interne værktøjer hos Arzonic. Kunden modtager en ikke-eksklusiv brugslicens til den leverede løsning. Overdragelse af fulde rettigheder eller kildekode kræver særskilt skriftlig aftale og kan medføre ekstra omkostninger."
     },
+
     "section5": {
-      "title": "5. Ansvar og begrænsninger",
-      "description": "Vi fraskriver os ansvar for indirekte tab, fejl forårsaget af tredjepart, og force majeure-situationer."
+      "title": "5. Tredjepartstjenester og begrænsninger",
+      "description": "Vores løsninger kan afhænge af hosting, API’er, analyseværktøjer, fonte, Meta-integrationer og sociale platforme. Arzonic er ikke ansvarlig for nedetid, datatab, begrænsninger eller ændringer forårsaget af tredjepart. Vi er ikke ansvarlige for indirekte tab, driftstab, markedsføringsresultater eller følgeskader."
     },
+
     "section6": {
-      "title": "6. Samarbejde og ændringer",
-      "description": "Kunden skal medvirke rettidigt. Ændringer i projektet skal aftales skriftligt. Manglende medvirken kan påvirke levering."
+      "title": "6. Kundens ansvar og samarbejde",
+      "description": "Kunden skal levere nødvendigt materiale, information, godkendelser og feedback inden for rimelig tid. Forsinket kommunikation kan påvirke levering og pris. Godkendte funktioner, design eller leverancer anses som færdige; efterfølgende ændringer betragtes som ændringsønsker og kan faktureres separat."
     },
+
     "section7": {
-      "title": "7. Opsigelse",
-      "description": "Løbende aftaler kan opsiges med én måneds varsel. Ved væsentlig misligholdelse kan samarbejdet ophøre straks."
+      "title": "7. Hosting, support og service",
+      "description": "Hvis Arzonic leverer hosting, drift eller support, vil vi anvende rimelige tekniske og organisatoriske tiltag for at opretholde tilgængelighed. Planlagt vedligeholdelse kan forekomme. Vi garanterer ikke oppetid, datalagring eller adgang ved misligholdelse. Opsigelse af supportaftaler kræver 30 dages skriftligt varsel, medmindre andet er aftalt."
     },
+
     "section8": {
-      "title": "8. Gældende lov og værneting",
-      "description": "Tvister afgøres efter dansk ret med værneting i Retten i Hillerød."
+      "title": "8. Ansvar og juridiske begrænsninger",
+      "description": "I det størst mulige omfang, som loven tillader, er Arzonic ikke ansvarlig for indirekte tab, tabt omsætning, markedsføringsresultater, drifttab eller kundens egen anvendelse. Eventuelt ansvar er begrænset til det samlede beløb betalt for den specifikke ydelse."
     },
+
     "section9": {
-      "title": "9. Ændringer af vilkår",
-      "description": "Vi forbeholder os retten til at ændre disse vilkår. Den nyeste version findes altid på vores hjemmeside."
+      "title": "9. Opsigelse",
+      "description": "Løbende aftaler kan opsiges med 30 dages skriftligt varsel, medmindre andet er angivet. Arzonic kan opsige med øjeblikkelig virkning ved væsentlig misligholdelse, ulovlig brug eller manglende betaling. Arbejde udført før opsigelse faktureres."
+    },
+
+    "section10": {
+      "title": "10. Brug i portefølje og cases",
+      "description": "Arzonic kan vise kundens logo, projektnavn, offentligt tilgængeligt materiale og resultater i vores portefølje, præsentationer eller markedsføring. Hvis kunden ikke ønsker dette, kan det frabedes skriftligt. Arzonic kan fortsat anvende anonymiserede design- eller produktionsdele, der ikke identificerer kunden."
+    },
+
+    "section11": {
+      "title": "11. AI-genereret indhold",
+      "description": "AI-genereret tekst, design, medie eller kode kan indeholde elementer, som Arzonic ikke har fuld ophavsret til. Materialet leveres 'som det er'. Kunden er ansvarlig for lovlig anvendelse, udgivelse og overholdelse af gældende rettigheder. Arzonic kan ikke holdes ansvarlig for varemærkekrænkelser, ophavsretskrav eller platformbegrænsninger. Ønsker kunden garanteret originalt indhold uden AI, skal dette aftales skriftligt og kan medføre ekstra omkostninger."
+    },
+
+    "section12": {
+      "title": "12. Databehandling og GDPR",
+      "description": "Arzonic behandler personoplysninger i overensstemmelse med GDPR. Arzonic agerer databehandler ved drift, platform og teknisk behandling. Kunden er dataansvarlig for brugerdata, virksomhedsdata og markedsføring. Kunden er ansvarlig for lovlig indsamling og anvendelse af data. Arzonic kan benytte tredjepartsleverandører i EU/EØS eller godkendte lande. Yderligere detaljer findes i vores privatlivspolitik."
     }
   },
   "GetStarted": {

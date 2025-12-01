@@ -1,54 +1,32 @@
+
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { FaLocationDot } from "react-icons/fa6";
 import Link from "next/link";
 
-interface CasesListProps {
-  page: number;
-  setTotal: React.Dispatch<React.SetStateAction<number>>;
-}
-
-interface CaseItem {
+export interface CaseItem {
   id: number;
   company: string;
   desc: string;
-  image?: string;
+  image?: string | null;
   city: string;
   created_at: string;
-  website: string;
+  website: string | null;
+}
+
+interface CasesListProps {
+  cases: CaseItem[];
+  loading: boolean;
 }
 
 const FALLBACK_IMAGE = "/demo.jpg";
 
-const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
-  const { t, i18n } = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [caseItems, setCaseItems] = useState<CaseItem[]>([]);
-
-  const fetchCases = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/cases?page=${page}&lang=${i18n.language}`);
-      if (!res.ok) throw new Error("Failed to load cases");
-      const { cases, total } = await res.json();
-      setCaseItems(cases);
-      setTotal(total);
-    } catch (err) {
-      console.error("Failed to fetch cases:", err);
-      setCaseItems([]);
-      setTotal(0);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, setTotal, i18n.language]);
-
-  useEffect(() => {
-    fetchCases();
-  }, [fetchCases]);
+const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
+  const { t } = useTranslation();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -59,7 +37,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
     }).format(date);
   };
 
-  if (loading) {
+  if (loading && cases.length === 0) {
     return (
       <div className="flex justify-center gap-3 items-center w-full">
         <span className="loading loading-dots loading-xl text-secondary h-96" />
@@ -67,7 +45,7 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
     );
   }
 
-  if (caseItems.length === 0) {
+  if (!loading && cases.length === 0) {
     return (
       <div className="flex justify-center items-center h-40">
         <p className="text-lg text-gray-500">{t("no_cases")}</p>
@@ -76,8 +54,14 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 ">
-      {caseItems.map((item, index) => (
+    <div className="relative">
+      {loading && cases.length > 0 && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-base-100/80">
+          <span className="loading loading-dots loading-lg text-secondary" />
+        </div>
+      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 ">
+        {cases.map((item, index) => (
         <motion.article
           key={item.id}
           initial={{ opacity: 0, y: 30 }}
@@ -117,7 +101,8 @@ const CasesList: React.FC<CasesListProps> = ({ page, setTotal }) => {
             </div>
           </Link>
         </motion.article>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

@@ -112,7 +112,7 @@ const CreateNews = ({
   };
 
   const handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length <= 350) setDesc(e.target.value);
+    if (e.target.value.length <= 800) setDesc(e.target.value);
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,13 +141,13 @@ const CreateNews = ({
                 onChange={handleDescChange}
                 required
                 placeholder={t("write_desc")}
-                maxLength={350}
+                maxLength={800}
                 cols={30}
                 rows={8}
                 style={{ resize: "none" }}
               />
               <div className="text-right text-xs font-medium text-zinc-500 absolute right-1 -bottom-5">
-                {desc.length} / 350
+                {desc.length} / 800
               </div>
               {errors.desc && (
                 <span className="absolute -bottom-4 text-xs text-red-500">

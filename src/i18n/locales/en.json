@@ -658,64 +658,72 @@
   },
   "Policy": {
     "title": "Privacy Policy & Consent",
+
     "section1": {
       "title": "1. Information Collection",
-      "description": "When you use our price calculator or contact form on Arzonic ApS's website, we request the following information:",
+      "description": "When you use our price calculator or contact form on the Arzonic ApS website, we may request the following information:",
       "list": {
         "name": "Your name",
         "phone": "Phone number",
         "email": "Email address",
         "details": "Details you voluntarily provide in your message"
       },
-      "note": "We only use this information to respond to your inquiry and prepare an offer if requested."
+      "note": "We only use this information to respond to your inquiry and prepare a potential offer."
     },
+
     "section2": {
-      "title": "2. Facebook and Instagram Integration",
-      "description1": "The option to connect a Facebook Page or Instagram Business account is only available to registered users through our admin panel. If you choose to enable this feature, you will be asked to authorize the connection via Meta (Facebook). This may provide access to a few necessary details, which are used solely to support manual publishing and always require your active confirmation and permission.:",
+      "title": "2. Facebook and Instagram Connection (System User)",
+      "description1": "To publish posts to your Facebook Page or Instagram Business account via our platform, we use a Meta System User. This access is only granted if you explicitly request it as a customer.",
       "list": {
-        "access": "Your name and email address via Facebook Login",
-        "pages": "A list of your connected Facebook Pages or Instagram accounts",
-        "publish": "The ability to manually share content through our platform (only with your clear approval)"
+        "pages": "Access to the specific pages or accounts you authorize in Meta Business",
+        "publish": "Ability to publish posts to the authorized pages/accounts via our platform"
       },
-      "description2": "This connection simply allows you to manage your social content in one place. Nothing is shared or posted automatically, and no information is stored longer than necessary to support the functionality. You are always in control and can disconnect at any time through your Facebook settings."
+      "description2": "This integration does not collect personal information such as your private profile, name, or email. The access is purely technical and used only to support the publication of content that you choose to submit. You may revoke this access at any time through your Meta Business settings."
     },
+
     "section3": {
       "title": "3. Data Storage",
       "description": "Your data is stored securely and confidentially.",
       "list": {
         "noCustomer": "If you do not become a customer, your data will be deleted within 30 days.",
-        "customer": "If you become a customer, we retain your data only as long as legally required or necessary to provide our services."
+        "customer": "If you become a customer, we retain your data only as long as legally required or necessary to deliver our services."
       },
-      "note": "To request earlier deletion, contact us at mail@arzonic.com."
+      "note": "If you would like your data deleted sooner, please contact us at mail@arzonic.com."
     },
+
     "section4": {
       "title": "4. Sharing with Third Parties",
-      "description": "We never share your data with third parties without your prior consent unless it is necessary to provide a requested service."
+      "description": "We never share your data with third parties without your prior consent, unless it is necessary to provide a service you have requested."
     },
+
     "section5": {
       "title": "5. Your Rights",
       "description": "You have the right to:",
       "list": {
         "access": "Request access to your data",
-        "correct": "Correct inaccuracies in your information",
+        "correct": "Request corrections to inaccurate information",
         "delete": "Request deletion of your data if permitted by law",
         "withdraw": "Withdraw previously given consent"
       },
-      "note": "Please contact mail@arzonic.com to exercise these rights."
+      "note": "Please contact us at mail@arzonic.com to exercise these rights."
     },
+
     "section6": {
       "title": "6. Consent",
-      "description1": "By submitting information via our website, you consent to us processing your data as described.",
-      "description2": "You may withdraw your consent at any time. We will then delete your data unless legally required to retain it."
+      "description1": "By submitting information via our website, you consent to the processing of your data as described in this policy.",
+      "description2": "You may withdraw your consent at any time. We will then delete your data unless we are legally required to retain it."
     },
+
     "section7": {
       "title": "7. Data Security",
       "description": "We use technical and organizational measures to protect your data from unauthorized access or misuse."
     },
+
     "section8": {
       "title": "8. Policy Updates",
-      "description": "We regularly update this policy. The latest version is always available on our website."
+      "description": "We update this policy regularly. The latest version will always be available on our website."
     },
+
     "section9": {
       "title": "9. Contact Information",
       "list": {
@@ -725,49 +733,74 @@
         "phone": "+45 22 50 17 03"
       }
     },
-    "lastUpdated": "Last updated: July 28, 2025"
+
+    "lastUpdated": "Last updated: November 28, 2025"
   },
   "TermsModal": {
     "title": "Terms of Service",
     "closeButton": "Close",
     "effectiveFrom": "Effective from: May 7, 2025",
-    "lastUpdated": "Last updated: May 7, 2025",
+    "lastUpdated": "Last updated: November 29, 2025",
     "effectiveNote": "These terms apply to all agreements entered into after this date.",
+
     "section1": {
       "title": "1. Introduction",
-      "description": "These terms apply to all services and products provided by Arzonic Agency to our clients. By using our website or services, you agree to these terms."
+      "description": "These terms apply to all digital services, software and products delivered by Arzonic ApS ('Arzonic', 'we', 'us'). By using our website, platform, or services, you agree to these Terms of Service."
     },
+
     "section2": {
-      "title": "2. Services",
-      "description": "We provide digital consultancy and ready-made solutions including web development, 3D design, and maintenance. Scope is agreed individually."
+      "title": "2. Scope of Services",
+      "description": "We provide web development, UI/UX, digital consultancy, integrations, hosting, design, and other digital services. Specific features, deadlines and deliverables are defined in proposals, contracts or documented communication."
     },
+
     "section3": {
       "title": "3. Payment and Invoicing",
-      "description": "Payment is due upon invoice unless otherwise agreed. Payment terms: 8 days net. Late payments may incur fees and interest according to law."
+      "description": "Unless otherwise stated, payment is due within 8 days of invoice. Some projects require upfront deposit. Late or missing payments may result in interest, fees, or suspension of services. Work delivered up to termination or suspension will be invoiced."
     },
+
     "section4": {
-      "title": "4. Intellectual Property",
-      "description": "All materials developed by Arzonic remain our property unless otherwise agreed in writing. The client receives a usage license."
+      "title": "4. Intellectual Property and Source Code",
+      "description": "Unless otherwise agreed in writing, Arzonic retains ownership of source code, backend logic, design frameworks and internal development tools. The customer receives a non-exclusive license to use the delivered solution. Full IP or source code transfer must be agreed in writing and may include additional fees."
     },
+
     "section5": {
-      "title": "5. Liability and Limitations",
-      "description": "We disclaim responsibility for indirect losses, third-party software issues, and force majeure events."
+      "title": "5. Third-Party Services and Limitations",
+      "description": "Our solutions may rely on external services such as hosting providers, APIs, analytics tools, fonts, meta integrations or social media platforms. Arzonic is not liable for downtime, data loss, rate limits, policy changes or limitations caused by third parties. We are not liable for indirect loss, business interruption or consequential damages."
     },
+
     "section6": {
-      "title": "6. Cooperation and Changes",
-      "description": "The client must respond in a timely manner. Changes must be agreed in writing. Lack of cooperation may affect delivery."
+      "title": "6. Client Responsibilities and Cooperation",
+      "description": "The client must provide required materials, information, approvals and feedback in a timely manner. Delays in communication or missing content may postpone delivery and increase costs. Once a design, feature or deliverable is approved, modifications or new requirements are treated as change requests and may be billed separately."
     },
+
     "section7": {
-      "title": "7. Termination",
-      "description": "Ongoing agreements can be terminated with one month’s notice. Immediate termination may occur in case of material breach."
+      "title": "7. Hosting, Support and Service Level",
+      "description": "If Arzonic provides hosting, maintenance or technical support, we will use commercially reasonable efforts to maintain availability. Scheduled updates may be performed. We do not guarantee uptime, data retention or access if the customer violates terms or fails to pay. Termination of support requires 30 days' written notice unless otherwise agreed."
     },
+
     "section8": {
-      "title": "8. Governing Law and Jurisdiction",
-      "description": "Disputes are governed by Danish law with jurisdiction in the Court of Hillerød."
+      "title": "8. Liability and Legal Limitations",
+      "description": "To the fullest extent permitted by law, Arzonic is not liable for indirect losses, lost revenue, marketing performance, operational impact or client execution. Any liability is limited to the total amount paid for the specific project or service."
     },
+
     "section9": {
-      "title": "9. Changes to Terms",
-      "description": "We reserve the right to modify these terms. The latest version is always available on our website."
+      "title": "9. Termination",
+      "description": "Contracts may be terminated with 30 days’ written notice unless stated otherwise. Arzonic may terminate immediately in case of breach, illegal activities, abuse of services or unpaid invoices. Work performed prior to termination will be invoiced."
+    },
+
+    "section10": {
+      "title": "10. Portfolio and Case Usage",
+      "description": "Arzonic may display the client’s logo, project name, publicly available visuals and results in our portfolio, presentations and marketing. If the client does not wish this, they may opt out in writing. Arzonic may still use anonymized examples or design structures that do not identify the client."
+    },
+
+    "section11": {
+      "title": "11. AI-Generated Content",
+      "description": "AI-generated text, design, media or code may contain elements for which Arzonic does not hold full copyright. Such material is provided 'as-is'. The client is responsible for legal usage, publication, and compliance. Arzonic is not liable for trademark violations, copyright disputes or restrictions from platforms or third parties. If the client requires fully original, non-AI content, this must be requested in writing and may incur additional fees."
+    },
+
+    "section12": {
+      "title": "12. Data Processing and GDPR",
+      "description": "Arzonic processes personal data according to applicable GDPR law. Arzonic acts as a data processor for technical hosting and platform services. The customer remains data controller for business data, users and marketing. The customer is responsible for lawful data collection. Arzonic may use third-party providers in EU/EEA or approved countries. See our Privacy Policy for full details."
     }
   },
   "GetStarted": {
