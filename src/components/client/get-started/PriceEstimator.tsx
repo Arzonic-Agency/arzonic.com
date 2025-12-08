@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  type Variants,
+  type Easing,
+} from "framer-motion";
 import { FaAngleLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import EstimatorContactForm from "../forms/EstimatorForm";
@@ -10,7 +15,9 @@ import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
 type Country = { name: string; code: string; dial: string; flag: string };
 
 const QUESTIONS_PER_SLIDE = 1;
-const slideVariants = {
+const easeOutTransition: Easing = "easeOut";
+const easeInTransition: Easing = "easeIn";
+const slideVariants: Variants = {
   enter: (dir: number) => ({
     x: dir > 0 ? 100 : -100,
     opacity: 0,
@@ -18,12 +25,12 @@ const slideVariants = {
   center: {
     x: 0,
     opacity: 1,
-    transition: { duration: 0.35, ease: "easeOut" },
+    transition: { duration: 0.35, ease: easeOutTransition },
   },
   exit: (dir: number) => ({
     x: dir > 0 ? -100 : 100,
     opacity: 0,
-    transition: { duration: 0.3, ease: "easeIn" },
+    transition: { duration: 0.3, ease: easeInTransition },
   }),
 };
 

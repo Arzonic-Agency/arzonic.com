@@ -5,6 +5,7 @@ import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
 import Spline from "@splinetool/react-spline";
+import Image from "next/image";
 
 type Props = {
   slug:
@@ -38,9 +39,22 @@ const SolutionClient = ({ slug, countryName }: Props) => {
       <Spline scene="https://prod.spline.design/7L07tDETuES9U9Si/scene.splinecode" />
     ),
     "web-applications": (
-      <div className="p-5 border rounded-xl bg-base-200">
-        <p className="text-sm">Example of app component or live demo</p>
-      </div>
+      <span className="text-rotate text-7xl leading-[2]">
+        <span className="justify-items-center">
+          <span>
+            {" "}
+            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
+          </span>
+          <span>
+            {" "}
+            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
+          </span>
+          <span>
+            {" "}
+            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
+          </span>
+        </span>
+      </span>
     ),
   };
 

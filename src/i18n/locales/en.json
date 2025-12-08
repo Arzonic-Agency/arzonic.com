@@ -658,83 +658,127 @@
   },
   "Policy": {
     "title": "Privacy Policy & Consent",
+    "intro": "Here you can read how Arzonic ApS processes the information you share with us – for example when you contact us, use the price calculator, or apply for a job with us. We take good care of your data and only use it for clear and relevant purposes.",
 
     "section1": {
-      "title": "1. Information Collection",
-      "description": "When you use our price calculator or contact form on the Arzonic ApS website, we may request the following information:",
+      "title": "1. When we collect information",
+      "description": "We only collect information when you actively choose to provide it to us. This typically happens in the following situations:",
       "list": {
-        "name": "Your name",
-        "phone": "Phone number",
-        "email": "Email address",
-        "details": "Details you voluntarily provide in your message"
+        "contact": "When you send an inquiry via the contact form (e.g. questions, collaboration, or a quote).",
+        "calculator": "When you use the price calculator and ask for a non-binding quote.",
+        "job": "When you apply for a job or internship at Arzonic ApS via a form or e-mail."
       },
-      "note": "We only use this information to respond to your inquiry and prepare a potential offer."
+      "note": "We do not collect sensitive information via our website."
     },
 
     "section2": {
-      "title": "2. Facebook and Instagram Connection (System User)",
-      "description1": "To publish posts to your Facebook Page or Instagram Business account via our platform, we use a Meta System User. This access is only granted if you explicitly request it as a customer.",
+      "title": "2. What information we collect",
+      "description": "Depending on how you contact us, we may ask for:",
       "list": {
-        "pages": "Access to the specific pages or accounts you authorize in Meta Business",
-        "publish": "Ability to publish posts to the authorized pages/accounts via our platform"
+        "common": "Contact details: name, e-mail, phone number, and whatever you choose to write in the message field.",
+        "calculator": "Information about your business, project description, and preferences so we can prepare a realistic estimate.",
+        "job": "Job applications and CV: information about your experience, education, portfolio, links (e.g. GitHub, LinkedIn, website), and any other documents you attach. These documents are treated confidentially and only accessed by relevant people."
       },
-      "description2": "This integration does not collect personal information such as your private profile, name, or email. The access is purely technical and used only to support the publication of content that you choose to submit. You may revoke this access at any time through your Meta Business settings."
+      "note": "We only ask for the information we need in order to respond to your inquiry, send you a quote, or assess your application."
     },
 
     "section3": {
-      "title": "3. Data Storage",
-      "description": "Your data is stored securely and confidentially.",
+      "title": "3. How we use your information",
+      "description": "We use your information for a few, specific purposes:",
       "list": {
-        "noCustomer": "If you do not become a customer, your data will be deleted within 30 days.",
-        "customer": "If you become a customer, we retain your data only as long as legally required or necessary to deliver our services."
+        "inquiry": "To respond to your inquiry and provide the help or information you have requested.",
+        "offer": "To prepare and send quotes, estimates, and follow-ups in connection with the price calculator or direct dialogue.",
+        "job": "To assess your job or internship application, invite you for an interview, and keep you informed about the process.",
+        "improvement": "To improve our service and communication, for example by seeing which types of inquiries we receive the most."
       },
-      "note": "If you would like your data deleted sooner, please contact us at mail@arzonic.com."
+      "note": "We do not use your information for unwanted marketing, and we do not share it with others without a clear purpose and legal basis."
     },
 
     "section4": {
-      "title": "4. Sharing with Third Parties",
-      "description": "We never share your data with third parties without your prior consent, unless it is necessary to provide a service you have requested."
+      "title": "4. Job and internship applications",
+      "description": "We know it requires trust to send your CV, application, and other documents. That is why we treat all applications confidentially and only internally:",
+      "list": {
+        "access": "Only relevant people at Arzonic ApS (e.g. the owner or direct collaborators on the specific team) get access to your application.",
+        "noAutomated": "We do not use automated decisions to filter applicants. There is always a real person behind the assessment.",
+        "references": "We only contact references if you have given your consent.",
+        "unsolicited": "If you send an unsolicited application, we only use it to assess your fit with current or upcoming opportunities."
+      },
+      "retention": "If you are not hired, we generally store your application, CV, and any attachments for up to 6 months or until the material is no longer relevant for the position. In some cases, the application is deleted earlier, for example no later than 30 days after a process has ended without hiring – unless we have agreed in writing that we may store the material for longer."
     },
 
     "section5": {
-      "title": "5. Your Rights",
-      "description": "You have the right to:",
+      "title": "5. Connection to Facebook and Instagram (System User)",
+      "description1": "For some customers, we offer the option to publish posts on their Facebook Page or Instagram Business account via our platform. For this, we use a so-called Meta System User.",
       "list": {
-        "access": "Request access to your data",
-        "correct": "Request corrections to inaccurate information",
-        "delete": "Request deletion of your data if permitted by law",
-        "withdraw": "Withdraw previously given consent"
+        "pages": "The access only covers the pages and accounts you actively approve in Meta Business.",
+        "publish": "We can only publish posts that you have approved, to the pages/accounts you have selected."
       },
-      "note": "Please contact us at mail@arzonic.com to exercise these rights."
+      "description2": "This integration does not fetch personal information about you as a private person (e.g. private profile, private e-mail, or friends). The connection is technical and is only used to publish content on your behalf. You can remove access at any time in your Meta Business settings."
     },
 
     "section6": {
-      "title": "6. Consent",
-      "description1": "By submitting information via our website, you consent to the processing of your data as described in this policy.",
-      "description2": "You may withdraw your consent at any time. We will then delete your data unless we are legally required to retain it."
+      "title": "6. Storage and deletion of information",
+      "description": "We store your information securely and only for as long as necessary:",
+      "list": {
+        "noCustomer": "If you contact us but do not become a customer, your information is normally deleted within 30 days after our last dialogue.",
+        "customer": "If you become a customer, we store relevant information for as long as necessary to deliver our solutions and comply with accounting and other legal obligations.",
+        "job": "Job and internship applications (including CV and attachments) are generally stored for up to 6 months after the recruitment process has ended or until the material is no longer relevant for the specific position. After that, they are deleted automatically or manually."
+      },
+      "note": "You can always contact us if you want your information deleted earlier, as long as legislation allows it."
     },
 
     "section7": {
-      "title": "7. Data Security",
-      "description": "We use technical and organizational measures to protect your data from unauthorized access or misuse."
+      "title": "7. Sharing with third parties",
+      "description": "We do not sell your information. We only share data with third parties when it is necessary and justified:",
+      "list": {
+        "providers": "Suppliers and partners who help us with operations (e.g. hosting, e-mail, project management) and who are bound by data processing agreements.",
+        "legal": "Authorities, if we are legally required to do so (e.g. in connection with audits or other legal requirements)."
+      },
+      "note": "Third parties are not allowed to use your information for their own purposes."
     },
 
     "section8": {
-      "title": "8. Policy Updates",
-      "description": "We update this policy regularly. The latest version will always be available on our website."
+      "title": "8. Your rights",
+      "description": "You have a number of rights in relation to your personal data:",
+      "list": {
+        "access": "Right of access – to know what information we have about you.",
+        "correct": "Right to rectification – to have incorrect or incomplete information corrected.",
+        "delete": "Right to erasure – to have information deleted when possible under applicable law.",
+        "limit": "Right to restriction – in some cases to restrict how we process your data.",
+        "object": "Right to object – in certain cases to object to our processing.",
+        "withdraw": "Right to withdraw consent – if you have previously given consent to a specific processing."
+      },
+      "note": "If you want to exercise your rights, you can always contact us at mail@arzonic.com. We will get back to you as soon as possible."
     },
 
     "section9": {
-      "title": "9. Contact Information",
+      "title": "9. Consent",
+      "description1": "When you submit a form on our website (contact, price calculator, or job application), you give your consent for us to process your information for the purpose of that form.",
+      "description2": "You can withdraw your consent at any time by writing to us. We will then stop the processing and delete your information unless we are required by law to store it (e.g. accounting rules)."
+    },
+
+    "section10": {
+      "title": "10. Data security",
+      "description": "We use both technical and organizational measures to protect your information from unauthorized access, loss, or misuse. Only people with a legitimate need get access to your data."
+    },
+
+    "section11": {
+      "title": "11. Updates to this policy",
+      "description": "We may update this privacy policy if there are changes to our services or to applicable legislation. The latest version is always available on our website."
+    },
+
+    "section12": {
+      "title": "12. Contact",
+      "description": "If you have questions about how we process personal data – or if you want to exercise your rights – you are always welcome to contact us:",
       "list": {
         "company": "Arzonic ApS",
-        "access": "VAT ID: DK45630102",
-        "email": "mail@arzonic.com",
-        "phone": "+45 22 50 17 03"
+        "cvr": "CVR no.: 45630102",
+        "email": "E-mail: mail@arzonic.com",
+        "phone": "Phone: +45 22 50 17 03"
       }
     },
 
-    "lastUpdated": "Last updated: November 28, 2025"
+    "lastUpdated": "Last updated: 2 December 2025"
   },
   "TermsModal": {
     "title": "Terms of Service",

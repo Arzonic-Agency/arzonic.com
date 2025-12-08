@@ -295,8 +295,8 @@ export async function sendJobApplicationConfirmEmail(
     to: mail,
     subject:
       lang === "da"
-        ? `Tak for din ansøgning, ${name}`
-        : `Thank you for your application, ${name}`,
+        ? `Tak for din ansøgning!`
+        : `Thank you for your application!`,
     text: userTextTr,
     html: userHtmlTr,
   });
