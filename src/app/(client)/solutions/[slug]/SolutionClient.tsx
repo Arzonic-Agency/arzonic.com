@@ -38,24 +38,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
     "3d-visualization": (
       <Spline scene="https://prod.spline.design/7L07tDETuES9U9Si/scene.splinecode" />
     ),
-    "web-applications": (
-      <span className="text-rotate text-7xl leading-[2]">
-        <span className="justify-items-center">
-          <span>
-            {" "}
-            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
-          </span>
-          <span>
-            {" "}
-            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
-          </span>
-          <span>
-            {" "}
-            <Image src="/demo.png" alt="test" width={100} height={100} />{" "}
-          </span>
-        </span>
-      </span>
-    ),
+    "web-applications": <span className=""></span>,
   };
 
   return (
@@ -76,7 +59,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
           backgroundImage: `url('/backgrounds/${slug}.jpg')`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-tranparent to-transparent z-10" />
+        <div className="absolute inset-0 bg-linear-to-t from-base-100 via-tranparent to-transparent z-10" />
         <div className="relative z-20 text-center text-white px-4 w-full pt-10">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             {seoTitleStart}

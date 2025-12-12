@@ -3,15 +3,26 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+type AnalyticsPoint = { x: string; y: number };
+type AnalyticsData = {
+  pageviews: number;
+  visitors: number;
+  visits: number;
+  pages: AnalyticsPoint[];
+  devices: AnalyticsPoint[];
+};
+
+const defaultAnalyticsData: AnalyticsData = {
+  pageviews: 0,
+  visitors: 0,
+  visits: 0,
+  pages: [],
+  devices: [],
+};
+
 const Overview = () => {
   const { t } = useTranslation();
-  const [data, setData] = useState({
-    pageviews: 0,
-    visitors: 0,
-    visits: 0,
-    pages: [],
-    devices: [],
-  });
+  const [data, setData] = useState<AnalyticsData>(defaultAnalyticsData);
   const [period, setPeriod] = useState("7d");
   const [loading, setLoading] = useState(true);
 
@@ -21,9 +32,16 @@ const Overview = () => {
       try {
         const response = await fetch(`/api/umami?period=${period}`);
         const result = await response.json();
-        setData(result);
+        setData({
+          pageviews: Number(result?.pageviews) || 0,
+          visitors: Number(result?.visitors) || 0,
+          visits: Number(result?.visits) || 0,
+          pages: Array.isArray(result?.pages) ? result.pages : [],
+          devices: Array.isArray(result?.devices) ? result.devices : [],
+        });
       } catch (error) {
         console.error("Failed to fetch analytics", error);
+        setData(defaultAnalyticsData);
       } finally {
         setLoading(false);
       }
