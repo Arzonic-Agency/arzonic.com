@@ -14,6 +14,10 @@ type UmamiStatsResponse = {
   visits: UmamiStatValue;
 };
 
+type UmamiMetricsResponse = {
+  data?: UmamiMetricItem[];
+};
+
 type UmamiMetricItem = {
   x: string;
   y: number;
@@ -25,6 +29,59 @@ const DEFAULT_ANALYTICS = {
   visits: 0,
   pages: [] as UmamiMetricItem[],
   devices: [] as UmamiMetricItem[],
+};
+
+const normalizeMetricItems = (payload: unknown): UmamiMetricItem[] => {
+  const entries = Array.isArray(payload)
+    ? payload
+    : typeof payload === "object" &&
+      payload !== null &&
+      Array.isArray((payload as UmamiMetricsResponse).data)
+    ? (payload as UmamiMetricsResponse).data
+    : [];
+
+  return entries
+    .filter(
+      (item): item is UmamiMetricItem =>
+        typeof item === "object" && item !== null && "x" in item && "y" in item
+    )
+    .map((item) => ({
+      x: String((item as UmamiMetricItem).x ?? ""),
+      y: Number((item as UmamiMetricItem).y ?? 0),
+    }));
+};
+
+const extractStatValue = (value: unknown): number => {
+  if (typeof value === "number") return value;
+  if (typeof value === "object" && value !== null && "value" in value) {
+    const nested = (value as UmamiStatValue).value;
+    return typeof nested === "number" ? nested : 0;
+  }
+  return 0;
+};
+
+const normalizeStats = (payload: unknown) => {
+  if (typeof payload !== "object" || payload === null) {
+    return {
+      pageviews: 0,
+      visitors: 0,
+      visits: 0,
+    };
+  }
+
+  const record = payload as Record<string, unknown>;
+
+  return {
+    pageviews: extractStatValue(
+      record["pageviews"] ?? record["pageViews"] ?? record["views"]
+    ),
+    visitors: extractStatValue(
+      record["visitors"] ?? record["uniques"] ?? record["users"]
+    ),
+    visits: extractStatValue(
+      record["visits"] ?? record["sessions"] ?? record["total"]
+    ),
+  };
 };
 
 export async function GET(request: Request) {
@@ -69,24 +126,26 @@ export async function GET(request: Request) {
     };
 
     const [statsData, pagesData, devicesData] = await Promise.all([
-      fetchJson<UmamiStatsResponse>(
+      fetchJson<UmamiStatsResponse | Record<string, unknown>>(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`
       ),
-      fetchJson<UmamiMetricItem[]>(
+      fetchJson<UmamiMetricItem[] | UmamiMetricsResponse>(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`
       ),
-      fetchJson<UmamiMetricItem[]>(
+      fetchJson<UmamiMetricItem[] | UmamiMetricsResponse>(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`
       ),
     ]);
 
+    const stats = normalizeStats(statsData);
+
     return NextResponse.json(
       {
-        pageviews: statsData?.pageviews?.value ?? 0,
-        visitors: statsData?.visitors?.value ?? 0,
-        visits: statsData?.visits?.value ?? 0,
-        pages: Array.isArray(pagesData) ? pagesData : [],
-        devices: Array.isArray(devicesData) ? devicesData : [],
+        pageviews: stats.pageviews,
+        visitors: stats.visitors,
+        visits: stats.visits,
+        pages: normalizeMetricItems(pagesData),
+        devices: normalizeMetricItems(devicesData),
       },
       { status: 200 }
     );
