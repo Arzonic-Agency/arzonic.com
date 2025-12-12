@@ -12,47 +12,34 @@ jobs:
       APP_DIR: /home/arzonic/htdocs/arzonic.com
       PM2_NAME: arzonic-app
       PORT: 3000
-      SSH_KEY: /home/arzonic/.ssh/id_arzonic # ← din private deploy key
 
     defaults:
       run:
         shell: bash
 
     steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: 🧰 Setup Node.js 20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
-      - name: 🔑 Verify SSH access to GitHub
-        run: |
-          # Sørg for known_hosts indeholder GitHub (kør én gang, harmless hvis gentaget)
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null || true
-
-          # Test auth (non-fatal)
-          ssh -i "$SSH_KEY" -T git@github.com || true
-
-      - name: 🔄 Get latest code via SSH
+      - name: 🔄 Sync code to APP_DIR
         run: |
           set -e
           mkdir -p "$APP_DIR"
-          cd "$APP_DIR"
 
-          # Brug specifik nøgle ved git-kommandoer
-          export GIT_SSH_COMMAND="ssh -i $SSH_KEY -o StrictHostKeyChecking=yes"
-
-          if [ ! -d ".git" ]; then
-            echo "📥 Cloning fresh repo..."
-            git clone git@github.com:MarcMadeIt/arzonic.git "$APP_DIR"
-          else
-            echo "⚠️ Fetching latest changes..."
-            git fetch --all
-            git reset --hard origin/main
-          fi
-
-          # Sikr korrekt remote (i tilfælde af gammel HTTPS-remote)
-          git remote set-url origin git@github.com:MarcMadeIt/arzonic.git
+          # Brug rsync så vi ikke kopierer node_modules/.next med fra workspace
+          rsync -a --delete \
+            --exclude node_modules \
+            --exclude .next \
+            --exclude .git \
+            ./ "$APP_DIR/"
 
       - name: 🧹 Clean previous Next.js build
         run: |
