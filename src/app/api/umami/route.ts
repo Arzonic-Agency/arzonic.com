@@ -23,6 +23,17 @@ type UmamiMetricItem = {
   y: number;
 };
 
+type RawMetricItem =
+  | UmamiMetricItem
+  | {
+      url?: string;
+      name?: string;
+      value?: number;
+      count?: number;
+      x?: string;
+      y?: number;
+    };
+
 const DEFAULT_ANALYTICS = {
   pageviews: 0,
   visitors: 0,
@@ -32,23 +43,43 @@ const DEFAULT_ANALYTICS = {
 };
 
 const normalizeMetricItems = (payload: unknown): UmamiMetricItem[] => {
-  const entries = Array.isArray(payload)
-    ? payload
+  const entries: RawMetricItem[] = Array.isArray(payload)
+    ? (payload as RawMetricItem[])
     : typeof payload === "object" &&
       payload !== null &&
       Array.isArray((payload as UmamiMetricsResponse).data)
-    ? (payload as UmamiMetricsResponse).data
+    ? ((payload as UmamiMetricsResponse).data as RawMetricItem[])
     : [];
 
   return entries
-    .filter(
-      (item): item is UmamiMetricItem =>
-        typeof item === "object" && item !== null && "x" in item && "y" in item
-    )
-    .map((item) => ({
-      x: String((item as UmamiMetricItem).x ?? ""),
-      y: Number((item as UmamiMetricItem).y ?? 0),
-    }));
+    .map((item) => {
+      if (typeof item !== "object" || item === null) {
+        return null;
+      }
+
+      const record = item as {
+        x?: string;
+        url?: string;
+        name?: string;
+        y?: number;
+        value?: number;
+        count?: number;
+      };
+
+      const rawLabel = record.x ?? record.url ?? record.name ?? "";
+      const rawValue = record.y ?? record.value ?? record.count ?? Number.NaN;
+
+      if (!rawLabel) {
+        return null;
+      }
+
+      return {
+        x: String(rawLabel),
+        y: Number.isFinite(rawValue) ? Number(rawValue) : 0,
+      } satisfies UmamiMetricItem;
+    })
+    .filter((item): item is UmamiMetricItem => Boolean(item))
+    .sort((a, b) => b.y - a.y);
 };
 
 const extractStatValue = (value: unknown): number => {
