@@ -34,7 +34,7 @@ export default function ClientLayout({
         async
         defer
         src="https://stats.arzonic.com/script.js"
-        data-website-id="3226dc67-1feb-4d8c-9f6d-75f7dd0d23d7"
+        data-website-id="07686da1-b9ea-4c1c-a961-404432a84e2c"
       />
       <DefaultSeo
         titleTemplate="%s - Arzonic"
@@ -47,7 +47,7 @@ export default function ClientLayout({
           siteName: "Arzonic",
         }}
       />
-      <div className="sm:h-lvh h-dvh max-w-screen-xl mx-auto pt-[101px]">
+      <div className="sm:h-lvh h-dvh max-w-7xl mx-auto pt-[101px]">
         <header>
           <Header />
         </header>

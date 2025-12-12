@@ -7,20 +7,21 @@ export async function GET(request: Request) {
 
   if (!ACCESS_TOKEN || !BASE_URL || !WEBSITE_ID) {
     return NextResponse.json(
-      { error: "Missing API credentials in .env.local" },
+      { error: "Missing API credentials in environment variables" },
       { status: 500 }
     );
   }
 
   const { searchParams } = new URL(request.url);
   const period = searchParams.get("period") || "7d";
+
   const endAt = Date.now();
   const startAt =
     period === "30d"
       ? endAt - 30 * 24 * 60 * 60 * 1000
       : endAt - 7 * 24 * 60 * 60 * 1000;
 
-  const headers = {
+  const headers: HeadersInit = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     Accept: "application/json",
   };
@@ -29,40 +30,59 @@ export async function GET(request: Request) {
     const [statsRes, pagesRes, devicesRes] = await Promise.all([
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
-        { headers }
+        { headers, cache: "no-store" }
       ),
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
-        { headers }
+        { headers, cache: "no-store" }
       ),
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
-        { headers }
+        { headers, cache: "no-store" }
       ),
     ]);
 
-    const statsData = await statsRes.json();
-    const pagesData = await pagesRes.json();
-    const devicesData = await devicesRes.json();
-
-    return NextResponse.json({
-      pageviews: statsData?.pageviews?.value ?? 0,
-      visitors: statsData?.visitors?.value ?? 0,
-      visits: statsData?.visits?.value ?? 0,
-      pages: pagesData || [],
-      devices: devicesData || [],
-    });
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("🚨 API Route Error:", error.message);
+    // Gør fejl synlige (i stedet for “0 data” uden forklaring)
+    if (!statsRes.ok) {
+      const txt = await statsRes.text().catch(() => "");
       return NextResponse.json(
-        { error: `Failed to fetch analytics: ${error.message}` },
+        { error: `Umami stats request failed (${statsRes.status}): ${txt}` },
         { status: 500 }
       );
     }
-    console.error("🚨 API Route Error: Unknown error");
+    if (!pagesRes.ok) {
+      const txt = await pagesRes.text().catch(() => "");
+      return NextResponse.json(
+        { error: `Umami pages request failed (${pagesRes.status}): ${txt}` },
+        { status: 500 }
+      );
+    }
+    if (!devicesRes.ok) {
+      const txt = await devicesRes.text().catch(() => "");
+      return NextResponse.json(
+        {
+          error: `Umami devices request failed (${devicesRes.status}): ${txt}`,
+        },
+        { status: 500 }
+      );
+    }
+
+    const statsData: any = await statsRes.json();
+    const pagesData: any = await pagesRes.json();
+    const devicesData: any = await devicesRes.json();
+
+    return NextResponse.json({
+      pageviews: Number(statsData?.pageviews?.value ?? 0),
+      visitors: Number(statsData?.visitors?.value ?? 0),
+      visits: Number(statsData?.visits?.value ?? 0),
+      pages: Array.isArray(pagesData) ? pagesData : [],
+      devices: Array.isArray(devicesData) ? devicesData : [],
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("🚨 API Route Error:", message);
     return NextResponse.json(
-      { error: "Failed to fetch analytics: Unknown error" },
+      { error: `Failed to fetch analytics: ${message}` },
       { status: 500 }
     );
   }

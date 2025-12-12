@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type AnalyticsPoint = { x: string; y: number };
+
 type AnalyticsData = {
   pageviews: number;
   visitors: number;
@@ -22,16 +23,28 @@ const defaultAnalyticsData: AnalyticsData = {
 
 const Overview = () => {
   const { t } = useTranslation();
+
   const [data, setData] = useState<AnalyticsData>(defaultAnalyticsData);
-  const [period, setPeriod] = useState("7d");
-  const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<"7d" | "30d">("7d");
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       setLoading(true);
+
       try {
-        const response = await fetch(`/api/umami?period=${period}`);
+        const response = await fetch(`/api/umami?period=${period}`, {
+          cache: "no-store",
+        });
+
         const result = await response.json();
+
+        if (!response.ok) {
+          console.error("Umami API error:", result?.error || response.status);
+          setData(defaultAnalyticsData);
+          return;
+        }
+
         setData({
           pageviews: Number(result?.pageviews) || 0,
           visitors: Number(result?.visitors) || 0,
@@ -73,6 +86,7 @@ const Overview = () => {
             </button>
           </div>
         </div>
+
         <h3 className="text-lg font-semibold">
           {t("analytics.title")} (
           {period === "7d"
@@ -105,8 +119,10 @@ const Overview = () => {
           </div>
         )}
       </div>
+
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.most_visited")}</h3>
+
         {loading ? (
           <div className="flex justify-start items-center h-32 gap-3">
             <span className="loading loading-spinner loading-md" />
@@ -127,8 +143,10 @@ const Overview = () => {
           <p className="text-neutral-400 mt-3">{t("analytics.no_data")}</p>
         )}
       </div>
+
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
+
         {loading ? (
           <div className="flex justify-start items-center h-32 gap-3">
             <span className="loading loading-spinner loading-md" />
@@ -136,15 +154,18 @@ const Overview = () => {
         ) : data.devices.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">
             {data.devices.map((device, index) => {
-              const deviceMapping = {
+              const deviceKey = (device?.x ?? "").toString().toLowerCase();
+
+              const deviceMapping: Record<string, string> = {
                 mobile: t("analytics.mobile"),
                 desktop: t("analytics.desktop"),
                 laptop: t("analytics.laptop"),
                 tablet: t("analytics.tablet"),
                 unknown: t("analytics.unknown"),
               };
+
               const deviceName =
-                deviceMapping[device.x?.toLowerCase()] || device.x;
+                deviceMapping[deviceKey] || device?.x || t("analytics.unknown");
 
               return (
                 <li
@@ -152,7 +173,7 @@ const Overview = () => {
                   className="flex justify-between border-b border-zinc-600 py-2"
                 >
                   <span className="text-sm">{deviceName}</span>
-                  <span className="font-bold">{device.y}</span>
+                  <span className="font-bold">{device?.y ?? 0}</span>
                 </li>
               );
             })}
