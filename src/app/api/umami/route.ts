@@ -19,18 +19,24 @@ type UmamiMetricItem = {
   y: number;
 };
 
+const DEFAULT_ANALYTICS = {
+  pageviews: 0,
+  visitors: 0,
+  visits: 0,
+  pages: [] as UmamiMetricItem[],
+  devices: [] as UmamiMetricItem[],
+};
+
 export async function GET(request: Request) {
   const BASE_URL = process.env.UMAMI_API_URL;
   const WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
   const ACCESS_TOKEN = process.env.UMAMI_ACCESS_TOKEN;
 
   if (!BASE_URL || !WEBSITE_ID || !ACCESS_TOKEN) {
-    return NextResponse.json(
-      {
-        error: "Missing UMAMI_API_URL, UMAMI_WEBSITE_ID or UMAMI_ACCESS_TOKEN",
-      },
-      { status: 500 }
+    console.warn(
+      "Umami analytics disabled: missing UMAMI_API_URL, UMAMI_WEBSITE_ID or UMAMI_ACCESS_TOKEN"
     );
+    return NextResponse.json(DEFAULT_ANALYTICS);
   }
 
   const { searchParams } = new URL(request.url);
@@ -48,36 +54,42 @@ export async function GET(request: Request) {
   };
 
   try {
-    const [statsRes, pagesRes, devicesRes] = await Promise.all([
-      fetch(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
-        { headers }
+    const fetchJson = async <T>(url: string) => {
+      const res = await fetch(url, { headers });
+      if (!res.ok) {
+        console.warn(`Umami request failed: ${res.status} ${url}`);
+        return null;
+      }
+      try {
+        return (await res.json()) as T;
+      } catch (parseError) {
+        console.warn(`Failed to parse Umami response for ${url}`, parseError);
+        return null;
+      }
+    };
+
+    const [statsData, pagesData, devicesData] = await Promise.all([
+      fetchJson<UmamiStatsResponse>(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`
       ),
-      fetch(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
-        { headers }
+      fetchJson<UmamiMetricItem[]>(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`
       ),
-      fetch(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
-        { headers }
+      fetchJson<UmamiMetricItem[]>(
+        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`
       ),
     ]);
 
-    if (!statsRes.ok || !pagesRes.ok || !devicesRes.ok) {
-      throw new Error("One or more Umami API requests failed");
-    }
-
-    const statsData = (await statsRes.json()) as UmamiStatsResponse;
-    const pagesData = (await pagesRes.json()) as UmamiMetricItem[];
-    const devicesData = (await devicesRes.json()) as UmamiMetricItem[];
-
-    return NextResponse.json({
-      pageviews: statsData.pageviews.value,
-      visitors: statsData.visitors.value,
-      visits: statsData.visits.value,
-      pages: pagesData,
-      devices: devicesData,
-    });
+    return NextResponse.json(
+      {
+        pageviews: statsData?.pageviews?.value ?? 0,
+        visitors: statsData?.visitors?.value ?? 0,
+        visits: statsData?.visits?.value ?? 0,
+        pages: Array.isArray(pagesData) ? pagesData : [],
+        devices: Array.isArray(devicesData) ? devicesData : [],
+      },
+      { status: 200 }
+    );
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown Umami API error";
@@ -85,8 +97,8 @@ export async function GET(request: Request) {
     console.error("🚨 Umami API route error:", message);
 
     return NextResponse.json(
-      { error: "Failed to fetch analytics" },
-      { status: 500 }
+      { ...DEFAULT_ANALYTICS, error: message },
+      { status: 200 }
     );
   }
 }

@@ -39,6 +39,7 @@ jobs:
             --exclude node_modules \
             --exclude .next \
             --exclude .git \
+            --exclude .env \
             ./ "$APP_DIR/"
 
       - name: 🧹 Clean previous Next.js build
