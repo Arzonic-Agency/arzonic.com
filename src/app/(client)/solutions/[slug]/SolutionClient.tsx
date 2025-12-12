@@ -5,7 +5,6 @@ import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
 import Spline from "@splinetool/react-spline";
-import Image from "next/image";
 
 type Props = {
   slug:
