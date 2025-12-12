@@ -1,19 +1,40 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Umami API response types
+ */
+
+type UmamiStatValue = {
+  value: number;
+};
+
+type UmamiStatsResponse = {
+  pageviews: UmamiStatValue;
+  visitors: UmamiStatValue;
+  visits: UmamiStatValue;
+};
+
+type UmamiMetricItem = {
+  x: string;
+  y: number;
+};
+
 export async function GET(request: Request) {
   const BASE_URL = process.env.UMAMI_API_URL;
   const WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
   const ACCESS_TOKEN = process.env.UMAMI_ACCESS_TOKEN;
 
-  if (!ACCESS_TOKEN || !BASE_URL || !WEBSITE_ID) {
+  if (!BASE_URL || !WEBSITE_ID || !ACCESS_TOKEN) {
     return NextResponse.json(
-      { error: "Missing API credentials in environment variables" },
+      {
+        error: "Missing UMAMI_API_URL, UMAMI_WEBSITE_ID or UMAMI_ACCESS_TOKEN",
+      },
       { status: 500 }
     );
   }
 
   const { searchParams } = new URL(request.url);
-  const period = searchParams.get("period") || "7d";
+  const period = searchParams.get("period") ?? "7d";
 
   const endAt = Date.now();
   const startAt =
@@ -30,59 +51,41 @@ export async function GET(request: Request) {
     const [statsRes, pagesRes, devicesRes] = await Promise.all([
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
-        { headers, cache: "no-store" }
+        { headers }
       ),
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
-        { headers, cache: "no-store" }
+        { headers }
       ),
       fetch(
         `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
-        { headers, cache: "no-store" }
+        { headers }
       ),
     ]);
 
-    // Gør fejl synlige (i stedet for “0 data” uden forklaring)
-    if (!statsRes.ok) {
-      const txt = await statsRes.text().catch(() => "");
-      return NextResponse.json(
-        { error: `Umami stats request failed (${statsRes.status}): ${txt}` },
-        { status: 500 }
-      );
-    }
-    if (!pagesRes.ok) {
-      const txt = await pagesRes.text().catch(() => "");
-      return NextResponse.json(
-        { error: `Umami pages request failed (${pagesRes.status}): ${txt}` },
-        { status: 500 }
-      );
-    }
-    if (!devicesRes.ok) {
-      const txt = await devicesRes.text().catch(() => "");
-      return NextResponse.json(
-        {
-          error: `Umami devices request failed (${devicesRes.status}): ${txt}`,
-        },
-        { status: 500 }
-      );
+    if (!statsRes.ok || !pagesRes.ok || !devicesRes.ok) {
+      throw new Error("One or more Umami API requests failed");
     }
 
-    const statsData: any = await statsRes.json();
-    const pagesData: any = await pagesRes.json();
-    const devicesData: any = await devicesRes.json();
+    const statsData = (await statsRes.json()) as UmamiStatsResponse;
+    const pagesData = (await pagesRes.json()) as UmamiMetricItem[];
+    const devicesData = (await devicesRes.json()) as UmamiMetricItem[];
 
     return NextResponse.json({
-      pageviews: Number(statsData?.pageviews?.value ?? 0),
-      visitors: Number(statsData?.visitors?.value ?? 0),
-      visits: Number(statsData?.visits?.value ?? 0),
-      pages: Array.isArray(pagesData) ? pagesData : [],
-      devices: Array.isArray(devicesData) ? devicesData : [],
+      pageviews: statsData.pageviews.value,
+      visitors: statsData.visitors.value,
+      visits: statsData.visits.value,
+      pages: pagesData,
+      devices: devicesData,
     });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("🚨 API Route Error:", message);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Unknown Umami API error";
+
+    console.error("🚨 Umami API route error:", message);
+
     return NextResponse.json(
-      { error: `Failed to fetch analytics: ${message}` },
+      { error: "Failed to fetch analytics" },
       { status: 500 }
     );
   }
