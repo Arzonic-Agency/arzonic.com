@@ -1,8 +1,11 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@plugin "daisyui" {}
+
+
 
 @plugin "daisyui/theme" {
-  name: arzonicdark;
+  name: "arzonicdark";
   default: true;
   prefersdark: true;
   color-scheme: dark;
@@ -39,7 +42,7 @@
 }
 
 @plugin "daisyui/theme" {
-  name: arzoniclight;
+  name: "arzoniclight";
   default: false;
   prefersdark: false;
   color-scheme: light;
