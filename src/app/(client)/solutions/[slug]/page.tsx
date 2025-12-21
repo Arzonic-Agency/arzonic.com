@@ -2,25 +2,25 @@ import { Metadata } from "next";
 import SolutionClientWrapper from "./SolutionClientWrapper";
 
 const seoData: Record<string, { title: string; description: string }> = {
-  "custom-websites": {
-    title: "Custom Websites",
-    description:
-      "We design and develop fast, tailored websites – optimized for conversions, performance, and visual identity.",
-  },
   "web-applications": {
     title: "Web Applications",
     description:
-      "From dashboards to booking platforms – we build scalable, modern web apps tailored to your business needs.",
+      "We design and build modern, scalable web applications – from dashboards to custom systems, focused on performance and usability.",
+  },
+  "design-ux": {
+    title: "Design & UX",
+    description:
+      "User-centered design and UX that combines clarity, aesthetics, and interaction to create intuitive digital experiences.",
   },
   "3d-visualization": {
     title: "3D Visualization",
     description:
-      "Bring your content to life with interactive 3D – perfect for presentations, product demos, and immersive websites.",
+      "Interactive 3D experiences for products, presentations, and digital platforms – designed to engage and impress.",
   },
-  "design-animation": {
-    title: "Design & Animation",
+  "systems-integrations": {
+    title: "Systems & Integrations",
     description:
-      "We craft modern, motion-enhanced digital designs that engage users and express brand identity.",
+      "Seamless integration of diverse systems and technologies to streamline operations and enhance functionality.",
   },
 };
 

@@ -4,10 +4,10 @@ import { useParams } from "next/navigation";
 import SolutionClient from "./SolutionClient";
 
 const allowedSlugs = [
-  "custom-websites",
   "web-applications",
+  "design-ux",
   "3d-visualization",
-  "design-animation",
+  "systems-integrations",
 ] as const;
 
 type SolutionSlug = (typeof allowedSlugs)[number];

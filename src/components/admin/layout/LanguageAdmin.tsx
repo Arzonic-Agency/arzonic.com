@@ -1,21 +1,36 @@
+"use client";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const LanguageAdmin = () => {
   const { i18n, t } = useTranslation();
-  const [isEnglish, setIsEnglish] = useState(i18n.language === "en");
+  const [isEnglish, setIsEnglish] = useState(() =>
+    i18n.language?.startsWith("en")
+  );
 
   useEffect(() => {
-    i18n.changeLanguage(isEnglish ? "en" : "da");
+    void i18n.changeLanguage(isEnglish ? "en" : "da");
   }, [isEnglish, i18n]);
+
+  useEffect(() => {
+    const handleLanguageChange = (lng: string) => {
+      setIsEnglish(lng.startsWith("en"));
+    };
+
+    i18n.on("languageChanged", handleLanguageChange);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChange);
+    };
+  }, [i18n]);
 
   return (
     <label className="swap swap-rotate cursor-pointer justify-start">
       <input
         type="checkbox"
         checked={isEnglish}
-        onChange={() => setIsEnglish(!isEnglish)}
+        onChange={() => setIsEnglish((prev) => !prev)}
         aria-label={
           isEnglish
             ? t("aria.language.changeToDanish")

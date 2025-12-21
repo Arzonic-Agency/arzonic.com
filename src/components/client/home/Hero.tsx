@@ -60,11 +60,11 @@ const Hero = () => {
               </Link>
 
               <Link
-                href={"/solutions/custom-websites"}
+                href={"/solutions/systems-integrations"}
                 className="badge badge-secondary badge-soft badge-sm lg:badge-md xl:badge-lg"
-                aria-label={t("aria.badges.customWebsites")}
+                aria-label={t("aria.badges.systemsIntegrations")}
               >
-                {t("Hero.customWebsites")}
+                {t("Hero.systemsIntegrations")}
               </Link>
             </div>
             <div className="mt-2 flex items-center gap-3">
@@ -130,7 +130,7 @@ const Hero = () => {
                 </div>
               </div>
               <div>
-                <p className="text-[11px]">{t("Hero.customerFeedback")}</p>
+                <p className="textarea-xs">{t("Hero.customerFeedback")}</p>
               </div>
             </div>
             {/* <div className="w-full h-full relative bg-transparent ">

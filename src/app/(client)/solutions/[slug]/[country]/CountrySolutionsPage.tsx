@@ -5,10 +5,10 @@ import { useTranslation } from "react-i18next";
 import SolutionClient from "../SolutionClient";
 
 const allowedSlugs = [
-  "custom-websites",
   "web-applications",
   "3d-visualization",
-  "design-animation",
+  "design-ux",
+  "systems-integrations",
 ] as const;
 
 type SolutionSlug = (typeof allowedSlugs)[number];

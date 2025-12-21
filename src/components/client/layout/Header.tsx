@@ -49,7 +49,7 @@ const Header = () => {
   };
 
   return (
-    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-screen-xl mx-auto md:px-5 md:py-5 py-7">
+    <div className="navbar absolute top-0 inset-x-0 z-50 max-w-7xl mx-auto md:px-5 md:py-5 py-7">
       <div className="flex-1">
         <Link
           href="/"
@@ -93,13 +93,13 @@ const Header = () => {
                   className="absolute top-10 -left-5 bg-base-100 shadow-xl w-52 px-2 py-3 z-30 flex flex-col items-start gap-3 rounded-xl text-sm"
                 >
                   <li className="w-full">
-                    <Link href="/solutions/custom-websites">
-                      {t("Header.dropdown.customWebsites")}
+                    <Link href="/solutions/web-applications">
+                      {t("Header.dropdown.webApplications")}
                     </Link>
                   </li>
                   <li className="w-full">
-                    <Link href="/solutions/web-applications">
-                      {t("Header.dropdown.webApplications")}
+                    <Link href="/solutions/design-ux">
+                      {t("Header.dropdown.designUX")}
                     </Link>
                   </li>
                   <li className="w-full">
@@ -108,8 +108,8 @@ const Header = () => {
                     </Link>
                   </li>
                   <li className="w-full">
-                    <Link href="/solutions/design-animation">
-                      {t("Header.dropdown.designAnimation")}
+                    <Link href="/solutions/systems-integrations">
+                      {t("Header.dropdown.systemsIntegrations")}
                     </Link>
                   </li>
                 </motion.ul>

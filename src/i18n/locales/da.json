@@ -352,11 +352,10 @@
     "instagram": "Instagram",
     "linkedIn": "LinkedIn",
     "dropdown": {
-      "customWebsites": "Tilpassede hjemmesider",
       "webApplications": "Webapplikationer",
+      "designUX": "Design & UX",
       "visualization": "3D-visualisering",
-      "designAnimation": "Design & Animation",
-      "marketing": "Marketing"
+      "systemsIntegrations": "Systemer & Integrationer"
     },
     "aria": {
       "navigation": {
@@ -371,14 +370,14 @@
   "Hero": {
     "title": "SOFTWARE AGENCY",
     "description": "Vi udvikler intelligente webapps til ambitiøse virksomheder",
-    "customWebsites": "Hjemmesider",
+    "systemsIntegrations": "Systemer & Integrationer",
     "visualization": "3D-Design",
     "webApplications": "Webapplikationer",
     "seeMore": "Se løsninger",
     "customerFeedback": "Effektivt, brugervenligt system – Arzonic leverer altid professionel, hurtig service."
   },
   "Present": {
-    "title": "Superhurtige hjemmesider – bygget til ydeevne og vækst",
+    "title": "Superhurtig – bygget til ydeevne og vækst",
     "customDesign": {
       "title": "Tilpasset design, der afspejler dig",
       "description": "Ingen skabeloner. Ingen kompromiser. Vi designer hver pixel, så den matcher dit brand og får dig til at skille dig ud."
@@ -878,62 +877,64 @@
       "btn": "Find din løsning"
     },
 
-    "custom-websites": {
-      "titleStart": "Tilpassede",
-      "titleEnd": "Hjemmesider",
-      "hero": "Unikke hjemmesider der afspejler din identitet",
-      "body": "Dit website er ofte det første indtryk – og det skal ramme plet.\nVi bygger fra bunden med blik for dit brand, dine mål og din målgruppe. Det betyder lynhurtige sider, mobilvenligt design og fleksibel struktur, så du altid er klar til at vækste.",
-      "processTitle": "Vores forløb til en ny hjemmeside",
-      "process": [
-        "Workshops og strategi",
-        "Wireframes og design",
-        "Udvikling og integration",
-        "Performanceoptimering og SEO"
-      ],
-      "cta": "Klar til at stå stærkere online?"
-    },
     "web-applications": {
-      "titleStart": "Skalerbare",
+      "titleStart": "Moderne",
       "titleEnd": "Webapplikationer",
-      "hero": "Fra idé til interaktiv oplevelse – vi bygger webapps der arbejder for dig.",
-      "body": "En god webapp kombinerer brugervenlighed, funktionalitet og performance.\nVi udvikler alt fra interne dashboards og kundeværktøjer til komplekse platforms-løsninger – altid med fokus på hastighed, skalerbarhed og sikkerhed.",
-      "processTitle": "Sådan udvikler vi en webapplikation",
+      "hero": "Webapplikationer der understøtter din forretning – bygget til performance og skalerbarhed.",
+      "body": "Vi udvikler moderne webapplikationer og systemer – fra dashboards og interne værktøjer til forretningskritiske platforme.\nFokus er på performance, sikkerhed og skalerbar arkitektur, så løsningen kan vokse med din forretning.",
+      "processTitle": "Sådan udvikler vi webapplikationer",
       "process": [
-        "Analyse og flow-mapping",
-        "Prototyping og UI/UX",
-        "Full-stack udvikling (React, Supabase m.fl.)",
-        "Test, lancering og support"
+        "Analyse af behov og forretningsflows",
+        "Arkitektur og teknisk afklaring",
+        "Full-stack udvikling (React, Next.js, Supabase m.fl.)",
+        "Test, lancering og videreudvikling"
       ],
-      "cta": "Har du en digital løsning i tankerne? Vi gør den virkelig."
+      "cta": "Har du en webapplikation i tankerne?"
     },
+
+    "design-ux": {
+      "titleStart": "Design &",
+      "titleEnd": "UX",
+      "hero": "Brugeroplevelser der skaber klarhed, flow og tillid.",
+      "body": "Godt design og UX er afgørende for digitale produkter.\nVi designer brugercentrerede interfaces med fokus på intuitive flows, tydelig struktur og et professionelt visuelt udtryk – altid med slutbrugeren i centrum.",
+      "processTitle": "Vores tilgang til Design & UX",
+      "process": [
+        "Brugerforståelse og research",
+        "Wireframes og brugerflows",
+        "UI-design og design systems",
+        "Test og løbende optimering"
+      ],
+      "cta": "Vil du forbedre brugeroplevelsen?"
+    },
+
     "3d-visualization": {
       "titleStart": "3D",
       "titleEnd": "Visualisering",
-      "hero": "Skab wow-effekt med 3D – fra produktvisualisering til interaktive oplevelser.",
-      "body": "3D giver dybde, realisme og følelsen af noget større.\nVi laver alt fra arkitektur og produktpræsentationer til interaktive 3D-elementer på din hjemmeside – med styr på æstetik, teknik og performance.",
-      "processTitle": "Vores måde at skabe 3D-visualisering",
+      "hero": "Interaktiv 3D der skaber engagement og differentierer din løsning.",
+      "body": "3D-visualisering kan gøre komplekse produkter og idéer mere forståelige.\nVi integrerer interaktiv 3D direkte i din digitale løsning – ideelt til produkter, præsentationer og engagerende brugeroplevelser.",
+      "processTitle": "Sådan arbejder vi med 3D-visualisering",
       "process": [
-        "3D-modellering & teksturering",
-        "Rendering og animation",
-        "WebGL-integration (Three.js, Rive, Spline)",
-        "Letvægtsoptimering til web"
+        "3D-modellering og teksturering",
+        "Animation og interaktion",
+        "Web-integration (Three.js, Spline, Rive)",
+        "Performance- og letvægtsoptimering"
       ],
-      "cta": "Klar til at gøre indtryk i 3 dimensioner?"
+      "cta": "Klar til at skille dig visuelt ud?"
     },
-    "design-animation": {
-      "titleStart": "Design &",
-      "titleEnd": "Animation",
-      "hero": "Visuel identitet med kant – og bevægelse, der skaber engagement.",
-      "body": "Godt design handler ikke bare om pæne flader – det handler om at få mennesker til at føle noget. Vi udvikler visuelle identiteter, grafiske elementer og animationer der løfter din kommunikation og gør dit brand mindeværdigt.",
-      "processTitle": "Måden på vi skaber grafisk design og animation",
-      "process": [
-        "Branddesign og stilretning",
-        "Illustration og grafiske komponenter",
-        "UI-animerede elementer og mikrointeraktioner",
-        "rive og motion-integration"
-      ],
 
-      "cta": "Skal dit brand bevæge sig?"
+    "systems-integrations": {
+      "titleStart": "Systemer &",
+      "titleEnd": "Integrationer",
+      "hero": "Stabile backend-systemer der binder din digitale løsning sammen.",
+      "body": "Vi designer og integrerer skalerbare backend-systemer – herunder databaser, API’er, autentificering og tredjepartsservices.\nAlt sammen for at understøtte effektive forretningsprocesser og sikre stabil drift.",
+      "processTitle": "Vores arbejde med systemer og integrationer",
+      "process": [
+        "Datamodellering og arkitektur",
+        "API-udvikling og integrationer",
+        "Autentificering og adgangsstyring",
+        "Overvågning, sikkerhed og videreudvikling"
+      ],
+      "cta": "Har du behov for robuste systemintegrationer?"
     }
   },
   "countries": {
@@ -964,31 +965,31 @@
   "SolutionsPage": {
     "title": "Hvad vi kan",
     "highlight": "skabe for jer",
-    "custom-websites": "Tilpassede hjemmesider",
     "web-applications": "Webapplikationer",
+    "design-ux": "Design & UX",
     "visualization": "3D-visualisering",
-    "design-animation": "Design og animation"
+    "systems-integrations": "Systemer & Integrationer"
   },
   "solutionscards": {
-    "custom": {
-      "title": "Tilpassede Hjemmesider",
-      "description": "Skræddersyede sider med fokus på design, konvertering og ydeevne – bygget til at understøtte din identitet.",
-      "image": "/backgrounds/custom-websites.jpg"
-    },
     "webapp": {
       "title": "Webapplikationer",
-      "description": "Vi bygger funktionelle apps med dashboards, databaser og integrationer – til virksomheder med digitale produkter og behov.",
+      "description": "Vi udvikler moderne webapplikationer – fra dashboards til forretningskritiske løsninger, bygget til performance og skalerbarhed.",
       "image": "/backgrounds/web-applications.jpg"
     },
+    "designUx": {
+      "title": "Design & UX",
+      "description": "Brugercentreret design og UX, der skaber klare flows, høj brugervenlighed og et professionelt visuelt udtryk.",
+      "image": "/backgrounds/design-ux.jpg"
+    },
     "visualization": {
-      "title": "3D-Visualisering",
-      "description": "Integrer interaktiv 3D direkte i din løsning – ideelt til præsentationer, produkter og unikke oplevelser.",
+      "title": "3D-visualisering",
+      "description": "Interaktiv 3D integreret direkte i din digitale løsning – ideelt til produkter, præsentationer og engagerende oplevelser.",
       "image": "/backgrounds/3d-visualization.jpg"
     },
-    "design": {
-      "title": "Design & Animation",
-      "description": "Moderne UI-design og animationer, der skaber visuel sammenhæng, bevægelse og en professionel oplevelse.",
-      "image": "/backgrounds/design-animation.jpg"
+    "systemsIntegrations": {
+      "title": "Systemer & Integrationer",
+      "description": "Vi designer og integrerer skalerbare backend-systemer med databaser, API’er, autentificering og tredjepartsservices.",
+      "image": "/backgrounds/systems-integrations.jpg"
     }
   },
   "faq": {
@@ -1213,10 +1214,10 @@
       "getStartedButton": "Kom i gang med pris sammenligning"
     },
     "solutionCards": {
-      "custom": "Gå til Tilpassede Hjemmesider løsning",
-      "webapp": "Gå til Webapplikationer løsning",
-      "visualization": "Gå til 3D-Visualisering løsning",
-      "design": "Gå til Design & Animation løsning"
+      "webapp": "Gå til Webapplikationer",
+      "designUx": "Gå til Design & UX",
+      "visualization": "Gå til 3D-visualisering",
+      "systems-integrations": "Gå til Systemer & Integrationer"
     },
     "topbar": {
       "moreOptions": "Flere muligheder",

@@ -351,11 +351,10 @@
     "instagram": "Instagram",
     "linkedIn": "LinkedIn",
     "dropdown": {
-      "customWebsites": "Custom Websites",
       "webApplications": "Web Applications",
+      "designUX": "Design & UX",
       "visualization": "3D Visualization",
-      "designAnimation": "Design & Animation",
-      "marketing": "Marketing"
+      "systemsIntegrations": "Systems & Integrations"
     },
     "aria": {
       "navigation": {
@@ -374,14 +373,14 @@
   "Hero": {
     "title": "SOFTWARE AGENCY",
     "description": "We develop intelligent web apps for ambitious businesses",
-    "customWebsites": "Custom Websites",
+    "systemsIntegrations": "Systems & Integrations",
     "visualization": "3D Design",
     "webApplications": "Web Applications",
     "seeMore": "See Solutions",
     "customerFeedback": "Efficient, user-friendly system – Arzonic always delivers professional, fast service."
   },
   "Present": {
-    "title": "Superfast websites – built for performance and growth",
+    "title": "Superfast – built for performance and growth",
     "customDesign": {
       "title": "Custom design that reflects you",
       "description": "No templates. No compromises. We design every pixel to match your brand and make you stand out."
@@ -872,63 +871,67 @@
   "solutionsPage": {
     "common": {
       "countryAllTitle": "Available in these countries:",
-      "btn": "Find your price"
+      "btn": "Find your solution"
     },
-    "custom-websites": {
-      "titleStart": "Custom",
-      "titleEnd": "Websites",
-      "hero": "Custom Websites that put your business in focus.",
-      "body": "Your website is often your first impression—and it needs to be perfect. We build tailored websites focused on your brand, goals, and target audience. Enjoy lightning-fast loading speeds, mobile-friendly design, and a flexible structure ready to scale.",
-      "processTitle": "Our process to make a new customized website",
-      "process": [
-        "Strategy and planning",
-        "User-friendly design",
-        "Custom development",
-        "SEO and performance optimization"
-      ],
-      "cta": "Ready to elevate your business online?"
-    },
+
     "web-applications": {
-      "titleStart": "Effective",
+      "titleStart": "Modern",
       "titleEnd": "Web Applications",
-      "hero": "Digital solutions designed to streamline your operations and boost productivity.",
-      "body": "We create user-friendly web applications tailored to your business needs. Whether it's internal dashboards, customer-facing tools, or complex platforms, our solutions prioritize usability, speed, and security, helping your business grow efficiently.",
-      "processTitle": "Our process making a Web Application",
+      "hero": "Web applications that support your business — built for performance and scalability.",
+      "body": "We develop modern web applications and systems — from dashboards and internal tools to business-critical platforms.\nOur focus is on performance, security, and scalable architecture, ensuring the solution grows with your business.",
+      "processTitle": "How we build web applications",
       "process": [
-        "Needs analysis and consultation",
-        "Intuitive UI/UX design",
-        "Full-stack development",
-        "Testing, deployment, and ongoing support"
+        "Needs analysis and business flow mapping",
+        "Architecture and technical planning",
+        "Full-stack development (React, Next.js, Supabase, etc.)",
+        "Testing, launch, and continuous improvement"
       ],
-      "cta": "Let’s turn your digital vision into reality."
+      "cta": "Have a web application in mind?"
     },
+
+    "design-ux": {
+      "titleStart": "Design &",
+      "titleEnd": "UX",
+      "hero": "User experiences that create clarity, flow, and trust.",
+      "body": "Great design and UX are essential for successful digital products.\nWe create user-centered interfaces with intuitive flows, clear structure, and a professional visual expression — always with the end user in focus.",
+      "processTitle": "Our approach to Design & UX",
+      "process": [
+        "User research and insights",
+        "Wireframes and user flows",
+        "UI design and design systems",
+        "Testing and continuous optimization"
+      ],
+      "cta": "Want to improve your user experience?"
+    },
+
     "3d-visualization": {
-      "titleStart": "Professional",
-      "titleEnd": "3D Visualization",
-      "hero": "Stunning 3D visualizations that showcase your products and ideas clearly.",
-      "body": "Bring your products and projects to life with professional 3D visuals. We produce realistic renders and animations perfect for presentations, sales materials, or interactive web experiences, enhancing your brand’s appeal and customer engagement.",
-      "processTitle": "The process of creating 3D visualization",
+      "titleStart": "3D",
+      "titleEnd": "Visualization",
+      "hero": "Interactive 3D that creates engagement and sets your solution apart.",
+      "body": "3D visualization helps make complex products and ideas easier to understand.\nWe integrate interactive 3D directly into your digital solution — ideal for products, presentations, and engaging user experiences.",
+      "processTitle": "How we work with 3D visualization",
       "process": [
-        "Detailed 3D modeling",
-        "Realistic renderings and animations",
-        "Interactive web-ready 3D",
-        "Performance optimization for fast loading"
+        "3D modeling and texturing",
+        "Animation and interaction",
+        "Web integration (Three.js, Spline, Rive)",
+        "Performance and lightweight optimization"
       ],
-      "cta": "Showcase your business with impactful 3D visuals."
+      "cta": "Ready to stand out visually?"
     },
-    "design-animation": {
-      "titleStart": "Graphic Design &",
-      "titleEnd": "Animation",
-      "hero": "Memorable designs and animations that captivate your audience.",
-      "body": "Elevate your brand with powerful graphic designs and engaging animations. From distinctive brand identities to interactive animated content, we create visuals that clearly communicate your message and leave a lasting impression.",
-      "processTitle": "Our process of creating graphic design and animation",
+
+    "systems-integrations": {
+      "titleStart": "Systems &",
+      "titleEnd": "Integrations",
+      "hero": "Reliable backend systems that connect your digital solution.",
+      "body": "We design and integrate scalable backend systems — including databases, APIs, authentication, and third-party services.\nEverything is built to support efficient business workflows and ensure stable, secure operations.",
+      "processTitle": "Our approach to systems and integrations",
       "process": [
-        "Brand identity and visual style",
-        "Custom graphics and illustrations",
-        "Engaging animations",
-        "Integration across digital channels"
+        "Data modeling and system architecture",
+        "API development and integrations",
+        "Authentication and access control",
+        "Monitoring, security, and continuous development"
       ],
-      "cta": "Make your brand unforgettable."
+      "cta": "Need robust system integrations?"
     }
   },
   "countries": {
@@ -959,31 +962,31 @@
   "SolutionsPage": {
     "title": "What we can",
     "highlight": "create for you",
-    "custom-websites": "Custom websites",
     "web-applications": "Web applications",
+    "design-ux": "Design & UX",
     "visualization": "3D visualization",
-    "design-animation": "Design & animation"
+    "systems-integration": "Systems & Integrations"
   },
   "solutionscards": {
-    "custom": {
-      "title": "Custom Websites",
-      "description": "Tailor-made sites focused on design, performance, and conversion – built to reflect your identity.",
-      "image": "/backgrounds/custom-websites.jpg"
-    },
     "webapp": {
       "title": "Web Applications",
-      "description": "We build apps with dashboards, databases, and integrations – ideal for digital-first companies.",
+      "description": "We build modern web applications – from dashboards to business-critical solutions, designed for performance and scalability.",
       "image": "/backgrounds/web-applications.jpg"
+    },
+    "designUx": {
+      "title": "Design & UX",
+      "description": "User-centered design and UX that create clear flows, high usability, and a professional visual expression.",
+      "image": "/backgrounds/design-ux.jpg"
     },
     "visualization": {
       "title": "3D Visualization",
-      "description": "Integrate interactive 3D directly into your site – ideal for showcasing products or unique brand stories.",
+      "description": "Interactive 3D integrated directly into your digital solution – ideal for products, presentations, and engaging experiences.",
       "image": "/backgrounds/3d-visualization.jpg"
     },
-    "design": {
-      "title": "Design & Animation",
-      "description": "Modern UI and animations that create fluid, engaging interfaces with strong brand expression.",
-      "image": "/backgrounds/design-animation.jpg"
+    "systemsIntegrations": {
+      "title": "Systems & Integrations",
+      "description": "We design and integrate scalable backend systems with databases, APIs, authentication, and third-party services.",
+      "image": "/backgrounds/systems-integrations.jpg"
     }
   },
   "faq": {
@@ -1210,10 +1213,10 @@
       "q4": "Expand FAQ question 4"
     },
     "solutionCards": {
-      "custom": "Go to Custom Websites solution",
-      "webapp": "Go to Web Applications solution",
-      "visualization": "Go to 3D Visualization solution",
-      "design": "Go to Design & Animation solution"
+      "webapp": "Go to Web Applications",
+      "designUx": "Go to Design & UX",
+      "visualization": "Go to 3D Visualization",
+      "systems-integration": "Go to Systems & Integration"
     },
     "theme": {
       "switchToLight": "Switch to light theme",

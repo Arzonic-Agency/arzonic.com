@@ -20,16 +20,6 @@ const Footer = () => {
         <nav>
           <h5 className="footer-title">{t("Footer.solutions")}</h5>
           <Link
-            href="/solutions/custom-websites"
-            className="link link-hover"
-            aria-label={t(
-              "aria.footer.linkToCustomWebsites",
-              "Go to custom websites"
-            )}
-          >
-            {t("Header.dropdown.customWebsites")}
-          </Link>
-          <Link
             href="/solutions/web-applications"
             className="link link-hover"
             aria-label={t(
@@ -38,6 +28,13 @@ const Footer = () => {
             )}
           >
             {t("Header.dropdown.webApplications")}
+          </Link>
+          <Link
+            href="/solutions/ux-design"
+            className="link link-hover"
+            aria-label={t("aria.footer.linkToUXDesign", "Go to UX design")}
+          >
+            {t("Header.dropdown.designUX")}
           </Link>
           <Link
             href="/solutions/3d-visualization"
@@ -50,14 +47,11 @@ const Footer = () => {
             {t("Header.dropdown.visualization")}
           </Link>
           <Link
-            href="/solutions/design-animation"
+            href="/solutions/partnership"
             className="link link-hover"
-            aria-label={t(
-              "aria.footer.linkToDesignAnimation",
-              "Go to design and animation"
-            )}
+            aria-label={t("aria.footer.linkToPartnership", "Go to partnership")}
           >
-            {t("Header.dropdown.designAnimation")}
+            {t("Header.dropdown.partnership")}
           </Link>
         </nav>
         <nav>

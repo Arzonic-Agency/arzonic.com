@@ -9,10 +9,6 @@ const SolutionCards = () => {
 
   const solutions = [
     {
-      key: "custom",
-      href: "/solutions/custom-websites",
-    },
-    {
       key: "webapp",
       href: "/solutions/web-applications",
     },
@@ -21,13 +17,18 @@ const SolutionCards = () => {
       href: "/solutions/3d-visualization",
     },
     {
-      key: "design",
-      href: "/solutions/design-animation",
+      key: "designUx",
+      href: "/solutions/design-ux",
+    },
+
+    {
+      key: "systemsIntegrations",
+      href: "/solutions/systems-integrations",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 place-items-center xl:grid-cols-2 gap-10 w-full max-w-screen-xl">
+    <div className="grid grid-cols-1 place-items-center xl:grid-cols-2 gap-10 w-full max-w-7xl">
       {solutions.map((solution, index) => (
         <motion.div
           key={index}
@@ -44,14 +45,14 @@ const SolutionCards = () => {
             )}
           >
             <div>
-              <div className="h-full w-24 sm:h-32 sm:w-32 relative rounded-lg overflow-hidden">
+              <div className="h-full w-24 sm:h-32 sm:w-38 relative rounded-lg overflow-hidden">
                 <Image
                   src={t(`solutionscards.${solution.key}.image`)}
                   alt={t(`solutionscards.${solution.key}.title`)}
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#17171797] via-tranparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-linear-to-t from-[#17171797] via-tranparent to-transparent z-10" />
               </div>
             </div>
             <div className="p-2 sm:p-4">

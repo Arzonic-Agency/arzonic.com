@@ -8,10 +8,10 @@ import Spline from "@splinetool/react-spline";
 
 type Props = {
   slug:
-    | "custom-websites"
     | "web-applications"
+    | "design-ux"
     | "3d-visualization"
-    | "design-animation";
+    | "systems-integrations";
   countryName: string;
 };
 
@@ -28,9 +28,14 @@ const SolutionClient = ({ slug, countryName }: Props) => {
     string,
     string
   >;
-  const processSteps = t(`solutionsPage.${slug}.process`, {
+  const processStepsRaw = t(`solutionsPage.${slug}.process`, {
     returnObjects: true,
-  }) as string[];
+  }) as unknown;
+  const processSteps = Array.isArray(processStepsRaw)
+    ? (processStepsRaw as string[])
+    : typeof processStepsRaw === "object" && processStepsRaw !== null
+    ? Object.values(processStepsRaw as Record<string, string>)
+    : [];
   const cta = t(`solutionsPage.${slug}.cta`);
 
   const CustomContent: Partial<Record<Props["slug"], React.ReactNode>> = {
