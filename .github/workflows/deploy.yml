@@ -6,7 +6,10 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: [self-hosted, linux, x64, arzonic, deploy]
+
+    permissions:
+      contents: read
 
     env:
       APP_DIR: /home/arzonic/htdocs/arzonic.com
