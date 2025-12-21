@@ -47,11 +47,14 @@ const Footer = () => {
             {t("Header.dropdown.visualization")}
           </Link>
           <Link
-            href="/solutions/partnership"
+            href="/solutions/systems-integrations"
             className="link link-hover"
-            aria-label={t("aria.footer.linkToPartnership", "Go to partnership")}
+            aria-label={t(
+              "aria.footer.linkToSystemsIntegrations",
+              "Go to systems integrations"
+            )}
           >
-            {t("Header.dropdown.partnership")}
+            {t("Header.dropdown.systemsIntegrations")}
           </Link>
         </nav>
         <nav>

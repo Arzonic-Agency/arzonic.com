@@ -370,14 +370,14 @@
   "Hero": {
     "title": "SOFTWARE AGENCY",
     "description": "Vi udvikler intelligente webapps til ambitiøse virksomheder",
-    "systemsIntegrations": "Systemer & Integrationer",
-    "visualization": "3D-Design",
+    "systemsIntegrations": "Integrationer",
+    "visualization": "3D Design",
     "webApplications": "Webapplikationer",
     "seeMore": "Se løsninger",
     "customerFeedback": "Effektivt, brugervenligt system – Arzonic leverer altid professionel, hurtig service."
   },
   "Present": {
-    "title": "Superhurtig – bygget til ydeevne og vækst",
+    "title": "Superhurtige webapps – bygget til ydeevne og vækst",
     "customDesign": {
       "title": "Tilpasset design, der afspejler dig",
       "description": "Ingen skabeloner. Ingen kompromiser. Vi designer hver pixel, så den matcher dit brand og får dig til at skille dig ud."
