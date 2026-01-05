@@ -40,6 +40,7 @@ const DEFAULT_ANALYTICS = {
   visits: 0,
   pages: [] as UmamiMetricItem[],
   devices: [] as UmamiMetricItem[],
+  monthlyVisitors: [] as UmamiMetricItem[],
 };
 
 const normalizeMetricItems = (payload: unknown): UmamiMetricItem[] => {
@@ -129,6 +130,11 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const period = searchParams.get("period") ?? "7d";
+  const mode = searchParams.get("mode") ?? "summary";
+  const monthsParamRaw = Number.parseInt(searchParams.get("months") ?? "6", 10);
+  const monthsParam = Number.isFinite(monthsParamRaw)
+    ? Math.min(Math.max(monthsParamRaw, 1), 12)
+    : 6;
 
   const endAt = Date.now();
   const startAt =
@@ -169,6 +175,74 @@ export async function GET(request: Request) {
     ]);
 
     const stats = normalizeStats(statsData);
+    let monthlyVisitors: UmamiMetricItem[] = [];
+
+    if (mode === "monthly") {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      const monthLabels = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const monthRanges = Array.from({ length: monthsParam }, (_, index) => {
+        const monthIndex = monthsParam - 1 - index;
+        const monthDate = new Date(
+          now.getFullYear(),
+          now.getMonth() - monthIndex,
+          1
+        );
+        const startAtMonth = monthDate.getTime();
+        const endDate = new Date(
+          monthDate.getFullYear(),
+          monthDate.getMonth() + 1,
+          0,
+          23,
+          59,
+          59,
+          999
+        );
+        const endAtMonth = endDate.getTime();
+
+        return {
+          startAt: startAtMonth,
+          endAt: endAtMonth,
+          label: monthLabels[monthDate.getMonth()],
+        } satisfies {
+          startAt: number;
+          endAt: number;
+          label: string;
+        };
+      });
+
+      const monthlyStats = await Promise.all(
+        monthRanges.map(({ startAt: start, endAt: end }) =>
+          fetchJson<UmamiStatsResponse | Record<string, unknown>>(
+            `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${start}&endAt=${end}`
+          )
+        )
+      );
+
+      monthlyVisitors = monthlyStats.map((entry, idx) => {
+        const { label } = monthRanges[idx];
+        const normalized = normalizeStats(entry);
+        return {
+          x: label,
+          y: normalized.visitors ?? 0,
+        } satisfies UmamiMetricItem;
+      });
+    }
 
     return NextResponse.json(
       {
@@ -177,6 +251,7 @@ export async function GET(request: Request) {
         visits: stats.visits,
         pages: normalizeMetricItems(pagesData),
         devices: normalizeMetricItems(devicesData),
+        monthlyVisitors,
       },
       { status: 200 }
     );

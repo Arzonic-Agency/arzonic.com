@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     template: "%s - Arzonic",
   },
   description:
-    "We specialize in building high-performance webapplications and immersive 3D experiences using modern, custom-built technology",
+    "Building modern web applications, dashboards, and custom digital solutions for ambitious small and medium-sized businesses.",
   metadataBase: new URL("https://arzonic.com"),
   manifest: "/manifest.json",
   openGraph: {
     title: "Arzonic",
     description:
-      "We specialize in building high-performance websites and immersive 3D experiences using modern, custom-built technology",
+      "Building modern web applications, dashboards, and custom digital solutions for ambitious small and medium-sized businesses.",
     url: "https://arzonic.com",
     siteName: "Arzonic",
     images: [
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Arzonic",
     description:
-      "We are a Software Agency building custom websites, web applications, and immersive 3D experiences for businesses across Europe.",
+      "Building modern web applications, dashboards, and custom digital solutions for ambitious small and medium-sized businesses.",
     images: ["/opengraph-image.png"],
   },
   icons: {

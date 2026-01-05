@@ -38,8 +38,8 @@ export default function ClientLayout({
       />
       <DefaultSeo
         titleTemplate="%s - Arzonic"
-        defaultTitle="Arzonic - Danish Software Agency"
-        description="We develop intelligent web apps for ambitious businesses."
+        defaultTitle="Arzonic – Danish Software Agency for Modern Web Apps"
+        description="Building modern web applications, dashboards, and custom digital solutions for ambitious small and medium-sized businesses."
         openGraph={{
           type: "website",
           locale: "en_US",

@@ -231,7 +231,7 @@ const Header = () => {
                     </span>
                   </Link>
                   <Link
-                    href="https://www.instagram.com/arzonic.agency/"
+                    href="https://www.instagram.com/arzonicagency/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center"

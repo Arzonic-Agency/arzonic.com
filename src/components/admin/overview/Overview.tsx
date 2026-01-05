@@ -2,59 +2,35 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-type AnalyticsPoint = { x: string; y: number };
-
-type AnalyticsData = {
-  pageviews: number;
-  visitors: number;
-  visits: number;
-  pages: AnalyticsPoint[];
-  devices: AnalyticsPoint[];
-};
-
-const defaultAnalyticsData: AnalyticsData = {
-  pageviews: 0,
-  visitors: 0,
-  visits: 0,
-  pages: [],
-  devices: [],
-};
+import Chart from "./Chart";
 
 const Overview = () => {
   const { t } = useTranslation();
-
-  const [data, setData] = useState<AnalyticsData>(defaultAnalyticsData);
-  const [period, setPeriod] = useState<"7d" | "30d">("7d");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<{
+    pageviews: number;
+    visitors: number;
+    visits: number;
+    pages: { x: string; y: number }[];
+    devices: { x: string; y: number }[];
+  }>({
+    pageviews: 0,
+    visitors: 0,
+    visits: 0,
+    pages: [],
+    devices: [],
+  });
+  const [period, setPeriod] = useState("7d");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       setLoading(true);
-
       try {
-        const response = await fetch(`/api/umami?period=${period}`, {
-          cache: "no-store",
-        });
-
+        const response = await fetch(`/api/umami?period=${period}`);
         const result = await response.json();
-
-        if (!response.ok) {
-          console.error("Umami API error:", result?.error || response.status);
-          setData(defaultAnalyticsData);
-          return;
-        }
-
-        setData({
-          pageviews: Number(result?.pageviews) || 0,
-          visitors: Number(result?.visitors) || 0,
-          visits: Number(result?.visits) || 0,
-          pages: Array.isArray(result?.pages) ? result.pages : [],
-          devices: Array.isArray(result?.devices) ? result.devices : [],
-        });
+        setData(result);
       } catch (error) {
         console.error("Failed to fetch analytics", error);
-        setData(defaultAnalyticsData);
       } finally {
         setLoading(false);
       }
@@ -73,6 +49,7 @@ const Overview = () => {
               className={`tab ${period === "7d" ? "tab-active" : ""}`}
               onClick={() => setPeriod("7d")}
               aria-label={t("aria.overview.last7DaysTab")}
+              type="button"
             >
               {t("analytics.last_7_days")}
             </button>
@@ -81,12 +58,12 @@ const Overview = () => {
               className={`tab ${period === "30d" ? "tab-active" : ""}`}
               onClick={() => setPeriod("30d")}
               aria-label={t("aria.overview.last30DaysTab")}
+              type="button"
             >
               {t("analytics.last_30_days")}
             </button>
           </div>
         </div>
-
         <h3 className="text-lg font-semibold">
           {t("analytics.title")} (
           {period === "7d"
@@ -119,67 +96,67 @@ const Overview = () => {
           </div>
         )}
       </div>
-
+      <Chart />
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.most_visited")}</h3>
-
         {loading ? (
           <div className="flex justify-start items-center h-32 gap-3">
             <span className="loading loading-spinner loading-md" />
           </div>
-        ) : data.pages.length > 0 ? (
+        ) : data.pages && data.pages.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">
-            {data.pages.slice(0, 7).map((page, index) => (
+            {data.pages.slice(0, 5).map((page, index) => (
               <li
-                key={index}
+                key={`${page.x}-${index}`}
                 className="flex justify-between border-b border-zinc-600 py-2"
               >
-                <span className="text-sm">{page.x}</span>
-                <span className="font-semibold">{page.y}</span>
+                <span>{page.x}</span>
+                <span className="font-bold">{page.y}</span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-neutral-400 mt-3">{t("analytics.no_data")}</p>
+          <p className="text-neutral-400 mt-3">Ingen data endnu</p>
         )}
       </div>
 
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
-
         {loading ? (
           <div className="flex justify-start items-center h-32 gap-3">
             <span className="loading loading-spinner loading-md" />
           </div>
-        ) : data.devices.length > 0 ? (
+        ) : data.devices && data.devices.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">
             {data.devices.map((device, index) => {
-              const deviceKey = (device?.x ?? "").toString().toLowerCase();
-
-              const deviceMapping: Record<string, string> = {
+              const deviceMapping: Record<
+                "mobile" | "desktop" | "laptop" | "tablet" | "unknown",
+                string
+              > = {
                 mobile: t("analytics.mobile"),
                 desktop: t("analytics.desktop"),
                 laptop: t("analytics.laptop"),
                 tablet: t("analytics.tablet"),
                 unknown: t("analytics.unknown"),
               };
-
               const deviceName =
-                deviceMapping[deviceKey] || device?.x || t("analytics.unknown");
+                deviceMapping[
+                  device.x?.toLowerCase() as keyof typeof deviceMapping
+                ] || device.x;
 
               return (
                 <li
-                  key={index}
+                  key={`${device.x}-${index}`}
                   className="flex justify-between border-b border-zinc-600 py-2"
                 >
-                  <span className="text-sm">{deviceName}</span>
-                  <span className="font-bold">{device?.y ?? 0}</span>
+                  <span>{deviceName}</span>
+                  <span className="font-bold">{device.y}</span>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p className="text-neutral-400 mt-3">{t("analytics.no_data")}</p>
+          <p className="text-neutral-400 mt-3">Ingen data endnu</p>
         )}
       </div>
     </div>

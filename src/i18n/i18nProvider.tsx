@@ -20,7 +20,6 @@ export default function I18nProvider({
   }, []);
 
   if (!ready) {
-    // Du kan også returnere fx en loader her
     return <div className="p-4 text-center"></div>;
   }
 

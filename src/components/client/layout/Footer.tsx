@@ -122,7 +122,7 @@ const Footer = () => {
             </Link>
 
             <Link
-              href="https://www.instagram.com/arzonic.agency/"
+              href="https://www.instagram.com/arzonicagency/"
               target="_blank"
               rel="noopener noreferrer"
               className="md:hover:text-secondary md:transition-colors md:duration-300"
