@@ -90,14 +90,47 @@ const Header = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-10 -left-5 bg-base-100 shadow-xl w-52 px-2 py-3 z-30 flex flex-col items-start gap-3 rounded-xl text-sm"
+                  className="absolute top-10 -left-5 bg-base-100 shadow-xl w-64 px-3 py-4 z-30 flex flex-col items-start gap-2 rounded-xl text-sm"
                 >
-                  <li className="w-full">
-                    <Link href="/solutions/web-applications">
+                  <li className="w-full pb-2 border-b border-base-300">
+                    <Link
+                      href="/solutions/web-applications"
+                      className="font-semibold"
+                    >
                       {t("Header.dropdown.webApplications")}
                     </Link>
                   </li>
-                  <li className="w-full">
+                  <li className="w-full pl-3">
+                    <Link href="/solutions/web-applications#dashboard">
+                      {t("Header.dropdown.dashboard")}
+                    </Link>
+                  </li>
+                  <li className="w-full pl-3">
+                    <Link href="/solutions/web-applications#booking">
+                      {t("Header.dropdown.booking")}
+                    </Link>
+                  </li>
+                  <li className="w-full pl-3">
+                    <Link href="/solutions/web-applications#events">
+                      {t("Header.dropdown.events")}
+                    </Link>
+                  </li>
+                  <li className="w-full pl-3">
+                    <Link href="/solutions/web-applications#landingpage">
+                      {t("Header.dropdown.landingpage")}
+                    </Link>
+                  </li>
+                  <li className="w-full pl-3">
+                    <Link href="/solutions/web-applications#ecommerce">
+                      {t("Header.dropdown.ecommerce")}
+                    </Link>
+                  </li>
+                  <li className="w-full pl-3 pb-2 border-b border-base-300">
+                    <Link href="/solutions/web-applications#internalTools">
+                      {t("Header.dropdown.internalTools")}
+                    </Link>
+                  </li>
+                  <li className="w-full pt-2">
                     <Link href="/solutions/design-ux">
                       {t("Header.dropdown.designUX")}
                     </Link>

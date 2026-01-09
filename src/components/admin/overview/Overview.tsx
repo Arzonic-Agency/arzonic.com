@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Chart from "./Chart";
+import PieChart from "./PieChart";
 
 const Overview = () => {
   const { t } = useTranslation();
@@ -27,10 +28,20 @@ const Overview = () => {
       setLoading(true);
       try {
         const response = await fetch(`/api/umami?period=${period}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const result = await response.json();
         setData(result);
       } catch (error) {
         console.error("Failed to fetch analytics", error);
+        setData({
+          pageviews: 0,
+          visitors: 0,
+          visits: 0,
+          pages: [],
+          devices: [],
+        });
       } finally {
         setLoading(false);
       }
@@ -73,11 +84,13 @@ const Overview = () => {
         </h3>
 
         {loading ? (
-          <div className="flex justify-start items-center h-32 gap-3">
-            <span
-              className="loading loading-spinner loading-md"
-              aria-label={t("aria.overview.loadingSpinner")}
-            />
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <div key={idx} className="flex flex-col gap-2">
+                <div className="skeleton h-4 w-20" />
+                <div className="skeleton h-8 w-20" />
+              </div>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-4 mt-4">
@@ -96,12 +109,23 @@ const Overview = () => {
           </div>
         )}
       </div>
-      <Chart />
+      <div className="flex gap-4 w-full items-stretch">
+        <Chart />
+        <PieChart />
+      </div>
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.most_visited")}</h3>
         {loading ? (
-          <div className="flex justify-start items-center h-32 gap-3">
-            <span className="loading loading-spinner loading-md" />
+          <div className="flex flex-col gap-3 mt-3">
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="flex justify-between border-b border-zinc-600 py-[10px]"
+              >
+                <div className="skeleton h-5 w-32" />
+                <div className="skeleton h-5 w-10" />
+              </div>
+            ))}
           </div>
         ) : data.pages && data.pages.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">
@@ -123,8 +147,16 @@ const Overview = () => {
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
         <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
         {loading ? (
-          <div className="flex justify-start items-center h-32 gap-3">
-            <span className="loading loading-spinner loading-md" />
+          <div className="flex flex-col gap-3 mt-3">
+            {Array.from({ length: 4 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="flex justify-between border-b border-zinc-600 py-2"
+              >
+                <div className="skeleton h-4 w-24" />
+                <div className="skeleton h-4 w-10" />
+              </div>
+            ))}
           </div>
         ) : data.devices && data.devices.length > 0 ? (
           <ul className="flex flex-col gap-3 mt-3">

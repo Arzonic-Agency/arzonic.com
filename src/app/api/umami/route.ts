@@ -1,119 +1,69 @@
 import { NextResponse } from "next/server";
 
-/**
- * Umami API response types
- */
+type Row = { x: string; y: number };
 
-type UmamiStatValue = {
-  value: number;
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+const toLabel = (value: unknown): string => {
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  return "";
 };
 
-type UmamiStatsResponse = {
-  pageviews: UmamiStatValue;
-  visitors: UmamiStatValue;
-  visits: UmamiStatValue;
-};
-
-type UmamiMetricsResponse = {
-  data?: UmamiMetricItem[];
-};
-
-type UmamiMetricItem = {
-  x: string;
-  y: number;
-};
-
-type RawMetricItem =
-  | UmamiMetricItem
-  | {
-      url?: string;
-      name?: string;
-      value?: number;
-      count?: number;
-      x?: string;
-      y?: number;
-    };
-
-const DEFAULT_ANALYTICS = {
-  pageviews: 0,
-  visitors: 0,
-  visits: 0,
-  pages: [] as UmamiMetricItem[],
-  devices: [] as UmamiMetricItem[],
-  monthlyVisitors: [] as UmamiMetricItem[],
-};
-
-const normalizeMetricItems = (payload: unknown): UmamiMetricItem[] => {
-  const entries: RawMetricItem[] = Array.isArray(payload)
-    ? (payload as RawMetricItem[])
-    : typeof payload === "object" &&
-      payload !== null &&
-      Array.isArray((payload as UmamiMetricsResponse).data)
-    ? ((payload as UmamiMetricsResponse).data as RawMetricItem[])
-    : [];
-
-  return entries
-    .map((item) => {
-      if (typeof item !== "object" || item === null) {
-        return null;
-      }
-
-      const record = item as {
-        x?: string;
-        url?: string;
-        name?: string;
-        y?: number;
-        value?: number;
-        count?: number;
-      };
-
-      const rawLabel = record.x ?? record.url ?? record.name ?? "";
-      const rawValue = record.y ?? record.value ?? record.count ?? Number.NaN;
-
-      if (!rawLabel) {
-        return null;
-      }
-
-      return {
-        x: String(rawLabel),
-        y: Number.isFinite(rawValue) ? Number(rawValue) : 0,
-      } satisfies UmamiMetricItem;
-    })
-    .filter((item): item is UmamiMetricItem => Boolean(item))
-    .sort((a, b) => b.y - a.y);
-};
-
-const extractStatValue = (value: unknown): number => {
+const toNumber = (value: unknown): number => {
   if (typeof value === "number") return value;
-  if (typeof value === "object" && value !== null && "value" in value) {
-    const nested = (value as UmamiStatValue).value;
-    return typeof nested === "number" ? nested : 0;
+  if (typeof value === "string") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
   return 0;
 };
 
-const normalizeStats = (payload: unknown) => {
-  if (typeof payload !== "object" || payload === null) {
-    return {
-      pageviews: 0,
-      visitors: 0,
-      visits: 0,
-    };
-  }
+const normalizeXY = (value: unknown): Row[] => {
+  const dataArray: unknown[] = Array.isArray(value)
+    ? (value as unknown[])
+    : isRecord(value) && Array.isArray(value.data)
+    ? (value.data as unknown[])
+    : [];
 
-  const record = payload as Record<string, unknown>;
+  return dataArray
+    .map((entry): Row => {
+      if (!isRecord(entry)) return { x: "", y: 0 };
 
-  return {
-    pageviews: extractStatValue(
-      record["pageviews"] ?? record["pageViews"] ?? record["views"]
-    ),
-    visitors: extractStatValue(
-      record["visitors"] ?? record["uniques"] ?? record["users"]
-    ),
-    visits: extractStatValue(
-      record["visits"] ?? record["sessions"] ?? record["total"]
-    ),
-  };
+      const labelSource =
+        entry["x"] ?? entry["name"] ?? entry["path"] ?? entry["value"] ?? "";
+      const countSource =
+        entry["y"] ??
+        entry["visitors"] ??
+        entry["pageviews"] ??
+        entry["count"] ??
+        0;
+
+      return {
+        x: toLabel(labelSource),
+        y: toNumber(countSource),
+      };
+    })
+    .filter((row) => row.x.length > 0)
+    .sort((a: Row, b: Row) => b.y - a.y);
+};
+
+const statVal = (source: unknown, key: string): number => {
+  if (!isRecord(source)) return 0;
+
+  const direct = source[key];
+  if (typeof direct === "number") return direct;
+  if (isRecord(direct) && typeof direct.value === "number") return direct.value;
+
+  const data = source.data;
+  if (!isRecord(data)) return 0;
+
+  const nested = data[key];
+  if (typeof nested === "number") return nested;
+  if (isRecord(nested) && typeof nested.value === "number") return nested.value;
+
+  return 0;
 };
 
 export async function GET(request: Request) {
@@ -121,149 +71,135 @@ export async function GET(request: Request) {
   const WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
   const ACCESS_TOKEN = process.env.UMAMI_ACCESS_TOKEN;
 
-  if (!BASE_URL || !WEBSITE_ID || !ACCESS_TOKEN) {
-    console.warn(
-      "Umami analytics disabled: missing UMAMI_API_URL, UMAMI_WEBSITE_ID or UMAMI_ACCESS_TOKEN"
-    );
-    return NextResponse.json(DEFAULT_ANALYTICS);
+  if (!ACCESS_TOKEN || !BASE_URL || !WEBSITE_ID) {
+    return NextResponse.json({
+      pageviews: 0,
+      visitors: 0,
+      visits: 0,
+      pages: [],
+      devices: [],
+      monthlyVisitors: [],
+    });
   }
 
   const { searchParams } = new URL(request.url);
-  const period = searchParams.get("period") ?? "7d";
-  const mode = searchParams.get("mode") ?? "summary";
-  const monthsParamRaw = Number.parseInt(searchParams.get("months") ?? "6", 10);
-  const monthsParam = Number.isFinite(monthsParamRaw)
-    ? Math.min(Math.max(monthsParamRaw, 1), 12)
-    : 6;
+  const periodParam = searchParams.get("period") ?? "";
+  const period =
+    periodParam === "30d" || periodParam === "365d" ? periodParam : "7d";
+  const mode = searchParams.get("mode") ?? "";
+  const months = Math.min(
+    Math.max(Number(searchParams.get("months") ?? 6), 1),
+    12
+  );
 
   const endAt = Date.now();
-  const startAt =
-    period === "30d"
+  const defaultStart =
+    period === "365d"
+      ? endAt - 365 * 24 * 60 * 60 * 1000
+      : period === "30d"
       ? endAt - 30 * 24 * 60 * 60 * 1000
       : endAt - 7 * 24 * 60 * 60 * 1000;
+  const monthlyStart = endAt - months * 30 * 24 * 60 * 60 * 1000;
+  const startAt = mode === "monthly" ? monthlyStart : defaultStart;
 
   const headers: HeadersInit = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     Accept: "application/json",
   };
 
-  try {
-    const fetchJson = async <T>(url: string) => {
-      const res = await fetch(url, { headers });
-      if (!res.ok) {
-        console.warn(`Umami request failed: ${res.status} ${url}`);
-        return null;
-      }
-      try {
-        return (await res.json()) as T;
-      } catch (parseError) {
-        console.warn(`Failed to parse Umami response for ${url}`, parseError);
-        return null;
-      }
-    };
+  const statsUrl = `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`;
+  const pagesUrl = `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=path&limit=50`;
+  const devicesUrl = `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device&limit=50`;
 
-    const [statsData, pagesData, devicesData] = await Promise.all([
-      fetchJson<UmamiStatsResponse | Record<string, unknown>>(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`
-      ),
-      fetchJson<UmamiMetricItem[] | UmamiMetricsResponse>(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`
-      ),
-      fetchJson<UmamiMetricItem[] | UmamiMetricsResponse>(
-        `${BASE_URL}/api/websites/${WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`
-      ),
+  try {
+    const [statsRes, pagesRes, devicesRes] = await Promise.all([
+      fetch(statsUrl, { headers, cache: "no-store" }),
+      fetch(pagesUrl, { headers, cache: "no-store" }),
+      fetch(devicesUrl, { headers, cache: "no-store" }),
     ]);
 
-    const stats = normalizeStats(statsData);
-    let monthlyVisitors: UmamiMetricItem[] = [];
+    const statsText = await statsRes.text();
+    const pagesText = await pagesRes.text();
+    const devicesText = await devicesRes.text();
 
-    if (mode === "monthly") {
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
+    const statsJson = statsText ? JSON.parse(statsText) : {};
+    const pagesJson = pagesText ? JSON.parse(pagesText) : [];
+    const devicesJson = devicesText ? JSON.parse(devicesText) : [];
 
-      const monthLabels = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
+    // Hvis Umami svarer med fejl, log det på serveren (ikke i UI)
+    if (!statsRes.ok)
+      console.error("Umami stats failed", statsRes.status, statsText);
+    if (!pagesRes.ok)
+      console.error("Umami pages failed", pagesRes.status, pagesText);
+    if (!devicesRes.ok)
+      console.error("Umami devices failed", devicesRes.status, devicesText);
 
-      const monthRanges = Array.from({ length: monthsParam }, (_, index) => {
-        const monthIndex = monthsParam - 1 - index;
-        const monthDate = new Date(
-          now.getFullYear(),
-          now.getMonth() - monthIndex,
-          1
-        );
-        const startAtMonth = monthDate.getTime();
-        const endDate = new Date(
-          monthDate.getFullYear(),
-          monthDate.getMonth() + 1,
-          0,
-          23,
-          59,
-          59,
-          999
-        );
-        const endAtMonth = endDate.getTime();
+    const monthlyVisitors =
+      mode === "monthly"
+        ? await (async () => {
+            const now = new Date(endAt);
+            const count = Math.max(1, Math.min(months, 5)); // Always get last 5 months
 
-        return {
-          startAt: startAtMonth,
-          endAt: endAtMonth,
-          label: monthLabels[monthDate.getMonth()],
-        } satisfies {
-          startAt: number;
-          endAt: number;
-          label: string;
-        };
-      });
+            // Fetch actual data for each of the last 5 months
+            const monthPromises = [];
+            for (let i = count - 1; i >= 0; i--) {
+              const monthStart = new Date(now);
+              monthStart.setMonth(monthStart.getMonth() - i);
+              monthStart.setDate(1);
+              monthStart.setHours(0, 0, 0, 0);
 
-      const monthlyStats = await Promise.all(
-        monthRanges.map(({ startAt: start, endAt: end }) =>
-          fetchJson<UmamiStatsResponse | Record<string, unknown>>(
-            `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${start}&endAt=${end}`
-          )
-        )
-      );
+              const monthEnd = new Date(monthStart);
+              monthEnd.setMonth(monthEnd.getMonth() + 1);
+              monthEnd.setDate(0);
+              monthEnd.setHours(23, 59, 59, 999);
 
-      monthlyVisitors = monthlyStats.map((entry, idx) => {
-        const { label } = monthRanges[idx];
-        const normalized = normalizeStats(entry);
-        return {
-          x: label,
-          y: normalized.visitors ?? 0,
-        } satisfies UmamiMetricItem;
-      });
-    }
+              const label = new Intl.DateTimeFormat("da-DK", {
+                month: "short",
+                year: "2-digit",
+              }).format(monthStart);
 
-    return NextResponse.json(
-      {
-        pageviews: stats.pageviews,
-        visitors: stats.visitors,
-        visits: stats.visits,
-        pages: normalizeMetricItems(pagesData),
-        devices: normalizeMetricItems(devicesData),
-        monthlyVisitors,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Unknown Umami API error";
+              monthPromises.push(
+                fetch(
+                  `${BASE_URL}/api/websites/${WEBSITE_ID}/stats?startAt=${monthStart.getTime()}&endAt=${monthEnd.getTime()}`,
+                  { headers, cache: "no-store" }
+                )
+                  .then((res) => res.text())
+                  .then((text) => {
+                    try {
+                      const json = text ? JSON.parse(text) : {};
+                      const visitors = statVal(json, "visitors");
+                      return { x: label, y: visitors };
+                    } catch {
+                      return { x: label, y: 0 };
+                    }
+                  })
+                  .catch(() => ({ x: label, y: 0 }))
+              );
+            }
 
-    console.error("🚨 Umami API route error:", message);
+            const results = await Promise.all(monthPromises);
+            return results;
+          })()
+        : [];
 
-    return NextResponse.json(
-      { ...DEFAULT_ANALYTICS, error: message },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      pageviews: statVal(statsJson, "pageviews"),
+      visitors: statVal(statsJson, "visitors"),
+      visits: statVal(statsJson, "visits"),
+      pages: normalizeXY(pagesJson), // [{x: "/kontakt", y: 12}, ...]
+      devices: normalizeXY(devicesJson),
+      monthlyVisitors,
+    });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Umami route crashed", message);
+    return NextResponse.json({
+      pageviews: 0,
+      visitors: 0,
+      visits: 0,
+      pages: [],
+      devices: [],
+      monthlyVisitors: [],
+    });
   }
 }

@@ -354,7 +354,13 @@
       "webApplications": "Web Applications",
       "designUX": "Design & UX",
       "visualization": "3D Visualization",
-      "systemsIntegrations": "Systems & Integrations"
+      "systemsIntegrations": "Systems & Integrations",
+      "dashboard": "Dashboard / CMS",
+      "booking": "Booking System",
+      "events": "Event System",
+      "landingpage": "Landingpage",
+      "ecommerce": "E-commerce",
+      "internalTools": "Internal Tools"
     },
     "aria": {
       "navigation": {
@@ -883,7 +889,7 @@
       "process": [
         "Needs analysis and business flow mapping",
         "Architecture and technical planning",
-        "Full-stack development (React, Next.js, Supabase, etc.)",
+        "Full-stack development (React)",
         "Testing, launch, and continuous improvement"
       ],
       "cta": "Have a web application in mind?"
@@ -934,22 +940,43 @@
       "cta": "Need robust system integrations?"
     }
   },
+  "webAppProducts": {
+    "title": "Products we develop",
+    "dashboard": {
+      "title": "Dashboard / CMS",
+      "description": "Custom dashboards and content management systems tailored to your needs."
+    },
+    "booking": {
+      "title": "Booking System",
+      "description": "Complete booking solutions for appointments, reservations, and scheduling."
+    },
+    "events": {
+      "title": "Event System",
+      "description": "Manage events, registrations, and attendee information efficiently."
+    },
+    "landingpage": {
+      "title": "Landingpage",
+      "description": "High-converting landing pages designed to capture leads and drive action."
+    },
+    "ecommerce": {
+      "title": "E-commerce",
+      "description": "Full-featured online stores with payment integration and inventory management."
+    },
+    "internalTools": {
+      "title": "Internal Tools",
+      "description": "Custom tools and platforms for internal business processes and workflows."
+    }
+  },
   "countries": {
     "denmark": "Denmark",
     "sweden": "Sweden",
     "norway": "Norway",
     "finland": "Finland",
-    "germany": "Germany",
     "netherlands": "Netherlands",
     "belgium": "Belgium",
-    "ireland": "Ireland",
-    "switzerland": "Switzerland",
-    "estonia": "Estonia",
-    "poland": "Poland",
-    "czechia": "Czechia",
-    "latvia": "Latvia",
-    "lithuania": "Lithuania",
-    "austria": "Austria"
+    "iceland": "Iceland",
+    "greenland": "Greenland",
+    "faroe-islands": "Faroe Islands"
   },
   "CasesPage": {
     "title": "What we have",
@@ -1153,7 +1180,11 @@
     "desktop": "Desktop",
     "laptop": "Laptop",
     "tablet": "Tablet",
-    "unknown": "Unknown"
+    "unknown": "Unknown",
+    "visitors_by_solution": "Visitors per solution (last 1 year)",
+    "visitors_by_month": "Visitors per month",
+    "loading": "Loading analytics",
+    "error": "Unable to load data right now."
   },
   "aria": {
     "edit_user_button": "Edit user {{name}}",

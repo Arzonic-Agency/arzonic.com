@@ -1,7 +1,7 @@
 "use client";
 
-import ApexCharts, { ApexOptions } from "apexcharts";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import type { ApexOptions } from "apexcharts";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type MonthlyVisitorPoint = {
@@ -79,28 +79,42 @@ const readThemePalette = (): ThemePalette => {
   };
 };
 
+type ApexChartsInstance = {
+  render: () => void;
+  updateOptions: (
+    options: ApexOptions,
+    redraw?: boolean,
+    animate?: boolean
+  ) => void;
+  updateSeries: (series: unknown[], animate?: boolean) => void;
+  destroy: () => void;
+};
+
+type ApexChartsConstructor = new (
+  element: HTMLElement,
+  options: ApexOptions
+) => ApexChartsInstance;
+
 const Chart = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
-  const chartInstanceRef = useRef<ApexCharts | null>(null);
+  const chartInstanceRef = useRef<ApexChartsInstance | null>(null);
+  const apexchartsModuleRef = useRef<ApexChartsConstructor | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [series, setSeries] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [themeColors, setThemeColors] = useState<ThemePalette>(FALLBACK_THEME);
 
-  const formatNumber = useCallback(
-    (value: number) => {
-      const rounded = Math.round(value);
-      try {
-        return rounded.toLocaleString(i18n.language);
-      } catch (localeError) {
-        console.warn("Unable to format number for locale", localeError);
-        return rounded.toLocaleString();
-      }
-    },
-    [i18n.language]
-  );
+  const formatNumber = useCallback((value: number) => {
+    const rounded = Math.round(value);
+    try {
+      return new Intl.NumberFormat("da-DK").format(rounded);
+    } catch (localeError) {
+      console.warn("Unable to format number", localeError);
+      return rounded.toLocaleString();
+    }
+  }, []);
 
   useEffect(() => {
     const fetchMonthlyVisitors = async () => {
@@ -108,7 +122,9 @@ const Chart = () => {
       setError(null);
 
       try {
-        const response = await fetch("/api/umami?mode=monthly&months=12");
+        const response = await fetch(
+          "/api/umami?mode=monthly&months=5&period=365d"
+        );
 
         if (!response.ok) {
           throw new Error(`Request failed: ${response.status}`);
@@ -176,139 +192,169 @@ const Chart = () => {
   }, []);
 
   useEffect(() => {
-    if (!chartContainerRef.current) {
-      return;
-    }
+    let active = true;
 
-    const labelColors = categories.map(() => themeColors.content);
-    const tooltipBorder = themeColors.isDark
-      ? "rgba(255,255,255,0.08)"
-      : "rgba(0,0,0,0.1)";
-    const markerBackground = themeColors.primaryAlt;
+    const renderChart = async () => {
+      if (!chartContainerRef.current) return;
 
-    const options: ApexOptions = {
-      colors: [themeColors.primary],
-      series: [
-        {
-          name: seriesName,
-          data: series,
-        },
-      ],
-      chart: {
-        height: 350,
-        type: "bar",
-        background: "transparent",
-        toolbar: {
-          show: false,
-        },
-        foreColor: themeColors.content,
-        fontFamily: "inherit",
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 10,
-          dataLabels: {
-            position: "top",
+      if (!apexchartsModuleRef.current) {
+        const mod = await import("apexcharts");
+        if (!active) return;
+        const ApexChartsDefault = (mod as { default?: ApexChartsConstructor })
+          .default;
+        const ApexChartsModule = mod as unknown as ApexChartsConstructor;
+        apexchartsModuleRef.current = ApexChartsDefault ?? ApexChartsModule;
+      }
+
+      const ApexChartsLib = apexchartsModuleRef.current;
+      if (!ApexChartsLib) return;
+
+      const labelColors = categories.map(() => themeColors.content);
+      const tooltipBorder = themeColors.isDark
+        ? "rgba(255,255,255,0.08)"
+        : "rgba(0,0,0,0.1)";
+      const markerBackground = themeColors.primaryAlt;
+
+      const options: ApexOptions = {
+        colors: [themeColors.primary],
+        series: [
+          {
+            name: seriesName,
+            data: series,
           },
-          columnWidth: "52%",
+        ],
+        chart: {
+          height: 350,
+          type: "bar",
+          background: "transparent",
+          toolbar: {
+            show: false,
+          },
+          foreColor: themeColors.content,
+          fontFamily: "inherit",
         },
-      },
-      dataLabels: {
-        enabled: true,
-        formatter: (val: number) => formatNumber(val),
-        offsetY: -16,
-        style: {
-          fontSize: "12px",
-          fontWeight: 600,
-          colors: [themeColors.content],
-        },
-      },
-      stroke: {
-        show: true,
-        width: 1,
-        colors: [themeColors.primaryAlt],
-      },
-      fill: {
-        type: "gradient",
-        gradient: {
-          shade: "light",
-          type: "vertical",
-          gradientToColors: [themeColors.primaryAlt],
-          inverseColors: false,
-          opacityFrom: 0.9,
-          opacityTo: 0.95,
-          stops: [0, 90, 100],
-        },
-      },
-      xaxis: {
-        categories,
-        position: "top",
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        crosshairs: {
-          fill: {
-            type: "gradient",
-            gradient: {
-              colorFrom: themeColors.primaryAlt,
-              colorTo: themeColors.primary,
-              stops: [0, 100],
-              opacityFrom: 0.25,
-              opacityTo: 0.35,
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: "top",
             },
+            columnWidth: "45%",
           },
         },
-        labels: {
-          style: {
-            colors: labelColors,
-            fontWeight: 500,
-          },
-        },
-        tooltip: {
-          enabled: false,
-        },
-      },
-      yaxis: {
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
-        labels: {
+        dataLabels: {
+          enabled: true,
           formatter: (val: number) => formatNumber(val),
-          offsetX: -6,
+          offsetY: -20,
           style: {
+            fontSize: "12px",
+            fontWeight: 600,
             colors: [themeColors.content],
           },
         },
-      },
-      tooltip: {
-        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-          const label =
-            categories[dataPointIndex] ??
-            (w?.globals?.categoryLabels?.[dataPointIndex] as
-              | string
-              | undefined) ??
-            "";
-          const rawValue = series?.[seriesIndex]?.[dataPointIndex];
-          const value =
-            typeof rawValue === "number" ? rawValue : Number(rawValue ?? 0);
-          const formattedValue = formatNumber(
-            Number.isFinite(value) ? value : 0
-          );
-          const safeLabel = escapeHtml(String(label));
-          const safeSeriesName = escapeHtml(seriesName);
+        stroke: {
+          show: true,
+          width: 1,
+          colors: [themeColors.primaryAlt],
+        },
+        fill: {
+          type: "gradient",
+          gradient: {
+            shade: "light",
+            type: "vertical",
+            gradientToColors: [themeColors.primaryAlt],
+            inverseColors: false,
+            opacityFrom: 0.9,
+            opacityTo: 0.95,
+            stops: [0, 90, 100],
+          },
+        },
+        xaxis: {
+          categories,
+          position: "top",
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+          crosshairs: {
+            fill: {
+              type: "gradient",
+              gradient: {
+                colorFrom: themeColors.primaryAlt,
+                colorTo: themeColors.primary,
+                stops: [0, 100],
+                opacityFrom: 0.25,
+                opacityTo: 0.35,
+              },
+            },
+          },
+          labels: {
+            style: {
+              colors: labelColors,
+              fontWeight: 500,
+            },
+          },
+          tooltip: {
+            enabled: false,
+          },
+        },
+        yaxis: {
+          min: 0,
+          max: (max: number) => {
+            const headroom = max * 1.15;
 
-          return `
+            const step =
+              headroom <= 50
+                ? 10
+                : headroom <= 100
+                ? 20
+                : headroom <= 250
+                ? 50
+                : headroom <= 500
+                ? 100
+                : 100;
+
+            return Math.ceil(headroom / step) * step;
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            formatter: (val: number) => formatNumber(val),
+            offsetX: -6,
+            style: {
+              colors: [themeColors.content],
+            },
+          },
+        },
+        tooltip: {
+          custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+            const label =
+              categories[dataPointIndex] ??
+              (w?.globals?.categoryLabels?.[dataPointIndex] as
+                | string
+                | undefined) ??
+              "";
+            const rawValue = series?.[seriesIndex]?.[dataPointIndex];
+            const value =
+              typeof rawValue === "number" ? rawValue : Number(rawValue ?? 0);
+            const formattedValue = formatNumber(
+              Number.isFinite(value) ? value : 0
+            );
+            const safeLabel = escapeHtml(String(label));
+            const safeSeriesName = escapeHtml(seriesName);
+
+            return `
             <div style="background:${escapeHtml(
               themeColors.base
             )};padding:12px 16px;border-radius:12px;border:1px solid ${tooltipBorder};box-shadow:0 4px 12px rgba(0,0,0,0.28);color:${escapeHtml(
-            themeColors.content
-          )};font-family:inherit;min-width:140px;">
+              themeColors.content
+            )};font-family:inherit;min-width:140px;">
               <div style="font-size:12px;font-weight:600;opacity:0.85;">${safeLabel}</div>
               <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;font-weight:600;">
                 <span style="display:inline-flex;width:10px;height:10px;border-radius:9999px;background:${markerBackground};box-shadow:0 0 0 2px rgba(0,0,0,0.25);"></span>
@@ -316,75 +362,82 @@ const Chart = () => {
               </div>
             </div>
           `;
-        },
-      },
-      legend: {
-        show: false,
-      },
-      grid: {
-        borderColor: themeColors.grid,
-        strokeDashArray: 6,
-        padding: {
-          left: 12,
-          right: 12,
-        },
-        xaxis: {
-          lines: {
-            show: false,
           },
         },
-        yaxis: {
-          lines: {
-            show: true,
+        legend: {
+          show: false,
+        },
+        grid: {
+          borderColor: themeColors.grid,
+          strokeDashArray: 6,
+          padding: {
+            left: 12,
+            right: 12,
+          },
+          xaxis: {
+            lines: {
+              show: false,
+            },
+          },
+          yaxis: {
+            lines: {
+              show: true,
+            },
           },
         },
-      },
-      states: {
-        hover: {
-          filter: {
-            type: "lighten",
+        states: {
+          hover: {
+            filter: {
+              type: "lighten",
+            },
+          },
+          active: {
+            filter: {
+              type: "darken",
+            },
           },
         },
-        active: {
-          filter: {
-            type: "darken",
-          },
-        },
-      },
-      responsive: [
-        {
-          breakpoint: 768,
-          options: {
-            plotOptions: {
-              bar: {
-                columnWidth: "30%",
+        responsive: [
+          {
+            breakpoint: 768,
+            options: {
+              plotOptions: {
+                bar: {
+                  columnWidth: "30%",
+                },
+              },
+              dataLabels: {
+                offsetY: -12,
+                style: {
+                  fontSize: "11px",
+                },
+              },
+              title: {
+                offsetY: 280,
               },
             },
-            dataLabels: {
-              offsetY: -12,
-              style: {
-                fontSize: "11px",
-              },
-            },
-            title: {
-              offsetY: 280,
-            },
           },
-        },
-      ],
+        ],
+      };
+
+      if (!chartInstanceRef.current) {
+        chartInstanceRef.current = new ApexChartsLib(
+          chartContainerRef.current,
+          options
+        );
+        chartInstanceRef.current.render();
+        return;
+      }
+
+      chartInstanceRef.current.updateOptions(options, true, true);
+      chartInstanceRef.current.updateSeries(options.series ?? [], true);
     };
 
-    if (!chartInstanceRef.current) {
-      chartInstanceRef.current = new ApexCharts(
-        chartContainerRef.current,
-        options
-      );
-      chartInstanceRef.current.render();
-      return;
-    }
+    renderChart();
 
-    chartInstanceRef.current.updateOptions(options, true, true);
-    chartInstanceRef.current.updateSeries(options.series ?? [], true);
+    return () => {
+      active = false;
+    };
   }, [categories, series, seriesName, themeColors, formatNumber]);
 
   useEffect(() => {
@@ -395,18 +448,16 @@ const Chart = () => {
   }, []);
 
   return (
-    <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
+    <div className="2xl:flex-2 flex-1 bg-base-200 rounded-lg shadow-md p-3 md:p-7">
       <div className="mb-4">
         <h3 className="text-base font-semibold text-base-content">
           {chartHeading}
         </h3>
       </div>
       {loading ? (
-        <div className="flex h-64 items-center gap-3">
-          <span className="loading loading-spinner loading-md" />
-          <span className="text-sm text-neutral-400">
-            {t("analytics.loading", { defaultValue: "Loading analytics" })}
-          </span>
+        <div className="min-h-[350px] flex flex-col gap-4">
+          <div className="skeleton h-6 w-40" />
+          <div className="skeleton h-[300px] w-full" />
         </div>
       ) : error ? (
         <div className="flex h-64 items-center">

@@ -355,7 +355,13 @@
       "webApplications": "Webapplikationer",
       "designUX": "Design & UX",
       "visualization": "3D-visualisering",
-      "systemsIntegrations": "Systemer & Integrationer"
+      "systemsIntegrations": "Systemer & Integrationer",
+      "dashboard": "Dashboard / CMS",
+      "booking": "Bookingsystem",
+      "events": "Eventsystem",
+      "landingpage": "Landingpage",
+      "ecommerce": "E-handel",
+      "internalTools": "Interne værktøjer"
     },
     "aria": {
       "navigation": {
@@ -886,7 +892,7 @@
       "process": [
         "Analyse af behov og forretningsflows",
         "Arkitektur og teknisk afklaring",
-        "Full-stack udvikling (React, Next.js, Supabase m.fl.)",
+        "Full-stack udvikling (React)",
         "Test, lancering og videreudvikling"
       ],
       "cta": "Har du en webapplikation i tankerne?"
@@ -937,22 +943,43 @@
       "cta": "Har du behov for robuste systemintegrationer?"
     }
   },
+  "webAppProducts": {
+    "title": "Produkter vi udvikler",
+    "dashboard": {
+      "title": "Dashboard / CMS",
+      "description": "Skræddersyede dashboards og indholdssystemer tilpasset dine behov."
+    },
+    "booking": {
+      "title": "Bookingsystem",
+      "description": "Komplette bookingløsninger til aftaler, reservationer og planlægning."
+    },
+    "events": {
+      "title": "Eventsystem",
+      "description": "Administrer events, tilmeldinger og deltagerinformation effektivt."
+    },
+    "landingpage": {
+      "title": "Landingpage",
+      "description": "Højkonverterende landingssider designet til at fange leads og drive handling."
+    },
+    "ecommerce": {
+      "title": "E-handel",
+      "description": "Fuld funktionelle webshops med betalingsintegration og lagerstyring."
+    },
+    "internalTools": {
+      "title": "Interne værktøjer",
+      "description": "Skræddersyede værktøjer og platforme til interne forretningsprocesser og workflows."
+    }
+  },
   "countries": {
     "denmark": "Danmark",
     "sweden": "Sverige",
     "norway": "Norge",
     "finland": "Finland",
-    "germany": "Tyskland",
     "netherlands": "Holland",
     "belgium": "Belgien",
-    "ireland": "Irland",
-    "switzerland": "Schweiz",
-    "estonia": "Estland",
-    "poland": "Polen",
-    "czechia": "Tjekkiet",
-    "latvia": "Letland",
-    "lithuania": "Litauen",
-    "austria": "Østrig"
+    "iceland": "Island",
+    "greenland": "Grønland",
+    "faroe-islands": "Færøerne"
   },
   "CasesPage": {
     "title": "Hvad vi har",
@@ -1155,7 +1182,11 @@
     "desktop": "Stationær",
     "laptop": "Bærbar",
     "tablet": "Tablet",
-    "unknown": "Ukendt"
+    "unknown": "Ukendt",
+    "visitors_by_solution": "Besøgende pr. løsning (seneste 1 år)",
+    "visitors_by_month": "Besøgende pr. måned",
+    "loading": "Indlæser statistikker",
+    "error": "Kan ikke hente data lige nu."
   },
   "aria": {
     "edit_user_button": "Rediger bruger {{name}}",

@@ -5,6 +5,7 @@ import { NextSeo } from "next-seo";
 import Link from "next/link";
 import { FaCaretRight } from "react-icons/fa6";
 import Spline from "@splinetool/react-spline";
+import WebAppProducts from "@/components/client/solutions/WebAppProducts";
 
 type Props = {
   slug:
@@ -42,7 +43,7 @@ const SolutionClient = ({ slug, countryName }: Props) => {
     "3d-visualization": (
       <Spline scene="https://prod.spline.design/7L07tDETuES9U9Si/scene.splinecode" />
     ),
-    "web-applications": <span className=""></span>,
+    "web-applications": <div className="relative w-full h-full"></div>,
   };
 
   return (
@@ -110,6 +111,15 @@ const SolutionClient = ({ slug, countryName }: Props) => {
             )}
           </div>
         </div>
+
+        {slug === "web-applications" && (
+          <div className="w-full mt-10">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-6">
+              {t("webAppProducts.title", "Products we develop")}
+            </h3>
+            <WebAppProducts />
+          </div>
+        )}
 
         <div className="flex flex-col gap-5 max-w-4xl mt-20">
           <h4 className="text-base font-semibold text-zinc-400">
