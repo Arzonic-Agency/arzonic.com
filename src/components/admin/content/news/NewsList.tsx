@@ -38,11 +38,12 @@ const NewsList = ({
   const [deletingNewsId, setDeletingNewsId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [deleting, setDeleting] = useState<boolean>(false);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(6);
 
   const fetchNews = useCallback(async () => {
     try {
       setLoading(true);
-      const { news, total } = await getAllNews(page);
+      const { news, total } = await getAllNews(page, itemsPerPage);
       setNews(news || []);
       setTotal(total);
     } catch (error) {
@@ -50,11 +51,32 @@ const NewsList = ({
     } finally {
       setLoading(false);
     }
-  }, [page, setTotal, setNews]);
+  }, [page, itemsPerPage, setTotal, setNews]);
 
   useEffect(() => {
     fetchNews();
   }, [page, setTotal, fetchNews]);
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      if (width >= 1920) {
+        setItemsPerPage(8);
+      } else if (width >= 1024) {
+        setItemsPerPage(6);
+      } else {
+        setItemsPerPage(4);
+      }
+    };
+
+    updateItemsPerPage();
+
+    window.addEventListener("resize", updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener("resize", updateItemsPerPage);
+    };
+  }, []);
 
   const truncateDescription = (
     description: string | null,
@@ -89,10 +111,52 @@ const NewsList = ({
   return (
     <div className="w-full mt-3">
       {loading ? (
-        <div className="flex justify-center gap-3 items-center h-40">
-          <span className="loading loading-spinner loading-md"></span>
-          {t("loading_news")}
-        </div>
+        view === "cards" ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-5">
+            {[...Array(itemsPerPage)].map((_, index) => (
+              <div
+                key={index}
+                className="card card-compact shadow-lg rounded-md"
+              >
+                <figure className="relative w-full aspect-4/3 h-56 overflow-hidden rounded-t-md">
+                  <div className="skeleton w-full h-full"></div>
+                </figure>
+                <div className="card-body">
+                  <div className="skeleton h-3 w-full mt-1"></div>
+                  <div className="skeleton h-3 w-3/4 mt-1"></div>
+                  <div className="card-actions justify-between items-center mt-2">
+                    <div className="flex gap-2">
+                      <div className="skeleton h-8 w-20"></div>
+                      <div className="skeleton h-8 w-20"></div>
+                    </div>
+                    <div className="skeleton h-8 w-16"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {[...Array(itemsPerPage)].map((_, index) => (
+              <React.Fragment key={index}>
+                <li>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                      <div className="skeleton w-14 h-14 rounded-md"></div>
+                      <div className="skeleton h-4 w-48"></div>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="skeleton h-8 w-20"></div>
+                      <div className="skeleton h-8 w-20"></div>
+                      <div className="skeleton h-8 w-16"></div>
+                    </div>
+                  </div>
+                </li>
+                <hr className="border-px rounded-lg border-base-200" />
+              </React.Fragment>
+            ))}
+          </ul>
+        )
       ) : newsItems.length === 0 ? (
         <div className="flex justify-center items-center h-40 w-full">
           <p className="text-gray-500">{t("no_news")}</p>
@@ -101,12 +165,12 @@ const NewsList = ({
         <>
           {view === "cards" ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-5">
-              {newsItems.map((item) => (
+              {newsItems.map((item, itemIndex) => (
                 <div
                   key={item.id}
-                  className="card card-compact shadow-md border-2 border-base-100 rounded-lg h-full lg:h-[450px]"
+                  className="card card-compact shadow-lg rounded-md"
                 >
-                  <figure className="relative w-full aspect-[1/1] overflow-hidden h-72 lg:h-68">
+                  <figure className="relative w-full aspect-4/3 h-56 overflow-hidden">
                     {item.images && item.images.length > 0 ? (
                       item.images.length === 1 ? (
                         <div className="relative w-full h-full">
@@ -116,7 +180,7 @@ const NewsList = ({
                             fill
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="object-cover"
-                            priority
+                            priority={itemIndex < 8}
                             loading="eager"
                           />
                         </div>
@@ -134,7 +198,7 @@ const NewsList = ({
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-cover"
-                                priority={index === 0}
+                                priority={itemIndex < 8 && index === 0}
                                 loading="eager"
                               />
                               {item.images.length > 1 && (
@@ -189,6 +253,7 @@ const NewsList = ({
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-cover"
+                          priority={itemIndex < 8}
                           loading="eager"
                         />
                       </div>
@@ -247,69 +312,78 @@ const NewsList = ({
               ))}
             </div>
           ) : (
-            <ul className="list">
+            <ul className="flex flex-col gap-3">
               {newsItems.map((item) => (
                 <React.Fragment key={item.id}>
-                  <li className="list-row py-6">
-                    <div className="relative w-14 aspect-[1/1] rounded-md overflow-hidden">
-                      <Image
-                        src={
-                          item.images && item.images.length > 0
-                            ? item.images[0]
-                            : FALLBACK_IMAGE
-                        }
-                        alt="News image"
-                        fill
-                        className="object-cover"
-                        loading="eager"
-                      />
-                    </div>
-                    <div></div>
-                    <div></div>
+                  <li>
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-2 items-center">
+                        <div className="relative w-14 h-14 rounded-md overflow-hidden">
+                          <Image
+                            src={
+                              item.images && item.images.length > 0
+                                ? item.images[0]
+                                : FALLBACK_IMAGE
+                            }
+                            alt="News image"
+                            fill
+                            style={{ objectFit: "cover" }}
+                            loading="eager"
+                          />
+                        </div>
+                        <div className="hidden sm:block">
+                          <p className="text-xs">
+                            {truncateDescription(item.content, 100)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex gap-5 md:gap-2">
+                        {item.linkFacebook && (
+                          <button
+                            onClick={() =>
+                              openSocialLink(item.linkFacebook!, "facebook")
+                            }
+                            className="btn btn-sm"
+                            title="Se Facebook opslag"
+                          >
+                            <FaFacebook className="text-[15px] md:text-base" />
+                            <span className=" font-normal text-base-content hidden md:block">
+                              Facebook
+                            </span>
+                          </button>
+                        )}
+                        {item.linkInstagram && (
+                          <button
+                            onClick={() =>
+                              openSocialLink(item.linkInstagram!, "instagram")
+                            }
+                            className="btn btn-sm"
+                            title="Se Instagram opslag"
+                          >
+                            <FaInstagram className="text-base" />
+                            <span className="font-normal text-base-content hidden md:block">
+                              Instagram
+                            </span>
+                          </button>
+                        )}
 
-                    <div className="flex gap-2">
-                      {item.linkFacebook && (
                         <button
-                          onClick={() =>
-                            openSocialLink(item.linkFacebook!, "facebook")
-                          }
                           className="btn btn-sm"
-                          title="Se Facebook opslag"
+                          onClick={() => {
+                            setDeletingNewsId(item.id);
+                            setIsModalOpen(true);
+                          }}
                         >
-                          <FaFacebook className="text-[15px] md:text-base" />
-                          <span className=" font-normal text-base-content hidden md:block">
-                            Facebook
+                          <FaTrash />
+                          <span className="md:flex hidden">
+                            {" "}
+                            {t("delete")}{" "}
                           </span>
                         </button>
-                      )}
-                      {item.linkInstagram && (
-                        <button
-                          onClick={() =>
-                            openSocialLink(item.linkInstagram!, "instagram")
-                          }
-                          className="btn btn-sm"
-                          title="Se Instagram opslag"
-                        >
-                          <FaInstagram className="text-base" />
-                          <span className="font-normal text-base-content hidden md:block">
-                            Instagram
-                          </span>
-                        </button>
-                      )}
-
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => {
-                          setDeletingNewsId(item.id);
-                          setIsModalOpen(true);
-                        }}
-                      >
-                        <FaTrash />
-                        <span className=""> Slet </span>
-                      </button>
+                      </div>
                     </div>
                   </li>
-                  <hr className="border-[1px] rounded-lg border-base-200" />
+                  <hr className="border-px rounded-lg border-base-200" />
                 </React.Fragment>
               ))}
             </ul>

@@ -1184,7 +1184,18 @@
     "visitors_by_solution": "Visitors per solution (last 1 year)",
     "visitors_by_month": "Visitors per month",
     "loading": "Loading analytics",
-    "error": "Unable to load data right now."
+    "error": "Unable to load data right now.",
+    "most_visited_areas": "Most visited page areas",
+    "area": {
+      "home": "Home",
+      "solutions": "Solutions",
+      "cases": "Cases",
+      "pricing": "Pricing",
+      "getStarted": "Get Started",
+      "contact": "Contact",
+      "about": "About",
+      "jobs": "Jobs"
+    }
   },
   "aria": {
     "edit_user_button": "Edit user {{name}}",

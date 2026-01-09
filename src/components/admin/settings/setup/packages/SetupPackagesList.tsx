@@ -24,10 +24,20 @@ const SetupPackagesList = ({ onEdit }) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center gap-3 items-center">
-        <span className="loading loading-spinner loading-md h-52"></span>
-        {t("loading_packages")}
-      </div>
+      <ul className="list">
+        {[...Array(3)].map((_, index) => (
+          <li key={index} className="list-row">
+            <div>
+              <div className="skeleton h-5 w-32 mb-2"></div>
+              <div className="skeleton h-4 w-40"></div>
+            </div>
+            <div>
+              <div className="skeleton h-4 w-48"></div>
+            </div>
+            <div className="skeleton h-8 w-20"></div>
+          </li>
+        ))}
+      </ul>
     );
   }
 

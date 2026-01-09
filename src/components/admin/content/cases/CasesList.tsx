@@ -29,11 +29,14 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
   const [editingCaseId, setEditingCaseId] = useState<number | null>(null);
   const [deletingCaseId, setDeletingCaseId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(6);
 
   const fetchCases = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/cases?page=${page}&lang=${i18n.language}`);
+      const res = await fetch(
+        `/api/cases?page=${page}&limit=${itemsPerPage}&lang=${i18n.language}`
+      );
       if (!res.ok) throw new Error("Failed to load cases");
       const { cases, total } = await res.json();
       setCaseItems(cases);
@@ -45,11 +48,32 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
     } finally {
       setLoading(false);
     }
-  }, [page, setTotal, i18n.language]);
+  }, [page, itemsPerPage, setTotal, i18n.language]);
 
   useEffect(() => {
     fetchCases();
   }, [fetchCases]);
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      if (width >= 1920) {
+        setItemsPerPage(8);
+      } else if (width >= 1024) {
+        setItemsPerPage(6);
+      } else {
+        setItemsPerPage(4);
+      }
+    };
+
+    updateItemsPerPage();
+
+    window.addEventListener("resize", updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener("resize", updateItemsPerPage);
+    };
+  }, []);
 
   const truncate = (text: string | null | undefined, max: number) =>
     text && text.length > max ? text.slice(0, max) + "…" : text || "";
@@ -76,23 +100,6 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
     setIsModalOpen(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center gap-3 items-center w-full">
-        <span className="loading loading-spinner loading-md h-40" />
-        {t("loading_cases")}
-      </div>
-    );
-  }
-
-  if (caseItems.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-40">
-        <p className="text-lg text-gray-500">{t("no_cases")}</p>
-      </div>
-    );
-  }
-
   if (editingCaseId) {
     return (
       <UpdateCase caseId={editingCaseId} onCaseUpdated={handleCaseUpdated} />
@@ -101,90 +108,150 @@ const CasesList = ({ view, page, setTotal, onEditCase }: CasesListProps) => {
 
   return (
     <div className="w-full mt-3">
-      {view === "cards" ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-5">
-          {caseItems.map((item) => (
-            <div
-              key={item.id}
-              className="card card-compact shadow-md border-2 border-base-100 rounded-lg"
-            >
-              <figure className="relative w-full aspect-[4/3] overflow-hidden">
-                <Image
-                  src={item.image || FALLBACK_IMAGE}
-                  alt={`Case study for ${item.company}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  priority={page === 1}
-                  className="object-cover"
-                />
-              </figure>
-              <div className="card-body">
-                <h2 className="card-title text-lg">{item.company}</h2>
-                <p className="text-xs">{truncate(item.desc, 100)}</p>
-                <div className="card-actions justify-end mt-2">
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => onEditCase(item.id)}
-                  >
-                    <FaPen /> {t("edit")}
-                  </button>
-                  <button
-                    className="btn btn-sm"
-                    onClick={() => {
-                      setDeletingCaseId(item.id);
-                      setIsModalOpen(true);
-                    }}
-                  >
-                    <FaTrash /> {t("delete")}
-                  </button>
+      {loading ? (
+        view === "cards" ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-5">
+            {[...Array(itemsPerPage)].map((_, index) => (
+              <div
+                key={index}
+                className="card card-compact shadow-lg rounded-md"
+              >
+                <figure className="relative w-full aspect-4/3 h-56 overflow-hidden rounded-t-md">
+                  <div className="skeleton w-full h-full"></div>
+                </figure>
+                <div className="card-body">
+                  <div className="skeleton h-7 w-3/4"></div>
+                  <div className="skeleton h-3 w-full mt-1"></div>
+                  <div className="card-actions justify-end mt-2">
+                    <div className="skeleton h-8 w-20"></div>
+                    <div className="skeleton h-8 w-12"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {[...Array(itemsPerPage)].map((_, index) => (
+              <React.Fragment key={index}>
+                <li>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                      <div className="skeleton w-12 h-10 rounded-md"></div>
+                      <div className="skeleton h-4 w-32"></div>
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="skeleton h-8 w-20"></div>
+                      <div className="skeleton h-8 w-16"></div>
+                    </div>
+                  </div>
+                </li>
+                <hr className="border-px rounded-lg border-base-200" />
+              </React.Fragment>
+            ))}
+          </ul>
+        )
+      ) : caseItems.length === 0 ? (
+        <div className="flex justify-center items-center h-40 w-full">
+          <p className="text-gray-500">{t("no_cases")}</p>
         </div>
       ) : (
-        <ul className="list">
-          {caseItems.map((item) => (
-            <li key={item.id} className="list-row py-6">
-              <div className="relative w-14 h-10 rounded-md overflow-hidden">
-                <Image
-                  src={item.image || FALLBACK_IMAGE}
-                  alt={`Case study for ${item.company}`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  priority={page === 1}
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex items-center">
-                <h3 className="font-semibold text-xs hidden sm:block">
-                  {item.company}
-                </h3>
-                <h3 className="font-semibold text-xs block sm:hidden">
-                  {truncate(item.company, 20)}
-                </h3>
-              </div>
-              <div className="flex gap-5 md:gap-2">
-                <button
-                  className="btn btn-sm"
-                  onClick={() => onEditCase(item.id)}
+        <>
+          {view === "cards" ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 4xl:grid-cols-4 gap-5">
+              {caseItems.map((item, itemIndex) => (
+                <div
+                  key={item.id}
+                  className="card card-compact shadow-lg rounded-md"
                 >
-                  <FaPen /> <span className="md:flex hidden">{t("edit")}</span>
-                </button>
-                <button
-                  className="btn btn-sm"
-                  onClick={() => {
-                    setDeletingCaseId(item.id);
-                    setIsModalOpen(true);
-                  }}
-                >
-                  <FaTrash />{" "}
-                  <span className="md:flex hidden">{t("delete")}</span>
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+                  <figure className="relative w-full aspect-4/3 h-56 overflow-hidden">
+                    <Image
+                      src={item.image || FALLBACK_IMAGE}
+                      alt={`Case study for ${item.company}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={itemIndex < 8}
+                      loading="eager"
+                      className="object-cover"
+                    />
+                  </figure>
+                  <div className="card-body">
+                    <h2 className="card-title text-lg">{item.company}</h2>
+                    <p className="text-xs">{truncate(item.desc, 100)}</p>
+                    <div className="card-actions justify-end mt-2">
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => onEditCase(item.id)}
+                      >
+                        <FaPen /> {t("edit")}
+                      </button>
+                      <button
+                        className="btn btn-sm"
+                        onClick={() => {
+                          setDeletingCaseId(item.id);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        <FaTrash /> {t("delete")}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {caseItems.map((item, itemIndex) => (
+                <React.Fragment key={item.id}>
+                  <li>
+                    <div className="flex justify-between items-center">
+                      <div className="flex gap-2 items-center">
+                        <div className="relative w-12 h-10 rounded-md overflow-hidden">
+                          <Image
+                            src={item.image || FALLBACK_IMAGE}
+                            alt={`Case study for ${item.company}`}
+                            fill
+                            style={{ objectFit: "cover" }}
+                            priority={itemIndex < 8}
+                            loading="eager"
+                          />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-xs hidden sm:block">
+                            {item.company}
+                          </h3>
+                          <h3 className="font-semibold text-xs block sm:hidden">
+                            {truncate(item.company, 20)}
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="flex gap-5 md:gap-2">
+                        <button
+                          className="btn btn-sm"
+                          onClick={() => onEditCase(item.id)}
+                        >
+                          <FaPen />{" "}
+                          <span className="md:flex hidden">{t("edit")}</span>
+                        </button>
+                        <button
+                          className="btn btn-sm"
+                          onClick={() => {
+                            setDeletingCaseId(item.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          <FaTrash />{" "}
+                          <span className="md:flex hidden">{t("delete")}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                  <hr className="border-px rounded-lg border-base-200" />
+                </React.Fragment>
+              ))}
+            </ul>
+          )}
+        </>
       )}
 
       {isModalOpen && deletingCaseId != null && (

@@ -217,6 +217,86 @@ export async function deleteFacebookPost(
   return { success: true };
 }
 
+/**
+ * Polls Instagram media creation status until it's ready
+ */
+async function pollMediaStatus(
+  creationId: string,
+  accessToken: string,
+  maxAttempts = 30,
+  initialDelay = 2000
+): Promise<void> {
+  const maxDelay = 30000; // 30 seconds max delay
+  let delay = initialDelay;
+  let attempts = 0;
+
+  while (attempts < maxAttempts) {
+    attempts++;
+
+    try {
+      const statusRes = await fetch(
+        `https://graph.facebook.com/v20.0/${creationId}?fields=status_code&access_token=${accessToken}`
+      );
+
+      if (!statusRes.ok) {
+        const errorData = await statusRes.json();
+        console.warn(
+          `⚠️ [SERVER] Status check failed for ${creationId}:`,
+          errorData
+        );
+        // Continue polling even if status check fails
+      } else {
+        const statusData = await statusRes.json();
+        const statusCode = statusData.status_code;
+
+        console.log(
+          `📊 [SERVER] Media ${creationId} status: ${statusCode} (attempt ${attempts}/${maxAttempts})`
+        );
+
+        if (statusCode === "FINISHED") {
+          console.log(`✅ [SERVER] Media ${creationId} is ready!`);
+          return;
+        }
+
+        if (statusCode === "ERROR") {
+          throw new Error(
+            `Media processing failed with status: ${statusCode}. Check image format, size, and URL accessibility.`
+          );
+        }
+
+        // If IN_PROGRESS or other status, continue polling
+        if (statusCode === "IN_PROGRESS") {
+          console.log(
+            `⏳ [SERVER] Media ${creationId} still processing, waiting ${delay}ms...`
+          );
+        } else {
+          console.log(
+            `⏳ [SERVER] Media ${creationId} status: ${statusCode}, waiting ${delay}ms...`
+          );
+        }
+      }
+
+      // Wait before next attempt with exponential backoff
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      delay = Math.min(delay * 1.5, maxDelay); // Exponential backoff, max 30s
+    } catch (error) {
+      if (attempts >= maxAttempts) {
+        throw error;
+      }
+      console.warn(
+        `⚠️ [SERVER] Error checking status (attempt ${attempts}/${maxAttempts}):`,
+        error
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      delay = Math.min(delay * 1.5, maxDelay);
+    }
+  }
+
+  throw new Error(
+    `Media ${creationId} did not become ready after ${maxAttempts} attempts (timeout ~${Math.round((delay * maxAttempts) / 1000)}s)`
+  );
+}
+
 export async function postToInstagram({
   caption,
   imageUrls,
@@ -278,27 +358,68 @@ export async function postToInstagram({
 
       console.log("✅ [SERVER] Instagram single media uploaded:", creationId);
 
-      // Publicér single image
-      const publishRes = await fetch(
-        `https://graph.facebook.com/v20.0/${instagramBusinessId}/media_publish`,
-        {
-          method: "POST",
-          body: new URLSearchParams({
-            creation_id: creationId,
-            access_token: accessToken,
-          }),
-        }
-      );
+      // Poll status until ready
+      console.log("⏳ [SERVER] Waiting for media to be ready...");
+      await pollMediaStatus(creationId, accessToken);
 
-      const publishData = await publishRes.json();
-      if (!publishRes.ok) {
-        console.error("Instagram single publish error:", publishData);
-        const msg = publishData?.error?.message || "Ukendt fejl ved publish";
-        throw new Error(`Kunne ikke publicere opslag: ${msg}`);
+      // Publicér single image (with retry logic)
+      let publishAttempts = 0;
+      const maxPublishAttempts = 8;
+      const publishRetryDelays = [2000, 4000, 8000, 16000, 30000, 30000, 30000, 30000];
+      let publishedId: string | undefined;
+
+      while (publishAttempts < maxPublishAttempts) {
+        publishAttempts++;
+
+        const publishRes = await fetch(
+          `https://graph.facebook.com/v20.0/${instagramBusinessId}/media_publish`,
+          {
+            method: "POST",
+            body: new URLSearchParams({
+              creation_id: creationId,
+              access_token: accessToken,
+            }),
+          }
+        );
+
+        const publishData = await publishRes.json();
+
+        if (publishRes.ok) {
+          publishedId = publishData.id as string | undefined;
+          console.log("✅ [SERVER] Instagram single post published:", publishedId);
+          break; // Success, exit retry loop
+        }
+
+        // Check if it's the specific retryable error
+        if (
+          publishData?.error?.code === 9007 &&
+          publishData?.error?.error_subcode === 2207027
+        ) {
+          if (publishAttempts < maxPublishAttempts) {
+            const delay = publishRetryDelays[publishAttempts - 1] || 30000;
+            console.log(
+              `⏳ [SERVER] Media not ready for publish (attempt ${publishAttempts}/${maxPublishAttempts}), waiting ${delay}ms...`
+            );
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            continue;
+          } else {
+            throw new Error(
+              "Media blev ikke klar til publicering efter flere forsøg. Prøv igen senere."
+            );
+          }
+        } else {
+          // Non-retryable error
+          console.error("Instagram single publish error:", publishData);
+          const msg = publishData?.error?.message || "Ukendt fejl ved publish";
+          throw new Error(`Kunne ikke publicere opslag: ${msg}`);
+        }
       }
 
-      const publishedId = publishData.id as string | undefined;
-      console.log("✅ [SERVER] Instagram single post published:", publishedId);
+      if (!publishedId) {
+        throw new Error(
+          "Kunne ikke publicere opslag efter flere forsøg. Media blev ikke klar."
+        );
+      }
 
       // Fetch permalink
       let permalink: string | undefined;
@@ -367,11 +488,18 @@ export async function postToInstagram({
         throw new Error(`Item ID mangler for billede ${i + 1}`);
       }
 
-      carouselItemIds.push(itemId);
       console.log(
         `✅ [SERVER] Instagram carousel item ${i + 1} uploaded:`,
         itemId
       );
+
+      // Poll status until ready
+      console.log(
+        `⏳ [SERVER] Waiting for carousel item ${i + 1} to be ready...`
+      );
+      await pollMediaStatus(itemId, accessToken);
+
+      carouselItemIds.push(itemId);
     }
 
     // 2) Opret carousel container
@@ -403,10 +531,15 @@ export async function postToInstagram({
 
     console.log("✅ [SERVER] Instagram carousel created:", carouselId);
 
+    // Poll carousel container status until ready
+    console.log("⏳ [SERVER] Waiting for carousel container to be ready...");
+    await pollMediaStatus(carouselId, accessToken);
+
     // 3) Publicér carousel (med retry logic for Instagram processing)
     let publishAttempts = 0;
-    const maxAttempts = 5;
-    const retryDelay = 3000; // 3 sekunder
+    const maxAttempts = 8;
+    const publishRetryDelays = [2000, 4000, 8000, 16000, 30000, 30000, 30000, 30000];
+    let publishedId: string | undefined;
 
     while (publishAttempts < maxAttempts) {
       publishAttempts++;
@@ -426,38 +559,9 @@ export async function postToInstagram({
         const publishData = await publishRes.json();
 
         if (publishRes.ok) {
-          const publishedId = publishData.id as string | undefined;
+          publishedId = publishData.id as string | undefined;
           console.log("✅ [SERVER] Instagram carousel published:", publishedId);
-
-          // 4) Fetch permalink
-          let permalink: string | undefined;
-          if (publishedId) {
-            try {
-              const permalinkRes = await fetch(
-                `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
-              );
-
-              if (permalinkRes.ok) {
-                const permalinkData = await permalinkRes.json();
-                permalink = permalinkData.permalink;
-                console.log(
-                  "✅ [SERVER] Instagram carousel permalink retrieved:",
-                  permalink
-                );
-              } else {
-                console.warn(
-                  "⚠️ [SERVER] Could not fetch Instagram carousel permalink"
-                );
-              }
-            } catch (permalinkError) {
-              console.warn(
-                "⚠️ [SERVER] Error fetching Instagram carousel permalink:",
-                permalinkError
-              );
-            }
-          }
-
-          return { success: true, id: publishedId, permalink };
+          break; // Success, exit retry loop
         }
 
         // Check if it's a retryable error
@@ -465,12 +569,12 @@ export async function postToInstagram({
           publishData?.error?.code === 9007 &&
           publishData?.error?.error_subcode === 2207027
         ) {
-          console.log(
-            `⏳ [SERVER] Instagram media not ready, attempt ${publishAttempts}/${maxAttempts}. Waiting ${retryDelay}ms...`
-          );
-
           if (publishAttempts < maxAttempts) {
-            await new Promise((resolve) => setTimeout(resolve, retryDelay));
+            const delay = publishRetryDelays[publishAttempts - 1] || 30000;
+            console.log(
+              `⏳ [SERVER] Media not ready for publish (attempt ${publishAttempts}/${maxAttempts}), waiting ${delay}ms...`
+            );
+            await new Promise((resolve) => setTimeout(resolve, delay));
             continue; // Retry
           } else {
             throw new Error(
@@ -487,12 +591,49 @@ export async function postToInstagram({
         if (publishAttempts >= maxAttempts) {
           throw fetchError;
         }
+        const delay = publishRetryDelays[publishAttempts - 1] || 30000;
         console.log(
-          `⏳ [SERVER] Network error, attempt ${publishAttempts}/${maxAttempts}. Retrying...`
+          `⏳ [SERVER] Network error, attempt ${publishAttempts}/${maxAttempts}. Retrying in ${delay}ms...`
         );
-        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
+
+    if (!publishedId) {
+      throw new Error(
+        "Kunne ikke publicere carousel efter flere forsøg. Media blev ikke klar."
+      );
+    }
+
+    // 4) Fetch permalink
+    let permalink: string | undefined;
+    if (publishedId) {
+      try {
+        const permalinkRes = await fetch(
+          `https://graph.facebook.com/v20.0/${publishedId}?fields=permalink&access_token=${accessToken}`
+        );
+
+        if (permalinkRes.ok) {
+          const permalinkData = await permalinkRes.json();
+          permalink = permalinkData.permalink;
+          console.log(
+            "✅ [SERVER] Instagram carousel permalink retrieved:",
+            permalink
+          );
+        } else {
+          console.warn(
+            "⚠️ [SERVER] Could not fetch Instagram carousel permalink"
+          );
+        }
+      } catch (permalinkError) {
+        console.warn(
+          "⚠️ [SERVER] Error fetching Instagram carousel permalink:",
+          permalinkError
+        );
+      }
+    }
+
+    return { success: true, id: publishedId, permalink };
   } catch (error) {
     console.error("❌ [SERVER] Instagram posting failed:", error);
     throw error;

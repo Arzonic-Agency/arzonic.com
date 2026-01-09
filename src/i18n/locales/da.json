@@ -1186,7 +1186,18 @@
     "visitors_by_solution": "Besøgende pr. løsning (seneste 1 år)",
     "visitors_by_month": "Besøgende pr. måned",
     "loading": "Indlæser statistikker",
-    "error": "Kan ikke hente data lige nu."
+    "error": "Kan ikke hente data lige nu.",
+    "most_visited_areas": "Mest besøgte side områder",
+    "area": {
+      "home": "Forside",
+      "solutions": "Løsninger",
+      "cases": "Cases",
+      "pricing": "Priser",
+      "getStarted": "Kom i gang",
+      "contact": "Kontakt",
+      "about": "Om os",
+      "jobs": "Jobs"
+    }
   },
   "aria": {
     "edit_user_button": "Rediger bruger {{name}}",

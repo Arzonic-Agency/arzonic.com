@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Chart from "./Chart";
 import PieChart from "./PieChart";
@@ -49,6 +49,43 @@ const Overview = () => {
 
     fetchAnalytics();
   }, [period]);
+
+  // Group pages by solution type
+  const areaPages = useMemo(() => {
+    if (!data.pages || data.pages.length === 0) return [];
+
+    const solutions = [
+      { key: "web-applications", nameKey: "web-applications" },
+      { key: "design-ux", nameKey: "design-ux" },
+      { key: "3d-visualization", nameKey: "visualization" },
+      { key: "systems-integrations", nameKey: "systems-integration" },
+    ];
+
+    const solutionMap: Record<string, { name: string; y: number }> = {};
+
+    data.pages.forEach((page) => {
+      const path = page.x || "";
+
+      // Only process solutions paths
+      if (!path.startsWith("/solutions/")) return;
+
+      // Find which solution this path belongs to
+      const solution = solutions.find((sol) =>
+        path.startsWith(`/solutions/${sol.key}`)
+      );
+
+      if (solution) {
+        const name = t(`SolutionsPage.${solution.nameKey}`);
+        if (solutionMap[solution.key]) {
+          solutionMap[solution.key].y += page.y;
+        } else {
+          solutionMap[solution.key] = { name, y: page.y };
+        }
+      }
+    });
+
+    return Object.values(solutionMap).sort((a, b) => b.y - a.y);
+  }, [data.pages, t]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -114,13 +151,69 @@ const Overview = () => {
         <PieChart />
       </div>
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
-        <h3 className="text-lg font-semibold">{t("analytics.most_visited")}</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-base lg:text-lg font-semibold">
+            {t("analytics.most_visited_areas", {
+              defaultValue: "Mest besøgte side områder",
+            })}
+          </h3>
+          <span className="text-xs lg:text-sm text-gray-600">
+            (
+            {period === "7d"
+              ? t("analytics.last_7_days")
+              : t("analytics.last_30_days")}
+            )
+          </span>
+        </div>
+        {loading ? (
+          <div className="flex flex-col gap-3 mt-3">
+            {Array.from({ length: 3 }).map((_, idx) => (
+              <div
+                key={idx}
+                className="flex justify-between border-b border-zinc-800 py-[10px]"
+              >
+                <div className="skeleton h-5 w-32" />
+                <div className="skeleton h-5 w-10" />
+              </div>
+            ))}
+          </div>
+        ) : areaPages && areaPages.length > 0 ? (
+          <ul className="flex flex-col gap-3 mt-3">
+            {areaPages.map((page, index) => (
+              <li
+                key={`${page.name}-${index}`}
+                className="flex justify-between border-b border-zinc-800 py-2"
+              >
+                <span>{page.name}</span>
+                <span className="font-bold">{page.y}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-neutral-400 mt-3">
+            {t("analytics.no_data", { defaultValue: "Ingen data endnu" })}
+          </p>
+        )}
+      </div>
+      <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold">
+            {t("analytics.most_visited")}
+          </h3>
+          <span className="text-xs lg:text-sm text-gray-600">
+            (
+            {period === "7d"
+              ? t("analytics.last_7_days")
+              : t("analytics.last_30_days")}
+            )
+          </span>
+        </div>
         {loading ? (
           <div className="flex flex-col gap-3 mt-3">
             {Array.from({ length: 5 }).map((_, idx) => (
               <div
                 key={idx}
-                className="flex justify-between border-b border-zinc-600 py-[10px]"
+                className="flex justify-between border-b border-zinc-800 py-[10px]"
               >
                 <div className="skeleton h-5 w-32" />
                 <div className="skeleton h-5 w-10" />
@@ -132,7 +225,7 @@ const Overview = () => {
             {data.pages.slice(0, 5).map((page, index) => (
               <li
                 key={`${page.x}-${index}`}
-                className="flex justify-between border-b border-zinc-600 py-2"
+                className="flex justify-between border-b border-zinc-800 py-2"
               >
                 <span>{page.x}</span>
                 <span className="font-bold">{page.y}</span>
@@ -145,13 +238,22 @@ const Overview = () => {
       </div>
 
       <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
-        <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-semibold">{t("analytics.devices")}</h3>
+          <span className="text-xs lg:text-sm text-gray-600">
+            (
+            {period === "7d"
+              ? t("analytics.last_7_days")
+              : t("analytics.last_30_days")}
+            )
+          </span>
+        </div>
         {loading ? (
           <div className="flex flex-col gap-3 mt-3">
             {Array.from({ length: 4 }).map((_, idx) => (
               <div
                 key={idx}
-                className="flex justify-between border-b border-zinc-600 py-2"
+                className="flex justify-between border-b border-zinc-800 py-2"
               >
                 <div className="skeleton h-4 w-24" />
                 <div className="skeleton h-4 w-10" />
@@ -179,7 +281,7 @@ const Overview = () => {
               return (
                 <li
                   key={`${device.x}-${index}`}
-                  className="flex justify-between border-b border-zinc-600 py-2"
+                  className="flex justify-between border-b border-zinc-800 py-2"
                 >
                   <span>{deviceName}</span>
                   <span className="font-bold">{device.y}</span>

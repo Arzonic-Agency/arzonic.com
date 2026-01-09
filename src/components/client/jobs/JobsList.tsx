@@ -52,8 +52,32 @@ const JobsList = ({
 
   if (loading) {
     return (
-      <div className="flex justify-center gap-3 items-center w-full">
-        <span className="loading loading-dots loading-xl text-secondary h-96" />
+      <div className="flex flex-col items-center justify-center w-full p-1 md:p-4">
+        <div className="flex flex-col gap-10 items-center w-full md:max-w-2xl">
+          {[...Array(3)].map((_, index) => (
+            <div
+              key={index}
+              className="flex flex-row rounded-xl bg-base-200 ring-2 p-2 ring-base-300 gap-3 shadow-lg relative w-full"
+            >
+              <div className="hidden md:block">
+                <div className="h-full w-24 sm:h-32 sm:w-32 relative rounded-lg overflow-hidden">
+                  <div className="skeleton w-full h-full"></div>
+                </div>
+              </div>
+              <div className="p-2 sm:p-4 flex flex-col gap-2 w-full">
+                <div className="skeleton h-6 w-3/4"></div>
+                <div className="skeleton h-4 w-full"></div>
+                <div className="flex gap-5 items-center justify-between mt-2">
+                  <div className="flex gap-2 items-center">
+                    <div className="skeleton h-6 w-20"></div>
+                    <div className="skeleton h-6 w-24"></div>
+                  </div>
+                  <div className="skeleton h-4 w-24"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

@@ -40,10 +40,26 @@ const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center gap-3 items-center w-full">
-        <span className="loading loading-spinner loading-md h-24"></span>
-        {t("loading_jobs")}
-      </div>
+      <ul className="list bg-base-200 rounded-box w-full">
+        {[...Array(3)].map((_, index) => (
+          <li
+            key={index}
+            className="list-row flex justify-between items-center p-4 w-full"
+          >
+            <div className="flex flex-col gap-1">
+              <div className="skeleton h-5 w-48 mb-2"></div>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="skeleton h-3 w-3 rounded-full"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                </div>
+                <div className="skeleton h-4 w-24"></div>
+              </div>
+            </div>
+            <div className="skeleton h-8 w-24"></div>
+          </li>
+        ))}
+      </ul>
     );
   }
 

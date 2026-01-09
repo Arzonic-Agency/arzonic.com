@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+
+@theme {
+  --breakpoint-4xl: 120rem;
+}
+
 @plugin "daisyui" {
   themes: arzoniclight --default, arzonicdark --prefersdark;
 }

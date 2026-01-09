@@ -35,9 +35,10 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get("page") ?? "1", 10);
+    const limit = parseInt(url.searchParams.get("limit") ?? "6", 10);
     const uiLang = url.searchParams.get("lang") === "en" ? "en" : "da";
 
-    const { cases, total } = await getAllCases(page);
+    const { cases, total } = await getAllCases(page, limit);
     const raw = cases as CaseRow[];
 
     const transformed: CaseResponse[] = raw.map((c) => {
