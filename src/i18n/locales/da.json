@@ -57,6 +57,15 @@
   "invalid_email": "Mailen er ugyldig",
   "password_too_short": "Kodeordet skal være mindst 6 tegn",
   "passwords_not_matching": "Kodeordene er ikke ens",
+  "change_password": "Skift kodeord",
+  "current_password": "Nuværende kodeord",
+  "new_password": "Nyt kodeord",
+  "current_password_required": "Nuværende kodeord er påkrævet",
+  "new_password_required": "Nyt kodeord er påkrævet",
+  "confirm_password_required": "Bekræft venligst dit kodeord",
+  "password_changed_successfully": "Kodeordet er blevet ændret",
+  "password_change_failed": "Kunne ikke ændre kodeord",
+  "changing": "Ændrer...",
   "invalid_date": "Ugyldig dato",
   "invalid_days": "Ugyldigt antal dage",
   "registration_error": "Fejl ved registrering, prøv igen",
@@ -154,6 +163,14 @@
   "overview": "Overblik",
   "content": "Indhold",
   "settings": "Indstillinger",
+  "layout": "Sideopsætning",
+  "general": "Generelt",
+  "profile_settings": "Brugerindstillinger",
+  "user_profile": "Brugerprofil",
+  "appearance": "Udseende",
+  "notifications": "Notifikationer",
+  "security": "Sikkerhed",
+  "settings_content_coming_soon": "Indstillinger kommer snart...",
   "site": "Side",
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
@@ -163,6 +180,9 @@
   "from": "Fra",
   "bookingMeeting": "Book et møde",
   "checking": "Tjekker...",
+  "latest_notifications": "Seneste notifikationer",
+  "no_notifications": "Ingen notifikationer",
+  "new_request": "Ny henvendelse",
   "connected": "Forbundet",
   "connectToFacebook": "Forbind Facebook",
   "connecting": "Forbinder...",
@@ -664,128 +684,129 @@
     }
   },
   "Policy": {
-    "title": "Privatlivspolitik & Samtykke",
-    "intro": "Her kan du læse, hvordan Arzonic ApS behandler de oplysninger, du deler med os – fx når du kontakter os, bruger prisberegneren eller søger et job hos os. Vi passer godt på dine data og bruger dem kun til tydelige og relevante formål.",
+    "meta": {
+      "title": "Privatlivspolitik & Samtykke",
+      "lastUpdated": "Sidst opdateret: 2. december 2025",
+      "company": "Arzonic ApS"
+    },
 
     "section1": {
-      "title": "1. Hvornår vi indsamler oplysninger",
-      "description": "Vi indsamler kun oplysninger, når du aktivt vælger at give dem til os. Det sker typisk i følgende situationer:",
+      "title": "1. Hvornår vi indsamler personoplysninger",
+      "description": "Vi indsamler kun personoplysninger, når du aktivt vælger at dele dem med os – typisk når du:",
       "list": {
-        "contact": "Når du sender en henvendelse via kontaktformularen (fx spørgsmål, samarbejde eller tilbud).",
-        "calculator": "Når du bruger prisberegneren og beder om at få et uforpligtende tilbud.",
-        "job": "Når du søger et job eller praktikplads hos Arzonic ApS via formular eller e-mail."
+        "contact": "Sender en henvendelse via kontaktformularen (spørgsmål, samarbejde eller tilbud).",
+        "calculator": "Bruger prisberegneren og beder om et uforpligtende estimat.",
+        "job": "Søger job eller praktik hos Arzonic ApS via formular eller e-mail."
       },
-      "note": "Vi indsamler ikke følsomme oplysninger via vores hjemmeside."
+      "note": "Vi indsamler ikke bevidst følsomme personoplysninger via vores hjemmeside."
     },
 
     "section2": {
       "title": "2. Hvilke oplysninger vi indsamler",
-      "description": "Afhængigt af, hvordan du kontakter os, kan vi bede om:",
+      "description": "Afhængigt af hvordan du kontakter os, kan vi indsamle:",
       "list": {
-        "common": "Kontaktoplysninger: navn, e-mail, telefonnummer og det, du selv vælger at skrive i beskedfeltet.",
-        "calculator": "Oplysninger om din virksomhed, projektbeskrivelse og præferencer, så vi kan udarbejde et realistisk estimat.",
-        "job": "Jobansøgninger og CV: oplysninger om din erfaring, uddannelse, portfolio, links (fx GitHub, LinkedIn, hjemmeside) og evt. andre dokumenter, du vedhæfter. Disse dokumenter behandles fortroligt og kun af relevante personer."
+        "common": "Kontaktoplysninger: navn, e-mail, telefonnummer og det, du selv skriver i beskedfeltet.",
+        "calculator": "Oplysninger om virksomhed og projekt, så vi kan udarbejde et realistisk estimat (fx scope, præferencer og tidsplan).",
+        "job": "Ansøgningsmateriale: CV, ansøgning, portfolio, links (fx GitHub, LinkedIn, hjemmeside) og eventuelle bilag. Materialet behandles fortroligt og kun af relevante personer."
       },
-      "note": "Vi beder kun om de oplysninger, vi har brug for, for at kunne svare på din henvendelse, sende dig et tilbud eller vurdere din ansøgning."
+      "note": "Vi beder kun om de oplysninger, vi har brug for, for at kunne svare, give et estimat/tilbud eller vurdere din ansøgning."
     },
 
     "section3": {
       "title": "3. Hvordan vi bruger dine oplysninger",
       "description": "Vi bruger dine oplysninger til få, konkrete formål:",
       "list": {
-        "inquiry": "At besvare din henvendelse og give dig den hjælp eller information, du har bedt om.",
-        "offer": "At udarbejde og sende tilbud, estimater og opfølgninger i forbindelse med prisberegneren eller direkte dialog.",
-        "job": "At vurdere din job- eller praktikansøgning, invitere dig til samtale og holde dig orienteret om processen.",
-        "improvement": "At forbedre vores service og kommunikation, fx ved at se, hvilke typer forespørgsler vi får flest af."
+        "inquiry": "At besvare din henvendelse og give den information eller hjælp, du har bedt om.",
+        "offer": "At udarbejde og sende estimater, tilbud og opfølgning i forbindelse med prisberegneren eller direkte dialog.",
+        "job": "At vurdere job-/praktikansøgninger, invitere til samtale og kommunikere om processen.",
+        "improvement": "At forbedre vores service og kommunikation (fx forstå hvilke henvendelser vi får flest af)."
       },
-      "note": "Vi bruger ikke dine oplysninger til uønsket markedsføring, og vi videregiver dem ikke uden et klart formål og grundlag."
+      "note": "Vi bruger ikke dine oplysninger til uønsket markedsføring, og vi deler dem ikke uden et klart formål og behandlingsgrundlag."
     },
 
     "section4": {
       "title": "4. Job- og praktikansøgninger",
-      "description": "Vi ved, at det kræver tillid at sende CV, ansøgning og andre dokumenter. Derfor behandler vi alle ansøgninger fortroligt og kun internt:",
+      "description": "Vi behandler ansøgninger fortroligt og internt:",
       "list": {
-        "access": "Kun relevante personer i Arzonic ApS (fx ejer eller direkte samarbejdspartnere på det konkrete team) får adgang til din ansøgning.",
-        "noAutomated": "Vi bruger ikke automatiske beslutninger til at sortere ansøgere. Der sidder altid et menneske bag vurderingen.",
-        "references": "Vi kontakter kun referencer, hvis du har givet samtykke til det.",
-        "unsolicited": "Hvis du sender en uopfordret ansøgning, bruger vi den kun til at vurdere dit match med nuværende eller kommende muligheder."
+        "access": "Kun relevante personer hos Arzonic ApS (fx ejer eller direkte involverede teammedlemmer/samarbejdspartnere) har adgang til din ansøgning.",
+        "noAutomated": "Vi bruger ikke automatiske beslutninger til at sortere ansøgere – en person vurderer altid ansøgningen.",
+        "references": "Vi kontakter kun referencer, hvis du har givet samtykke.",
+        "unsolicited": "Uopfordrede ansøgninger bruges kun til at vurdere match til nuværende eller kommende muligheder."
       },
-      "retention": "Hvis du ikke bliver ansat, gemmer vi som udgangspunkt din ansøgning, dit CV og eventuelle bilag i op til 6 måneder eller indtil materialet ikke længere er relevant for stillingen. I nogle tilfælde slettes ansøgningen tidligere, fx senest 30 dage efter, at en proces er afsluttet uden ansættelse – medmindre vi har aftalt skriftligt, at vi må gemme materialet længere."
+      "retention": "Hvis du ikke bliver ansat, gemmer vi som udgangspunkt din ansøgning og bilag i op til 6 måneder eller indtil materialet ikke længere er relevant. I nogle tilfælde kan vi slette tidligere (fx inden for 30 dage efter afsluttet proces), medmindre vi skriftligt har aftalt at gemme materialet længere."
     },
 
     "section5": {
-      "title": "5. Forbindelse til Facebook og Instagram (System User)",
-      "description1": "For nogle kunder tilbyder vi mulighed for at udgive opslag på deres Facebook-side eller Instagram Business-konto via vores platform. Til dette bruger vi en såkaldt Meta System User.",
+      "title": "5. Forbindelse til Facebook og Instagram (Meta System User)",
+      "description1": "For nogle kunder tilbyder vi funktionalitet, der gør det muligt at udgive indhold på en Facebook-side eller Instagram Business-konto via vores platform. Det håndteres gennem en Meta System User.",
       "list": {
-        "pages": "Adgangen omfatter kun de sider og konti, du selv og aktivt godkender i Meta Business.",
-        "publish": "Vi kan kun udgive opslag, som du har godkendt, på dine valgte sider/konti."
+        "pages": "Adgangen omfatter kun de sider/konti, du selv og aktivt godkender i Meta Business.",
+        "publish": "Vi udgiver kun indhold, som du har godkendt, på dine valgte sider/konti."
       },
-      "description2": "Denne integration henter ikke personlige oplysninger om dig som person (fx privat profil, privat e-mail eller venner). Forbindelsen er teknisk og bruges kun til at kunne udgive indhold på dine vegne. Du kan til enhver tid fjerne adgangen igen i dine Meta Business-indstillinger."
+      "description2": "Integrationen henter ikke personlige oplysninger fra din private Meta-profil (fx privat e-mail eller venneliste). Forbindelsen er teknisk og bruges kun til at kunne udgive indhold på dine vegne. Du kan altid fjerne adgangen i dine Meta Business-indstillinger."
     },
 
     "section6": {
-      "title": "6. Opbevaring og sletning af oplysninger",
-      "description": "Vi gemmer dine oplysninger sikkert og kun så længe, det er nødvendigt:",
+      "title": "6. Opbevaring og sletning",
+      "description": "Vi opbevarer oplysninger sikkert og kun så længe det er nødvendigt:",
       "list": {
-        "noCustomer": "Hvis du kontakter os, men ikke bliver kunde, slettes dine oplysninger normalt inden for 30 dage efter vores seneste dialog.",
-        "customer": "Hvis du bliver kunde, gemmer vi relevante oplysninger så længe, det er nødvendigt for at levere vores løsninger og leve op til bogførings- og anden lovgivning.",
-        "job": "Job- og praktikansøgninger (inkl. CV og bilag) gemmes som udgangspunkt i op til 6 måneder efter afsluttet rekrutteringsforløb eller indtil materialet ikke længere er relevant for den konkrete stilling. Herefter slettes de automatisk eller manuelt."
+        "noCustomer": "Hvis du kontakter os men ikke bliver kunde, sletter vi typisk oplysningerne inden for 30 dage efter seneste dialog.",
+        "customer": "Hvis du bliver kunde, gemmer vi relevante oplysninger i det omfang det er nødvendigt for at levere ydelser og overholde lovkrav (fx bogføring).",
+        "job": "Job-/praktikansøgninger (inkl. CV og bilag) gemmes normalt i op til 6 måneder efter afsluttet rekrutteringsforløb eller indtil materialet ikke længere er relevant, hvorefter det slettes."
       },
-      "note": "Du kan altid kontakte os, hvis du ønsker dine oplysninger slettet tidligere, så længe lovgivningen tillader det."
+      "note": "Du kan kontakte os og anmode om tidligere sletning, medmindre vi er forpligtet til at gemme visse oplysninger."
     },
 
     "section7": {
       "title": "7. Deling med tredjeparter",
       "description": "Vi sælger ikke dine oplysninger. Vi deler kun data med tredjeparter, når det er nødvendigt og sagligt:",
       "list": {
-        "providers": "Leverandører og samarbejdspartnere, som hjælper os med drift (fx hosting, e-mail, projektstyring), og som er underlagt databehandleraftaler.",
-        "legal": "Myndigheder, hvis vi er juridisk forpligtet til det (fx i forbindelse med revision eller lovkrav)."
+        "providers": "Leverandører og samarbejdspartnere der hjælper med drift (fx hosting, e-mail, projektværktøjer) og som er underlagt databehandleraftaler.",
+        "legal": "Myndigheder, hvis vi er juridisk forpligtet til det (fx revision eller lovkrav)."
       },
       "note": "Tredjeparter må ikke bruge dine oplysninger til egne formål."
     },
 
     "section8": {
       "title": "8. Dine rettigheder",
-      "description": "Du har en række rettigheder i forhold til dine personoplysninger:",
+      "description": "Du har rettigheder i forhold til dine personoplysninger, herunder:",
       "list": {
-        "access": "Ret til indsigt – at få at vide, hvilke oplysninger vi har om dig.",
+        "access": "Ret til indsigt – at få at vide hvilke oplysninger vi har om dig.",
         "correct": "Ret til berigtigelse – at få rettet forkerte eller ufuldstændige oplysninger.",
-        "delete": "Ret til sletning – at få slettet oplysninger, når det er muligt efter lovgivningen.",
-        "limit": "Ret til begrænsning – i nogle tilfælde at få begrænset, hvordan vi behandler dine data.",
-        "object": "Ret til indsigelse – i visse tilfælde at gøre indsigelse mod vores behandling.",
-        "withdraw": "Ret til at trække samtykke tilbage – hvis du tidligere har givet samtykke til en behandling."
+        "delete": "Ret til sletning – at få slettet oplysninger når det er muligt efter lovgivningen.",
+        "limit": "Ret til begrænsning – i nogle tilfælde at få begrænset behandlingen.",
+        "object": "Ret til indsigelse – i visse tilfælde at gøre indsigelse mod behandlingen.",
+        "withdraw": "Ret til at trække samtykke tilbage – hvis behandlingen er baseret på samtykke."
       },
-      "note": "Hvis du vil bruge dine rettigheder, kan du altid kontakte os på mail@arzonic.com. Vi vender tilbage så hurtigt som muligt."
+      "note": "Hvis du vil gøre brug af dine rettigheder, kan du kontakte os på mail@arzonic.com. Vi vender tilbage hurtigst muligt."
     },
 
     "section9": {
       "title": "9. Samtykke",
-      "description1": "Når du indsender en formular på vores hjemmeside (kontakt, prisberegner eller jobansøgning), giver du samtykke til, at vi må behandle dine oplysninger til det formål, formularen angår.",
-      "description2": "Du kan til enhver tid trække dit samtykke tilbage ved at skrive til os. Vi stopper så behandlingen og sletter dine oplysninger, medmindre vi er forpligtet til at gemme dem efter lovgivningen (fx bogføringsregler)."
+      "description1": "Når du indsender en formular på vores hjemmeside (kontakt, prisberegner eller jobansøgning), giver du samtykke til, at vi må behandle dine oplysninger til formålet med formularen.",
+      "description2": "Du kan til enhver tid trække dit samtykke tilbage ved at kontakte os. Vi stopper behandlingen og sletter dine oplysninger, medmindre vi er forpligtet til at gemme dem efter lovgivningen (fx bogføringsregler)."
     },
 
     "section10": {
       "title": "10. Datasikkerhed",
-      "description": "Vi bruger både tekniske og organisatoriske foranstaltninger for at beskytte dine oplysninger mod uautoriseret adgang, tab eller misbrug. Kun personer med et sagligt behov får adgang til dine data."
+      "description": "Vi bruger passende tekniske og organisatoriske foranstaltninger til at beskytte dine oplysninger mod uautoriseret adgang, tab eller misbrug. Kun personer med et sagligt behov har adgang til dine data."
     },
 
     "section11": {
       "title": "11. Opdateringer af denne politik",
-      "description": "Vi kan opdatere denne privatlivspolitik, hvis der sker ændringer i vores services eller lovgivningen. Den nyeste version er altid tilgængelig på vores hjemmeside."
+      "description": "Vi kan opdatere denne politik, hvis vores services ændrer sig eller hvis lovgivningen kræver det. Den nyeste version vil altid være tilgængelig på vores hjemmeside."
     },
 
     "section12": {
-      "title": "12. Kontakt",
-      "description": "Har du spørgsmål til vores behandling af personoplysninger – eller vil du bruge dine rettigheder – er du altid velkommen til at kontakte os:",
+      "title": "12. Kontaktoplysninger",
+      "description": "Har du spørgsmål til vores behandling af personoplysninger – eller vil du bruge dine rettigheder – kan du kontakte:",
       "list": {
         "company": "Arzonic ApS",
         "cvr": "CVR-nr.: 45630102",
         "email": "E-mail: mail@arzonic.com",
         "phone": "Telefon: +45 22 50 17 03"
       }
-    },
-
-    "lastUpdated": "Sidst opdateret: 2. december 2025"
+    }
   },
   "TermsModal": {
     "title": "Handelsbetingelser",
@@ -1221,7 +1242,7 @@
       "linkToOverview": "Gå til overblik",
       "linkToContent": "Gå til indhold",
       "linkToCustomers": "Gå til kunder",
-      "linkToSettings": "Gå til indstillinger",
+      "linkToLayout": "Gå til layout",
       "linkToHome": "Gå til forsiden"
     },
     "estimator": {
@@ -1269,6 +1290,15 @@
       "switchToLight": "Skift til lys tema",
       "switchToDark": "Skift til mørk tema"
     },
+    "settings": {
+      "open": "Åbn indstillinger"
+    },
+    "password_input": "Indtast kodeord",
+    "confirm_password_input": "Bekræft kodeord",
+    "current_password_input": "Indtast nuværende kodeord",
+    "new_password_input": "Indtast nyt kodeord",
+    "change_password": "Skift kodeord",
+    "changing_password": "Ændrer kodeord",
     "createCase": {
       "companyName": "Indtast virksomhedsnavn",
       "contactPerson": "Indtast kontaktperson",

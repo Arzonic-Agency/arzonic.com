@@ -96,7 +96,7 @@ const Navbar = () => {
               <li>
                 <Link
                   href="/admin"
-                  className={pathname === "/admin" ? "active" : ""}
+                  className={pathname === "/admin" ? "menu-active" : ""}
                   aria-label={t("aria.navigation.linkToOverview")}
                 >
                   <FaHouse size={25} />
@@ -106,7 +106,7 @@ const Navbar = () => {
             <li>
               <Link
                 href="/admin/content"
-                className={pathname === "/admin/content" ? "active" : ""}
+                className={pathname === "/admin/content" ? "menu-active" : ""}
                 aria-label={t("aria.navigation.linkToContent")}
               >
                 <FaList size={25} />
@@ -115,7 +115,7 @@ const Navbar = () => {
             <li>
               <Link
                 href="/admin/messages"
-                className={pathname === "/admin/messages" ? "active" : ""}
+                className={pathname === "/admin/messages" ? "menu-active" : ""}
                 aria-label={t("aria.navigation.linkToCustomers")}
               >
                 <FaComment size={25} />
@@ -125,7 +125,9 @@ const Navbar = () => {
               <li>
                 <Link
                   href="/admin/settings"
-                  className={pathname === "/admin/settings" ? "active" : ""}
+                  className={
+                    pathname === "/admin/settings" ? "menu-active" : ""
+                  }
                   aria-label={t("aria.navigation.linkToSettings")}
                 >
                   <FaGear size={25} />

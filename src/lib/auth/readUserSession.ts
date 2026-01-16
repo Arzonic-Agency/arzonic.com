@@ -11,16 +11,18 @@ export async function readUserSession() {
   } = await supabase.auth.getUser();
   if (userError || !user) return null;
 
-  const { data: roleResult, error: roleError } = await supabase
-    .from("permissions")
-    .select("role")
-    .eq("member_id", user.id)
+  const { data: memberResult, error: memberError } = await supabase
+    .from("members")
+    .select("name, role")
+    .eq("id", user.id)
     .single();
-  if (roleError || !roleResult) return null;
+  if (memberError || !memberResult) return null;
+  const { name, role } = memberResult;
 
   return {
     user,
-    role: roleResult.role as "admin" | "editor" | "developer",
+    role: role as "admin" | "editor" | "developer",
+    name,
   };
 }
 

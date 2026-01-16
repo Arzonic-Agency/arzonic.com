@@ -6,22 +6,28 @@ import { FaMoon } from "react-icons/fa6";
 import { MdSunny } from "react-icons/md";
 
 const ThemeAdmin = () => {
+  const LIGHT_THEME = "arzoniclight";
+  const DARK_THEME = "arzonicdark";
+
   const [isLight, setIsLight] = useState(false);
   const { t } = useTranslation();
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
-    if (storedTheme === "Light") {
-      document.documentElement.setAttribute("data-theme", "Light");
-      setIsLight(true);
-    } else {
-      document.documentElement.setAttribute("data-theme", "dark");
-      setIsLight(false);
-    }
+    const currentTheme =
+      storedTheme ??
+      document.documentElement.getAttribute("data-theme") ??
+      DARK_THEME;
+
+    const themeToApply =
+      currentTheme === LIGHT_THEME ? LIGHT_THEME : DARK_THEME;
+
+    document.documentElement.setAttribute("data-theme", themeToApply);
+    setIsLight(themeToApply === LIGHT_THEME);
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = isLight ? "Dark" : "Light";
+    const newTheme = isLight ? DARK_THEME : LIGHT_THEME;
     document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
     setIsLight(!isLight);

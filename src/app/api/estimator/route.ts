@@ -35,9 +35,22 @@ export async function POST(req: Request) {
   // 1) Compute estimate
   const nestedAnswers = answers.map((q) => q.optionIds);
   let estimate: string;
+  let monthlyInstallment: string | undefined;
+  let serviceFee: string | undefined;
+  let basePackage: string | undefined;
+  let features: { label: string; price?: string }[] = [];
   try {
     const pkgOptId = answers.find((q) => q.questionId === 2)?.optionIds?.[0];
-    estimate = await calculateEstimateFromAnswers(nestedAnswers, pkgOptId);
+    const estimateResult = await calculateEstimateFromAnswers(
+      nestedAnswers,
+      pkgOptId,
+      lang
+    );
+    estimate = estimateResult.estimate;
+    monthlyInstallment = estimateResult.monthlyInstallment;
+    serviceFee = estimateResult.serviceFee;
+    basePackage = estimateResult.basePackage;
+    features = estimateResult.features;
   } catch (err: unknown) {
     if (err instanceof Error) {
       console.error("Estimate computation failed:", err);
@@ -96,6 +109,10 @@ export async function POST(req: Request) {
       estimate,
       details,
       packageLabel,
+      monthlyInstallment,
+      serviceFee,
+      basePackage,
+      features,
       lang
     );
 

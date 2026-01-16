@@ -78,24 +78,12 @@ export async function createMember(data: {
 
     const memberResult = await supabase
       .from("members")
-      .insert({ name: data.name, id: userId });
+      .insert({ name: data.name, id: userId, role: data.role });
 
     if (memberResult.error) {
       console.error(
         "Failed to insert into members:",
         memberResult.error.message
-      );
-      throw new Error("REGISTRATION_ERROR");
-    }
-
-    const permissionsResult = await supabase
-      .from("permissions")
-      .insert({ role: data.role, member_id: userId });
-
-    if (permissionsResult.error) {
-      console.error(
-        "Failed to insert into permissions:",
-        permissionsResult.error.message
       );
       throw new Error("REGISTRATION_ERROR");
     }
@@ -133,18 +121,10 @@ export async function getAllUsers() {
   }
 
   const userIds = users.map((user) => user.id);
-  const { data: permissions, error: permissionsError } = await supabase
-    .from("permissions")
-    .select("member_id, role")
-    .in("member_id", userIds);
-
-  if (permissionsError) {
-    throw new Error("Failed to fetch permissions: " + permissionsError.message);
-  }
 
   const { data: members, error: membersError } = await supabase
     .from("members")
-    .select("id, name")
+    .select("id, name, role")
     .in("id", userIds);
 
   if (membersError) {
@@ -152,14 +132,11 @@ export async function getAllUsers() {
   }
 
   const usersWithRolesAndNames = users.map((user) => {
-    const userPermission = permissions.find(
-      (permission) => permission.member_id === user.id
-    );
-    const userName = members.find((member) => member.id === user.id)?.name;
+    const member = members.find((m) => m.id === user.id);
     return {
       ...user,
-      role: userPermission ? userPermission.role : null,
-      name: userName || null,
+      role: member?.role ?? null,
+      name: member?.name ?? null,
     };
   });
 
@@ -203,24 +180,6 @@ export async function deleteUser(userId: string) {
 
     console.log("User deleted from members:", userId);
 
-    const { error: deletePermissionError } = await supabase
-      .from("permissions")
-      .delete()
-      .eq("member_id", userId);
-
-    if (deletePermissionError) {
-      console.error(
-        "Failed to delete user from permissions:",
-        deletePermissionError.message
-      );
-      throw new Error(
-        "Failed to delete user from permissions: " +
-          deletePermissionError.message
-      );
-    }
-
-    console.log("User deleted from permissions:", userId);
-
     return { success: true };
   } catch (err) {
     console.error("Unexpected error during user deletion:", err);
@@ -230,7 +189,12 @@ export async function deleteUser(userId: string) {
 
 export async function updateUser(
   userId: string,
-  data: { email?: string; password?: string; role?: string; name?: string }
+  data: {
+    email?: string;
+    password?: string;
+    role?: "admin" | "editor" | "developer";
+    name?: string;
+  }
 ): Promise<void> {
   const supabase = await createAdminClient();
 
@@ -247,32 +211,74 @@ export async function updateUser(
       throw new Error(`Failed to update user in auth: ${authError.message}`);
     }
 
-    const { error: memberError } = await supabase
-      .from("members")
-      .update({ name: data.name })
-      .eq("id", userId);
+    const memberPayload: Record<string, unknown> = {};
+    if (data.name !== undefined) memberPayload.name = data.name;
+    if (data.role !== undefined) memberPayload.role = data.role;
 
-    if (memberError) {
-      throw new Error(
-        `Failed to update user in members: ${memberError.message}`
-      );
-    }
+    if (Object.keys(memberPayload).length > 0) {
+      const { error: memberError } = await supabase
+        .from("members")
+        .update(memberPayload)
+        .eq("id", userId);
 
-    if (data.role) {
-      const { error: permissionError } = await supabase
-        .from("permissions")
-        .update({ role: data.role })
-        .eq("member_id", userId);
-
-      if (permissionError) {
+      if (memberError) {
         throw new Error(
-          `Failed to update user role: ${permissionError.message}`
+          `Failed to update user in members: ${memberError.message}`
         );
       }
     }
   } catch (error) {
     console.error("Error in updateUser:", error);
     throw error;
+  }
+}
+
+export async function changeOwnPassword(
+  currentPassword: string,
+  newPassword: string
+): Promise<{ success: boolean; message?: string }> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    // Get current user
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error("Not authenticated");
+    }
+
+    // Verify current password by attempting to sign in
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email!,
+      password: currentPassword,
+    });
+
+    if (signInError) {
+      return {
+        success: false,
+        message: "Current password is incorrect",
+      };
+    }
+
+    // Update password
+    const { error: updateError } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (updateError) {
+      throw new Error(`Failed to update password: ${updateError.message}`);
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error in changeOwnPassword:", error);
+    if (error instanceof Error) {
+      return { success: false, message: error.message };
+    }
+    return { success: false, message: "An unexpected error occurred" };
   }
 }
 
@@ -1330,6 +1336,47 @@ export async function deleteRequestNote(noteId: string): Promise<void> {
     throw error;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NOTIFICATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function createNotificationForAdmins(
+  requestId: number,
+  name: string,
+  allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"]
+) {
+  const supabase = await createAdminClient();
+
+  const { data: admins, error: adminsError } = await supabase
+    .from("members")
+    .select("id")
+    .in("role", allowedRoles);
+
+  if (adminsError || !admins || admins.length === 0) {
+    return { error: "Kunne ikke oprette notifikationer" };
+  }
+
+  const now = new Date().toISOString();
+  const notifications = admins.map((admin) => ({
+    user_id: admin.id,
+    request_id: requestId,
+    message: name, // Store the name, will be used for i18n interpolation in frontend
+    notification_type: "request",
+    is_read: false,
+    created_at: now,
+  }));
+
+  const { error: notifError } = await supabase
+    .from("notifications")
+    .insert(notifications);
+
+  if (notifError) {
+    return { error: "Kunne ikke oprette notifikationer" };
+  }
+
+  return { success: true };
+}
 // ─────────────────────────────────────────────────────────────────────────────
 // JOBS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1654,7 +1701,7 @@ export async function getServices() {
 
   try {
     const { data, error } = await supabase
-      .from("services")
+      .from("features")
       .select("*")
       .order("label", { ascending: true });
 

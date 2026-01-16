@@ -7,8 +7,9 @@ import Bookings from "./bookings/Bookings";
 import { useTranslation } from "react-i18next";
 
 const NavMessages = () => {
-  const [activeTab, setActiveTab] = useState("users");
+  const [activeTab, setActiveTab] = useState("requests");
   const { t } = useTranslation();
+
   return (
     <div className="w-full">
       <div
@@ -18,11 +19,11 @@ const NavMessages = () => {
         <button
           role="tab"
           className={`tab gap-2  ${
-            activeTab === "users"
+            activeTab === "requests"
               ? "tab-active bg-base-200 rounded-lg shadow-md"
               : ""
           }`}
-          onClick={() => setActiveTab("users")}
+          onClick={() => setActiveTab("requests")}
           aria-label={t("aria.navMessages.requestsTab")}
         >
           <FaClipboardCheck />
@@ -31,11 +32,11 @@ const NavMessages = () => {
         <button
           role="tab"
           className={`tab gap-2  ${
-            activeTab === "extra"
+            activeTab === "bookings"
               ? "tab-active bg-base-200 rounded-lg shadow-md"
               : ""
           }`}
-          onClick={() => setActiveTab("extra")}
+          onClick={() => setActiveTab("bookings")}
           aria-label={t("aria.navMessages.bookingsTab")}
         >
           <FaCalendarCheck />
@@ -44,12 +45,12 @@ const NavMessages = () => {
       </div>
 
       <div className="mt-3 md:mt-5">
-        {activeTab === "users" && (
+        {activeTab === "requests" && (
           <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
             <Requests />
           </div>
         )}
-        {activeTab === "extra" && (
+        {activeTab === "bookings" && (
           <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
             <Bookings />
           </div>

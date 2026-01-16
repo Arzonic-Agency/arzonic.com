@@ -175,7 +175,9 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
           )}
         </ul>
         <div className="flex flex-col gap-1 items-start">
-          <span className="text-xs text-zinc-500">{getTabLabel()}</span>
+          <span className="text-xs md:text-sm text-zinc-300">
+            {getTabLabel()}
+          </span>
           <span className="text-2xl sm:text-3xl  font-semibold tracking-wide">
             {getPrice(key)}
           </span>

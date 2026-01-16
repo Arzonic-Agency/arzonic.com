@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { createAdminClient } from "@/utils/supabase/server";
+import { createNotificationForAdmins } from "@/lib/server/actions";
 
 export async function getAllCases(page: number = 1, limit: number = 3) {
   const supabase = createClient();
@@ -268,7 +269,7 @@ export async function createRequest(
   consent: boolean,
   message: string
 ): Promise<void> {
-  const supabase = createClient();
+  const supabase = await createAdminClient();
 
   try {
     const ipResponse = await fetch("https://api64.ipify.org?format=json");
@@ -276,29 +277,49 @@ export async function createRequest(
     const ipAddress = ipData.ip;
 
     const consentTimestamp = consent ? new Date().toISOString() : null;
-    const { error } = await supabase.from("requests").insert([
-      {
-        name,
-        company,
-        mobile,
-        mail,
-        category,
-        consent,
-        message,
-        consent_timestamp: consentTimestamp,
-        ip_address: ipAddress,
-        terms_version: "v1.0",
-      },
-    ]);
+    const { data: request, error } = await supabase
+      .from("requests")
+      .insert([
+        {
+          name,
+          company,
+          mobile,
+          mail,
+          category,
+          consent,
+          message,
+          consent_timestamp: consentTimestamp,
+          ip_address: ipAddress,
+          terms_version: "v1.0",
+        },
+      ])
+      .select()
+      .single();
 
-    if (error) {
-      throw new Error(`Failed to create request: ${error.message}`);
+    if (error || !request) {
+      throw new Error(`Failed to create request: ${error?.message}`);
+    }
+
+    // Create notifications for admins/developers using service role
+    const displayName = (company && company.trim()) || (name && name.trim()) || "kunde";
+
+    const numericRequestId =
+      typeof request.id === "number"
+        ? request.id
+        : parseInt(String(request.id), 10);
+
+    if (!isNaN(numericRequestId)) {
+      await createNotificationForAdmins(numericRequestId, displayName, [
+        "admin",
+        "developer",
+      ]);
     }
   } catch (error) {
     console.error("Error in createRequest:", error);
     throw error;
   }
 }
+
 export async function createContactRequest(
   name: string,
   email: string,
@@ -306,7 +327,7 @@ export async function createContactRequest(
   mobile: string,
   answers: { questionId: number; optionIds: number[] }[],
   consentChecked: boolean
-): Promise<{ requestId: string }> {
+): Promise<{ requestId: number }> {
   const supabase = await createAdminClient();
 
   const { data: request, error: reqErr } = await supabase
@@ -335,7 +356,20 @@ export async function createContactRequest(
     throw new Error("Failed to save responses: " + respErr.message);
   }
 
-  return { requestId };
+  // Create notifications for admins/developers
+  const displayName = (name && name.trim()) || "kunde";
+
+  const numericRequestId =
+    typeof requestId === "number" ? requestId : parseInt(String(requestId), 10);
+
+  if (!isNaN(numericRequestId)) {
+    await createNotificationForAdmins(numericRequestId, displayName, [
+      "admin",
+      "developer",
+    ]);
+  }
+
+  return { requestId: numericRequestId };
 }
 
 export type Option = { id: number; text: string };
@@ -422,7 +456,7 @@ export async function getPackages() {
 export async function getExtraServices() {
   const supabase = createClient();
   const { data, error } = await supabase
-    .from("services")
+    .from("features")
     .select("*")
     .order("price_dkk", { ascending: true });
 

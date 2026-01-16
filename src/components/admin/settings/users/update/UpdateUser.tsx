@@ -30,7 +30,7 @@ const UpdateUser = ({
         const user = users.find((user) => user.id === userId);
         if (user) {
           setEmail(user.email || "");
-          setRole(user.role as "editor" | "admin");
+          setRole(user.role as "editor" | "admin" | "developer");
           setName(user.name || "");
         }
       } catch {
@@ -74,7 +74,7 @@ const UpdateUser = ({
         const updateData: {
           email?: string;
           password?: string;
-          role?: string;
+          role?: "editor" | "admin" | "developer";
           name?: string;
         } = {};
         if (email) updateData.email = email;

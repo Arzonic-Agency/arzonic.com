@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const supabase = await createServerClientInstance();
   const { data, error } = await supabase
-    .from("services")
+    .from("features")
     .select("*")
     .order("label", { ascending: true });
 

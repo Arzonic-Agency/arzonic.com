@@ -57,6 +57,15 @@
   "invalid_email": "The email is invalid",
   "password_too_short": "Password must be at least 6 characters",
   "passwords_not_matching": "Passwords do not match",
+  "change_password": "Change Password",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "current_password_required": "Current password is required",
+  "new_password_required": "New password is required",
+  "confirm_password_required": "Please confirm your password",
+  "password_changed_successfully": "Password changed successfully",
+  "password_change_failed": "Failed to change password",
+  "changing": "Changing...",
   "invalid_date": "Invalid Date",
   "invalid_days": "Invalid number of days",
   "registration_error": "Error during registration, please try again",
@@ -153,6 +162,14 @@
   "overview": "Overview",
   "content": "Content",
   "settings": "Settings",
+  "layout": "Layout Settings",
+  "general": "General",
+  "appearance": "Appearance",
+  "notifications": "Notifications",
+  "security": "Security",
+  "settings_content_coming_soon": "Settings content coming soon...",
+  "profile_settings": "User Settings",
+  "user_profile": "User Profile",
   "site": "Site",
   "site_setup": "Site Setup",
   "layout_settings": "Layout Settings",
@@ -162,6 +179,9 @@
   "from": "From",
   "bookingMeeting": "Book a Meeting",
   "checking": "Checking...",
+  "latest_notifications": "Latest notifications",
+  "no_notifications": "No notifications",
+  "new_request": "New request",
   "connected": "Connected",
   "connectToFacebook": "Connect to Facebook",
   "connecting": "Connecting...",
@@ -662,128 +682,129 @@
     }
   },
   "Policy": {
-    "title": "Privacy Policy & Consent",
-    "intro": "Here you can read how Arzonic ApS processes the information you share with us – for example when you contact us, use the price calculator, or apply for a job with us. We take good care of your data and only use it for clear and relevant purposes.",
+    "meta": {
+      "title": "Privacy Policy & Consent",
+      "lastUpdated": "Last updated: December 2, 2025",
+      "company": "Arzonic ApS"
+    },
 
     "section1": {
-      "title": "1. When we collect information",
-      "description": "We only collect information when you actively choose to provide it to us. This typically happens in the following situations:",
+      "title": "1. When we collect personal data",
+      "description": "We only collect personal data when you actively choose to share it with us, typically when you:",
       "list": {
-        "contact": "When you send an inquiry via the contact form (e.g. questions, collaboration, or a quote).",
-        "calculator": "When you use the price calculator and ask for a non-binding quote.",
-        "job": "When you apply for a job or internship at Arzonic ApS via a form or e-mail."
+        "contact": "Send us a message through our contact form (questions, collaboration, or a request for an offer).",
+        "calculator": "Use our pricing calculator and request a non-binding estimate.",
+        "job": "Apply for a job or internship at Arzonic ApS via a form or email."
       },
-      "note": "We do not collect sensitive information via our website."
+      "note": "We do not intentionally collect sensitive personal data through our website."
     },
 
     "section2": {
-      "title": "2. What information we collect",
-      "description": "Depending on how you contact us, we may ask for:",
+      "title": "2. What data we collect",
+      "description": "Depending on how you contact us, we may collect:",
       "list": {
-        "common": "Contact details: name, e-mail, phone number, and whatever you choose to write in the message field.",
-        "calculator": "Information about your business, project description, and preferences so we can prepare a realistic estimate.",
-        "job": "Job applications and CV: information about your experience, education, portfolio, links (e.g. GitHub, LinkedIn, website), and any other documents you attach. These documents are treated confidentially and only accessed by relevant people."
+        "common": "Contact details: name, email, phone number, and the information you provide in the message field.",
+        "calculator": "Company and project details to prepare a realistic estimate (e.g., scope, preferences, timeline).",
+        "job": "Job application materials: CV, cover letter, portfolio, links (e.g., GitHub, LinkedIn, website) and any attachments you provide. These are handled confidentially and only by relevant persons."
       },
-      "note": "We only ask for the information we need in order to respond to your inquiry, send you a quote, or assess your application."
+      "note": "We only request the information necessary to respond, provide an estimate/offer, or evaluate your application."
     },
 
     "section3": {
-      "title": "3. How we use your information",
-      "description": "We use your information for a few, specific purposes:",
+      "title": "3. How we use your data",
+      "description": "We use your data for a limited set of purposes:",
       "list": {
-        "inquiry": "To respond to your inquiry and provide the help or information you have requested.",
-        "offer": "To prepare and send quotes, estimates, and follow-ups in connection with the price calculator or direct dialogue.",
-        "job": "To assess your job or internship application, invite you for an interview, and keep you informed about the process.",
-        "improvement": "To improve our service and communication, for example by seeing which types of inquiries we receive the most."
+        "inquiry": "To respond to your inquiry and provide the information or support you requested.",
+        "offer": "To prepare and send estimates, offers, and follow-ups related to the pricing calculator or direct dialogue.",
+        "job": "To evaluate job/internship applications, invite candidates to interviews, and communicate about the process.",
+        "improvement": "To improve our service and communication (e.g., understanding what types of requests we receive)."
       },
-      "note": "We do not use your information for unwanted marketing, and we do not share it with others without a clear purpose and legal basis."
+      "note": "We do not use your data for unsolicited marketing, and we do not share it without a clear purpose and lawful basis."
     },
 
     "section4": {
-      "title": "4. Job and internship applications",
-      "description": "We know it requires trust to send your CV, application, and other documents. That is why we treat all applications confidentially and only internally:",
+      "title": "4. Job & internship applications",
+      "description": "We treat applications confidentially and handle them internally:",
       "list": {
-        "access": "Only relevant people at Arzonic ApS (e.g. the owner or direct collaborators on the specific team) get access to your application.",
-        "noAutomated": "We do not use automated decisions to filter applicants. There is always a real person behind the assessment.",
-        "references": "We only contact references if you have given your consent.",
-        "unsolicited": "If you send an unsolicited application, we only use it to assess your fit with current or upcoming opportunities."
+        "access": "Only relevant people at Arzonic ApS (e.g., owner or directly involved team members/partners) may access your application.",
+        "noAutomated": "We do not use automated decision-making to filter applicants; applications are reviewed by a person.",
+        "references": "We only contact references if you have given consent.",
+        "unsolicited": "Unsolicited applications are used only to assess fit for current or future opportunities."
       },
-      "retention": "If you are not hired, we generally store your application, CV, and any attachments for up to 6 months or until the material is no longer relevant for the position. In some cases, the application is deleted earlier, for example no later than 30 days after a process has ended without hiring – unless we have agreed in writing that we may store the material for longer."
+      "retention": "If you are not hired, we generally retain your application and attachments for up to 6 months, or until it is no longer relevant. In some cases we may delete earlier (e.g., within 30 days after the process ends), unless we have agreed in writing to keep it longer."
     },
 
     "section5": {
-      "title": "5. Connection to Facebook and Instagram (System User)",
-      "description1": "For some customers, we offer the option to publish posts on their Facebook Page or Instagram Business account via our platform. For this, we use a so-called Meta System User.",
+      "title": "5. Facebook & Instagram access (Meta System User)",
+      "description1": "For some customers, we offer functionality that enables publishing content to a Facebook Page or Instagram Business account via our platform. This is handled through a Meta System User.",
       "list": {
-        "pages": "The access only covers the pages and accounts you actively approve in Meta Business.",
-        "publish": "We can only publish posts that you have approved, to the pages/accounts you have selected."
+        "pages": "Access is limited to the pages/accounts you explicitly approve in Meta Business.",
+        "publish": "We only publish content that you have approved for your selected pages/accounts."
       },
-      "description2": "This integration does not fetch personal information about you as a private person (e.g. private profile, private e-mail, or friends). The connection is technical and is only used to publish content on your behalf. You can remove access at any time in your Meta Business settings."
+      "description2": "This integration does not retrieve personal data from your private Meta profile (e.g., personal email, friends list). It is a technical connection used solely to publish content on your behalf. You can revoke access at any time in your Meta Business settings."
     },
 
     "section6": {
-      "title": "6. Storage and deletion of information",
-      "description": "We store your information securely and only for as long as necessary:",
+      "title": "6. Storage & deletion",
+      "description": "We store data securely and only for as long as necessary:",
       "list": {
-        "noCustomer": "If you contact us but do not become a customer, your information is normally deleted within 30 days after our last dialogue.",
-        "customer": "If you become a customer, we store relevant information for as long as necessary to deliver our solutions and comply with accounting and other legal obligations.",
-        "job": "Job and internship applications (including CV and attachments) are generally stored for up to 6 months after the recruitment process has ended or until the material is no longer relevant for the specific position. After that, they are deleted automatically or manually."
+        "noCustomer": "If you contact us but do not become a customer, we typically delete your information within 30 days after our last dialogue.",
+        "customer": "If you become a customer, we retain relevant information as needed to deliver services and comply with legal obligations (e.g., bookkeeping).",
+        "job": "Job/internship applications (including CV and attachments) are normally stored for up to 6 months after the recruitment process ends, or until no longer relevant, and then deleted."
       },
-      "note": "You can always contact us if you want your information deleted earlier, as long as legislation allows it."
+      "note": "You may request deletion earlier, unless we are required to keep certain data by law."
     },
 
     "section7": {
       "title": "7. Sharing with third parties",
-      "description": "We do not sell your information. We only share data with third parties when it is necessary and justified:",
+      "description": "We do not sell your data. We only share data when necessary and appropriate:",
       "list": {
-        "providers": "Suppliers and partners who help us with operations (e.g. hosting, e-mail, project management) and who are bound by data processing agreements.",
-        "legal": "Authorities, if we are legally required to do so (e.g. in connection with audits or other legal requirements)."
+        "providers": "Service providers and partners who support operations (e.g., hosting, email, project tools) under data processing agreements.",
+        "legal": "Authorities when we are legally required to do so (e.g., audit or legal compliance)."
       },
-      "note": "Third parties are not allowed to use your information for their own purposes."
+      "note": "Third parties are not permitted to use your data for their own purposes."
     },
 
     "section8": {
       "title": "8. Your rights",
-      "description": "You have a number of rights in relation to your personal data:",
+      "description": "You have rights regarding your personal data, including:",
       "list": {
-        "access": "Right of access – to know what information we have about you.",
-        "correct": "Right to rectification – to have incorrect or incomplete information corrected.",
-        "delete": "Right to erasure – to have information deleted when possible under applicable law.",
-        "limit": "Right to restriction – in some cases to restrict how we process your data.",
-        "object": "Right to object – in certain cases to object to our processing.",
-        "withdraw": "Right to withdraw consent – if you have previously given consent to a specific processing."
+        "access": "Right of access – to know what data we hold about you.",
+        "correct": "Right to rectification – to correct inaccurate or incomplete data.",
+        "delete": "Right to erasure – to have data deleted when legally possible.",
+        "limit": "Right to restriction – in some cases, to limit how we process your data.",
+        "object": "Right to object – in certain cases, to object to processing.",
+        "withdraw": "Right to withdraw consent – if processing is based on consent."
       },
-      "note": "If you want to exercise your rights, you can always contact us at mail@arzonic.com. We will get back to you as soon as possible."
+      "note": "To exercise your rights, contact us at mail@arzonic.com. We will respond as soon as possible."
     },
 
     "section9": {
       "title": "9. Consent",
-      "description1": "When you submit a form on our website (contact, price calculator, or job application), you give your consent for us to process your information for the purpose of that form.",
-      "description2": "You can withdraw your consent at any time by writing to us. We will then stop the processing and delete your information unless we are required by law to store it (e.g. accounting rules)."
+      "description1": "When you submit a form on our website (contact, pricing calculator, or job application), you consent to our processing of your data for the purpose of that form.",
+      "description2": "You can withdraw your consent at any time by contacting us. We will stop processing and delete your data unless we are legally required to retain it (e.g., bookkeeping requirements)."
     },
 
     "section10": {
       "title": "10. Data security",
-      "description": "We use both technical and organizational measures to protect your information from unauthorized access, loss, or misuse. Only people with a legitimate need get access to your data."
+      "description": "We use appropriate technical and organizational measures to protect your data against unauthorized access, loss, or misuse. Only people with a legitimate need may access your data."
     },
 
     "section11": {
       "title": "11. Updates to this policy",
-      "description": "We may update this privacy policy if there are changes to our services or to applicable legislation. The latest version is always available on our website."
+      "description": "We may update this policy if our services change or if required by law. The latest version will always be available on our website."
     },
 
     "section12": {
-      "title": "12. Contact",
-      "description": "If you have questions about how we process personal data – or if you want to exercise your rights – you are always welcome to contact us:",
+      "title": "12. Contact details",
+      "description": "If you have questions about our processing of personal data—or want to exercise your rights—you can contact:",
       "list": {
         "company": "Arzonic ApS",
-        "cvr": "CVR no.: 45630102",
-        "email": "E-mail: mail@arzonic.com",
+        "cvr": "CVR: 45630102",
+        "email": "Email: mail@arzonic.com",
         "phone": "Phone: +45 22 50 17 03"
       }
-    },
-
-    "lastUpdated": "Last updated: 2 December 2025"
+    }
   },
   "TermsModal": {
     "title": "Terms of Service",
@@ -1219,7 +1240,7 @@
       "linkToOverview": "Go to overview",
       "linkToContent": "Go to content",
       "linkToCustomers": "Go to customers",
-      "linkToSettings": "Go to settings",
+      "linkToLayout": "Go to layout",
       "linkToHome": "Go to homepage"
     },
     "topbar": {
@@ -1264,6 +1285,15 @@
       "switchToLight": "Switch to light theme",
       "switchToDark": "Switch to dark theme"
     },
+    "settings": {
+      "open": "Open settings"
+    },
+    "password_input": "Enter password",
+    "confirm_password_input": "Confirm password",
+    "current_password_input": "Enter current password",
+    "new_password_input": "Enter new password",
+    "change_password": "Change password",
+    "changing_password": "Changing password",
     "createCase": {
       "companyName": "Enter company name",
       "contactPerson": "Enter contact person",

@@ -5,10 +5,13 @@ import { signOut } from "@/lib/server/actions";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
-import { FaEllipsis, FaRightFromBracket } from "react-icons/fa6";
+import { FaRightFromBracket } from "react-icons/fa6";
 
 import LanguageAdmin from "./LanguageAdmin";
 import ThemeAdmin from "./ThemeAdmin";
+import Settings from "./settings/UserSettings";
+import { FaUserCircle } from "react-icons/fa";
+import NotificationList from "./notifications/NotificationList";
 
 const Topbar = () => {
   const pathname = usePathname();
@@ -31,6 +34,8 @@ const Topbar = () => {
           {currentTitle}
         </a>
       </div>
+      <NotificationList />
+
       <div className="flex-none">
         <div className="dropdown dropdown-bottom dropdown-end">
           <div
@@ -39,18 +44,18 @@ const Topbar = () => {
             className="btn btn-ghost md:btn-md m-1 text-lg"
             aria-label={t("aria.topbar.moreOptions")}
           >
-            <FaEllipsis size={20} />
+            <FaUserCircle size={24} />
           </div>
           <ul
             ref={dropdownRef}
             tabIndex={0}
-            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg ring-1 ring-base-300 ring-opacity-5"
+            className="dropdown-content menu bg-base-200 border-2 border-base-300 rounded-box z-10 w-52 p-2 shadow-lg ring-1 ring-base-300 ring-opacity-5"
           >
             <li>
-              <ThemeAdmin />
+              <Settings />
             </li>
             <li>
-              <LanguageAdmin />
+              <ThemeAdmin />
             </li>
             <li>
               <LanguageAdmin />

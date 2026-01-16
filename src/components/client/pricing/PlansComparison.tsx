@@ -307,21 +307,26 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
       {/* Mobile version */}
       <div className="md:hidden w-full overflow-hidden px-2 mt-10 flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <label htmlFor="plan-select" className="text-xl font-semibold">
+          <span className="text-xl font-semibold">
             {translate("selectLabel") || "Choose a plan"}
-          </label>
-          <select
-            id="plan-select"
-            value={selectedPlan}
-            onChange={(e) => setSelectedPlan(e.target.value as PlanKey)}
-            className="select select-lg select-bordered w-full font-semibold"
-          >
+          </span>
+          <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
             {rawPlans.map((plan) => (
-              <option key={plan.key} value={plan.key}>
+              <button
+                key={plan.key}
+                type="button"
+                aria-pressed={selectedPlan === plan.key}
+                className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+                  selectedPlan === plan.key
+                    ? "bg-primary text-white"
+                    : "bg-transparent text-primary"
+                }`}
+                onClick={() => setSelectedPlan(plan.key)}
+              >
                 {plan.name}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         </div>
 
         <div className="w-full rounded-xl border border-base-200 overflow-hidden">

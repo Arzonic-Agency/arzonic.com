@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next"; // Import translation hook
-
+import { useTranslation } from "react-i18next";
 interface ContactSelectProps {
   onChange: (value: string) => void;
 }

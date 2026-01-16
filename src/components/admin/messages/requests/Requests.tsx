@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RequestsSearch from "./RequestsSearch";
 import RequestsList, { Request } from "./RequestsList";
 import RequestsDetails from "./RequestsDetails";
 import { FaAngleLeft } from "react-icons/fa6";
-import { deleteRequest, updateRequest } from "@/lib/server/actions";
+import {
+  deleteRequest,
+  updateRequest,
+  getRequestById,
+} from "@/lib/server/actions";
 import RequestsPagination from "./RequestsPagination";
 
 import { useTranslation } from "react-i18next";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Requests = () => {
-  const [selectedRequestId, setSelectedRequestId] = useState<number | null>(
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null
   );
   const [requests, setRequests] = useState<Request[]>([]);
@@ -19,15 +26,55 @@ const Requests = () => {
   const [selectedRequests, setSelectedRequests] = useState<number[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [selectedRequestData, setSelectedRequestData] =
+    useState<Request | null>(null);
   const { t } = useTranslation();
 
-  const handleDetailsClick = (requestId: number) => {
-    setSelectedRequestId(requestId);
+  const isUuid = (value: string) => /^[0-9a-fA-F-]{36}$/.test(value);
+
+  const handleDetailsClick = (requestId: number | string) => {
+    const idStr = String(requestId);
+    const request = requests.find((r) => String(r.id) === idStr);
+    if (request) {
+      setSelectedRequestId(idStr);
+      setSelectedRequestData(request);
+      // Sync URL so back/refresh keeps the same view
+      if (isUuid(idStr) && searchParams.get("requestId") !== idStr) {
+        router.push(`/admin/messages?requestId=${idStr}`);
+      }
+    } else {
+      // If request is not in list, fetch it
+      const fetchRequest = async () => {
+        try {
+          if (!isUuid(idStr)) return;
+          const requestData = await getRequestById(idStr);
+          if (requestData) {
+            setSelectedRequestId(idStr);
+            setSelectedRequestData(requestData as Request);
+            // Optionally add to requests list
+            setRequests((prev) => {
+              if (!prev.some((r) => String(r.id) === idStr)) {
+                return [requestData as Request, ...prev];
+              }
+              return prev;
+            });
+            if (isUuid(idStr) && searchParams.get("requestId") !== idStr) {
+              router.push(`/admin/messages?requestId=${idStr}`);
+            }
+          }
+        } catch (error) {
+          console.error("Failed to fetch request by ID:", error);
+        }
+      };
+      fetchRequest();
+    }
   };
 
   const handleBackClick = () => {
     setSelectedRequestId(null);
+    setSelectedRequestData(null);
     setIsEditing(false);
+    router.push("/admin/messages");
   };
 
   const handleDeleteSelected = async () => {
@@ -59,9 +106,50 @@ const Requests = () => {
       prevRequests.filter((request) => request.id !== deletedRequestId)
     );
     setSelectedRequestId(null); // Redirect to list view
+    setSelectedRequestData(null);
     setShowToast(true); // Trigger toast
     setTimeout(() => setShowToast(false), 3000);
   };
+
+  // When a requestId is present in URL, show its details (guard against loops/invalid ids)
+  useEffect(() => {
+    const param = searchParams.get("requestId");
+    // Bail if missing or not UUID-ish (avoid db errors on numeric/short ids)
+    if (!param || !isUuid(param)) {
+      setSelectedRequestId(null);
+      setSelectedRequestData(null);
+      return;
+    }
+
+    // Already showing this request
+    if (selectedRequestId === param) return;
+
+    const existing = requests.find((r) => String(r.id) === param);
+    if (existing) {
+      setSelectedRequestId(param);
+      setSelectedRequestData(existing);
+      return;
+    }
+
+    const fetchRequest = async () => {
+      try {
+        const requestData = await getRequestById(param);
+        if (requestData) {
+          setSelectedRequestId(param);
+          setSelectedRequestData(requestData as Request);
+          setRequests((prev) => {
+            if (!prev.some((r) => String(r.id) === param)) {
+              return [requestData as Request, ...prev];
+            }
+            return prev;
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch request by ID:", error);
+      }
+    };
+    fetchRequest();
+  }, [searchParams, selectedRequestId, requests]);
 
   const handleUpdateRequest = async (
     requestId: string,
@@ -73,6 +161,13 @@ const Requests = () => {
           request.id === parseInt(requestId) ? { ...request, ...data } : request
         )
       );
+      // Update selectedRequestData if it matches
+      if (
+        selectedRequestData &&
+        selectedRequestData.id === parseInt(requestId)
+      ) {
+        setSelectedRequestData({ ...selectedRequestData, ...data });
+      }
       await updateRequest(requestId, data);
     } catch (error) {
       console.error("Failed to update request:", error);
@@ -95,38 +190,26 @@ const Requests = () => {
               </button>
             </div>
           )}
-          <RequestsDetails
-            name={requests.find((r) => r.id === selectedRequestId)?.name || ""}
-            company={
-              requests.find((r) => r.id === selectedRequestId)?.company || ""
-            }
-            category={
-              requests.find((r) => r.id === selectedRequestId)?.category || ""
-            }
-            created_at={
-              requests.find((r) => r.id === selectedRequestId)?.created_at || ""
-            }
-            mobile={
-              requests.find((r) => r.id === selectedRequestId)?.mobile || ""
-            }
-            mail={requests.find((r) => r.id === selectedRequestId)?.mail || ""}
-            city={requests.find((r) => r.id === selectedRequestId)?.city || ""}
-            address={
-              requests.find((r) => r.id === selectedRequestId)?.address || ""
-            }
-            message={
-              requests.find((r) => r.id === selectedRequestId)?.message || ""
-            }
-            consent={
-              !!requests.find((r) => r.id === selectedRequestId)?.consent
-            }
-            requestId={selectedRequestId.toString()}
-            setIsEditing={setIsEditing}
-            onUpdateRequest={handleUpdateRequest}
-            onDeleteRequest={(deletedRequestId) => {
-              handleDeleteRequest(deletedRequestId);
-            }}
-          />
+          {selectedRequestData && (
+            <RequestsDetails
+              name={selectedRequestData.name || ""}
+              company={selectedRequestData.company || ""}
+              category={selectedRequestData.category || ""}
+              created_at={selectedRequestData.created_at || ""}
+              mobile={selectedRequestData.mobile || ""}
+              mail={selectedRequestData.mail || ""}
+              city={selectedRequestData.city || ""}
+              address={selectedRequestData.address || ""}
+              message={selectedRequestData.message || ""}
+              consent={!!selectedRequestData.consent}
+              requestId={selectedRequestId.toString()}
+              setIsEditing={setIsEditing}
+              onUpdateRequest={handleUpdateRequest}
+              onDeleteRequest={(deletedRequestId) => {
+                handleDeleteRequest(deletedRequestId);
+              }}
+            />
+          )}
         </div>
       ) : (
         <>

@@ -92,7 +92,7 @@ const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
                     : t("jobsDetails.inactive")}
                 </span>
               </div>
-              <span className="text-xs text-zinc-300 flex items-center gap-1">
+              <span className="text-xs text-zinc-500 flex items-center gap-1">
                 <FaHourglassHalf size={11} className="text-primary" />
                 {new Date(job.deadline).toLocaleDateString()}
               </span>

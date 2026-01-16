@@ -44,7 +44,6 @@ const EstimatorContactForm = ({
   onSubmit,
 }: Props) => {
   const { t } = useTranslation();
-
   return (
     <form onSubmit={onSubmit} className="p-7 flex flex-col gap-5 max-w-md">
       <h2 className="text-base md:text-xl font-bold flex gap-1 items-center">
@@ -62,9 +61,10 @@ const EstimatorContactForm = ({
         placeholder={t("estimator.form.namePlaceholder", "Your name")}
         aria-label={t("aria.estimator.nameInput", "Enter your name")}
         required
+        name="name"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="input input-ghost bg-base-200 w-full max-w-md"
+        className="input input-ghost bg-base-300 w-full max-w-md"
       />
 
       <input
@@ -72,53 +72,53 @@ const EstimatorContactForm = ({
         placeholder={t("estimator.form.emailPlaceholder", "Your email")}
         aria-label={t("aria.estimator.emailInput", "Enter your email")}
         required
+        name="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="input input-ghost bg-base-200 w-full max-w-md"
+        className="input input-ghost bg-base-300 w-full max-w-md"
       />
 
       <div className="flex gap-2 items-center max-w-md">
-        <div className="dropdown">
-          <label
-            tabIndex={0}
-            className="btn btn-ghost bg-base-200 w-28 justify-between flex items-center"
-          >
+        <div className="relative w-28">
+          <div className="btn btn-ghost bg-base-300 w-26 justify-between flex items-center pointer-events-none">
             {(() => {
-              const sel = countries.find((c) => c.dial === phonePrefix);
+              const selected = countries.find((c) => c.dial === phonePrefix);
               return (
                 <>
-                  {sel?.flag} {sel?.dial}
+                  {selected?.flag} {phonePrefix}
                 </>
               );
             })()}
-          </label>
-          <ul
-            tabIndex={0}
-            className="dropdown-content p-1 shadow bg-base-100 rounded-box w-56 max-h-60 overflow-y-auto flex flex-col z-50"
+          </div>
+          <select
+            value={phonePrefix}
+            onChange={(e) => setPhonePrefix(e.target.value)}
+            className="select select-ghost absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            aria-label={t(
+              "aria.estimator.countryCodeSelect",
+              "Select country code"
+            )}
           >
             {countries.map((cn) => (
-              <li key={cn.code}>
-                <button
-                  onClick={() => setPhonePrefix(cn.dial)}
-                  className="flex items-center justify-between px-2 py-1 hover:bg-base-200 rounded"
-                >
-                  <span className="flex-1 mr-2">
-                    {cn.flag} {cn.name}
-                  </span>
-                  <span className="opacity-70">{cn.dial}</span>
-                </button>
-              </li>
+              <option
+                key={cn.code}
+                value={cn.dial}
+                label={`${cn.flag} ${cn.name} ${cn.dial}`}
+              >
+                {cn.name}
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
         <input
           type="tel"
           placeholder={t("estimator.form.phonePlaceholder", "Phone number")}
           aria-label={t("aria.estimator.phoneInput", "Enter your phone number")}
           required
+          name="phoneNumber"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
-          className="input input-ghost bg-base-200 w-full max-w-md"
+          className="input input-ghost bg-base-300 w-full max-w-md"
         />
       </div>
 

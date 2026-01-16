@@ -7,13 +7,15 @@ const Policy = () => {
   return (
     <>
       <h3 className="font-bold text-xl md:text-2xl py-2">
-        {t("Policy.title")}
+        {t("Policy.meta.title")}
       </h3>
-      <p className="mb-4 text-sm">{t("Policy.intro")}</p>
-      <div className="py-4 text-sm max-h-96 md:max-h-[40vh] overflow-y-auto flex flex-col gap-5">
-        {/* Intro – ligger nu inde i scroll-containeren */}
 
-        {/* Section 1 – When we collect information */}
+      <p className="text-sm opacity-80 mb-5">
+        {t("Policy.meta.company")} · {t("Policy.meta.lastUpdated")}
+      </p>
+
+      <div className="py-4 text-sm max-h-96 md:max-h-[40vh] overflow-y-auto flex flex-col gap-5">
+        {/* Section 1 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section1.title")}
@@ -27,7 +29,7 @@ const Policy = () => {
           <p>{t("Policy.section1.note")}</p>
         </div>
 
-        {/* Section 2 – What information we collect */}
+        {/* Section 2 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section2.title")}
@@ -41,7 +43,7 @@ const Policy = () => {
           <p>{t("Policy.section2.note")}</p>
         </div>
 
-        {/* Section 3 – How we use your information */}
+        {/* Section 3 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section3.title")}
@@ -56,7 +58,7 @@ const Policy = () => {
           <p>{t("Policy.section3.note")}</p>
         </div>
 
-        {/* Section 4 – Job and internship applications */}
+        {/* Section 4 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section4.title")}
@@ -71,7 +73,7 @@ const Policy = () => {
           <p>{t("Policy.section4.retention")}</p>
         </div>
 
-        {/* Section 5 – Facebook / Instagram (System User) */}
+        {/* Section 5 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section5.title")}
@@ -84,7 +86,7 @@ const Policy = () => {
           <p>{t("Policy.section5.description2")}</p>
         </div>
 
-        {/* Section 6 – Storage and deletion */}
+        {/* Section 6 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section6.title")}
@@ -98,7 +100,7 @@ const Policy = () => {
           <p>{t("Policy.section6.note")}</p>
         </div>
 
-        {/* Section 7 – Sharing with third parties */}
+        {/* Section 7 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section7.title")}
@@ -111,7 +113,7 @@ const Policy = () => {
           <p>{t("Policy.section7.note")}</p>
         </div>
 
-        {/* Section 8 – Your rights */}
+        {/* Section 8 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section8.title")}
@@ -128,7 +130,7 @@ const Policy = () => {
           <p>{t("Policy.section8.note")}</p>
         </div>
 
-        {/* Section 9 – Consent */}
+        {/* Section 9 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section9.title")}
@@ -137,7 +139,7 @@ const Policy = () => {
           <p className="mt-1">{t("Policy.section9.description2")}</p>
         </div>
 
-        {/* Section 10 – Data security */}
+        {/* Section 10 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section10.title")}
@@ -145,7 +147,7 @@ const Policy = () => {
           <p>{t("Policy.section10.description")}</p>
         </div>
 
-        {/* Section 11 – Updates */}
+        {/* Section 11 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section11.title")}
@@ -153,7 +155,7 @@ const Policy = () => {
           <p>{t("Policy.section11.description")}</p>
         </div>
 
-        {/* Section 12 – Contact */}
+        {/* Section 12 */}
         <div>
           <h4 className="font-semibold md:text-base mb-2">
             {t("Policy.section12.title")}
@@ -166,9 +168,6 @@ const Policy = () => {
             <li>{t("Policy.section12.list.phone")}</li>
           </ul>
         </div>
-
-        {/* Last updated */}
-        <p className="mt-2 text-xs">{t("Policy.lastUpdated")}</p>
       </div>
     </>
   );

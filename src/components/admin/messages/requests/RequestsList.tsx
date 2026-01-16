@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { FaAngleRight } from "react-icons/fa6";
 import { getAllRequests } from "@/lib/server/actions";
+import {
+  useRequestsRealtime,
+  type RealtimeRequest,
+} from "@/hooks/useRequestsRealtime";
 
 export interface Request {
   id: number;
@@ -19,15 +23,15 @@ export interface Request {
 
 interface RequestsListProps {
   requests: Request[];
-  setRequests: (requests: Request[]) => void;
+  setRequests: React.Dispatch<React.SetStateAction<Request[]>>;
   page: number;
-  setPage: (page: number) => void;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
   total: number;
-  setTotal: (total: number) => void;
+  setTotal: React.Dispatch<React.SetStateAction<number>>;
   searchTerm: string;
   onDetailsClick: (requestId: number) => void;
   selectedRequests: number[];
-  setSelectedRequests: (selected: number[]) => void;
+  setSelectedRequests: React.Dispatch<React.SetStateAction<number[]>>;
   handleCheckboxChange: (requestId: number) => void;
 }
 
@@ -44,7 +48,50 @@ const RequestsList = ({
 }: RequestsListProps) => {
   const [loading, setLoading] = useState(true);
   const [localRequests, setLocalRequests] = useState<Request[]>(requests);
+  const safeSelectedRequests = Array.isArray(selectedRequests)
+    ? selectedRequests
+    : [];
   const { t } = useTranslation();
+
+  const handleNewRequest = useCallback(
+    (payload: RealtimeRequest) => {
+      if (!payload?.id) return;
+
+      const numericId =
+        typeof payload.id === "number"
+          ? payload.id
+          : parseInt(String(payload.id), 10);
+
+      if (Number.isNaN(numericId)) return;
+
+      setTotal((prevTotal) => prevTotal + 1);
+
+      if (page !== 1) return;
+
+      setRequests((prevRequests) => {
+        if (prevRequests.some((req) => req.id === numericId)) {
+          return prevRequests;
+        }
+        const nextRequest: Request = {
+          id: numericId,
+          name: payload.name ?? "",
+          company: payload.company ?? "",
+          category: payload.category ?? "",
+          created_at: payload.created_at ?? new Date().toISOString(),
+          mobile: payload.mobile ?? "",
+          mail: payload.mail ?? "",
+          message: payload.message ?? "",
+          address: payload.address ?? "",
+          city: payload.city ?? "",
+          consent: payload.consent ?? false,
+        };
+        return [nextRequest, ...prevRequests].slice(0, 6);
+      });
+    },
+    [page, setRequests, setTotal]
+  );
+
+  useRequestsRealtime(handleNewRequest);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -81,9 +128,47 @@ const RequestsList = ({
 
   if (loading) {
     return (
-      <div className="flex justify-center gap-3 items-center h-52">
-        <span className="loading loading-spinner loading-md"></span>
-        {t("loading_request")}
+      <div className="overflow-x-auto">
+        <table className="table md:table-md lg:table-lg">
+          <thead>
+            <tr>
+              <th>
+                <label>
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-primary"
+                    disabled
+                    aria-hidden="true"
+                  />
+                </label>
+              </th>
+              <th>{t("sent_by")}</th>
+              <th className="hidden md:block">{t("subject")}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <tr key={`request-skeleton-${index}`}>
+                <th>
+                  <div className="skeleton h-5 w-5 rounded-md" />
+                </th>
+                <td>
+                  <div className="skeleton h-4 w-32 md:w-40" />
+                </td>
+                <td className="hidden md:block">
+                  <div className="flex flex-col gap-2">
+                    <div className="skeleton h-4 w-28" />
+                    <div className="skeleton h-4 w-20 rounded-full" />
+                  </div>
+                </td>
+                <th>
+                  <div className="skeleton h-8 w-20 md:w-24" />
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -111,7 +196,10 @@ const RequestsList = ({
                       e.target.checked ? localRequests.map((req) => req.id) : []
                     )
                   }
-                  checked={selectedRequests.length === localRequests.length}
+                  checked={
+                    localRequests.length > 0 &&
+                    safeSelectedRequests.length === localRequests.length
+                  }
                   aria-label={t("aria.requestsList.selectAllCheckbox")}
                 />
               </label>
@@ -129,7 +217,7 @@ const RequestsList = ({
                   <input
                     type="checkbox"
                     className="checkbox checkbox-primary "
-                    checked={selectedRequests.includes(request.id)}
+                    checked={safeSelectedRequests.includes(request.id)}
                     onChange={() => handleCheckboxChange(request.id)}
                     aria-label={t("aria.requestsList.individualCheckbox")}
                   />

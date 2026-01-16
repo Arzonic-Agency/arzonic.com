@@ -1,9 +1,8 @@
 "use client";
 
-import Policy from "@/components/elements/Policy";
-import Link from "next/link";
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import Link from "next/link";
+import Policy from "@/components/elements/Policy";
 
 interface PolicyModalProps {
   buttonText: string;
@@ -12,43 +11,45 @@ interface PolicyModalProps {
 
 const PolicyModal = ({ buttonText, variant = "hover" }: PolicyModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { t } = useTranslation();
 
-  const handleClose = () => setIsOpen(false);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   return (
     <>
-      {/* Link to open modal */}
-      <span
-        className={`font-medium link cursor-pointer ${
-          variant === "primary" ? "link-primary" : "link-hover"
+      {/* Trigger */}
+      <button
+        type="button"
+        onClick={openModal}
+        className={`font-medium ${
+          variant === "primary"
+            ? "btn btn-link btn-primary p-0"
+            : "link link-hover"
         }`}
-        onClick={() => setIsOpen(true)}
       >
         {buttonText}
-      </span>
+      </button>
 
       {/* Modal */}
       {isOpen && (
         <div
-          className="modal modal-open fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-          onClick={handleClose}
+          className="modal modal-open fixed inset-0 z-50"
+          onClick={closeModal}
           role="dialog"
           aria-modal="true"
-          aria-label={t("Policy.title")}
         >
           <div
-            className="modal-box max-w-2xl p-6 bg-base-100 rounded-lg shadow-lg text-base-content overflow-y-auto"
-            onClick={(e) => e.stopPropagation()} // stop click from bubbling to overlay
+            className="modal-box max-w-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
             <Policy />
 
-            <div className="modal-action justify-between items-center mt-6">
+            <div className="modal-action justify-between">
               <Link href="/policy" className="btn btn-link">
-                {t("privacy_policy")}
+                Read full policy
               </Link>
-              <button className="btn btn-primary" onClick={handleClose}>
-                {t("close")}
+              <button className="btn btn-primary" onClick={closeModal}>
+                Close
               </button>
             </div>
           </div>

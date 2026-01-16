@@ -1,5 +1,7 @@
 import Navbar from "@/components/admin/layout/Navbar";
 import Topbar from "@/components/admin/layout/Topbar";
+import SettingsModal from "@/components/admin/layout/settings/UserSettingsModal";
+import { UserSettingsModalProvider } from "@/components/admin/layout/settings/UserSettingsModalContext";
 
 export default function AdminLayout({
   children,
@@ -7,12 +9,15 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col sm:flex-row sm:h-lvh h-dvh relative">
-      <Navbar />
-      <div className="p-3 w-full sm:pl-[238px] xl:pl-[300px] flex flex-col gap-3 md:gap-5 pb-28 md:pb-0">
-        <Topbar />
-        {children}
+    <UserSettingsModalProvider>
+      <div className="flex flex-col sm:flex-row sm:h-lvh h-dvh relative">
+        <Navbar />
+        <div className="p-3 w-full sm:pl-[238px] xl:pl-[300px] flex flex-col gap-3 md:gap-5 pb-28 md:pb-0">
+          <Topbar />
+          {children}
+        </div>
+        <SettingsModal />
       </div>
-    </div>
+    </UserSettingsModalProvider>
   );
 }

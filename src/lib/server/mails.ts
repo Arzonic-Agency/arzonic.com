@@ -117,6 +117,10 @@ Thanks for reaching out! We’ll be in touch shortly.
  * @param estimate - formatted estimate string
  * @param details - breakdown or summary details
  * @param packageLabel - human-readable package name
+ * @param monthlyInstallment - formatted monthly installment price
+ * @param serviceFee - formatted service agreement setup fee
+ * @param basePackage - formatted base package price
+ * @param features - formatted feature list
  * @param lang - target language code (e.g. 'en' or 'da')
  */
 
@@ -126,29 +130,87 @@ export async function sendEstimatorEmail(
   estimate: string,
   details: string,
   packageLabel: string,
+  monthlyInstallment: string | undefined,
+  serviceFee: string | undefined,
+  basePackage: string | undefined,
+  features: { label: string; price?: string }[],
   lang: "en" | "da" = "en"
 ): Promise<void> {
+  const estimateLine =
+    lang === "da"
+      ? `Anslået Pakkepris: Engangspris ${estimate}${
+          monthlyInstallment
+            ? ` eller ${monthlyInstallment} pr. måned i 48 måneder`
+            : ""
+        }`
+      : `Estimated Package price: One-time price ${estimate}${
+          monthlyInstallment
+            ? ` or ${monthlyInstallment} per month for 48 months`
+            : ""
+        }`;
+
+  const serviceAgreementText = serviceFee
+    ? lang === "da"
+      ? `Serviceaftale (ikke inkluderet i pakkeprisen): ${serviceFee}`
+      : `Service agreement (not included in package price): ${serviceFee}`
+    : "";
+
+  const featuresText =
+    features.length > 0
+      ? features
+          .map((feature) =>
+            feature.price ? `${feature.label}: ${feature.price}` : feature.label
+          )
+          .join("\n    ")
+      : "";
   const adminText = `Estimate request details:
     Name: ${name}
     Email: ${email}
     Selected package: ${packageLabel}
-    Estimated Price: ${estimate}
+    ${estimateLine}
+    ${featuresText ? `Features:\n    ${featuresText}` : ""}
+    ${serviceAgreementText}
     ${details}`;
 
   const adminHtml = `<h2>New Estimate Request</h2>
     <p><strong>Name:</strong> ${name}</p>
     <p><strong>Email:</strong> ${email}</p>
-    <p><strong>Selected package:</strong> ${packageLabel}</p>
-    <p><strong>Estimated Price:</strong> ${estimate}</p>
+    <p><strong>${
+      lang === "da" ? "Anslået pris" : "Estimated price"
+    }:</strong> ${estimateLine.replace(/^.*?:\s*/, "")}</p>
+    ${
+      features.length
+        ? `<p><strong>Features:</strong><br/>${features
+            .map((feature) =>
+              feature.price
+                ? `${feature.label}: ${feature.price}`
+                : feature.label
+            )
+            .join("<br/>")}</p>`
+        : ""
+    }
+    ${
+      serviceFee
+        ? `<p><strong>${
+            lang === "da" ? "Serviceaftale" : "Service agreement"
+          }:</strong> ${
+            lang === "da"
+              ? `${serviceFee} (ikke inkluderet i pakkeprisen)`
+              : `${serviceFee} (not included in package price)`
+          }</p>`
+        : ""
+    }
     <hr/>
+       <p><strong>Selected package:</strong> ${packageLabel}</p>
     <p>${details.replace(/\n/g, "<br/>")}</p>`;
 
   const userText = `Hi ${name},
 
     Thanks for using our project estimator – we're excited to learn more about your vision!
 
-    Selected package: ${packageLabel}
-    Estimated price: ${estimate}
+    ${estimateLine}
+    ${featuresText ? `Features:\n    ${featuresText}` : ""}
+    ${serviceAgreementText}
 
     This is a non-binding, preliminary estimate based on the details you provided.
     We’ll be in touch shortly to discuss your project further.
@@ -161,8 +223,32 @@ export async function sendEstimatorEmail(
   const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
     <p>Hi ${name},</p>
     <p>Thanks for using our project estimator – we’re excited to learn more about your vision!</p>
-    <p><strong>Selected package:</strong> ${packageLabel}<br/>
-      <strong>Estimated price:</strong> ${estimate}</p>
+      <strong>${
+        lang === "da" ? "Anslået pris" : "Estimated price"
+      }:</strong> ${estimateLine.replace(/^.*?:\s*/, "")}</p>
+    <p><strong>Selected package:</strong> ${packageLabel}</p>
+    ${
+      features.length
+        ? `<p><strong>Features:</strong><br/>${features
+            .map((feature) =>
+              feature.price
+                ? `${feature.label}: ${feature.price}`
+                : feature.label
+            )
+            .join("<br/>")}</p>`
+        : ""
+    }
+    ${
+      serviceFee
+        ? `<p><strong>${
+            lang === "da" ? "Serviceaftale" : "Service agreement"
+          }:</strong> ${
+            lang === "da"
+              ? `${serviceFee} (ikke inkluderet i prisen)`
+              : `${serviceFee} (not included in price)`
+          }</p>`
+        : ""
+    }
     <p style="font-size:12px; background:#f9f9f9; padding:8px; border-radius:4px;">Please note this is a <strong>non-binding estimate</strong> based on your input.</p>
     <p>We’ll carefully review your submission and get back to you — no matter what.</p>
     <p>If you have any additional information or questions, feel free to reply directly or <a href="mailto:mail@arzonic.com" style="color: #2563eb;">contact us</a>.</p>

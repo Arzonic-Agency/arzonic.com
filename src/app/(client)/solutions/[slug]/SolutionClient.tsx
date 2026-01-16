@@ -43,7 +43,6 @@ const SolutionClient = ({ slug, countryName }: Props) => {
     "3d-visualization": (
       <Spline scene="https://prod.spline.design/7L07tDETuES9U9Si/scene.splinecode" />
     ),
-    "web-applications": <div className="relative w-full h-full"></div>,
   };
 
   return (
@@ -81,7 +80,14 @@ const SolutionClient = ({ slug, countryName }: Props) => {
         <p className="text-sm md:text-lg mb-6 whitespace-pre-line">
           {seoDescription}
         </p>
-
+        {slug === "web-applications" && (
+          <div className="w-full">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-6">
+              {t("webAppProducts.title", "Products we develop")}
+            </h3>
+            <WebAppProducts />
+          </div>
+        )}
         <div className="flex flex-col-reverse md:flex-row gap-5">
           <div className="flex justify-between items-start flex-col gap-10">
             <div className="flex flex-col gap-5 w-full">
@@ -111,15 +117,6 @@ const SolutionClient = ({ slug, countryName }: Props) => {
             )}
           </div>
         </div>
-
-        {slug === "web-applications" && (
-          <div className="w-full mt-10">
-            <h3 className="text-base sm:text-lg md:text-xl font-semibold mb-6">
-              {t("webAppProducts.title", "Products we develop")}
-            </h3>
-            <WebAppProducts />
-          </div>
-        )}
 
         <div className="flex flex-col gap-5 max-w-4xl mt-20">
           <h4 className="text-base font-semibold text-zinc-400">
