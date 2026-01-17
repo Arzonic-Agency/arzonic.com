@@ -14,6 +14,8 @@ import { FaShieldAlt } from "react-icons/fa";
 import { useUserSettingsModal } from "./UserSettingsModalContext";
 import ChangePassword from "./config/ChangePassword";
 import UserDetails from "./config/UserDetails";
+import PushNotificationToggle from "./notifications/PushNotificationToggle";
+
 
 const UserSettingsModal = () => {
   const { dialogRef, closeModal } = useUserSettingsModal();
@@ -159,9 +161,7 @@ const UserSettingsModal = () => {
                   <h4 className="text-lg font-semibold mb-4">
                     {t("notifications")}
                   </h4>
-                  <p className="text-sm text-base-content/70">
-                    {t("settings_content_coming_soon")}
-                  </p>
+                  <PushNotificationToggle />
                 </div>
               )}
               {activeTab === "security" && (

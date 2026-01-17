@@ -100,7 +100,6 @@
   "delete_review_prompt": "Er du sikker på, at du vil slette denne anmeldelse?",
   "delete_review_warning": "Denne handling kan ikke fortrydes.",
   "delete_application_confirmation": "Slet ansøgning",
-
   "delete_application_prompt": "Er du sikker på, at du vil slette denne ansøgning?",
   "delete_application_warning": "Denne handling kan ikke fortrydes.",
   "delete_job_confirmation": "Slet jobopslag",
@@ -188,6 +187,10 @@
   "connecting": "Forbinder...",
   "disconnect": "Afbryd forbindelse",
   "disconnecting": "Afbryder forbindelse...",
+  "push_notifications": "Notifikationer til din enhed",
+  "push_notifications_description": "Modtag beskeder og opdateringer direkte på din enhed. Du kan til enhver tid slå notifikationer til eller fra.",
+  "push_notifications_enabled": "Notifikationer er slået til",
+  "push_notifications_disabled": "Notifikationer er slået fra",
   "go_website": "Gå til hjemmeside",
   "messages": {
     "email_already_exists": "Der findes allerede en bruger med denne e-mail",

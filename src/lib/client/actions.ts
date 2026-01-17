@@ -547,3 +547,34 @@ export async function getModelUrl(fileName: string): Promise<string> {
     throw err;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUSH NOTIFICATION PREFERENCES
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function updatePushNotificationPreference(
+  enabled: boolean
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const response = await fetch("/api/push/preference", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ enabled }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { success: false, error: error.message || "Unknown error" };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Fejl ved opdatering af push notification preference:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

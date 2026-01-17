@@ -187,6 +187,10 @@
   "connecting": "Connecting...",
   "disconnect": "Disconnect",
   "disconnecting": "Disconnecting...",
+    "push_notifications": "Notifications to your device",
+  "push_notifications_description": "Receive messages and updates directly on your device. You can turn notifications on or off at any time.",
+  "push_notifications_enabled": "Notifications are turned on",
+  "push_notifications_disabled": "Notifications are turned off",
   "go_website": "Go to Website",
   "messages": {
     "email_already_exists": "A user with this email already exists",
