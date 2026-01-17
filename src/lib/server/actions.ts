@@ -1353,11 +1353,10 @@ export async function sendPushNotificationsToUsers(
   }
 ): Promise<{ success: boolean; sent: number; errors: number }> {
   // Tjek om web-push er tilgængelig
-  let webpush: any = null;
+  let webpush: typeof import("web-push") | null = null;
   try {
-    // @ts-ignore - web-push may not be installed
     webpush = await import("web-push");
-  } catch (error) {
+  } catch {
     console.warn("web-push ikke installeret - push notifications deaktiveret");
     return { success: false, sent: 0, errors: 0 };
   }
@@ -1423,12 +1422,18 @@ export async function sendPushNotificationsToUsers(
         })
       );
       sent++;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Fejl ved sending af push notification:", error);
       errors++;
 
       // Hvis subscription er ugyldig, slet den
-      if (error.statusCode === 410 || error.statusCode === 404) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "statusCode" in error &&
+        ((error as { statusCode: number }).statusCode === 410 ||
+          (error as { statusCode: number }).statusCode === 404)
+      ) {
         await supabase
           .from("push_subscriptions")
           .delete()
