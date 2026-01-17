@@ -404,9 +404,24 @@
   },
   "Present": {
     "title": "Superhurtige webapps – bygget til ydeevne og vækst",
+    "badge": "VORES EKSPERTISE",
     "customDesign": {
-      "title": "Tilpasset design, der afspejler dig",
-      "description": "Ingen skabeloner. Ingen kompromiser. Vi designer hver pixel, så den matcher dit brand og får dig til at skille dig ud."
+      "badge": "UDVIKLING",
+      "stats": "15+ Projekter",
+      "title": "Web & Mobil Apps",
+      "description": "Vi designer og udvikler højtydende web- og mobilapplikationer.",
+      "button": "Vores Cases"
+    },
+    "landingPages": {
+      "badge": "LANDINGPAGES",
+      "title": "Landingpages",
+      "description": "Lancer hurtigere med kraftfulde, fuldt tilpasselige landingpages bygget med moderne værktøjer, der er nemme at administrere og optimeret til konvertering.",
+      "examples": [
+        "Lead generation",
+        "Product launches",
+        "Startups & SaaS",
+        "Service businesses"
+      ]
     },
     "easyToManage": {
       "title": "Nem at administrere",
@@ -417,8 +432,14 @@
       "description": "Ingen flere langsomme indlæsningstider. Din side er bygget til hastighed – på mobil, desktop og alt derimellem."
     },
     "builtToGrow": {
+      "badge": "VÆKST",
       "title": "Bygget til at vokse med din virksomhed",
       "description": "Fra lille team til fuldskala operation. Din hjemmeside er fleksibel, fremtidssikret og klar til at skalere med dig."
+    },
+    "cta": {
+      "title": "Klar til at transformere?",
+      "description": "Lad os skabe digitale oplevelser, der driver målbar vækst for din virksomhed.",
+      "button": "Book et møde"
     }
   },
   "Preview": {
@@ -496,9 +517,9 @@
   "OfferForm": {
     "title": "Få et skræddersyet tilbud",
     "fields": {
-      "name": {
-        "label": "Navn",
-        "placeholder": "Indtast dit navn"
+      "organization": {
+        "label": "Virksomhed",
+        "placeholder": "Indtast virksomhedsnavn"
       },
       "email": {
         "label": "E-mailadresse",
@@ -536,13 +557,13 @@
       "generic": "Noget gik galt. Prøv venligst igen senere."
     },
     "aria": {
-      "name": "Indtast dit navn",
+      "organization": "Indtast dit virksomhedsnavn",
       "email": "Indtast din e-mail",
       "phone": "Indtast dit telefonnummer",
       "message": "Indtast din besked",
       "submit": "Send formularen",
       "consent": "Accepter samtykke",
-      "nameInput": "Indtast dit navn",
+      "organizationInput": "Indtast dit virksomhedsnavn",
       "emailInput": "Indtast din e-mail",
       "phoneInput": "Indtast dit telefonnummer",
       "messageInput": "Indtast din besked",

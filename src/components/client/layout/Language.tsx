@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 
 const Language = () => {
   const { i18n, t } = useTranslation();
-  const [isEnglish, setIsEnglish] = useState(() =>
-    i18n.language?.startsWith("en")
+  const [isEnglish, setIsEnglish] = useState(
+    () => i18n.resolvedLanguage?.startsWith("en") ?? true
   );
 
   useEffect(() => {
@@ -26,14 +26,14 @@ const Language = () => {
   }, [i18n]);
 
   return (
-    <label className="swap swap-rotate cursor-pointer justify-start">
+    <label className="swap swap-rotate cursor-pointer">
       <input
         type="checkbox"
         checked={isEnglish}
-        onChange={() => setIsEnglish((prev) => !prev)}
+        onChange={(event) => setIsEnglish(event.target.checked)}
       />
-      <div
-        className="swap-on flex items-center gap-2 text-3xl opacity-90"
+      <span
+        className="swap-on "
         aria-label={t(
           "aria.language.changeToDanish",
           "Change language to Danish"
@@ -44,11 +44,11 @@ const Language = () => {
           alt="Skift til Dansk"
           width={35}
           height={35}
-          className="w-9 h-auto"
+          className="w-9 h-auto opacity-80"
         />
-      </div>
-      <div
-        className="swap-off flex items-center gap-2 text-3xl opacity-90"
+      </span>
+      <span
+        className="swap-off"
         aria-label={t(
           "aria.language.changeToEnglish",
           "Change language to English"
@@ -59,9 +59,9 @@ const Language = () => {
           alt="Change to English"
           width={35}
           height={35}
-          className="w-9 h-auto"
+          className="w-9 h-auto opacity-80"
         />
-      </div>
+      </span>
     </label>
   );
 };

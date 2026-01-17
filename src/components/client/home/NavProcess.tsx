@@ -187,7 +187,7 @@ const NavProcess = ({
       <div
         ref={navRef}
         className={`
-          nav-process w-full max-w-screen-xl bg-base-100 z-10
+          nav-process w-full max-w-7xl bg-base-100 z-10
           ${
             positionState === "sticky"
               ? "sticky top-0 left-0 right-0 mx-auto shadow-md"

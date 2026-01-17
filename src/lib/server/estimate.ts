@@ -174,8 +174,7 @@ export async function calculateEstimateFromAnswers(
   return {
     estimate: formatter.format(Math.round(price)),
     monthlyInstallment:
-      monthlyInstallmentValue !== null &&
-      monthlyInstallmentValue !== undefined
+      monthlyInstallmentValue !== null && monthlyInstallmentValue !== undefined
         ? formatter.format(Math.round(Number(monthlyInstallmentValue)))
         : undefined,
     serviceFee:

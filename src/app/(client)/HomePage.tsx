@@ -21,19 +21,19 @@ const HomePage = () => {
         <div className="background-fade-bottom " />
         <Hero />
       </section>
-      <section className="h-[700px] md:h-[700px]">
+      <section className="h-[1100px] md:h-[1200px]">
         <Present />
       </section>
       <section className="relative h-full md:h-[800px] xl:h-[900px] mb-30 overflow-visible flex items-center">
-        <div className="absolute xl:left-1/2 xl:-translate-x-1/2 xl:w-screen w-full h-full">
-          <div className="background-fade-top " />
-          <div className="background-animation-layer-right" />
-          <div className="background-fade-bottom hidden  lg:block" />
-        </div>
-        <div className="relative z-10 w-full max-w-screen-xl px-6 ">
+        <div className="relative z-10 w-full max-w-7xl px-6 ">
           <Preview />
         </div>
       </section>
+      {/* <section className="h-[700px] md:h-[700px]">
+        <div className="relative z-10 w-full max-w-7xl ">
+          <WebAppProducts />
+        </div>
+      </section> */}
       <section className="h-full">
         <NavProcess onStickyChange={setIsSticky} />
       </section>
@@ -55,7 +55,7 @@ const HomePage = () => {
             className="block md:hidden object-cover"
           />
         </div>
-        <div className="relative z-10 w-full max-w-screen-xl">
+        <div className="relative z-10 w-full max-w-7xl">
           <CallToAction />
         </div>
       </section>

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { FaBell, FaCommentDots } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useNotifications } from "@/hooks/useNotifications";
-import { createClient } from "@/utils/supabase/client";
+import { getRequestNamesByIds } from "@/lib/client/actions";
 
 const formatTime = (iso: string, locale: string) => {
   const date = new Date(iso);
@@ -63,7 +63,6 @@ const formatTime = (iso: string, locale: string) => {
 
 interface RequestName {
   id: number;
-  name: string | null;
   company: string | null;
 }
 
@@ -78,8 +77,6 @@ const NotificationList = () => {
   const [requestNames, setRequestNames] = useState<Map<number, string>>(
     new Map()
   );
-  const supabase = createClient();
-
   const hasNotifications = notifications.length > 0;
 
   useEffect(() => {
@@ -91,39 +88,32 @@ const NotificationList = () => {
 
       if (requestIds.length === 0) return;
 
-      setRequestNames((prevNames) => {
-        const missingIds = requestIds.filter((id) => !prevNames.has(id));
-        if (missingIds.length === 0) return prevNames;
+      const missingIds = requestIds.filter((id) => !requestNames.has(id));
+      if (missingIds.length === 0) return;
 
-        supabase
-          .from("requests")
-          .select("id, name, company")
-          .in("id", missingIds)
-          .then(({ data }) => {
-            if (data) {
-              setRequestNames((currentNames) => {
-                const updatedNames = new Map(currentNames);
-                data.forEach((request: RequestName) => {
-                  const displayName =
-                    (request.company && request.company.trim()) ||
-                    (request.name && request.name.trim()) ||
-                    "kunde";
-                  updatedNames.set(request.id, displayName);
-                });
-                return updatedNames;
-              });
-            }
+      try {
+        const data = await getRequestNamesByIds(missingIds);
+        if (data?.length) {
+          setRequestNames((currentNames) => {
+            const updatedNames = new Map(currentNames);
+            data.forEach((request: RequestName) => {
+              const displayName =
+                (request.company && request.company.trim()) || "kunde";
+              updatedNames.set(request.id, displayName);
+            });
+            return updatedNames;
           });
-
-        return prevNames;
-      });
+        }
+      } catch (error) {
+        console.error("Failed to fetch request names:", error);
+      }
     };
 
     fetchRequestNames();
-  }, [notifications, supabase]);
+  }, [notifications, requestNames]);
 
   const headerSubtitle = useMemo(() => {
-    if (hasNotifications) return t("latest_notifications");
+    if (hasNotifications) return "";
     return t("no_notifications") || "No notifications";
   }, [hasNotifications, t]);
 
@@ -144,7 +134,6 @@ const NotificationList = () => {
   ) => {
     closeDropdown();
     await markAsRead(notificationId);
-    // Only include requestId if it looks like a UUID (Supabase errors otherwise)
     const idStr =
       requestId !== null && requestId !== undefined ? String(requestId) : "";
     const isUuid = /^[0-9a-fA-F-]{36}$/.test(idStr);
@@ -179,7 +168,11 @@ const NotificationList = () => {
       >
         <div className="flex flex-col items-center">
           <span className="font-semibold">{t("notifications")}</span>
-          <span className="text-sm text-base-content/60">{headerSubtitle}</span>
+          {!hasNotifications && (
+            <span className="text-sm text-base-content/60">
+              {headerSubtitle}
+            </span>
+          )}
         </div>
         {hasNotifications ? (
           <div className="mt-2 max-h-72 overflow-y-auto space-y-2 w-full overflow-x-visible">
@@ -188,7 +181,7 @@ const NotificationList = () => {
               return (
                 <li
                   key={item.id}
-                  className="p-0 w-full rounded-lg hover:bg-base-300 transition-colors cursor-pointer  flex flex-col gap-1 tooltip tooltip-bottom"
+                  className="p-0 w-full rounded-lg hover:bg-base-300 transition-colors cursor-pointer  flex flex-col gap-1 lg:tooltip tooltip-bottom"
                   onClick={() => handleSelect(item.id, item.request_id)}
                   data-tip={time.tooltip}
                   tabIndex={0}
@@ -205,7 +198,7 @@ const NotificationList = () => {
                     </div>
                     <div className="flex flex-col items-start flex-1 min-w-0">
                       <span className="font-medium leading-tight flex items-center gap-2 text-secondary">
-                        {t("new_request", { name: "" }).trim() ||
+                        {t("new_request", { company: "" }).trim() ||
                           "Ny henvendelse"}
                       </span>
 

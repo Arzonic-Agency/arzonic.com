@@ -407,9 +407,24 @@
   },
   "Present": {
     "title": "Superfast webapps – built for performance and growth",
+    "badge": "OUR EXPERTISE",
     "customDesign": {
-      "title": "Custom design that reflects you",
-      "description": "No templates. No compromises. We design every pixel to match your brand and make you stand out."
+      "badge": "DEVELOPMENT",
+      "stats": "15+ Projects",
+      "title": "Web & Mobile Apps",
+      "description": "We design and develop high-performing web and mobile applications.",
+      "button": "View Cases"
+    },
+    "landingPages": {
+      "badge": "LANDING PAGES",
+      "title": "Landing Pages",
+      "description": "Launch faster with powerful, fully customizable landing pages built with modern tools that are easy to manage and optimized for conversion.",
+      "examples": [
+        "Lead generation",
+        "Product launches",
+        "Startups & SaaS",
+        "Service businesses"
+      ]
     },
     "easyToManage": {
       "title": "Easy to manage",
@@ -420,8 +435,14 @@
       "description": "No more sluggish load times. Your site is built for speed – on mobile, desktop and all between."
     },
     "builtToGrow": {
+      "badge": "GROWTH",
       "title": "Built to grow with your business",
       "description": "From small team to full-scale operation. Your website is flexible, future-proof, and ready to scale with you."
+    },
+    "cta": {
+      "title": "Ready to Transform?",
+      "description": "Let's create digital experiences that drive measurable growth for your business.",
+      "button": "Book a call"
     }
   },
   "Preview": {
@@ -499,9 +520,9 @@
   "OfferForm": {
     "title": "Request a custom quote",
     "fields": {
-      "name": {
-        "label": "Name",
-        "placeholder": "Enter your name"
+      "organization": {
+        "label": "Company",
+        "placeholder": "Enter company name"
       },
       "email": {
         "label": "Email Address",
@@ -539,7 +560,7 @@
       "generic": "Something went wrong. Please try again later."
     },
     "aria": {
-      "nameInput": "Enter your name",
+      "organizationInput": "Enter your name",
       "emailInput": "Enter your email",
       "phoneInput": "Enter your phone number",
       "messageInput": "Enter your message",

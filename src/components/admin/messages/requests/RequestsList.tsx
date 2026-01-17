@@ -137,6 +137,7 @@ const RequestsList = ({
                   <input
                     type="checkbox"
                     className="checkbox checkbox-primary"
+                    checked={false}
                     disabled
                     aria-hidden="true"
                   />

@@ -42,6 +42,22 @@ export async function getLatestCases() {
   return data;
 }
 
+export async function getRequestNamesByIds(requestIds: number[]) {
+  if (!requestIds.length) return [];
+  const supabase = await createAdminClient();
+  const { data, error } = await supabase
+    .from("requests")
+    .select("id, company")
+    .in("id", requestIds);
+
+  if (error) {
+    console.error("Failed to fetch request names:", error.message);
+    throw error;
+  }
+
+  return data || [];
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // JOBS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -281,7 +297,6 @@ export async function createRequest(
       .from("requests")
       .insert([
         {
-          name,
           company,
           mobile,
           mail,
@@ -301,7 +316,7 @@ export async function createRequest(
     }
 
     // Create notifications for admins/developers using service role
-    const displayName = (company && company.trim()) || (name && name.trim()) || "kunde";
+    const displayName = (company && company.trim()) || "kunde";
 
     const numericRequestId =
       typeof request.id === "number"
@@ -321,7 +336,7 @@ export async function createRequest(
 }
 
 export async function createContactRequest(
-  name: string,
+  company: string,
   email: string,
   country: string,
   mobile: string,
@@ -333,7 +348,7 @@ export async function createContactRequest(
   const { data: request, error: reqErr } = await supabase
     .from("requests")
     .insert({
-      name,
+      company,
       mail: email,
       country,
       mobile,
@@ -357,7 +372,7 @@ export async function createContactRequest(
   }
 
   // Create notifications for admins/developers
-  const displayName = (name && name.trim()) || "kunde";
+  const displayName = (company && company.trim()) || "kunde";
 
   const numericRequestId =
     typeof requestId === "number" ? requestId : parseInt(String(requestId), 10);
@@ -379,6 +394,50 @@ export type EstimatorQuestion = {
   type: "single" | "multiple";
   options: Option[];
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUSH NOTIFICATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function registerPushSubscription(
+  subscription: PushSubscription
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // Konverter subscription til JSON format
+    const subscriptionJson = subscription.toJSON();
+
+    if (!subscriptionJson.keys) {
+      return { success: false, error: "Invalid subscription keys" };
+    }
+
+    const response = await fetch("/api/push/subscribe", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        endpoint: subscriptionJson.endpoint,
+        keys: {
+          p256dh: subscriptionJson.keys.p256dh,
+          auth: subscriptionJson.keys.auth,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      return { success: false, error: error.message || "Unknown error" };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Fejl ved registrering af push subscription:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
 
 export async function getEstimatorQuestions(
   lang: "en" | "da" = "en"

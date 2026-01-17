@@ -6,7 +6,7 @@ import { createContactRequest } from "@/lib/client/actions";
 
 export async function POST(req: Request) {
   const {
-    name,
+    company,
     email,
     country,
     phone,
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     lang = "en",
     consentChecked, // Add consentChecked
   } = (await req.json()) as {
-    name: string;
+    company: string;
     email: string;
     country: string;
     phone: string;
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     consentChecked: boolean; // Add consentChecked type
   };
 
-  if (!name || !email || !answers?.length || consentChecked === undefined) {
+  if (!company || !email || !answers?.length || consentChecked === undefined) {
     return NextResponse.json(
       { error: "Missing required fields" },
       { status: 400 }
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
   try {
     // 3) Persist the request
     const { requestId } = await createContactRequest(
-      name,
+      company,
       email,
       country,
       phone,
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
 
     // 4) Send the email
     await sendEstimatorEmail(
-      name,
+      company,
       email,
       estimate,
       details,

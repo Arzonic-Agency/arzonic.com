@@ -1784,3 +1784,112 @@ export async function createDocsTopic(title: string, slug: string) {
     throw err;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUSH NOTIFICATIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Gemmer push subscription i Supabase
+ * @param subscription - PushSubscription objekt fra browseren
+ * @param userId - Optional user ID hvis brugeren er logget ind
+ * @param userAgent - Optional user agent string (browser/device info)
+ */
+export async function savePushSubscription(
+  subscription: {
+    endpoint: string;
+    keys: {
+      p256dh: string;
+      auth: string;
+    };
+  },
+  userId?: string,
+  userAgent?: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    // Konverter subscription til JSON format
+    const subscriptionData = {
+      endpoint: subscription.endpoint,
+      p256dh: subscription.keys.p256dh,
+      auth: subscription.keys.auth,
+      user_id: userId || null,
+      user_agent: userAgent || null,
+      created_at: new Date().toISOString(),
+    };
+
+    // Tjek om subscription allerede findes (baseret på endpoint)
+    const { data: existing } = await supabase
+      .from("push_subscriptions")
+      .select("id")
+      .eq("endpoint", subscription.endpoint)
+      .maybeSingle();
+
+    if (existing) {
+      // Opdater eksisterende subscription
+      const { error } = await supabase
+        .from("push_subscriptions")
+        .update({
+          p256dh: subscriptionData.p256dh,
+          auth: subscriptionData.auth,
+          user_id: subscriptionData.user_id,
+          user_agent: subscriptionData.user_agent,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", existing.id);
+
+      if (error) {
+        console.error("Fejl ved opdatering af push subscription:", error);
+        return { success: false, error: error.message };
+      }
+    } else {
+      // Opret ny subscription
+      const { error } = await supabase
+        .from("push_subscriptions")
+        .insert([subscriptionData]);
+
+      if (error) {
+        console.error("Fejl ved oprettelse af push subscription:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error("Unexpected error during push subscription save:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
+  }
+}
+
+/**
+ * Sletter push subscription fra Supabase
+ */
+export async function deletePushSubscription(
+  endpoint: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { error } = await supabase
+      .from("push_subscriptions")
+      .delete()
+      .eq("endpoint", endpoint);
+
+    if (error) {
+      console.error("Fejl ved sletning af push subscription:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err) {
+    console.error("Unexpected error during push subscription delete:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
+  }
+}

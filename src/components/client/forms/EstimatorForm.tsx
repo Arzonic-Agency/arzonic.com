@@ -9,8 +9,8 @@ import { FaRegCheckCircle } from "react-icons/fa";
 type Country = { name: string; code: string; dial: string; flag: string };
 
 type Props = {
-  name: string;
-  setName: (val: string) => void;
+  company: string;
+  setCompany: (val: string) => void;
   email: string;
   setEmail: (val: string) => void;
   phoneNumber: string;
@@ -27,8 +27,8 @@ type Props = {
 };
 
 const EstimatorContactForm = ({
-  name,
-  setName,
+  company,
+  setCompany,
   email,
   setEmail,
   phoneNumber,
@@ -58,12 +58,16 @@ const EstimatorContactForm = ({
 
       <input
         type="text"
-        placeholder={t("estimator.form.namePlaceholder", "Your name")}
-        aria-label={t("aria.estimator.nameInput", "Enter your name")}
+        placeholder={t(
+          "estimator.form.organizationPlaceholder",
+          "Enter company name"
+        )}
+        aria-label={t("aria.estimator.organizationInput", "Enter company name")}
         required
-        name="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        name="organization"
+        autoComplete="organization"
+        value={company}
+        onChange={(e) => setCompany(e.target.value)}
         className="input input-ghost bg-base-300 w-full max-w-md"
       />
 
@@ -131,7 +135,7 @@ const EstimatorContactForm = ({
           onChange={(e) => setConsentChecked(e.target.checked)}
           required
         />
-        <label htmlFor="consent" className="label-text text-xs">
+        <label htmlFor="consent" className="label-text text-sm">
           {t("estimator.consent.agree", "I agree to the")}{" "}
           <ConsentModal
             buttonText={t("estimator.consent.privacyPolicy", "Privacy Policy")}

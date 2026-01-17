@@ -45,7 +45,7 @@ const UserSettingsModal = () => {
 
   return (
     <dialog ref={dialogRef} className="modal">
-      <div className="modal-box max-w-5xl w-full h-full sm:h-[60vh] md:p-3 p-0 bg-base-100 rounded-lg shadow-lg flex flex-col gap-2">
+      <div className="modal-box max-w-5xl w-full h-full sm:h-[80vh] md:p-3 p-0 bg-base-100 rounded-lg shadow-lg flex flex-col gap-2">
         {/* Header */}
         <div className="flex items-center justify-between p-6 bg-base-200 rounded-lg">
           <h3 className="font-bold text-xl md:text-2xl">

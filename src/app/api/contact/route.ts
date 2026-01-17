@@ -2,17 +2,17 @@ import { NextResponse } from "next/server";
 import { sendContactEmail } from "@/lib/server/mails";
 
 interface ContactPayload {
-  name: string;
+  company: string;
   email: string;
   message: string;
   lang?: "en" | "da";
 }
 
 export async function POST(request: Request) {
-  const { name, email, message, lang } =
+  const { company, email, message, lang } =
     (await request.json()) as ContactPayload;
 
-  if (!name || !email || !message) {
+  if (!company || !email || !message) {
     return NextResponse.json(
       { error: "Missing required fields." },
       { status: 400 }
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await sendContactEmail(name, email, message, lang ?? "en");
+    await sendContactEmail(company, email, message, lang ?? "en");
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Mail error:", err);

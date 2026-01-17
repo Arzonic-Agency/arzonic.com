@@ -50,7 +50,7 @@ const PriceEstimator = () => {
   const [direction, setDirection] = useState(0);
   const [groupSel, setGroupSel] = useState<number[][]>([]);
   const [answers, setAnswers] = useState<number[][]>([]);
-  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [countries, setCountries] = useState<Country[]>([]);
   const [phonePrefix, setPhonePrefix] = useState("");
@@ -149,7 +149,7 @@ const PriceEstimator = () => {
     setDirection(0);
     setAnswers([]);
     setGroupSel([]);
-    setName("");
+    setCompany("");
     setEmail("");
     setPhoneNumber("");
     setPhonePrefix("");
@@ -212,7 +212,7 @@ const PriceEstimator = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
+          company,
           email,
           country: selectedCountry,
           phone: fullPhone,
@@ -318,8 +318,8 @@ const PriceEstimator = () => {
 
         {step === slides && !success && (
           <EstimatorContactForm
-            name={name}
-            setName={setName}
+            company={company}
+            setCompany={setCompany}
             email={email}
             setEmail={setEmail}
             phoneNumber={phoneNumber}

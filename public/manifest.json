@@ -1,7 +1,7 @@
 {
   "name": "Arzonic Agency",
   "short_name": "Arzonic",
-  "start_url": "/",
+  "start_url": "/admin",
   "display": "standalone",
   "background_color": "#171717",
   "theme_color": "#171717",

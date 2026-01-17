@@ -192,20 +192,20 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   return (
     <>
       {/* Desktop Table */}
-      <div className="hidden md:flex flex-col gap-10 items-center w-full">
+      <div className="hidden md:flex flex-col gap-10 items-center w-full ">
         <h2 className="text-xl md:text-3xl font-light text-center">
           {translate("title")}
         </h2>
 
-        <div className="mt-8 rounded-xl overflow-hidden w-full max-w-5xl">
+        <div className="mt-8 rounded-xl overflow-hidden w-full max-w-5xl bg-base-100">
           <table className="min-w-full border-3 border-base-200 rounded-xl">
             <thead className="bg-base-200">
               <tr>
-                <th className="p-3 text-left">
+                <th className="p-5 text-left">
                   {translate("table.featureColumn")}
                 </th>
                 {rawPlans.map((plan) => (
-                  <th key={plan.key} className="p-3 text-left">
+                  <th key={plan.key} className="p-5 text-left">
                     <div className="font-semibold">{plan.name}</div>
                     <div className="text-sm font-medium text-zinc-500">
                       {translate("startingFrom")} {getPrice(plan.key)}
@@ -217,9 +217,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
             <tbody>
               {features.map((feat, idx) => (
                 <tr key={idx}>
-                  <td className="px-3 py-4 font-medium text-xs md:text-sm">
-                    {feat}
-                  </td>
+                  <td className="p-5 font-medium text-xs md:text-sm">{feat}</td>
                   {rawPlans.map((plan) => (
                     <td key={`${plan.key}-${idx}`} className="p-3 text-sm">
                       {plan.values[idx]}
@@ -234,11 +232,11 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
               <>
                 <thead className="bg-base-200">
                   <tr>
-                    <th className="p-3 text-left">Ekstra services</th>
+                    <th className="p-5 text-left">Ekstra services</th>
                     {rawPlans.map((plan) => (
                       <th
                         key={`extra-head-${plan.key}`}
-                        className="p-3 text-left"
+                        className="p-5 text-left"
                       >
                         <div className="font-semibold">{plan.name}</div>
                       </th>
@@ -248,7 +246,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                 <tbody>
                   {extraServices.map((service, idx) => (
                     <tr key={`desktop-extra-${idx}`}>
-                      <td className="px-3 py-4 font-medium text-xs md:text-sm flex items-center gap-1">
+                      <td className="p-5 font-medium text-xs md:text-sm flex items-center gap-1">
                         {isDanish ? service.label_dk : service.label_en}
                         {(service.desc_dk || service.desc_en) && (
                           <div className="dropdown dropdown-start">
@@ -271,7 +269,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                       {rawPlans.map((plan) => (
                         <td
                           key={`extra-cell-${plan.key}-${idx}`}
-                          className="p-3 text-sm"
+                          className="p-5 text-sm"
                         >
                           {plan.key === "starter" &&
                           isBlockedForStarter(service.label_en)
@@ -292,7 +290,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
             )}
           </table>
 
-          <div className="text-xs mt-3 flex justify-between items-center px-3">
+          <div className="text-xs mt-3 flex justify-between items-center px-5">
             <div className="text-zinc-400">
               <p>{translate("vatNote")}</p>
             </div>

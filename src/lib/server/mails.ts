@@ -12,13 +12,13 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendContactEmail(
-  name: string,
+  company: string,
   email: string,
   message: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
   const adminText = `You’ve received a new message:
-Name: ${name}
+Company: ${company}
 Email: ${email}
 
 ${message}`;
@@ -36,7 +36,7 @@ ${message}`;
     <p style="font-size: 12px; color: #888; margin-top: 32px;">This is an automated notification from Arzonic Agency.</p>
   </div>`;
 
-  const userText = `Hi ${name},
+  const userText = `Hi ${company},
 
 Thanks for reaching out! We’ll be in touch shortly.
 
@@ -48,7 +48,7 @@ Thanks for reaching out! We’ll be in touch shortly.
       <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="40" style="display: block;" />
       <span style="font-size: 22px; padding-left: 5px; padding-top: 1px; font-weight: bold; color: #111;">Arzonic</span>
     </div>
-    <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for your message, ${name}!</h2>
+    <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for your message, ${company}!</h2>
     <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; margin: 16px 0;">
       <p style="margin: 0; font-size: 16px; font-weight: 500;">
         We’ve received your inquiry and will get back to you shortly.
@@ -91,8 +91,8 @@ Thanks for reaching out! We’ll be in touch shortly.
     to: process.env.ADMIN_EMAIL!,
     subject:
       lang === "da"
-        ? `Ny kontaktbesked fra ${name}`
-        : `New contact form submission from ${name}`,
+        ? `Ny kontaktbesked fra ${company}`
+        : `New contact form submission from ${company}`,
     text: adminTextTr,
     html: adminHtmlTr,
   });
@@ -103,8 +103,8 @@ Thanks for reaching out! We’ll be in touch shortly.
     to: email,
     subject:
       lang === "da"
-        ? `Vi har modtaget din besked, ${name}`
-        : `We’ve received your message, ${name}!`,
+        ? `Vi har modtaget din besked, ${company}`
+        : `We’ve received your message, ${company}!`,
     text: userTextTr,
     html: userHtmlTr,
   });
@@ -125,7 +125,7 @@ Thanks for reaching out! We’ll be in touch shortly.
  */
 
 export async function sendEstimatorEmail(
-  name: string,
+  company: string,
   email: string,
   estimate: string,
   details: string,
@@ -164,7 +164,7 @@ export async function sendEstimatorEmail(
           .join("\n    ")
       : "";
   const adminText = `Estimate request details:
-    Name: ${name}
+    Company: ${company}
     Email: ${email}
     Selected package: ${packageLabel}
     ${estimateLine}
@@ -173,7 +173,7 @@ export async function sendEstimatorEmail(
     ${details}`;
 
   const adminHtml = `<h2>New Estimate Request</h2>
-    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Company:</strong> ${company}</p>
     <p><strong>Email:</strong> ${email}</p>
     <p><strong>${
       lang === "da" ? "Anslået pris" : "Estimated price"
@@ -204,7 +204,7 @@ export async function sendEstimatorEmail(
        <p><strong>Selected package:</strong> ${packageLabel}</p>
     <p>${details.replace(/\n/g, "<br/>")}</p>`;
 
-  const userText = `Hi ${name},
+  const userText = `Hi ${company},
 
     Thanks for using our project estimator – we're excited to learn more about your vision!
 
@@ -221,7 +221,7 @@ export async function sendEstimatorEmail(
     The Arzonic Team`;
 
   const userHtml = `<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 32px 24px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); color: #333333;">
-    <p>Hi ${name},</p>
+    <p>Hi ${company},</p>
     <p>Thanks for using our project estimator – we’re excited to learn more about your vision!</p>
       <strong>${
         lang === "da" ? "Anslået pris" : "Estimated price"
@@ -279,8 +279,8 @@ export async function sendEstimatorEmail(
     to: process.env.ADMIN_EMAIL!,
     subject:
       lang === "da"
-        ? `Ny tilbudsanmodning fra ${name}`
-        : `New estimate request from ${name}`,
+        ? `Ny tilbudsanmodning fra ${company}`
+        : `New estimate request from ${company}`,
     text: adminTextTr,
     html: adminHtmlTr,
   });
@@ -290,8 +290,8 @@ export async function sendEstimatorEmail(
     to: email,
     subject:
       lang === "da"
-        ? `Dit forslag er klar, ${name}!`
-        : `Your project estimate is ready, ${name}`,
+        ? `Dit forslag er klar, ${company}!`
+        : `Your project estimate is ready, ${company}`,
     text: userTextTr,
     html: userHtmlTr,
   });
@@ -299,31 +299,31 @@ export async function sendEstimatorEmail(
 
 /**
  * Sends job application confirmation emails to admin and applicant.
- * @param name - applicant's name
+ * @param company - applicant's company
  * @param mail - applicant's email address
  * @param title - title of the job applied for
  * @param lang - target language code (e.g., 'en' or 'da')
  */
 export async function sendJobApplicationConfirmEmail(
-  name: string,
+  company: string,
   mail: string,
   title: string,
   lang: "en" | "da" = "en"
 ): Promise<void> {
   const adminText = `New job application received:
-  Name: ${name}
+  Company: ${company}
   Email: ${mail}
   Job Title: ${title}
   `;
 
   const adminHtml = `
   <h2>New Job Application</h2>
-  <p><strong>Name:</strong> ${name}</p>
+  <p><strong>Company:</strong> ${company}</p>
   <p><strong>Mail:</strong> ${mail}</p>
   <p><strong>Job Post:</strong> ${title}</p>
   `;
 
-  const userText = `Hi ${name},
+  const userText = `Hi ${company},
 
   Thank you for applying for the ${title} position at Arzonic. We’ve received your application and will review it shortly.
 
@@ -336,7 +336,7 @@ export async function sendJobApplicationConfirmEmail(
       <img src="https://arzonic.com/icon-512x512.png" alt="Arzonic Logo" width="40" style="display: block;" />
       <span style="font-size: 22px; padding-left: 5px; padding-top: 1px; font-weight: bold; color: #111;">Arzonic</span>
     </div>
-    <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for applying, ${name}!</h2>
+    <h2 style="color: #1a1a1a; font-size: 20px; margin: 0 0 16px;">Thanks for applying, ${company}!</h2>
     <div style="background-color: #f9f9f9; padding: 16px; border-radius: 8px; margin: 16px 0;">
       <p style="margin: 0; font-size: 16px;">
         We’ve received your application for the <strong>${title}</strong> position. We’ll get back to you — no matter what.
@@ -369,8 +369,8 @@ export async function sendJobApplicationConfirmEmail(
     to: process.env.ADMIN_EMAIL!,
     subject:
       lang === "da"
-        ? `Ny jobansøgning fra ${name}`
-        : `New job application from ${name}`,
+        ? `Ny jobansøgning fra ${company}`
+        : `New job application from ${company}`,
     text: adminTextTr,
     html: adminHtmlTr,
   });

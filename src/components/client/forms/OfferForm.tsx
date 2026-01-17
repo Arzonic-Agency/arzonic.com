@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 const OfferForm = () => {
   const { t } = useTranslation();
 
-  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [mobile, setMobile] = useState("");
   const [mail, setMail] = useState("");
   const [category, setCategory] = useState("");
@@ -44,7 +44,15 @@ const OfferForm = () => {
     setSuccessText("");
 
     try {
-      await createRequest(name, "", mobile, mail, category, isChecked, message);
+      await createRequest(
+        company,
+        "",
+        mobile,
+        mail,
+        category,
+        isChecked,
+        message
+      );
 
       const emailBody = [
         `Phone: ${mobile}`,
@@ -61,7 +69,7 @@ const OfferForm = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
+          company,
           email: mail,
           message: emailBody,
           lang,
@@ -100,7 +108,7 @@ const OfferForm = () => {
     setIsSuccess(false);
     setSuccessText("");
     setErrorText("");
-    setName("");
+    setCompany("");
     setMail("");
     setMobile("");
     setCategory("");
@@ -130,19 +138,19 @@ const OfferForm = () => {
             <div className="flex-1 flex flex-col gap-3">
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">
-                  {t("OfferForm.fields.name.label")}
+                  {t("OfferForm.fields.organization.label")}
                 </legend>
-                <label htmlFor="name" className="form-control w-full">
+                <label htmlFor="organization" className="form-control w-full">
                   <input
-                    id="name"
-                    name="name"
+                    id="organization"
+                    name="organization"
                     type="text"
-                    autoComplete="name"
-                    placeholder={t("OfferForm.fields.name.placeholder")}
-                    aria-label={t("OfferForm.aria.nameInput")}
+                    autoComplete="organization"
+                    placeholder={t("OfferForm.fields.organization.placeholder")}
+                    aria-label={t("OfferForm.aria.organizationInput")}
                     className="input input-ghost bg-base-200 w-full md:max-w-xs"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
                     required
                   />
                 </label>
@@ -189,9 +197,8 @@ const OfferForm = () => {
 
             {/* Category & Message */}
             <div className="flex-1 flex flex-col gap-3">
-              <fieldset className="fieldset">
-                <TaskSelect onChange={setCategory} />
-              </fieldset>
+              <TaskSelect onChange={setCategory} />
+
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">
                   {t("OfferForm.fields.message.label")}
@@ -233,7 +240,10 @@ const OfferForm = () => {
               aria-label={t("OfferForm.aria.consentCheckbox")}
               required
             />
-            <label htmlFor="consent" className="label-text text-xs max-w-60">
+            <label
+              htmlFor="consent"
+              className="label-text text-xs max-w-64 flex items-center gap-1"
+            >
               {t("OfferForm.fields.consent.label")}{" "}
               <ConsentModal
                 buttonText={t("OfferForm.fields.consent.readMore")}

@@ -16,7 +16,7 @@ const Footer = () => {
 
   return (
     <div>
-      <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-5 md:p-9 mt-12 border-base-300 border-t">
+      <footer className="footer sm:footer-horizontal bg-base-100 text-base-content p-5 md:p-9 xl:p-12 mt-12 border-base-300 border-t rounded-2xl">
         <nav>
           <h5 className="footer-title">{t("Footer.solutions")}</h5>
           <Link
