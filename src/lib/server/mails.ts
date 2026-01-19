@@ -69,8 +69,6 @@ Thanks for reaching out! We’ll be in touch shortly.
   let userTextTr = userText;
   let userHtmlTr = userHtml;
 
-  console.log("[sendContactEmail] selected lang=", lang);
-
   if (lang !== "en") {
     [adminTextTr, userTextTr] = await Promise.all([
       translateText(adminText, lang),
@@ -81,8 +79,6 @@ Thanks for reaching out! We’ll be in touch shortly.
       translateHtml(adminHtml, lang),
       translateHtml(userHtml, lang),
     ]);
-
-    console.log("[sendContactEmail] adminHtmlTr=", adminHtmlTr);
   }
 
   // Send to admin

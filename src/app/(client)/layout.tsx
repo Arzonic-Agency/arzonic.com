@@ -54,7 +54,9 @@ export default function ClientLayout({
           console.log("Service Worker registreret:", registration.scope);
 
           // Hvis VAPID key er sat, prøv at subscribe til push notifications
-          const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+          // VIGTIGT: NEXT_PUBLIC_ variabler skal hardcodes eller injectes via script
+          const vapidPublicKey = "BGLYSfFimmD-4FNiSeyBkE8RFXUU7QAX9RrH6mCC3vwauU_X8DdLUwZs0zabLs5J1cqmLb1RtJhECmKxA2r36u8";
+
           if (vapidPublicKey) {
             // Vent lidt for at sikre service worker er klar
             await new Promise((resolve) => setTimeout(resolve, 1000));

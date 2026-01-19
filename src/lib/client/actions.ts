@@ -410,16 +410,26 @@ export async function registerPushSubscription(
       return { success: false, error: "Invalid subscription keys" };
     }
 
+    // Hent user ID hvis brugeren er logget ind
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     // Importer og kald server action direkte
     const { savePushSubscription } = await import("@/lib/server/subscribe");
-    
-    return await savePushSubscription({
-      endpoint: subscriptionJson.endpoint!,
-      keys: {
-        p256dh: subscriptionJson.keys.p256dh!,
-        auth: subscriptionJson.keys.auth!,
+
+    return await savePushSubscription(
+      {
+        endpoint: subscriptionJson.endpoint!,
+        keys: {
+          p256dh: subscriptionJson.keys.p256dh!,
+          auth: subscriptionJson.keys.auth!,
+        },
       },
-    });
+      user?.id, // Send user ID hvis logget ind
+      navigator.userAgent // Send browser info
+    );
   } catch (error) {
     console.error("Fejl ved registrering af push subscription:", error);
     return {
