@@ -9,13 +9,32 @@ import { DefaultSeo } from "next-seo";
 import ScreenFade from "@/components/client/layout/ScreenFade";
 import { subscribeToPush } from "@/utils/push-notifications";
 import { registerPushSubscription } from "@/lib/client/actions";
+import { useTranslation } from "react-i18next";
+import { FaCookieBite } from "react-icons/fa6";
 
 export default function ClientLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { t } = useTranslation();
   const [showScroll, setShowScroll] = useState(false);
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
+
+  useEffect(() => {
+    // Check if user has already seen the cookie banner
+    const hasSeenCookie = localStorage.getItem("cookieBannerSeen");
+    if (!hasSeenCookie) {
+      // Show banner after a short delay
+      const timer = setTimeout(() => setShowCookieBanner(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const dismissCookieBanner = () => {
+    localStorage.setItem("cookieBannerSeen", "true");
+    setShowCookieBanner(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -103,6 +122,30 @@ export default function ClientLayout({
             <FaAngleUp size={17} />
           </button>
         )}
+        
+        {/* Cookie Banner */}
+        {showCookieBanner && (
+          <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-80 z-50 animate-in slide-in-from-bottom-4 duration-300">
+            <div className="card bg-base-200 ring-1 ring-base-300 shadow-xl">
+              <div className="card-body p-4 items-center text-center gap-3">
+                <div className="flex items-center gap-2">
+                  <FaCookieBite className="text-xl text-secondary" />
+                  <h2 className="card-title text-base">{t("CookieBanner.title")}!</h2>
+                </div>
+                <p className="text-sm text-zinc-400">{t("CookieBanner.message")}</p>
+                <div className="card-actions">
+                  <button 
+                    className="btn btn-primary btn-sm"
+                    onClick={dismissCookieBanner}
+                  >
+                    {t("CookieBanner.button")}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         <ScreenFade />
       </div>
     </>

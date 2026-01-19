@@ -129,7 +129,7 @@ const OfferForm = () => {
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-5 bg-base-100 md:ring-2 md:ring-base-200 rounded-lg shadow-md p-8 md:p-10"
+          className="flex flex-col gap-5 bg-base-100 md:ring-2 md:ring-base-200 rounded-lg shadow-md p-6 md:p-10"
         >
           <h2 className="text-xl font-bold">{t("OfferForm.title")}</h2>
 

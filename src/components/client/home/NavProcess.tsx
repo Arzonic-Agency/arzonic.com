@@ -171,8 +171,8 @@ const NavProcess = ({
   return (
     <div className="flex flex-col gap-5 ">
       {/* Header */}
-      <div className="flex flex-col items-center justify-center gap-3">
-        <h3 className="text-base md:text-4xl font-bold md:font-extralight">
+      <div className="flex flex-col items-start md:items-center justify-center gap-3 px-5 md:px-0">
+        <h3 className="text-xl md:text-4xl font-bold md:font-extralight">
           {t("NavProcess.header.title")}
         </h3>
         <p className="text-sm md:text-lg text-center mt-2 p-5 max-w-xs md:max-w-2xl tracking-wider hidden md:block">

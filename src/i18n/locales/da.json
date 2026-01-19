@@ -1,4 +1,9 @@
 {
+  "CookieBanner": {
+    "title": "Cookies",
+    "message": "Bare rolig, vi bruger ikke cookies. Ikke nødvendigt :)",
+    "button": "Fedt!"
+  },
   "AllRightReserved": "Alle rettigheder forbeholdes",
   "login": "Login",
   "logging_in": "Logger ind...",
@@ -446,8 +451,9 @@
     }
   },
   "Preview": {
-    "title": "Dit Dashboard, Din Måde",
-    "subtitle": "Få overblik og kontrol med et dashboard, der tilpasset til jer",
+    "badge": "Dashboard",
+    "title": "Dit Indhold, Din Måde",
+    "subtitle": "Hold kontrollen med et dashboard, bygget til jer",
     "aria": {
       "imageAlt": "Eksempel på løsning"
     }
@@ -990,6 +996,8 @@
   },
   "webAppProducts": {
     "title": "Produkter vi udvikler",
+    "title2": "Vi udvikler",
+    "subtitle": "Vi udvikler produkter, der understøtter din forretning",
     "dashboard": {
       "title": "Dashboard / CMS",
       "description": "Skræddersyede dashboards og indholdssystemer tilpasset dine behov."

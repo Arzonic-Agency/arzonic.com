@@ -92,20 +92,16 @@ const Hero = () => {
               className="mockup-phone scale-55 lg:scale-60"
             >
               <div className="mockup-phone-camera"></div>
-              <div className="mockup-phone-display text-white grid place-content-center">
-                <Image
-                  alt="wallpaper"
-                  src={
-                    isFirstImage
-                      ? "/models/mobile-screen-l.png"
-                      : "/models/mobile-screen-d.png"
-                  }
-                  width={400}
-                  height={800}
-                  className="object-cover w-full h-full"
-                  priority
-                />
-              </div>
+              <div className="mockup-phone-display relative overflow-hidden">
+  <Image
+    alt="wallpaper"
+    src={isFirstImage ? "/models/mobile-screen-l.png" : "/models/mobile-screen-d.png"}
+    fill
+    sizes="400px"
+    className="object-cover"
+    priority
+  />
+</div>
             </motion.div>
             <div className="absolute bottom-45 right-10 lg:flex hidden flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
               <div className="flex items-center justify-center gap-2">

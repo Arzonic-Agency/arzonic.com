@@ -1,4 +1,9 @@
 {
+  "CookieBanner": {
+    "title": "Cookies",
+    "message": "Relax, we don't use cookies. Not necessary :)",
+    "button": "Nice!"
+  },
   "AllRightReserved": "All rights reserved",
   "login": "Login",
   "logging_in": "Logging in...",
@@ -450,7 +455,8 @@
     }
   },
   "Preview": {
-    "title": "Your Dashboard, Your Way",
+    "badge": "Dashboard",
+    "title": "Your Content, Your Way",
     "subtitle": "Stay in control with a dashboard built around you",
     "aria": {
       "imageAlt": "Example of a solution"
@@ -988,6 +994,7 @@
   },
   "webAppProducts": {
     "title": "Products we develop",
+    "title2": "We develop",
     "dashboard": {
       "title": "Dashboard / CMS",
       "description": "Custom dashboards and content management systems tailored to your needs."

@@ -5,13 +5,13 @@ import Hero from "@/components/client/home/Hero";
 import Process from "@/components/client/home/Process";
 import NavProcess from "@/components/client/home/NavProcess";
 import Preview from "@/components/client/home/Preview";
-// import SplashScreen from "@/components/client/layout/SplashScreen";
 import Present from "@/components/client/home/Present";
 import CallToAction from "@/components/client/home/CallToAction";
 import Image from "next/image";
-
+import Products from "@/components/client/home/Products";
 const HomePage = () => {
   const [isSticky, setIsSticky] = useState(false);
+
 
   return (
     <>
@@ -21,19 +21,17 @@ const HomePage = () => {
         <div className="background-fade-bottom " />
         <Hero />
       </section>
-      <section className="h-[1100px] md:h-[1200px]">
+      <section className="h-[850px] md:h-[1200px]">
         <Present />
       </section>
-      <section className="relative h-full md:h-[800px] xl:h-[900px] mb-30 overflow-visible flex items-center">
-        <div className="relative z-10 w-full max-w-7xl px-6 ">
+      <section className="relative h-full md:h-[800px] xl:h-[900px] overflow-visible flex items-center mb-30 md:mb-0">
+        <div className="relative z-10 w-full max-w-7xl ">
           <Preview />
         </div>
       </section>
-      {/* <section className="h-[700px] md:h-[700px]">
-        <div className="relative z-10 w-full max-w-7xl ">
-          <WebAppProducts />
-        </div>
-      </section> */}
+      <section className="h-[850px] md:h-[650px] mb-20 hidden md:block">
+        <Products />
+      </section>
       <section className="h-full">
         <NavProcess onStickyChange={setIsSticky} />
       </section>
