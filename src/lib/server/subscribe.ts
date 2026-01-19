@@ -64,15 +64,19 @@ export async function sendPushNotificationsToUsers(
     (members || []).map((m) => [m.id, m.push_notifications_enabled ?? true])
   );
 
+  console.log(`📤 Sender push notifications til ${subscriptions.length} subscriptions`);
+
   // Send til alle subscriptions hvor brugeren har notifications enabled
   for (const sub of subscriptions) {
     // Tjek om brugeren har notifications enabled (default true)
     const userEnabled = preferencesMap.get(sub.user_id) ?? true;
     if (!userEnabled) {
+      console.log(`⏭️  Skip user ${sub.user_id} - notifications disabled`);
       continue; // Skip hvis brugeren har deaktiveret notifications
     }
 
     try {
+      console.log(`📨 Sender til ${sub.endpoint.substring(0, 50)}...`);
       await webpush.sendNotification(
         {
           endpoint: sub.endpoint,
@@ -88,8 +92,9 @@ export async function sendPushNotificationsToUsers(
         })
       );
       sent++;
+      console.log(`✅ Sendt til user ${sub.user_id}`);
     } catch (error: unknown) {
-      console.error("Fejl ved sending af push notification:", error);
+      console.error(`❌ Fejl ved sending til user ${sub.user_id}:`, error);
       errors++;
 
       // Hvis subscription er ugyldig, slet den
