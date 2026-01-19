@@ -1,4 +1,18 @@
 // Service Worker for Push Notifications
+// Version: 2.0.0 - Force update
+const SW_VERSION = "2.0.0";
+console.log(`[SW] Service Worker v${SW_VERSION} loaded`);
+
+self.addEventListener("install", (event) => {
+    console.log(`[SW] Installing v${SW_VERSION}...`);
+    self.skipWaiting(); // Force activation
+});
+
+self.addEventListener("activate", (event) => {
+    console.log(`[SW] Activated v${SW_VERSION}`);
+    event.waitUntil(clients.claim()); // Take control immediately
+});
+
 self.addEventListener("push", (event) => {
     console.log("[SW] Push event modtaget:", event);
 

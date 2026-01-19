@@ -1347,12 +1347,15 @@ export async function sendPushNotificationsToUsers(
     tag?: string;
   }
 ): Promise<{ success: boolean; sent: number; errors: number }> {
+  console.log(`🚀 sendPushNotificationsToUsers kaldt med ${userIds.length} userIds:`, userIds);
+  
   // Tjek om web-push er tilgængelig
   let webpush: typeof import("web-push") | null = null;
   try {
     webpush = await import("web-push");
-  } catch {
-    console.warn("web-push ikke installeret - push notifications deaktiveret");
+    console.log(`✅ web-push importeret succesfuldt`);
+  } catch (importError) {
+    console.warn("❌ web-push ikke installeret - push notifications deaktiveret", importError);
     return { success: false, sent: 0, errors: 0 };
   }
 
@@ -1365,8 +1368,10 @@ export async function sendPushNotificationsToUsers(
   const privateKey = process.env.VAPID_PRIVATE_KEY;
   const vapidEmail = process.env.VAPID_EMAIL || "noreply@arzonic.com";
 
+  console.log(`🔑 VAPID keys: publicKey=${publicKey ? 'SET' : 'MISSING'}, privateKey=${privateKey ? 'SET' : 'MISSING'}`);
+
   if (!publicKey || !privateKey) {
-    console.warn("VAPID keys ikke sat - push notifications deaktiveret");
+    console.warn("❌ VAPID keys ikke sat - push notifications deaktiveret");
     return { success: false, sent: 0, errors: 0 };
   }
 
@@ -1379,7 +1384,10 @@ export async function sendPushNotificationsToUsers(
     .select("*")
     .in("user_id", userIds);
 
+  console.log(`📋 Hentede ${subscriptions?.length || 0} subscriptions fra database`, { subError });
+
   if (subError || !subscriptions || subscriptions.length === 0) {
+    console.log(`⚠️ Ingen subscriptions fundet - returnerer tidligt`);
     return { success: true, sent: 0, errors: 0 };
   }
 
@@ -1393,15 +1401,19 @@ export async function sendPushNotificationsToUsers(
     (members || []).map((m) => [m.id, m.push_notifications_enabled ?? true])
   );
 
+  console.log(`📤 Sender push notifications til ${subscriptions.length} subscriptions`);
+
   // Send til alle subscriptions hvor brugeren har notifications enabled
   for (const sub of subscriptions) {
     // Tjek om brugeren har notifications enabled (default true)
     const userEnabled = preferencesMap.get(sub.user_id) ?? true;
     if (!userEnabled) {
+      console.log(`⏭️ Skip user ${sub.user_id} - notifications disabled`);
       continue; // Skip hvis brugeren har deaktiveret notifications
     }
 
     try {
+      console.log(`📨 Sender til ${sub.endpoint.substring(0, 50)}...`);
       await webpush.sendNotification(
         {
           endpoint: sub.endpoint,
@@ -1417,8 +1429,9 @@ export async function sendPushNotificationsToUsers(
         })
       );
       sent++;
+      console.log(`✅ Sendt til user ${sub.user_id}`);
     } catch (error: unknown) {
-      console.error("Fejl ved sending af push notification:", error);
+      console.error(`❌ Fejl ved sending til user ${sub.user_id}:`, error);
       errors++;
 
       // Hvis subscription er ugyldig, slet den
@@ -1429,6 +1442,7 @@ export async function sendPushNotificationsToUsers(
         ((error as { statusCode: number }).statusCode === 410 ||
           (error as { statusCode: number }).statusCode === 404)
       ) {
+        console.log(`🗑️ Sletter ugyldig subscription for user ${sub.user_id}`);
         await supabase
           .from("push_subscriptions")
           .delete()
@@ -1437,6 +1451,7 @@ export async function sendPushNotificationsToUsers(
     }
   }
 
+  console.log(`📊 Push notification resultat: sent=${sent}, errors=${errors}`);
   return { success: true, sent, errors };
 }
 

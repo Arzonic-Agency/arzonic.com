@@ -2,7 +2,7 @@
   "name": "Arzonic Agency",
   "short_name": "Arzonic Admin",
   "id": "/admin",
-  "start_url": "/admin",
+  "start_url": "/admin/",
   "scope": "/admin/",
   "display": "standalone",
   "background_color": "#171717",
