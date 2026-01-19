@@ -284,12 +284,14 @@ export async function createRequest(
   consent: boolean,
   message: string
 ): Promise<void> {
+  console.log(`📝 createRequest kaldt for company: ${company}`);
   const supabase = await createAdminClient();
 
   try {
     const ipResponse = await fetch("https://api64.ipify.org?format=json");
     const ipData = await ipResponse.json();
     const ipAddress = ipData.ip;
+    console.log(`🌐 IP hentet: ${ipAddress}`);
 
     const consentTimestamp = consent ? new Date().toISOString() : null;
     const { data: request, error } = await supabase
@@ -311,8 +313,11 @@ export async function createRequest(
       .single();
 
     if (error || !request) {
+      console.error(`❌ Fejl ved oprettelse af request:`, error);
       throw new Error(`Failed to create request: ${error?.message}`);
     }
+
+    console.log(`✅ Request oprettet med ID: ${request.id}`);
 
     // Create notifications for admins/developers using service role
     const displayName = (company && company.trim()) || "kunde";
@@ -322,11 +327,17 @@ export async function createRequest(
         ? request.id
         : parseInt(String(request.id), 10);
 
+    console.log(`🔢 Request ID parsed: ${numericRequestId}, isNaN: ${isNaN(numericRequestId)}`);
+
     if (!isNaN(numericRequestId)) {
+      console.log(`🔔 Kalder createNotificationForAdmins for request ${numericRequestId}`);
       await createNotificationForAdmins(numericRequestId, displayName, [
         "admin",
         "developer",
       ]);
+      console.log(`✅ createNotificationForAdmins færdig`);
+    } else {
+      console.error(`❌ Request ID er NaN, kan ikke oprette notifikationer`);
     }
   } catch (error) {
     console.error("Error in createRequest:", error);
