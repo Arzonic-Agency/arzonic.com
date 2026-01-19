@@ -1443,7 +1443,8 @@ export async function sendPushNotificationsToUsers(
 export async function createNotificationForAdmins(
   requestId: number,
   company: string,
-  allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"]
+  allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"],
+  notificationType: "request" | "estimator" = "request"
 ) {
   const supabase = await createAdminClient();
 
@@ -1461,7 +1462,7 @@ export async function createNotificationForAdmins(
     user_id: admin.id,
     request_id: requestId,
     message: company,
-    notification_type: "request",
+    notification_type: notificationType,
     is_read: false,
     created_at: now,
   }));
@@ -1475,13 +1476,18 @@ export async function createNotificationForAdmins(
   }
 
   // Send push notifications til admins
-  console.log(`🔔 Forsøger at sende push notification for request ${requestId} til ${admins.length} admins`);
+  const pushTitle = notificationType === "estimator" ? "Ny prisberegning foretaget" : "Ny request";
+  const pushBody = notificationType === "estimator" 
+    ? `${company} har foretaget en ny prisberegning`
+    : `${company} har oprettet en ny request`;
+  
+  console.log(`🔔 Forsøger at sende push notification for ${notificationType} ${requestId} til ${admins.length} admins`);
   try {
     const adminIds = admins.map((admin) => admin.id);
     const result = await sendPushNotificationsToUsers(adminIds, {
-      title: "Ny request",
-      body: `${company} har oprettet en ny request`,
-      tag: `request-${requestId}`,
+      title: pushTitle,
+      body: pushBody,
+      tag: `${notificationType}-${requestId}`,
     });
     console.log(`✅ Push notification resultat:`, result);
   } catch (pushError) {

@@ -391,7 +391,7 @@ export async function createContactRequest(
     await createNotificationForAdmins(numericRequestId, displayName, [
       "admin",
       "developer",
-    ]);
+    ], "estimator");
   }
 
   return { requestId: numericRequestId };

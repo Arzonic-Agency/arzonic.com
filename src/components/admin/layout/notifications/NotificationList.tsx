@@ -81,7 +81,7 @@ const NotificationList = () => {
         .filter(
           (n) =>
             n.request_id &&
-            n.notification_type === "request" &&
+            (n.notification_type === "request" || n.notification_type === "estimator") &&
             (!n.message || n.message === "kunde")
         )
         .map((n) => n.request_id)
@@ -127,11 +127,18 @@ const NotificationList = () => {
       return item.message;
     }
     // Fallback til request company fra databasen
-    if (item.notification_type === "request" && item.request_id) {
+    if ((item.notification_type === "request" || item.notification_type === "estimator") && item.request_id) {
       const companyName = requestNames.get(item.request_id);
       if (companyName) return companyName;
     }
     return "kunde";
+  };
+
+  const getNotificationTitle = (notificationType: string) => {
+    if (notificationType === "estimator") {
+      return t("new_price_estimate", "Ny prisberegning");
+    }
+    return t("new_request", { company: "" }).trim() || "Ny henvendelse";
   };
 
   const headerSubtitle = useMemo(() => {
@@ -220,8 +227,7 @@ const NotificationList = () => {
                     </div>
                     <div className="flex flex-col items-start flex-1 min-w-0">
                       <span className="font-medium leading-tight flex items-center gap-2 text-secondary">
-                        {t("new_request", { company: "" }).trim() ||
-                          "Ny henvendelse"}
+                        {getNotificationTitle(item.notification_type)}
                       </span>
 
                       <span className="text-sm text-base-content/70">
