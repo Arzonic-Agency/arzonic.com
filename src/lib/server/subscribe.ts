@@ -45,12 +45,16 @@ export async function sendPushNotificationsToUsers(
   webpush.setVapidDetails(`mailto:${vapidEmail}`, publicKey, privateKey);
 
   // Hent alle push subscriptions for brugere
+  console.log(`🔍 Søger efter subscriptions for userIds:`, userIds);
   const { data: subscriptions, error: subError } = await supabase
     .from("push_subscriptions")
     .select("*")
     .in("user_id", userIds);
 
+  console.log(`📊 Fandt ${subscriptions?.length || 0} subscriptions`, { subError, subscriptions });
+
   if (subError || !subscriptions || subscriptions.length === 0) {
+    console.warn(`⚠️ Ingen subscriptions fundet eller fejl - stopper her`);
     return { success: true, sent: 0, errors: 0 };
   }
 
