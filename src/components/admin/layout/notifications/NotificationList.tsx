@@ -70,7 +70,7 @@ const NotificationList = () => {
   const { notifications, unreadCount, markAllAsRead, markAsRead } =
     useNotifications();
   const hasNotifications = notifications.length > 0;
-  const [requestNames, setRequestNames] = useState<Map<number, string>>(
+  const [requestNames, setRequestNames] = useState<Map<number | string, string>>(
     new Map()
   );
 
@@ -98,7 +98,7 @@ const NotificationList = () => {
           setRequestNames((currentNames) => {
             const updatedNames = new Map(currentNames);
             data.forEach(
-              (request: { id: number; company: string | null }) => {
+              (request: { id: number | string; company: string | null }) => {
                 const displayName =
                   (request.company && request.company.trim()) || "";
                 if (displayName) {
@@ -119,7 +119,7 @@ const NotificationList = () => {
 
   const getDisplayName = (item: {
     message: string;
-    request_id: number;
+    request_id: number | string;
     notification_type: string;
   }) => {
     // Brug message hvis det ikke er tomt eller "kunde"

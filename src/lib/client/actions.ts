@@ -42,7 +42,7 @@ export async function getLatestCases() {
   return data;
 }
 
-export async function getRequestNamesByIds(requestIds: number[]) {
+export async function getRequestNamesByIds(requestIds: (number | string)[]) {
   if (!requestIds.length) return [];
   const supabase = await createAdminClient();
   const { data, error } = await supabase
@@ -322,23 +322,12 @@ export async function createRequest(
     // Create notifications for admins/developers using service role
     const displayName = (company && company.trim()) || "kunde";
 
-    const numericRequestId =
-      typeof request.id === "number"
-        ? request.id
-        : parseInt(String(request.id), 10);
-
-    console.log(`🔢 Request ID parsed: ${numericRequestId}, isNaN: ${isNaN(numericRequestId)}`);
-
-    if (!isNaN(numericRequestId)) {
-      console.log(`🔔 Kalder createNotificationForAdmins for request ${numericRequestId}`);
-      await createNotificationForAdmins(numericRequestId, displayName, [
-        "admin",
-        "developer",
-      ]);
-      console.log(`✅ createNotificationForAdmins færdig`);
-    } else {
-      console.error(`❌ Request ID er NaN, kan ikke oprette notifikationer`);
-    }
+    console.log(`🔔 Kalder createNotificationForAdmins for request ${request.id}`);
+    await createNotificationForAdmins(request.id, displayName, [
+      "admin",
+      "developer",
+    ]);
+    console.log(`✅ createNotificationForAdmins færdig`);
   } catch (error) {
     console.error("Error in createRequest:", error);
     throw error;
@@ -384,17 +373,12 @@ export async function createContactRequest(
   // Create notifications for admins/developers
   const displayName = (company && company.trim()) || "kunde";
 
-  const numericRequestId =
-    typeof requestId === "number" ? requestId : parseInt(String(requestId), 10);
+  await createNotificationForAdmins(requestId, displayName, [
+    "admin",
+    "developer",
+  ], "estimator");
 
-  if (!isNaN(numericRequestId)) {
-    await createNotificationForAdmins(numericRequestId, displayName, [
-      "admin",
-      "developer",
-    ], "estimator");
-  }
-
-  return { requestId: numericRequestId };
+  return { requestId };
 }
 
 export type Option = { id: number; text: string };

@@ -1441,11 +1441,12 @@ export async function sendPushNotificationsToUsers(
 }
 
 export async function createNotificationForAdmins(
-  requestId: number,
+  requestId: number | string,
   company: string,
   allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"],
   notificationType: "request" | "estimator" = "request"
 ) {
+  console.log(`📥 createNotificationForAdmins kaldt:`, { requestId, company, allowedRoles, notificationType });
   const supabase = await createAdminClient();
 
   const { data: admins, error: adminsError } = await supabase
@@ -1453,27 +1454,35 @@ export async function createNotificationForAdmins(
     .select("id")
     .in("role", allowedRoles);
 
+  console.log(`👥 Fandt ${admins?.length || 0} admins`, { adminsError, admins });
+
   if (adminsError || !admins || admins.length === 0) {
+    console.error(`❌ Ingen admins fundet eller fejl - returnerer tidligt`);
     return { error: "Kunne ikke oprette notifikationer" };
   }
 
   const now = new Date().toISOString();
   const notifications = admins.map((admin) => ({
     user_id: admin.id,
-    request_id: requestId,
+    request_id: typeof requestId === 'string' ? requestId : requestId,
     message: company,
     notification_type: notificationType,
     is_read: false,
     created_at: now,
   }));
 
+  console.log(`💾 Indsætter ${notifications.length} notifications i databasen`);
   const { error: notifError } = await supabase
     .from("notifications")
     .insert(notifications);
 
   if (notifError) {
+    console.error(`❌ Fejl ved indsættelse af notifications:`, notifError);
     return { error: "Kunne ikke oprette notifikationer" };
   }
+
+  console.log(`✅ Notifications indsat i database`);
+
 
   // Send push notifications til admins
   const pushTitle = notificationType === "estimator" ? "Ny prisberegning foretaget" : "Ny request";
