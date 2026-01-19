@@ -117,7 +117,7 @@ const WebAppProducts = () => {
             }}
           >
             <motion.a
-              className="flex flex-col gap-3 rounded-xl bg-base-200 ring-2 ring-base-200 p-4 md:p-5 hover:ring-primary transition-all duration-300 ease-in-out shadow-lg h-full cursor-pointer overflow-hidden relative"
+              className="flex flex-col gap-3 rounded-xl bg-accent ring-2 ring-base-200 p-4 md:p-5 hover:ring-primary transition-all duration-300 ease-in-out shadow-lg h-full cursor-pointer overflow-hidden relative"
               layout
               href={`/solutions/web-applications`}
             >

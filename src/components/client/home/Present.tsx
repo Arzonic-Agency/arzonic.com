@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import { FaAngleRight, FaArrowUpRightDots } from "react-icons/fa6";
+import { FaArrowUpRightDots, FaHandshake } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const Present = () => {
   const { t } = useTranslation();
@@ -153,18 +154,14 @@ const Present = () => {
             >
               {t("Present.customDesign.description")}
             </motion.p>
-            <motion.a
-              className="btn btn-primary btn-sm md:btn-md flex items-center gap-2 w-fit group-hover:bg-primary/90 transition-colors relative z-10"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              whileHover={{ scale: 1.05 }}
+            <Link
+              className="btn btn-accent md:btn-primary flex items-center gap-2 w-fit group-hover:bg-primary/90 transition-colors relative z-10"
+          
               href="/cases"
             >
               {t("Present.customDesign.button") || "View Cases"}
-              <FaAngleRight className="text-sm" />
-            </motion.a>
+
+            </Link>
             <motion.div
               className="absolute bottom-6 right-6 text-secondary z-10"
               variants={iconVariants}
@@ -268,7 +265,7 @@ const Present = () => {
         >
           {/* Call to Action - Left */}
           <motion.div
-            className="md:col-span-1 rounded-xl bg-linear-to-br from-primary/30 via-primary/20 to-primary/10 ring-2 ring-primary/30 min-h-[280px] md:min-h-[320px] p-6 md:p-8 flex-col gap-4 shadow-lg relative overflow-hidden cursor-pointer group hidden md:flex"
+            className="md:col-span-1 rounded-xl bg-linear-to-br from-accent via-primary/15 to-accent ring-2 ring-accent/30 min-h-[280px] md:min-h-[320px] p-6 md:p-8 flex-col gap-4 shadow-lg relative overflow-hidden cursor-pointer group hidden md:flex items-start"
             variants={cardVariants}
             layout
             layoutId="present-card-cta"
@@ -304,24 +301,19 @@ const Present = () => {
               {t("Present.cta.description") ||
                 "Let's create digital experiences that drive measurable growth for your business."}
             </motion.p>
-            <motion.a
-              className="mt-auto px-6 py-3 bg-base-300 text-base-content rounded-lg font-semibold flex items-center gap-2 w-fit group-hover:bg-base-200 transition-colors relative z-10"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              whileHover={{ scale: 1.05 }}
+            <Link
+              className="btn btn-accent "
               href="/contact"
             >
               {t("Present.cta.button") || "Book a call"}
-              <FaArrowUpRightDots className="text-sm" />
-            </motion.a>
+              <FaHandshake className="text-lg" />
+            </Link>
             {/* <Image
               src="/team/marc2.png"
               alt="Phone"
               width={180}
               height={180}
-              className="absolute bottom-0 right-10 w-32 h-32"
+              className="absolute bottom-0 right-10 w-38 h-38 blur-xs group-hover:blur-none transition-all duration-300"
             /> */}
           </motion.div>
 
@@ -340,7 +332,7 @@ const Present = () => {
               layout: {
                 type: "spring",
                 stiffness: 300,
-                damping: 30,
+                damping: 40,
               },
             }}
           >
@@ -362,6 +354,8 @@ const Present = () => {
             >
               {t("Present.builtToGrow.title")}
             </motion.h3>
+            <Image src="/seo.png" alt="Phone" width={180} height={180} className="w-20 h-auto absolute bottom-10 left-10 grayscale group-hover:grayscale-0 transition-all duration-300" />
+            <Image src="/ads.png" alt="Phone" width={180} height={180} className="w-33 h-auto absolute bottom-9 left-40 grayscale group-hover:grayscale-0 transition-all duration-300" />
             <motion.p
               className="text-sm md:text-base text-zinc-400 font-light relative z-10 flex-1"
               initial={{ opacity: 0 }}

@@ -12,7 +12,7 @@ const Preview = () => {
     <div className="flex flex-col gap-8 items-start md:items-center justify-center h-full w-full relative overflow-hidden px-3 py-8 md:py-20">
       {/* Header Section */}
       <motion.div
-        className="flex flex-col items-start md:items-center gap-4 px-5 md:px-0"
+        className="flex flex-col items-start md:items-center gap-4 px-5 md:px-0 pb-2"
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
@@ -56,10 +56,10 @@ const Preview = () => {
         transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
       >
         {/* Animated gradient background */}
-        <div className="absolute -inset-6 md:-inset-10 rounded-4xl overflow-hidden">
+        <div className="absolute -inset-6 md:-inset-10 rounded-4xl overflow-hidden ">
           {/* Primary animated gradient orb */}
           <motion.div
-            className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-primary/15 md:bg-primary/30 rounded-full blur-3xl"
+            className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-accent md:bg-accent rounded-full blur-3xl"
             animate={{
               x: [0, 50, 0],
               y: [0, 30, 0],
@@ -73,7 +73,7 @@ const Preview = () => {
           />
           {/* Secondary animated gradient orb */}
           <motion.div
-            className="absolute bottom-0 right-1/4 w-40 h-40 md:w-80 md:h-80 bg-secondary/10 md:bg-secondary/25 rounded-full blur-3xl"
+            className="absolute bottom-0 right-1/4 w-40 h-40 md:w-80 md:h-80 bg-secondary/10 md:bg-accent rounded-full blur-3xl"
             animate={{
               x: [0, -40, 0],
               y: [0, -20, 0],
@@ -105,7 +105,7 @@ const Preview = () => {
         <div className="absolute -inset-6 md:-inset-10 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_50%,var(--color-base-100)_100%)] opacity-60" />
         
         <motion.div
-          className="relative rounded-2xl overflow-hidden  p-10 md:p-20 shadow-2xl shadow-primary/10"
+          className="relative rounded-2xl overflow-hidden  p-10 md:p-16 shadow-2xl shadow-accent"
           whileHover={{ scale: 1.01, y: -2 }}
           transition={{ duration: 0.3 }}
         >

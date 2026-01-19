@@ -410,26 +410,16 @@ export async function registerPushSubscription(
       return { success: false, error: "Invalid subscription keys" };
     }
 
-    const response = await fetch("/api/push/subscribe", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    // Importer og kald server action direkte
+    const { savePushSubscription } = await import("@/lib/server/subscribe");
+    
+    return await savePushSubscription({
+      endpoint: subscriptionJson.endpoint!,
+      keys: {
+        p256dh: subscriptionJson.keys.p256dh!,
+        auth: subscriptionJson.keys.auth!,
       },
-      body: JSON.stringify({
-        endpoint: subscriptionJson.endpoint,
-        keys: {
-          p256dh: subscriptionJson.keys.p256dh,
-          auth: subscriptionJson.keys.auth,
-        },
-      }),
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message || "Unknown error" };
-    }
-
-    return { success: true };
   } catch (error) {
     console.error("Fejl ved registrering af push subscription:", error);
     return {
@@ -553,23 +543,14 @@ export async function getModelUrl(fileName: string): Promise<string> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function updatePushNotificationPreference(
+  userId: string,
   enabled: boolean
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const response = await fetch("/api/push/preference", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ enabled }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      return { success: false, error: error.message || "Unknown error" };
-    }
-
-    return { success: true };
+    // Importer og kald server action direkte
+    const { updateUserPushNotificationPreference } = await import("@/lib/server/subscribe");
+    
+    return await updateUserPushNotificationPreference(userId, enabled);
   } catch (error) {
     console.error("Fejl ved opdatering af push notification preference:", error);
     return {

@@ -416,14 +416,14 @@
     "customDesign": {
       "badge": "UDVIKLING",
       "stats": "15+ Projekter",
-      "title": "Web & Mobil Apps",
-      "description": "Vi designer og udvikler højtydende web- og mobilapplikationer.",
-      "button": "Vores Cases"
+      "title": "Webapplikationer",
+      "description": "Vi designer og udvikler højtydende webapplikationer til mobil og desktop",
+      "button": "Se vores cases"
     },
     "landingPages": {
       "badge": "LANDINGPAGES",
       "title": "Landingpages",
-      "description": "Lancer hurtigere med kraftfulde, fuldt tilpasselige landingpages bygget med moderne værktøjer, der er nemme at administrere og optimeret til konvertering.",
+      "description": "Lancer hurtigere med kraftfulde, fuldt tilpasselige landingpages bygget med moderne værktøjer, der er nemme at administrere og optimeret til konvertering",
       "examples": [
         "Lead generation",
         "Product launches",
