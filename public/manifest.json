@@ -1,6 +1,6 @@
 {
   "name": "Arzonic Agency",
-  "short_name": "Arzonic",
+  "short_name": "Arzonic Admin",
   "id": "/admin",
   "start_url": "/admin",
   "scope": "/admin/",
@@ -12,3 +12,4 @@
     { "src": "/icon-512x512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
+
