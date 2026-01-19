@@ -277,7 +277,6 @@ export async function getLatestReviews() {
 }
 
 export async function createRequest(
-  name: string,
   company: string,
   mobile: string,
   mail: string,
@@ -400,35 +399,23 @@ export type EstimatorQuestion = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function registerPushSubscription(
-  subscription: PushSubscription
+  subscriptionData: {
+    endpoint: string;
+    keys: {
+      p256dh: string;
+      auth: string;
+    };
+  },
+  userId?: string,
+  userAgent?: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    // Konverter subscription til JSON format
-    const subscriptionJson = subscription.toJSON();
-
-    if (!subscriptionJson.keys) {
-      return { success: false, error: "Invalid subscription keys" };
-    }
-
-    // Hent user ID hvis brugeren er logget ind
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    // Importer og kald server action direkte
     const { savePushSubscription } = await import("@/lib/server/subscribe");
 
     return await savePushSubscription(
-      {
-        endpoint: subscriptionJson.endpoint!,
-        keys: {
-          p256dh: subscriptionJson.keys.p256dh!,
-          auth: subscriptionJson.keys.auth!,
-        },
-      },
-      user?.id, // Send user ID hvis logget ind
-      navigator.userAgent // Send browser info
+      subscriptionData,
+      userId,
+      userAgent
     );
   } catch (error) {
     console.error("Fejl ved registrering af push subscription:", error);

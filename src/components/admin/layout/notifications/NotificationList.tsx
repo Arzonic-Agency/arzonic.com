@@ -61,11 +61,6 @@ const formatTime = (iso: string, locale: string) => {
   return { label, tooltip };
 };
 
-interface RequestName {
-  id: number;
-  company: string | null;
-}
-
 const NotificationList = () => {
   const { t, i18n } = useTranslation();
   const router = useRouter();
@@ -74,15 +69,21 @@ const NotificationList = () => {
   const menuRef = useRef<HTMLUListElement>(null);
   const { notifications, unreadCount, markAllAsRead, markAsRead } =
     useNotifications();
+  const hasNotifications = notifications.length > 0;
   const [requestNames, setRequestNames] = useState<Map<number, string>>(
     new Map()
   );
-  const hasNotifications = notifications.length > 0;
 
+  // Hent company navne fra requests tabellen for notifikationer uden message
   useEffect(() => {
     const fetchRequestNames = async () => {
       const requestIds = notifications
-        .filter((n) => n.request_id && n.notification_type === "request")
+        .filter(
+          (n) =>
+            n.request_id &&
+            n.notification_type === "request" &&
+            (!n.message || n.message === "kunde")
+        )
         .map((n) => n.request_id)
         .filter((id, index, self) => self.indexOf(id) === index);
 
@@ -96,11 +97,15 @@ const NotificationList = () => {
         if (data?.length) {
           setRequestNames((currentNames) => {
             const updatedNames = new Map(currentNames);
-            data.forEach((request: RequestName) => {
-              const displayName =
-                (request.company && request.company.trim()) || "kunde";
-              updatedNames.set(request.id, displayName);
-            });
+            data.forEach(
+              (request: { id: number; company: string | null }) => {
+                const displayName =
+                  (request.company && request.company.trim()) || "";
+                if (displayName) {
+                  updatedNames.set(request.id, displayName);
+                }
+              }
+            );
             return updatedNames;
           });
         }
@@ -111,6 +116,23 @@ const NotificationList = () => {
 
     fetchRequestNames();
   }, [notifications, requestNames]);
+
+  const getDisplayName = (item: {
+    message: string;
+    request_id: number;
+    notification_type: string;
+  }) => {
+    // Brug message hvis det ikke er tomt eller "kunde"
+    if (item.message && item.message !== "kunde") {
+      return item.message;
+    }
+    // Fallback til request company fra databasen
+    if (item.notification_type === "request" && item.request_id) {
+      const companyName = requestNames.get(item.request_id);
+      if (companyName) return companyName;
+    }
+    return "kunde";
+  };
 
   const headerSubtitle = useMemo(() => {
     if (hasNotifications) return "";
@@ -203,11 +225,7 @@ const NotificationList = () => {
                       </span>
 
                       <span className="text-sm text-base-content/70">
-                        {item.notification_type === "request" && item.request_id
-                          ? requestNames.get(item.request_id) ||
-                            item.message ||
-                            "kunde"
-                          : item.message || "kunde"}
+                        {getDisplayName(item)}
                       </span>
                     </div>
                     <span className="text-[11px] text-base-content/70 whitespace-nowrap ">

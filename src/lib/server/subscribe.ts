@@ -141,40 +141,23 @@ export async function savePushSubscription(
       created_at: new Date().toISOString(),
     };
 
-    // Tjek om subscription allerede findes (baseret på endpoint)
-    const { data: existing } = await supabase
+    // Brug upsert for at indsætte eller opdatere
+    const { error } = await supabase
       .from("push_subscriptions")
-      .select("id")
-      .eq("endpoint", subscription.endpoint)
-      .maybeSingle();
-
-    if (existing) {
-      // Opdater eksisterende subscription
-      const { error } = await supabase
-        .from("push_subscriptions")
-        .update({
-          p256dh: subscriptionData.p256dh,
-          auth: subscriptionData.auth,
-          user_id: subscriptionData.user_id,
-          user_agent: subscriptionData.user_agent,
+      .upsert(
+        {
+          ...subscriptionData,
           updated_at: new Date().toISOString(),
-        })
-        .eq("id", existing.id);
+        },
+        {
+          onConflict: "endpoint",
+          ignoreDuplicates: false,
+        }
+      );
 
-      if (error) {
-        console.error("Fejl ved opdatering af push subscription:", error);
-        return { success: false, error: error.message };
-      }
-    } else {
-      // Opret ny subscription
-      const { error } = await supabase
-        .from("push_subscriptions")
-        .insert([subscriptionData]);
-
-      if (error) {
-        console.error("Fejl ved oprettelse af push subscription:", error);
-        return { success: false, error: error.message };
-      }
+    if (error) {
+      console.error("Fejl ved gem/opdatering af push subscription:", error);
+      return { success: false, error: error.message };
     }
 
     return { success: true };

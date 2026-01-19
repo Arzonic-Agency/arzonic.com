@@ -7,8 +7,6 @@ import Footer from "@/components/client/layout/Footer";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
 import ScreenFade from "@/components/client/layout/ScreenFade";
-import { subscribeToPush } from "@/utils/push-notifications";
-import { registerPushSubscription } from "@/lib/client/actions";
 import { useTranslation } from "react-i18next";
 import { FaCookieBite } from "react-icons/fa6";
 
@@ -45,45 +43,6 @@ export default function ClientLayout({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Service Worker og Push Notification Registration
-  useEffect(() => {
-    const registerServiceWorker = async () => {
-      if ("serviceWorker" in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register("/sw.js");
-          console.log("Service Worker registreret:", registration.scope);
-
-          // Hvis VAPID key er sat, prøv at subscribe til push notifications
-          // VIGTIGT: NEXT_PUBLIC_ variabler skal hardcodes eller injectes via script
-          const vapidPublicKey = "BGLYSfFimmD-4FNiSeyBkE8RFXUU7QAX9RrH6mCC3vwauU_X8DdLUwZs0zabLs5J1cqmLb1RtJhECmKxA2r36u8";
-
-          if (vapidPublicKey) {
-            // Vent lidt for at sikre service worker er klar
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            const subscription = await subscribeToPush(vapidPublicKey);
-            if (subscription) {
-              // Gem subscription i Supabase
-              const result = await registerPushSubscription(subscription);
-              if (result.success) {
-                console.log("Push subscription gemt i Supabase");
-              } else {
-                console.error("Fejl ved gemning af subscription:", result.error);
-              }
-            }
-          } else {
-            console.warn(
-              "NEXT_PUBLIC_VAPID_PUBLIC_KEY ikke sat - push notifications deaktiveret"
-            );
-          }
-        } catch (error) {
-          console.error("Fejl ved registrering af service worker:", error);
-        }
-      }
-    };
-
-    registerServiceWorker();
-  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

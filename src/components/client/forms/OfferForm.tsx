@@ -46,7 +46,6 @@ const OfferForm = () => {
     try {
       await createRequest(
         company,
-        "",
         mobile,
         mail,
         category,

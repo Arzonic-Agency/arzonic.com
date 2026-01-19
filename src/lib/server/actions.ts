@@ -701,12 +701,7 @@ export async function createNews({
             const path = `${ud.user.id}/${name}`;
 
             try {
-              // Log file details before processing
-              console.log("Processing file:", {
-                name: file.name,
-                size: file.size,
-                type: file.type,
-              });
+              
 
               const buf = await sharp(Buffer.from(await file.arrayBuffer()))
                 .rotate()
@@ -1215,7 +1210,7 @@ export async function deleteRequest(requestId: string): Promise<void> {
 export async function updateRequest(
   requestId: string,
   data: {
-    name?: string;
+
     company?: string;
     category?: string;
     mobile?: string;
@@ -1447,7 +1442,7 @@ export async function sendPushNotificationsToUsers(
 
 export async function createNotificationForAdmins(
   requestId: number,
-  name: string,
+  company: string,
   allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"]
 ) {
   const supabase = await createAdminClient();
@@ -1465,7 +1460,7 @@ export async function createNotificationForAdmins(
   const notifications = admins.map((admin) => ({
     user_id: admin.id,
     request_id: requestId,
-    message: name, // Store the name, will be used for i18n interpolation in frontend
+    message: company,
     notification_type: "request",
     is_read: false,
     created_at: now,
@@ -1484,7 +1479,7 @@ export async function createNotificationForAdmins(
     const adminIds = admins.map((admin) => admin.id);
     await sendPushNotificationsToUsers(adminIds, {
       title: "Ny request",
-      body: `${name} har oprettet en ny request`,
+      body: `${company} har oprettet en ny request`,
       tag: `request-${requestId}`,
     });
   } catch (pushError) {
