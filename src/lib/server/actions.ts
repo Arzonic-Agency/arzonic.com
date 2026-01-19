@@ -1475,16 +1475,18 @@ export async function createNotificationForAdmins(
   }
 
   // Send push notifications til admins
+  console.log(`🔔 Forsøger at sende push notification for request ${requestId} til ${admins.length} admins`);
   try {
     const adminIds = admins.map((admin) => admin.id);
-    await sendPushNotificationsToUsers(adminIds, {
+    const result = await sendPushNotificationsToUsers(adminIds, {
       title: "Ny request",
       body: `${company} har oprettet en ny request`,
       tag: `request-${requestId}`,
     });
+    console.log(`✅ Push notification resultat:`, result);
   } catch (pushError) {
     // Log fejl men ikke fail hele operationen
-    console.error("Fejl ved sending af push notifications:", pushError);
+    console.error("❌ Fejl ved sending af push notifications:", pushError);
   }
 
   return { success: true };
