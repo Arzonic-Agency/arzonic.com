@@ -4,7 +4,7 @@ import { FaTrash, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { getAllNews, deleteNews } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
 import { FaInfoCircle } from "react-icons/fa";
-import { openSocialLink } from "@/lib/server/socialLinks";
+import { openSocialLink } from "@/utils/socialLinks";
 
 interface NewsListProps {
   view: "cards" | "list";
