@@ -1,5 +1,5 @@
 // Service Worker for Push Notifications
-const SW_VERSION = "2.1.0";
+const SW_VERSION = "2.3.0";
 
 self.addEventListener("install", () => {
     self.skipWaiting();
@@ -25,7 +25,6 @@ self.addEventListener("push", (event) => {
         requireInteraction: false,
         vibrate: [200, 100, 200],
         data: {
-            url: data.url || "/admin/messages",
             requestId: data.requestId || null,
         },
     };
@@ -39,29 +38,33 @@ self.addEventListener("notificationclick", (event) => {
     event.notification.close();
 
     const notificationData = event.notification.data || {};
-    let targetUrl = notificationData.url || "/admin/messages";
+    const requestId = notificationData.requestId;
 
-    // Hvis der er et requestId, tilføj det som query parameter
-    if (notificationData.requestId) {
-        targetUrl = `/admin/messages?requestId=${notificationData.requestId}`;
-    }
+    // Byg target URL med absolute path
+    const targetUrl = requestId
+        ? `${self.location.origin}/admin/messages?requestId=${requestId}`
+        : `${self.location.origin}/admin/messages`;
 
     event.waitUntil(
-        clients
-            .matchAll({ type: "window", includeUncontrolled: true })
-            .then((clientList) => {
-                // Find et eksisterende vindue med admin
-                for (const client of clientList) {
-                    if (client.url.includes("/admin") && "focus" in client) {
-                        // Naviger til den specifikke henvendelse
-                        client.navigate(targetUrl);
-                        return client.focus();
-                    }
+        clients.matchAll({
+            type: "window",
+            includeUncontrolled: true
+        }).then((clientList) => {
+            // Søg efter et eksisterende PWA vindue (standalone mode)
+            for (const client of clientList) {
+                // Tjek om det er vores admin app
+                if (client.url.includes("/admin")) {
+                    // Naviger til den specifikke henvendelse og fokuser
+                    return client.navigate(targetUrl).then((client) => {
+                        if (client) {
+                            return client.focus();
+                        }
+                    });
                 }
-                // Ellers åbn et nyt vindue med den specifikke URL
-                if (clients.openWindow) {
-                    return clients.openWindow(targetUrl);
-                }
-            })
+            }
+
+            // Hvis ingen PWA vindue findes, åbn et nyt
+            return clients.openWindow(targetUrl);
+        })
     );
 });
