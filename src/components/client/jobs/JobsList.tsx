@@ -7,7 +7,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { format } from "date-fns";
 import { da, enUS } from "date-fns/locale";
 import Link from "next/link";
-import { getAllActiveJobs } from "@/lib/client/actions";
+import { getAllActiveJobs } from "@/lib/server/client-actions";
 import { useTranslation } from "react-i18next";
 
 type Job = {

@@ -10,7 +10,7 @@ import {
   Group,
   PCFSoftShadowMap,
 } from "three";
-import { getModelUrl } from "@/lib/client/actions";
+import { getModelUrl } from "@/lib/server/client-actions";
 
 interface MobileModelProps {
   modelUrl: string;

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { FaCircleExclamation, FaSquareCheck } from "react-icons/fa6";
-import { getPackages, getExtraServices } from "@/lib/client/actions";
+import { getPackages, getExtraServices } from "@/lib/server/client-actions";
 import { useTranslation } from "react-i18next";
 
 interface DBPackage {

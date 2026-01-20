@@ -1345,17 +1345,14 @@ export async function sendPushNotificationsToUsers(
     title: string;
     body: string;
     tag?: string;
+    url?: string;
+    requestId?: string | number;
   }
 ): Promise<{ success: boolean; sent: number; errors: number }> {
-  console.log(`🚀 sendPushNotificationsToUsers kaldt med ${userIds.length} userIds:`, userIds);
-  
-  // Tjek om web-push er tilgængelig
   let webpush: typeof import("web-push") | null = null;
   try {
     webpush = await import("web-push");
-    console.log(`✅ web-push importeret succesfuldt`);
-  } catch (importError) {
-    console.warn("❌ web-push ikke installeret - push notifications deaktiveret", importError);
+  } catch {
     return { success: false, sent: 0, errors: 0 };
   }
 
@@ -1363,35 +1360,25 @@ export async function sendPushNotificationsToUsers(
   let sent = 0;
   let errors = 0;
 
-  // Hent VAPID keys fra environment
   const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
   const privateKey = process.env.VAPID_PRIVATE_KEY;
   const vapidEmail = process.env.VAPID_EMAIL || "noreply@arzonic.com";
 
-  console.log(`🔑 VAPID keys: publicKey=${publicKey ? 'SET' : 'MISSING'}, privateKey=${privateKey ? 'SET' : 'MISSING'}`);
-
   if (!publicKey || !privateKey) {
-    console.warn("❌ VAPID keys ikke sat - push notifications deaktiveret");
     return { success: false, sent: 0, errors: 0 };
   }
 
-  // Sæt VAPID detaljer
   webpush.setVapidDetails(`mailto:${vapidEmail}`, publicKey, privateKey);
 
-  // Hent alle push subscriptions for brugere
   const { data: subscriptions, error: subError } = await supabase
     .from("push_subscriptions")
     .select("*")
     .in("user_id", userIds);
 
-  console.log(`📋 Hentede ${subscriptions?.length || 0} subscriptions fra database`, { subError });
-
   if (subError || !subscriptions || subscriptions.length === 0) {
-    console.log(`⚠️ Ingen subscriptions fundet - returnerer tidligt`);
     return { success: true, sent: 0, errors: 0 };
   }
 
-  // Hent push notification preferences for brugere
   const { data: members } = await supabase
     .from("members")
     .select("id, push_notifications_enabled")
@@ -1401,19 +1388,13 @@ export async function sendPushNotificationsToUsers(
     (members || []).map((m) => [m.id, m.push_notifications_enabled ?? true])
   );
 
-  console.log(`📤 Sender push notifications til ${subscriptions.length} subscriptions`);
-
-  // Send til alle subscriptions hvor brugeren har notifications enabled
   for (const sub of subscriptions) {
-    // Tjek om brugeren har notifications enabled (default true)
     const userEnabled = preferencesMap.get(sub.user_id) ?? true;
     if (!userEnabled) {
-      console.log(`⏭️ Skip user ${sub.user_id} - notifications disabled`);
-      continue; // Skip hvis brugeren har deaktiveret notifications
+      continue;
     }
 
     try {
-      console.log(`📨 Sender til ${sub.endpoint.substring(0, 50)}...`);
       await webpush.sendNotification(
         {
           endpoint: sub.endpoint,
@@ -1426,15 +1407,14 @@ export async function sendPushNotificationsToUsers(
           title: notification.title,
           body: notification.body,
           tag: notification.tag || "default",
+          url: notification.url || "/admin/messages",
+          requestId: notification.requestId || null,
         })
       );
       sent++;
-      console.log(`✅ Sendt til user ${sub.user_id}`);
     } catch (error: unknown) {
-      console.error(`❌ Fejl ved sending til user ${sub.user_id}:`, error);
       errors++;
 
-      // Hvis subscription er ugyldig, slet den
       if (
         error &&
         typeof error === "object" &&
@@ -1442,7 +1422,6 @@ export async function sendPushNotificationsToUsers(
         ((error as { statusCode: number }).statusCode === 410 ||
           (error as { statusCode: number }).statusCode === 404)
       ) {
-        console.log(`🗑️ Sletter ugyldig subscription for user ${sub.user_id}`);
         await supabase
           .from("push_subscriptions")
           .delete()
@@ -1451,7 +1430,6 @@ export async function sendPushNotificationsToUsers(
     }
   }
 
-  console.log(`📊 Push notification resultat: sent=${sent}, errors=${errors}`);
   return { success: true, sent, errors };
 }
 
@@ -1461,7 +1439,6 @@ export async function createNotificationForAdmins(
   allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"],
   notificationType: "request" | "estimator" = "request"
 ) {
-  console.log(`📥 createNotificationForAdmins kaldt:`, { requestId, company, allowedRoles, notificationType });
   const supabase = await createAdminClient();
 
   const { data: admins, error: adminsError } = await supabase
@@ -1469,10 +1446,7 @@ export async function createNotificationForAdmins(
     .select("id")
     .in("role", allowedRoles);
 
-  console.log(`👥 Fandt ${admins?.length || 0} admins`, { adminsError, admins });
-
   if (adminsError || !admins || admins.length === 0) {
-    console.error(`❌ Ingen admins fundet eller fejl - returnerer tidligt`);
     return { error: "Kunne ikke oprette notifikationer" };
   }
 
@@ -1486,37 +1460,31 @@ export async function createNotificationForAdmins(
     created_at: now,
   }));
 
-  console.log(`💾 Indsætter ${notifications.length} notifications i databasen`);
   const { error: notifError } = await supabase
     .from("notifications")
     .insert(notifications);
 
   if (notifError) {
-    console.error(`❌ Fejl ved indsættelse af notifications:`, notifError);
     return { error: "Kunne ikke oprette notifikationer" };
   }
 
-  console.log(`✅ Notifications indsat i database`);
-
-
   // Send push notifications til admins
-  const pushTitle = notificationType === "estimator" ? "Ny prisberegning foretaget" : "Ny request";
+  const pushTitle = notificationType === "estimator" ? "Ny prisberegning foretaget" : "Ny henvendelse";
   const pushBody = notificationType === "estimator" 
     ? `${company} har foretaget en ny prisberegning`
-    : `${company} har oprettet en ny request`;
+    : `${company} har sendt en ny henvendelse`;
   
-  console.log(`🔔 Forsøger at sende push notification for ${notificationType} ${requestId} til ${admins.length} admins`);
   try {
     const adminIds = admins.map((admin) => admin.id);
-    const result = await sendPushNotificationsToUsers(adminIds, {
+    await sendPushNotificationsToUsers(adminIds, {
       title: pushTitle,
       body: pushBody,
       tag: `${notificationType}-${requestId}`,
+      url: `/admin/messages?requestId=${requestId}`,
+      requestId: requestId,
     });
-    console.log(`✅ Push notification resultat:`, result);
-  } catch (pushError) {
-    // Log fejl men ikke fail hele operationen
-    console.error("❌ Fejl ved sending af push notifications:", pushError);
+  } catch {
+    // Ignore push errors - notifications are still created in database
   }
 
   return { success: true };
@@ -1984,7 +1952,6 @@ export async function savePushSubscription(
         .eq("id", existing.id);
 
       if (error) {
-        console.error("Fejl ved opdatering af push subscription:", error);
         return { success: false, error: error.message };
       }
     } else {
@@ -1994,14 +1961,12 @@ export async function savePushSubscription(
         .insert([subscriptionData]);
 
       if (error) {
-        console.error("Fejl ved oprettelse af push subscription:", error);
         return { success: false, error: error.message };
       }
     }
 
     return { success: true };
   } catch (err) {
-    console.error("Unexpected error during push subscription save:", err);
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error",
@@ -2024,13 +1989,11 @@ export async function deletePushSubscription(
       .eq("endpoint", endpoint);
 
     if (error) {
-      console.error("Fejl ved sletning af push subscription:", error);
       return { success: false, error: error.message };
     }
 
     return { success: true };
   } catch (err) {
-    console.error("Unexpected error during push subscription delete:", err);
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error",
@@ -2054,13 +2017,11 @@ export async function updateUserPushNotificationPreference(
       .eq("id", userId);
 
     if (error) {
-      console.error("Fejl ved opdatering af push notification preference:", error);
       return { success: false, error: error.message };
     }
 
     return { success: true };
   } catch (err) {
-    console.error("Unexpected error during preference update:", err);
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error",

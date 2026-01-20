@@ -1,27 +1,19 @@
 // Service Worker for Push Notifications
-// Version: 2.0.0 - Force update
-const SW_VERSION = "2.0.0";
-console.log(`[SW] Service Worker v${SW_VERSION} loaded`);
+const SW_VERSION = "2.1.0";
 
-self.addEventListener("install", (event) => {
-    console.log(`[SW] Installing v${SW_VERSION}...`);
-    self.skipWaiting(); // Force activation
+self.addEventListener("install", () => {
+    self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
-    console.log(`[SW] Activated v${SW_VERSION}`);
-    event.waitUntil(clients.claim()); // Take control immediately
+    event.waitUntil(clients.claim());
 });
 
 self.addEventListener("push", (event) => {
-    console.log("[SW] Push event modtaget:", event);
-
     let data;
     try {
         data = event.data ? event.data.json() : { title: "Ny besked", body: "" };
-        console.log("[SW] Push data parsed:", data);
-    } catch (e) {
-        console.error("[SW] Fejl ved parsing af push data:", e);
+    } catch {
         data = { title: "Ny besked", body: "" };
     }
 
@@ -32,32 +24,43 @@ self.addEventListener("push", (event) => {
         tag: data.tag || "default",
         requireInteraction: false,
         vibrate: [200, 100, 200],
+        data: {
+            url: data.url || "/admin/messages",
+            requestId: data.requestId || null,
+        },
     };
-
-    console.log("[SW] Viser notification med options:", options);
 
     event.waitUntil(
         self.registration.showNotification(data.title, options)
-            .then(() => console.log("[SW] Notification vist succesfuldt"))
-            .catch((err) => console.error("[SW] Fejl ved visning af notification:", err))
     );
 });
 
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
+
+    const notificationData = event.notification.data || {};
+    let targetUrl = notificationData.url || "/admin/messages";
+
+    // Hvis der er et requestId, tilføj det som query parameter
+    if (notificationData.requestId) {
+        targetUrl = `/admin/messages?requestId=${notificationData.requestId}`;
+    }
+
     event.waitUntil(
         clients
             .matchAll({ type: "window", includeUncontrolled: true })
             .then((clientList) => {
-                // Hvis der allerede er et åbent vindue, fokusér på det
+                // Find et eksisterende vindue med admin
                 for (const client of clientList) {
-                    if (client.url === "/" && "focus" in client) {
+                    if (client.url.includes("/admin") && "focus" in client) {
+                        // Naviger til den specifikke henvendelse
+                        client.navigate(targetUrl);
                         return client.focus();
                     }
                 }
-                // Ellers åbn et nyt vindue
+                // Ellers åbn et nyt vindue med den specifikke URL
                 if (clients.openWindow) {
-                    return clients.openWindow("/");
+                    return clients.openWindow(targetUrl);
                 }
             })
     );

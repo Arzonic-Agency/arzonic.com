@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ApplyPage from "./ApplyPage";
-import { getJobBySlug } from "@/lib/client/actions";
+import { getJobBySlug } from "@/lib/server/client-actions";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({

@@ -27,25 +27,20 @@ export async function subscribeToPush(
   publicVapidKey: string
 ): Promise<PushSubscription | null> {
   if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-    console.warn("Push notifications er ikke understøttet i denne browser");
     return null;
   }
 
   try {
     const registration = await navigator.serviceWorker.ready;
 
-    // Spørg om tilladelse
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      console.log("Notification permission ikke givet");
       return null;
     }
 
-    // Tjek om der allerede er en subscription
     let subscription = await registration.pushManager.getSubscription();
 
     if (!subscription) {
-      // Opret ny subscription
       const keyArray = urlBase64ToUint8Array(publicVapidKey);
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -54,8 +49,7 @@ export async function subscribeToPush(
     }
 
     return subscription;
-  } catch (error) {
-    console.error("Fejl ved subscription til push notifications:", error);
+  } catch {
     return null;
   }
 }
@@ -71,8 +65,7 @@ export async function getCurrentSubscription(): Promise<PushSubscription | null>
   try {
     const registration = await navigator.serviceWorker.ready;
     return await registration.pushManager.getSubscription();
-  } catch (error) {
-    console.error("Fejl ved hentning af subscription:", error);
+  } catch {
     return null;
   }
 }
@@ -95,8 +88,7 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     }
 
     return false;
-  } catch (error) {
-    console.error("Fejl ved unsubscribe:", error);
+  } catch {
     return false;
   }
 }

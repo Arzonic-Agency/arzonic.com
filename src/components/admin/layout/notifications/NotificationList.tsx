@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { FaBell, FaCommentDots } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useNotifications } from "@/hooks/useNotifications";
-import { getRequestNamesByIds } from "@/lib/client/actions";
+import { getRequestNamesByIds } from "@/lib/server/client-actions";
 
 const formatTime = (iso: string, locale: string) => {
   const date = new Date(iso);

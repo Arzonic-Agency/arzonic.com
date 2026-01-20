@@ -10,7 +10,7 @@ import {
 import { FaAngleLeft } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import EstimatorContactForm from "../forms/EstimatorForm";
-import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/client/actions";
+import { EstimatorQuestion, getEstimatorQuestions } from "@/lib/server/client-actions";
 
 type Country = { name: string; code: string; dial: string; flag: string };
 

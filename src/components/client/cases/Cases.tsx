@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import CasesList, { CaseItem } from "./CasesList";
-import { getAllCases } from "@/lib/client/actions";
+import { getAllCases } from "@/lib/server/client-actions";
 import CasesPagination from "./CasesPagination";
 import { useTranslation } from "react-i18next";
 

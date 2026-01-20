@@ -79,10 +79,28 @@ const Requests = () => {
 
   const handleDeleteSelected = async () => {
     try {
+      const deletedCount = selectedRequests.length;
+      
       setRequests((prevRequests) =>
         prevRequests.filter((request) => !selectedRequests.includes(request.id))
       );
       setSelectedRequests([]);
+      
+      // Opdater total og tjek om vi skal gå til forrige side
+      setTotal((prevTotal) => {
+        const newTotal = Math.max(0, prevTotal - deletedCount);
+        const totalPages = Math.ceil(newTotal / 6);
+        
+        // Hvis nuværende side er højere end antal sider, gå til sidste side (eller side 1)
+        if (page > totalPages && totalPages > 0) {
+          setPage(totalPages);
+        } else if (newTotal === 0) {
+          setPage(1);
+        }
+        
+        return newTotal;
+      });
+      
       await Promise.all(
         selectedRequests.map((id) => deleteRequest(id.toString()))
       );
@@ -105,6 +123,22 @@ const Requests = () => {
     setRequests((prevRequests) =>
       prevRequests.filter((request) => request.id !== deletedRequestId)
     );
+    
+    // Opdater total og tjek om vi skal gå til forrige side
+    setTotal((prevTotal) => {
+      const newTotal = Math.max(0, prevTotal - 1);
+      const totalPages = Math.ceil(newTotal / 6);
+      
+      // Hvis nuværende side er højere end antal sider, gå til sidste side (eller side 1)
+      if (page > totalPages && totalPages > 0) {
+        setPage(totalPages);
+      } else if (newTotal === 0) {
+        setPage(1);
+      }
+      
+      return newTotal;
+    });
+    
     setSelectedRequestId(null); // Redirect to list view
     setSelectedRequestData(null);
     setShowToast(true); // Trigger toast

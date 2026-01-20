@@ -6,7 +6,7 @@ import SettingsModal from "@/components/admin/layout/settings/UserSettingsModal"
 import { UserSettingsModalProvider } from "@/components/admin/layout/settings/UserSettingsModalContext";
 import { useEffect } from "react";
 import { subscribeToPush } from "@/utils/push-notifications";
-import { registerPushSubscription } from "@/lib/client/actions";
+import { registerPushSubscription } from "@/lib/server/client-actions";
 import { createClient } from "@/utils/supabase/client";
 
 export default function AdminLayout({
