@@ -24,7 +24,7 @@ const Topbar = () => {
     "/admin/content": t("content"),
     "/admin/messages": t("customers"),
     "/admin/settings": t("settings"),
-    "/admin/users": t("user_settings"),
+    "/admin/users": t("user_access"),
   };
   const currentTitle = pageTitles[pathname] || t("unknown_page");
 

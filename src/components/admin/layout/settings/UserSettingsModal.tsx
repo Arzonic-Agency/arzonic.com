@@ -15,6 +15,7 @@ import { useUserSettingsModal } from "./UserSettingsModalContext";
 import ChangePassword from "./config/ChangePassword";
 import UserDetails from "./config/UserDetails";
 import PushNotificationToggle from "./notifications/PushNotificationToggle";
+import Security from "./security/Security";
 
 
 const UserSettingsModal = () => {
@@ -169,9 +170,7 @@ const UserSettingsModal = () => {
                   <h4 className="text-lg font-semibold mb-4">
                     {t("security")}
                   </h4>
-                  <p className="text-sm text-base-content/70">
-                    {t("settings_content_coming_soon")}
-                  </p>
+                <Security />
                 </div>
               )}
             </div>

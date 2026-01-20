@@ -178,7 +178,7 @@
   "site": "Side",
   "site_setup": "Sideopsætning",
   "layout_settings": "Sideopsætning",
-  "user_settings": "Brugeradgang",
+  "user_access": "Brugeradgang",
   "docs_settings": "Dokumentation",
   "packages": "Pakker",
   "from": "Fra",
@@ -197,6 +197,14 @@
   "push_notifications_enabled": "Notifikationer er slået til",
   "push_notifications_disabled": "Notifikationer er slået fra",
   "go_website": "Gå til hjemmeside",
+  "security_settings": {
+    "current": "Denne enhed",
+    "last_active": "Sidst aktiv",
+    "revoke": "Fjern adgang",
+    "refresh_sessions": "Opdater",
+    "active_sessions": "Aktive sessioner",
+    "active_sessions_desc": "Enheder hvor du er logget ind og modtager notifikationer. Fjern adgang for enheder du ikke genkender."
+  },
   "messages": {
     "email_already_exists": "Der findes allerede en bruger med denne e-mail",
     "registration_error": "Fejl ved registrering, prøv igen",

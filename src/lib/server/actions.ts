@@ -2028,3 +2028,106 @@ export async function updateUserPushNotificationPreference(
     };
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ACTIVE SESSIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+type Session = {
+  id: string;
+  endpoint: string;
+  user_agent: string | null;
+  created_at: string;
+  updated_at: string | null;
+  is_current: boolean;
+};
+
+/**
+ * Henter alle aktive sessioner (push subscriptions) for den aktuelle bruger
+ */
+export async function getActiveSessions(): Promise<{
+  success: boolean;
+  sessions?: Session[];
+  error?: string;
+}> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    // Hent nuværende bruger
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return { success: false, error: "Ikke autentificeret" };
+    }
+
+    // Hent alle push subscriptions for brugeren
+    const { data: subscriptions, error: subError } = await supabase
+      .from("push_subscriptions")
+      .select("id, endpoint, user_agent, created_at, updated_at")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false, nullsFirst: false });
+
+    if (subError) {
+      return { success: false, error: subError.message };
+    }
+
+    // is_current sættes på client-siden ved at matche endpoint
+    const sessions: Session[] = (subscriptions || []).map((sub) => ({
+      id: sub.id,
+      endpoint: sub.endpoint,
+      user_agent: sub.user_agent,
+      created_at: sub.created_at,
+      updated_at: sub.updated_at,
+      is_current: false, // Sættes korrekt på client-siden
+    }));
+
+    return { success: true, sessions };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Ukendt fejl",
+    };
+  }
+}
+
+/**
+ * Fjerner en specifik session (push subscription)
+ */
+export async function revokeSession(
+  sessionId: string
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    // Hent nuværende bruger
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      return { success: false, error: "Ikke autentificeret" };
+    }
+
+    // Slet kun hvis subscription tilhører den aktuelle bruger
+    const { error } = await supabase
+      .from("push_subscriptions")
+      .delete()
+      .eq("id", sessionId)
+      .eq("user_id", user.id);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Ukendt fejl",
+    };
+  }
+}

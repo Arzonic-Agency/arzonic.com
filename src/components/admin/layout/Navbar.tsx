@@ -87,7 +87,7 @@ const Navbar = () => {
                   aria-label={t("aria.navigation.linkToUsers")}
                 >
                   <FaUsers className="size-[1.1em] mr-[0.15rem]" />
-                  {t("user_settings")}
+                  {t("user_access")}
                 </Link>
               </li>
             )}
