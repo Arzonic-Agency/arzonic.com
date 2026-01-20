@@ -95,7 +95,7 @@ const NavContent = () => {
           {t("reviews")}
         </button>
       </div>
-      <div className="mt-3 md:mt-5 2xl:flex gap-3">
+      <div className="mt-3 2xl:flex gap-3">
         <div className="flex-3/4 4xl:flex-5/6">
           {activeTab === "news" && (
             <div className="bg-base-200 rounded-lg shadow-md p-5 md:p-7">

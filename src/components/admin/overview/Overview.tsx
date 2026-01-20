@@ -133,15 +133,15 @@ const Overview = () => {
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div>
               <h4 className="text-sm">{t("analytics.visitors")}</h4>
-              <p className="text-3xl font-bold">{data.visitors}</p>
+              <p className="text-2xl sm:text-3xl font-bold">{data.visitors}</p>
             </div>
             <div>
               <h4 className="text-sm">{t("analytics.pageviews")}</h4>
-              <p className="text-3xl font-bold">{data.pageviews}</p>
+              <p className="text-2xl sm:text-3xl font-bold">{data.pageviews}</p>
             </div>
             <div>
               <h4 className="text-sm">{t("analytics.visits")}</h4>
-              <p className="text-3xl font-bold">{data.visits}</p>
+              <p className="text-2xl sm:text-3xl font-bold">{data.visits}</p>
             </div>
           </div>
         )}

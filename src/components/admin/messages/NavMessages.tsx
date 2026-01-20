@@ -44,7 +44,7 @@ const NavMessages = () => {
         </button>
       </div>
 
-      <div className="mt-3 md:mt-5">
+      <div className="mt-3">
         {activeTab === "requests" && (
           <div className="bg-base-200 rounded-lg shadow-md p-3 md:p-7">
             <Requests />

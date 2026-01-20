@@ -1,6 +1,7 @@
 "use server";
 
 import { createServerClientInstance } from "@/utils/supabase/server";
+import { createClient } from "@/utils/supabase/client";
 
 export async function readUserSession() {
   const supabase = await createServerClientInstance();
@@ -24,6 +25,37 @@ export async function readUserSession() {
     role: role as "admin" | "editor" | "developer",
     name,
   };
+}
+
+// Client-side funktion til at tjekke om brugeren er admin/developer
+export async function checkIsAdminOrDeveloper(): Promise<{
+  isAuthorized: boolean;
+  userId: string | null;
+}> {
+  try {
+    const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return { isAuthorized: false, userId: null };
+    }
+
+    const { data: member } = await supabase
+      .from("members")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    const isAuthorized =
+      !!member && ["admin", "developer"].includes(member.role);
+
+    return { isAuthorized, userId: user.id };
+  } catch (error) {
+    console.error("Fejl ved tjek af admin/developer rolle:", error);
+    return { isAuthorized: false, userId: null };
+  }
 }
 
 // Client-side function to fetch and set user session in Zustand store

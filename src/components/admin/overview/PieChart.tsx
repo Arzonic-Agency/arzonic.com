@@ -39,6 +39,35 @@ const PieChart = () => {
   const [series, setSeries] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [baseColor, setBaseColor] = useState("#111827");
+  const [contentColor, setContentColor] = useState("#E4E4E4");
+  const [isDark, setIsDark] = useState(true);
+
+  // Læs theme farver fra CSS og opdater ved theme-skift
+  useEffect(() => {
+    const updateThemeColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      const themeAttr = document.documentElement.getAttribute("data-theme") ?? "";
+      
+      const base = styles.getPropertyValue("--color-base-100").trim();
+      const content = styles.getPropertyValue("--color-base-content").trim();
+      
+      if (base) setBaseColor(base);
+      if (content) setContentColor(content);
+      setIsDark(themeAttr.toLowerCase().includes("dark"));
+    };
+
+    updateThemeColors();
+
+    // Observer for at fange theme-skift
+    const observer = new MutationObserver(updateThemeColors);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme", "class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,7 +153,7 @@ const PieChart = () => {
         stroke: {
           show: true,
           width: 3,
-          colors: ["#111827"], // evt. brug en bg-farve i stedet for transparent
+          colors: [baseColor],
         },
 
         labels,
@@ -162,6 +191,25 @@ const PieChart = () => {
         legend: {
           show: false,
         },
+        tooltip: {
+          custom: ({ series: s, seriesIndex, w }) => {
+            const label = w?.globals?.labels?.[seriesIndex] ?? "";
+            const value = s?.[seriesIndex] ?? 0;
+            const total = s?.reduce((a: number, b: number) => a + b, 0) ?? 1;
+            const pct = ((value / total) * 100).toFixed(1);
+            const tooltipBorder = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)";
+
+            return `
+              <div style="background:${baseColor};padding:12px 16px;border-radius:12px;border:1px solid ${tooltipBorder};box-shadow:0 4px 12px rgba(0,0,0,0.28);color:${contentColor};font-family:inherit;min-width:140px;">
+                <div style="font-size:12px;font-weight:600;opacity:0.85;">${label}</div>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:13px;font-weight:600;">
+                  <span style="display:inline-flex;width:10px;height:10px;border-radius:9999px;background:#048179;box-shadow:0 0 0 2px rgba(0,0,0,0.25);"></span>
+                  <span>${value} besøg (${pct}%)</span>
+                </div>
+              </div>
+            `;
+          },
+        },
       };
 
       if (!chartInstanceRef.current) {
@@ -182,7 +230,7 @@ const PieChart = () => {
     return () => {
       active = false;
     };
-  }, [labels, series]);
+  }, [labels, series, baseColor, contentColor, isDark]);
 
   useEffect(() => {
     return () => {

@@ -6,6 +6,7 @@ import {
   useRequestsRealtime,
   type RealtimeRequest,
 } from "@/hooks/useRequestsRealtime";
+import Image from "next/image";
 
 export interface Request {
   id: number;
@@ -48,10 +49,28 @@ const RequestsList = ({
 }: RequestsListProps) => {
   const [loading, setLoading] = useState(true);
   const [localRequests, setLocalRequests] = useState<Request[]>(requests);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
   const safeSelectedRequests = Array.isArray(selectedRequests)
     ? selectedRequests
     : [];
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      setIsDarkTheme(theme !== "arzoniclight");
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleNewRequest = useCallback(
     (payload: RealtimeRequest) => {
@@ -176,8 +195,15 @@ const RequestsList = ({
 
   if (!localRequests.length) {
     return (
-      <div className="h-52 flex items-center justify-center">
-        {t("no_requests")}
+      <div className="h-96 flex flex-col items-center justify-center">
+        <Image 
+          src={isDarkTheme ? "/empty-dark.png" : "/empty-light.png"} 
+          alt="No requests" 
+          width={300} 
+          height={300} 
+          className="w-32 md:w-42 h-auto mb-4"
+        />
+        <span className="text-base md:text-lg font-semibold text-base-content/90 text-center">{t("no_requests")}</span>
       </div>
     );
   }

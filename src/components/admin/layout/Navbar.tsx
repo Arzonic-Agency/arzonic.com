@@ -9,6 +9,7 @@ import {
   FaHouse,
   FaList,
   FaRightFromBracket,
+  FaUsers,
 } from "react-icons/fa6";
 import { readUserSession } from "@/lib/auth/readUserSession";
 import Image from "next/image";
@@ -53,6 +54,7 @@ const Navbar = () => {
                   href="/admin"
                   aria-label={t("aria.navigation.linkToOverview")}
                 >
+                  <FaHouse className="size-[1.1em] mr-[0.15rem]" />
                   {t("overview")}
                 </Link>
               </li>
@@ -63,6 +65,7 @@ const Navbar = () => {
                 href="/admin/content"
                 aria-label={t("aria.navigation.linkToContent")}
               >
+                <FaList className="size-[1.1em] mr-[0.15rem]" />
                 {t("content")}
               </Link>
             </li>
@@ -72,69 +75,82 @@ const Navbar = () => {
                 href="/admin/messages"
                 aria-label={t("aria.navigation.linkToCustomers")}
               >
+                <FaComment className="size-[1.1em] mr-[0.15rem]" />
                 {t("customers")}
               </Link>
             </li>
             {["admin", "developer"].includes(role || "") && (
               <li>
                 <Link
+                  href="/admin/users"
+                  className={pathname === "/admin/users" ? "menu-active" : ""}
+                  aria-label={t("aria.navigation.linkToUsers")}
+                >
+                  <FaUsers className="size-[1.1em] mr-[0.15rem]" />
+                  {t("user_settings")}
+                </Link>
+              </li>
+            )}
+            {["admin", "developer"].includes(role || "") && (
+              <li>
+                <Link
                   className={
                     pathname === "/admin/settings" ? "menu-active" : ""
                   }
                   href="/admin/settings"
                   aria-label={t("aria.navigation.linkToSettings")}
                 >
+                    <FaGear className="size-[1.1em] mr-[0.15rem]" />
                   {t("settings")}
                 </Link>
               </li>
             )}
+        
           </ul>
         </div>
-        <div className="flex flex-col items-center sm:hidden fixed bottom-5 left-1/2 transform -translate-x-1/2 justify-center z-30 max-w-[300px] w-full">
-          <ul className="menu menu-horizontal bg-base-200 rounded-box flex-wrap justify-center max-w-md w-full gap-4 border-2 border-base-100">
-            {["admin", "developer"].includes(role || "") && (
-              <li>
-                <Link
-                  href="/admin"
-                  className={pathname === "/admin" ? "menu-active" : ""}
-                  aria-label={t("aria.navigation.linkToOverview")}
-                >
-                  <FaHouse size={25} />
-                </Link>
-              </li>
-            )}
-            <li>
-              <Link
-                href="/admin/content"
-                className={pathname === "/admin/content" ? "menu-active" : ""}
-                aria-label={t("aria.navigation.linkToContent")}
-              >
-                <FaList size={25} />
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/admin/messages"
-                className={pathname === "/admin/messages" ? "menu-active" : ""}
-                aria-label={t("aria.navigation.linkToCustomers")}
-              >
-                <FaComment size={25} />
-              </Link>
-            </li>
-            {["admin", "developer"].includes(role || "") && (
-              <li>
-                <Link
-                  href="/admin/settings"
-                  className={
-                    pathname === "/admin/settings" ? "menu-active" : ""
-                  }
-                  aria-label={t("aria.navigation.linkToSettings")}
-                >
-                  <FaGear size={25} />
-                </Link>
-              </li>
-            )}
-          </ul>
+        <div className="dock dock-sm sm:hidden z-30 bg-base-200">
+          {["admin", "developer"].includes(role || "") && (
+            <Link
+              href="/admin"
+              className={pathname === "/admin" ? "dock-active" : ""}
+              aria-label={t("aria.navigation.linkToOverview")}
+            >
+              <FaHouse className="size-[1.2em]" />
+            </Link>
+          )}
+          <Link
+            href="/admin/content"
+            className={pathname === "/admin/content" ? "dock-active" : ""}
+            aria-label={t("aria.navigation.linkToContent")}
+          >
+            <FaList className="size-[1.2em]" />
+          </Link>
+          <Link
+            href="/admin/messages"
+            className={pathname === "/admin/messages" ? "dock-active" : ""}
+            aria-label={t("aria.navigation.linkToCustomers")}
+          >
+            <FaComment className="size-[1.2em]" />
+          </Link>
+          {["admin", "developer"].includes(role || "") && (
+            <Link
+              href="/admin/users"
+              className={pathname === "/admin/users" ? "dock-active" : ""}
+              aria-label={t("aria.navigation.linkToUsers")}
+            >
+              <FaUsers className="size-[1.2em]" />
+            </Link>
+          )}
+          {["admin", "developer"].includes(role || "") && (
+            <Link
+              href="/admin/settings"
+              className={pathname === "/admin/settings" ? "dock-active" : ""}
+              aria-label={t("aria.navigation.linkToSettings")}
+            >
+              <FaGear className="size-[1.2em]" />
+            </Link>
+          )}
+    
         </div>
       </div>
       <div className="flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-12 hidden sm:flex">

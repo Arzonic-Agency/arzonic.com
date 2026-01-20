@@ -49,7 +49,7 @@ export default function ClientLayout({
   };
 
   return (
-    <>
+    <div className="client-background min-h-dvh sm:min-h-lvh">
       <Script
         async
         defer
@@ -67,7 +67,7 @@ export default function ClientLayout({
           siteName: "Arzonic",
         }}
       />
-      <div className="sm:h-lvh h-dvh max-w-7xl mx-auto pt-[101px]">
+      <div className="max-w-7xl mx-auto pt-[101px]">
         <header>
           <Header />
         </header>
@@ -109,6 +109,6 @@ export default function ClientLayout({
         
         <ScreenFade />
       </div>
-    </>
+    </div>
   );
 }
