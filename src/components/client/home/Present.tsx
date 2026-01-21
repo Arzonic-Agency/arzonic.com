@@ -306,15 +306,22 @@ const Present = () => {
               href="/contact"
             >
               {t("Present.cta.button") || "Book a call"}
-              <FaHandshake className="text-lg" />
+         
             </Link>
-            {/* <Image
+            <Image
               src="/team/marc2.png"
               alt="Phone"
               width={180}
               height={180}
-              className="absolute bottom-0 right-10 w-38 h-38 blur-xs group-hover:blur-none transition-all duration-300"
+              className="absolute bottom-0 right-10 w-34 h-34 transition-all duration-300"
+            />
+               {/* <Image
+              src="/test.png"
+              alt="Phone"
+              fill
+              className="absolute bottom-0 right-10 w-full h-full object-cover blur-xs group-hover:blur-none transition-all duration-300"
             /> */}
+              
           </motion.div>
 
           {/* Medium Card - Right */}

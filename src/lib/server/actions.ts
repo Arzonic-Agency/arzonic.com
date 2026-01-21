@@ -14,6 +14,37 @@ import {
 } from "./some";
 
 // ─────────────────────────────────────────────────────────────────────────────
+// DEEPL TRANSLATION HELPER (header-baseret auth - november 2025 krav)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const DEEPL_ENDPOINT = "https://api-free.deepl.com/v2/translate";
+
+async function translateWithDeepL(
+  text: string,
+  targetLang: string
+): Promise<{ text: string; detected_source_language: string }> {
+  const apiKey = process.env.DEEPL_API_KEY!;
+  const response = await fetch(DEEPL_ENDPOINT, {
+    method: "POST",
+    headers: {
+      Authorization: `DeepL-Auth-Key ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: [text],
+      target_lang: targetLang,
+    }),
+  });
+  if (!response.ok) {
+    throw new Error(`DeepL error ${response.status}: ${await response.text()}`);
+  }
+  const result = (await response.json()) as {
+    translations: { text: string; detected_source_language: string }[];
+  };
+  return result.translations[0];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // AUTHENTICATION
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -306,61 +337,19 @@ export async function createCase({
   const supabase = await createServerClientInstance();
 
   try {
-    const apiKey = process.env.DEEPL_API_KEY!;
-    const endpoint = "https://api-free.deepl.com/v2/translate";
-
-    const params1 = new URLSearchParams({
-      auth_key: apiKey,
-      text: desc,
-      target_lang: "EN",
-    });
-    const r1 = await fetch(endpoint, { method: "POST", body: params1 });
-    if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const {
-      translations: [first],
-    } = (await r1.json()) as {
-      translations: { text: string; detected_source_language: string }[];
-    };
+    // Oversæt beskrivelse
+    const first = await translateWithDeepL(desc, "EN");
     const sourceLang = first.detected_source_language.toLowerCase();
 
     let desc_translated = first.text;
     if (sourceLang === "en") {
-      const params2 = new URLSearchParams({
-        auth_key: apiKey,
-        text: desc,
-        target_lang: "DA",
-      });
-      const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok)
-        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const {
-        translations: [second],
-      } = (await r2.json()) as {
-        translations: { text: string }[];
-      };
+      const second = await translateWithDeepL(desc, "DA");
       desc_translated = second.text;
     }
 
-    const countryParams = new URLSearchParams({
-      auth_key: apiKey,
-      text: country,
-      target_lang: "EN",
-    });
-    const countryRes = await fetch(endpoint, {
-      method: "POST",
-      body: countryParams,
-    });
-    if (!countryRes.ok) {
-      throw new Error(
-        `DeepL country error ${countryRes.status}: ${await countryRes.text()}`
-      );
-    }
-    const {
-      translations: [countryFirst],
-    } = (await countryRes.json()) as {
-      translations: { text: string }[];
-    };
-    const country_translated = countryFirst.text;
+    // Oversæt land
+    const countryResult = await translateWithDeepL(country, "EN");
+    const country_translated = countryResult.text;
 
     let imageUrl: string | null = null;
     if (image) {
@@ -425,61 +414,19 @@ export async function updateCase(
   const supabase = await createServerClientInstance();
 
   try {
-    const apiKey = process.env.DEEPL_API_KEY!;
-    const endpoint = "https://api-free.deepl.com/v2/translate";
-
-    const params1 = new URLSearchParams({
-      auth_key: apiKey,
-      text: desc,
-      target_lang: "EN",
-    });
-    const r1 = await fetch(endpoint, { method: "POST", body: params1 });
-    if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-    const {
-      translations: [first],
-    } = (await r1.json()) as {
-      translations: { text: string; detected_source_language: string }[];
-    };
+    // Oversæt beskrivelse
+    const first = await translateWithDeepL(desc, "EN");
     const sourceLang = first.detected_source_language.toLowerCase();
 
     let desc_translated = first.text;
     if (sourceLang === "en") {
-      const params2 = new URLSearchParams({
-        auth_key: apiKey,
-        text: desc,
-        target_lang: "DA",
-      });
-      const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-      if (!r2.ok)
-        throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-      const {
-        translations: [second],
-      } = (await r2.json()) as {
-        translations: { text: string }[];
-      };
+      const second = await translateWithDeepL(desc, "DA");
       desc_translated = second.text;
     }
 
-    const countryParams = new URLSearchParams({
-      auth_key: apiKey,
-      text: country,
-      target_lang: "EN",
-    });
-    const countryRes = await fetch(endpoint, {
-      method: "POST",
-      body: countryParams,
-    });
-    if (!countryRes.ok) {
-      throw new Error(
-        `DeepL country error ${countryRes.status}: ${await countryRes.text()}`
-      );
-    }
-    const {
-      translations: [countryFirst],
-    } = (await countryRes.json()) as {
-      translations: { text: string }[];
-    };
-    const country_translated = countryFirst.text;
+    // Oversæt land
+    const countryResult = await translateWithDeepL(country, "EN");
+    const country_translated = countryResult.text;
 
     let imageUrl: string | null = null;
     if (image) {
@@ -613,13 +560,10 @@ export async function createNews({
     }
 
     const supabase = await createServerClientInstance();
-    const apiKey = process.env.DEEPL_API_KEY;
 
-    if (!apiKey) {
+    if (!process.env.DEEPL_API_KEY) {
       throw new Error("Translation service not configured");
     }
-
-    const endpoint = "https://api-free.deepl.com/v2/translate";
 
     // Authenticate user
     const { data: ud, error: ue } = await supabase.auth.getUser();
@@ -632,38 +576,13 @@ export async function createNews({
     let sourceLang = "da";
 
     try {
-      const params1 = new URLSearchParams({
-        auth_key: apiKey,
-        text: content,
-        target_lang: "EN",
-      });
-      const r1 = await fetch(endpoint, { method: "POST", body: params1 });
-      if (!r1.ok) {
-        const errorText = await r1.text();
-        throw new Error(`Translation error ${r1.status}: ${errorText}`);
-      }
-      const result1 = await r1.json();
-      const first = result1.translations?.[0];
+      const first = await translateWithDeepL(content, "EN");
+      sourceLang = first.detected_source_language?.toLowerCase() || "da";
+      content_translated = first.text;
 
-      if (first) {
-        sourceLang = first.detected_source_language?.toLowerCase() || "da";
-        content_translated = first.text;
-
-        if (sourceLang === "en") {
-          const params2 = new URLSearchParams({
-            auth_key: apiKey,
-            text: content,
-            target_lang: "DA",
-          });
-          const r2 = await fetch(endpoint, { method: "POST", body: params2 });
-          if (r2.ok) {
-            const result2 = await r2.json();
-            const second = result2.translations?.[0];
-            if (second) {
-              content_translated = second.text;
-            }
-          }
-        }
+      if (sourceLang === "en") {
+        const second = await translateWithDeepL(content, "DA");
+        content_translated = second.text;
       }
     } catch (contentError) {
       console.error("Content translation error:", contentError);
@@ -1001,35 +920,13 @@ export async function deleteNews(newsId: number): Promise<void> {
 // REVIEWS
 // ─────────────────────────────────────────────────────────────────────────────
 
-const DEEPL_ENDPOINT = "https://api-free.deepl.com/v2/translate";
-
 async function detectAndTranslate(text: string) {
-  const apiKey = process.env.DEEPL_API_KEY!;
-  const p1 = new URLSearchParams({ auth_key: apiKey, text, target_lang: "EN" });
-  const r1 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p1 });
-  if (!r1.ok) throw new Error(`DeepL error ${r1.status}: ${await r1.text()}`);
-  const {
-    translations: [first],
-  } = (await r1.json()) as {
-    translations: { text: string; detected_source_language: string }[];
-  };
-
+  const first = await translateWithDeepL(text, "EN");
   const sourceLang = first.detected_source_language.toLowerCase(); // "en" or "da"
   let translated = first.text;
 
   if (sourceLang === "en") {
-    const p2 = new URLSearchParams({
-      auth_key: apiKey,
-      text,
-      target_lang: "DA",
-    });
-    const r2 = await fetch(DEEPL_ENDPOINT, { method: "POST", body: p2 });
-    if (!r2.ok) throw new Error(`DeepL error ${r2.status}: ${await r2.text()}`);
-    const {
-      translations: [second],
-    } = (await r2.json()) as {
-      translations: { text: string }[];
-    };
+    const second = await translateWithDeepL(text, "DA");
     translated = second.text;
   }
 

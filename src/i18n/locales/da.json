@@ -111,9 +111,12 @@
   "delete_job_prompt": "Er du sikker på, at du vil slette dette jobopslag?",
   "delete_job_warning": "Denne handling kan ikke fortrydes.",
   "case_creation": "Oprettelse af Case",
+  "case_editing": "Redigering af Case",
+  "case_updated": "Case opdateret",
+  "case_deleted": "Case slettet",
+  "case_view": "Se Case",
   "news_creation": "Oprettelse af Nyhed",
   "review_creation": "Oprettelse af Anmeldelse",
-  "case_editing": "Redigering af Case",
   "review_editing": "Redigering af Anmeldelse",
   "customer": "kunde",
   "customers": "Kunder",
@@ -426,7 +429,7 @@
       "stats": "15+ Projekter",
       "title": "Webapplikationer",
       "description": "Vi designer og udvikler højtydende webapplikationer til mobil og desktop",
-      "button": "Se vores cases"
+      "button": "Se Cases"
     },
     "landingPages": {
       "badge": "LANDINGPAGES",

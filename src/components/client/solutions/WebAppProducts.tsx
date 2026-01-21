@@ -87,7 +87,7 @@ const WebAppProducts = () => {
 
   return (
     <motion.div
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-6xl mx-auto"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -117,7 +117,7 @@ const WebAppProducts = () => {
             }}
           >
             <motion.a
-              className="flex flex-col gap-3 rounded-xl bg-accent ring-2 ring-base-200 p-4 md:p-5 hover:ring-primary transition-all duration-300 ease-in-out shadow-lg h-full cursor-pointer overflow-hidden relative"
+              className="flex flex-col gap-3 rounded-xl bg-accent ring-2 ring-base-200 p-4 md:p-5 hover:ring-primary/30 transition-all duration-300 ease-in-out shadow-lg h-full cursor-pointer overflow-hidden relative"
               layout
               href={`/solutions/web-applications`}
             >

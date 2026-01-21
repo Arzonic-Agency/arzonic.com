@@ -43,7 +43,7 @@ const Hero = () => {
                 {t("Hero.description")}{" "}
               </p>
             </div>
-            <div className="flex gap-3 sm:items-center    font-semibold tracking-wide">
+            <div className="flex gap-3 sm:items-center font-semibold tracking-wide">
               <Link
                 href={"/solutions/web-applications"}
                 className="badge badge-secondary badge-soft badge-sm lg:badge-md xl:badge-lg"
@@ -89,21 +89,21 @@ const Hero = () => {
             <motion.div
               animate={{ y: [0, -30, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="mockup-phone scale-55 lg:scale-60"
+              className="mockup-phone scale-55 lg:scale-60 xl:scale-65"
             >
               <div className="mockup-phone-camera"></div>
               <div className="mockup-phone-display relative overflow-hidden">
-  <Image
-    alt="wallpaper"
-    src={isFirstImage ? "/models/mobile-screen-l.png" : "/models/mobile-screen-d.png"}
-    fill
-    sizes="400px"
-    className="object-cover"
-    priority
-  />
-</div>
+              <Image
+                alt="wallpaper"
+                src={isFirstImage ? "/models/mobile-screen-l.png" : "/models/mobile-screen-d.png"}
+                fill
+                sizes="400px"
+                className="object-cover"
+                priority
+              />
+            </div>
             </motion.div>
-            <div className="absolute bottom-45 right-10 lg:flex hidden flex-col p-4 justify-center items-start gap-2 bg-base-200 ring-1 ring-base-300 w-60 h-auto rounded-xl">
+            <div className="absolute bottom-45 right-7 xl:-right-4 lg:flex hidden flex-col p-4 justify-center items-start gap-2 bg-accent ring-1 ring-base-300 w-60 xl:w-72 h-auto rounded-xl">
               <div className="flex items-center justify-center gap-2">
                 <Image
                   src="/customer/favicon1.png"
@@ -112,12 +112,12 @@ const Hero = () => {
                   height={200}
                   className="w-5"
                 />
-                <span className="text-xs font-semibold pt-1">hhservice.dk</span>
+                <span className="text-xs xl:text-sm font-semibold pt-1">hhservice.dk</span>
                 <div className="rating rating-xs">
                   <div className="mask mask-star" aria-label="1 star"></div>
                   <div className="mask mask-star" aria-label="2 star"></div>
-                  <div className="mask mask-star " aria-label="3 star"></div>
-                  <div className="mask mask-star " aria-label="4 star"></div>
+                  <div className="mask mask-star" aria-label="3 star"></div>
+                  <div className="mask mask-star" aria-label="4 star"></div>
                   <div
                     className="mask mask-star "
                     aria-label="5 star"
@@ -126,7 +126,7 @@ const Hero = () => {
                 </div>
               </div>
               <div>
-                <p className="textarea-xs">{t("Hero.customerFeedback")}</p>
+                <p className="textarea-xs xl:text-sm">{t("Hero.customerFeedback")}</p>
               </div>
             </div>
             {/* <div className="w-full h-full relative bg-transparent ">
