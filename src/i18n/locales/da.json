@@ -201,10 +201,14 @@
   "push_notifications_disabled": "Notifikationer er slået fra",
   "go_website": "Gå til hjemmeside",
   "security_settings": {
+    "logging_out_all": "Logger ud...",
+    "logout_all_other_devices": "Log ud af alle enheder",
+    "logout_all_other_devices_desc": "Dette vil logge dig ud af alle enheder undtagen denne.",
     "current": "Denne enhed",
     "last_active": "Sidst aktiv",
-    "revoke": "Fjern adgang",
-    "refresh_sessions": "Opdater",
+    "revoke": "Log ud af enheden & fjerner adgang",
+    "refresh": "Opdater",
+    "no_sessions": "Ingen aktive sessioner fundet",
     "active_sessions": "Aktive sessioner",
     "active_sessions_desc": "Enheder hvor du er logget ind og modtager notifikationer. Fjern adgang for enheder du ikke genkender."
   },

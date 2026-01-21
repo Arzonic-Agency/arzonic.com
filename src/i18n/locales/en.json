@@ -201,10 +201,14 @@
   "push_notifications_disabled": "Notifications are turned off",
   "go_website": "Go to Website",
   "security_settings": {
-    "current": "Current device",
+    "logging_out_all": "Logging out...",
+    "logout_all_other_devices": "Logout from all devices",
+    "logout_all_other_devices_desc": "This will log you out of all devices except this one.",
+    "current": "This device",
     "last_active": "Last active",
-    "revoke": "Revoke access",
-    "refresh_sessions": "Refresh",
+    "revoke": "Logout & revoke access",  
+    "refresh": "Refresh",
+    "no_sessions": "No active sessions found",
     "active_sessions": "Active sessions",
     "active_sessions_desc": "Devices where you are logged in and receive notifications. Revoke access for devices you do not recognize."
   },

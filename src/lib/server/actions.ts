@@ -129,7 +129,8 @@ export async function createMember(data: {
 export async function signOut() {
   const supabase = await createServerClientInstance();
 
-  await supabase.auth.signOut();
+  // Log kun ud på denne enhed (local scope)
+  await supabase.auth.signOut({ scope: 'local' });
 
   revalidatePath("/", "layout");
   redirect("/login");
@@ -1932,53 +1933,81 @@ export async function updateUserPushNotificationPreference(
 
 type Session = {
   id: string;
-  endpoint: string;
   user_agent: string | null;
+  ip: string | null;
   created_at: string;
   updated_at: string | null;
+  not_after: string | null;
   is_current: boolean;
 };
 
 /**
- * Henter alle aktive sessioner (push subscriptions) for den aktuelle bruger
+ * Henter alle aktive sessioner fra Supabase Auth for den aktuelle bruger
  */
 export async function getActiveSessions(): Promise<{
   success: boolean;
   sessions?: Session[];
   error?: string;
 }> {
-  const supabase = await createServerClientInstance();
+  const supabase = await createAdminClient();
 
   try {
     // Hent nuværende bruger
+    const userSupabase = await createServerClientInstance();
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await userSupabase.auth.getUser();
 
     if (userError || !user) {
       return { success: false, error: "Ikke autentificeret" };
     }
 
-    // Hent alle push subscriptions for brugeren
-    const { data: subscriptions, error: subError } = await supabase
-      .from("push_subscriptions")
-      .select("id, endpoint, user_agent, created_at, updated_at")
-      .eq("user_id", user.id)
-      .order("updated_at", { ascending: false, nullsFirst: false });
+    // Hent den aktuelle session
+    const {
+      data: { session: currentSession },
+    } = await userSupabase.auth.getSession();
 
-    if (subError) {
-      return { success: false, error: subError.message };
+    // Få session ID fra JWT token
+    let currentSessionId: string | null = null;
+    if (currentSession?.access_token) {
+      try {
+        // Decode JWT payload (base64url decode middle part)
+        const payloadBase64 = currentSession.access_token.split('.')[1];
+        const payloadJson = Buffer.from(payloadBase64, 'base64url').toString('utf-8');
+        const payload = JSON.parse(payloadJson);
+        currentSessionId = payload.session_id;
+      } catch (e) {
+        console.error("Failed to decode session ID from JWT:", e);
+      }
     }
 
-    // is_current sættes på client-siden ved at matche endpoint
-    const sessions: Session[] = (subscriptions || []).map((sub) => ({
-      id: sub.id,
-      endpoint: sub.endpoint,
-      user_agent: sub.user_agent,
-      created_at: sub.created_at,
-      updated_at: sub.updated_at,
-      is_current: false, // Sættes korrekt på client-siden
+    // Brug direkte SQL query via RPC for at hente sessions fra auth schema
+    const { data: authSessions, error: sessionsError } = await supabase.rpc(
+      "get_user_sessions",
+      { target_user_id: user.id }
+    );
+
+    if (sessionsError) {
+      return { success: false, error: sessionsError.message };
+    }
+
+    // Map sessions og marker den aktuelle
+    const sessions: Session[] = (authSessions || []).map((session: {
+      id: string;
+      user_agent: string | null;
+      ip: string | null;
+      created_at: string;
+      updated_at: string | null;
+      not_after: string | null;
+    }) => ({
+      id: session.id,
+      user_agent: session.user_agent,
+      ip: session.ip,
+      created_at: session.created_at,
+      updated_at: session.updated_at,
+      not_after: session.not_after,
+      is_current: currentSessionId ? session.id === currentSessionId : false,
     }));
 
     return { success: true, sessions };
@@ -1991,36 +2020,120 @@ export async function getActiveSessions(): Promise<{
 }
 
 /**
- * Fjerner en specifik session (push subscription)
+ * Fjerner en specifik session fra Supabase Auth
  */
 export async function revokeSession(
   sessionId: string
 ): Promise<{ success: boolean; error?: string }> {
-  const supabase = await createServerClientInstance();
+  const adminSupabase = await createAdminClient();
 
   try {
     // Hent nuværende bruger
+    const userSupabase = await createServerClientInstance();
     const {
       data: { user },
       error: userError,
-    } = await supabase.auth.getUser();
+    } = await userSupabase.auth.getUser();
 
     if (userError || !user) {
       return { success: false, error: "Ikke autentificeret" };
     }
 
-    // Slet kun hvis subscription tilhører den aktuelle bruger
-    const { error } = await supabase
-      .from("push_subscriptions")
-      .delete()
-      .eq("id", sessionId)
-      .eq("user_id", user.id);
+    // Brug RPC til at slette session
+    const { error } = await adminSupabase.rpc(
+      "delete_user_session",
+      {
+        target_user_id: user.id,
+        target_session_id: sessionId
+      }
+    );
 
     if (error) {
       return { success: false, error: error.message };
     }
 
     return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Ukendt fejl",
+    };
+  }
+}
+
+/**
+ * Fjerner alle sessioner undtagen den nuværende
+ */
+export async function revokeAllOtherSessions(): Promise<{ success: boolean; error?: string; count?: number }> {
+  const adminSupabase = await createAdminClient();
+
+  try {
+    // Hent nuværende bruger og session
+    const userSupabase = await createServerClientInstance();
+    const {
+      data: { user },
+      error: userError,
+    } = await userSupabase.auth.getUser();
+
+    if (userError || !user) {
+      return { success: false, error: "Ikke autentificeret" };
+    }
+
+    // Hent nuværende session ID
+    const {
+      data: { session: currentSession },
+    } = await userSupabase.auth.getSession();
+
+    let currentSessionId: string | null = null;
+    if (currentSession?.access_token) {
+      try {
+        const payload = JSON.parse(atob(currentSession.access_token.split(".")[1]));
+        currentSessionId = payload.session_id;
+      } catch (e) {
+        console.error("Failed to decode session ID from JWT:", e);
+        return { success: false, error: "Kunne ikke identificere nuværende session" };
+      }
+    }
+
+    if (!currentSessionId) {
+      return { success: false, error: "Kunne ikke identificere nuværende session" };
+    }
+
+    // Hent alle sessioner
+    const { data: authSessions, error: sessionsError } = await adminSupabase.rpc(
+      "get_user_sessions",
+      { target_user_id: user.id }
+    );
+
+    if (sessionsError) {
+      return { success: false, error: sessionsError.message };
+    }
+
+    // Filtrer alle sessioner undtagen den nuværende
+    const sessionsToRevoke = (authSessions || []).filter(
+      (session: { id: string }) => session.id !== currentSessionId
+    );
+
+    if (sessionsToRevoke.length === 0) {
+      return { success: true, count: 0 };
+    }
+
+    // Slet alle andre sessioner
+    let revokedCount = 0;
+    for (const session of sessionsToRevoke) {
+      const { error } = await adminSupabase.rpc(
+        "delete_user_session",
+        {
+          target_user_id: user.id,
+          target_session_id: session.id
+        }
+      );
+      if (!error) {
+        revokedCount++;
+      }
+    }
+
+    return { success: true, count: revokedCount };
   } catch (err) {
     return {
       success: false,

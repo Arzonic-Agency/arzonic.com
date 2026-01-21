@@ -14,14 +14,16 @@ import { FaSpinner } from "react-icons/fa6";
 import {
   getActiveSessions,
   revokeSession,
+  revokeAllOtherSessions,
 } from "@/lib/server/actions";
 
 type Session = {
   id: string;
-  endpoint: string;
   user_agent: string | null;
+  ip: string | null;
   created_at: string;
   updated_at: string | null;
+  not_after: string | null;
   is_current: boolean;
 };
 
@@ -39,30 +41,68 @@ const parseUserAgent = (userAgent: string | null) => {
     device = "Tablet";
   }
 
-  // Detect browser
-  if (/firefox/i.test(userAgent)) {
-    browser = "Firefox";
-  } else if (/edg/i.test(userAgent)) {
-    browser = "Edge";
-  } else if (/chrome/i.test(userAgent)) {
-    browser = "Chrome";
-  } else if (/safari/i.test(userAgent)) {
-    browser = "Safari";
-  } else if (/opera|opr/i.test(userAgent)) {
+  // Detect browser (rækkefølge er vigtig!)
+  // Mere specifikke browsere skal tjekkes først
+  if (/edg\//i.test(userAgent) || /edga\//i.test(userAgent) || /edgios\//i.test(userAgent)) {
+    browser = "Microsoft Edge";
+  } else if (/opr\//i.test(userAgent) || /opera/i.test(userAgent)) {
     browser = "Opera";
+  } else if (/brave\//i.test(userAgent) || (userAgent.includes("Chrome") && userAgent.includes("Brave"))) {
+    browser = "Brave";
+  } else if (/vivaldi\//i.test(userAgent)) {
+    browser = "Vivaldi";
+  } else if (/arc\//i.test(userAgent) || userAgent.includes("Arc/")) {
+    browser = "Arc";
+  } else if (/duckduckgo\//i.test(userAgent)) {
+    browser = "DuckDuckGo";
+  } else if (/yabrowser\//i.test(userAgent)) {
+    browser = "Yandex Browser";
+  } else if (/samsungbrowser\//i.test(userAgent)) {
+    browser = "Samsung Internet";
+  } else if (/ucbrowser\//i.test(userAgent)) {
+    browser = "UC Browser";
+  } else if (/maxthon\//i.test(userAgent)) {
+    browser = "Maxthon";
+  } else if (/fxios\//i.test(userAgent)) {
+    browser = "Firefox (iOS)";
+  } else if (/firefox\//i.test(userAgent)) {
+    browser = "Firefox";
+  } else if (/crios\//i.test(userAgent)) {
+    browser = "Chrome (iOS)";
+  } else if (/chrome\//i.test(userAgent)) {
+    browser = "Chrome";
+  } else if (/safari\//i.test(userAgent) && !userAgent.includes("Chrome")) {
+    browser = "Safari";
+  } else if (/trident\//i.test(userAgent) || /msie /i.test(userAgent)) {
+    browser = "Internet Explorer";
   }
 
-  // Detect OS
-  if (/windows/i.test(userAgent)) {
+  // Detect OS med versioner
+  if (/windows nt 10\.0/i.test(userAgent)) {
+    os = "Windows 10/11";
+  } else if (/windows nt 6\.3/i.test(userAgent)) {
+    os = "Windows 8.1";
+  } else if (/windows nt 6\.2/i.test(userAgent)) {
+    os = "Windows 8";
+  } else if (/windows nt 6\.1/i.test(userAgent)) {
+    os = "Windows 7";
+  } else if (/windows/i.test(userAgent)) {
     os = "Windows";
-  } else if (/macintosh|mac os/i.test(userAgent)) {
+  } else if (/mac os x (\d+[._]\d+)/i.test(userAgent)) {
+    const match = userAgent.match(/mac os x (\d+[._]\d+)/i);
+    os = match ? `macOS ${match[1].replace(/_/g, ".")}` : "macOS";
+  } else if (/macintosh/i.test(userAgent)) {
     os = "macOS";
+  } else if (/android (\d+(\.\d+)?)/i.test(userAgent)) {
+    const match = userAgent.match(/android (\d+(\.\d+)?)/i);
+    os = match ? `Android ${match[1]}` : "Android";
+  } else if (/iphone os (\d+_\d+)/i.test(userAgent) || /cpu os (\d+_\d+)/i.test(userAgent)) {
+    const match = userAgent.match(/(?:iphone )?os (\d+_\d+)/i);
+    os = match ? `iOS ${match[1].replace(/_/g, ".")}` : "iOS";
+  } else if (/ipad|ipod|iphone/i.test(userAgent)) {
+    os = "iOS";
   } else if (/linux/i.test(userAgent)) {
     os = "Linux";
-  } else if (/android/i.test(userAgent)) {
-    os = "Android";
-  } else if (/iphone|ipad|ipod/i.test(userAgent)) {
-    os = "iOS";
   }
 
   return { device, browser, os };
@@ -84,29 +124,8 @@ const Security = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [revoking, setRevoking] = useState<string | null>(null);
+  const [revokingAll, setRevokingAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [currentEndpoint, setCurrentEndpoint] = useState<string | null>(null);
-
-  // Hent den aktuelle browsers push subscription endpoint
-  useEffect(() => {
-    const getCurrentEndpoint = async () => {
-      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-        return;
-      }
-
-      try {
-        const registration = await navigator.serviceWorker.ready;
-        const subscription = await registration.pushManager.getSubscription();
-        if (subscription) {
-          setCurrentEndpoint(subscription.endpoint);
-        }
-      } catch (err) {
-        console.error("Kunne ikke hente push subscription:", err);
-      }
-    };
-
-    getCurrentEndpoint();
-  }, []);
 
   const fetchSessions = async () => {
     setLoading(true);
@@ -145,6 +164,24 @@ const Security = () => {
     }
   };
 
+  const handleRevokeAllOthers = async () => {
+    setRevokingAll(true);
+    setError(null);
+    try {
+      const result = await revokeAllOtherSessions();
+      if (result.success) {
+        // Behold kun den nuværende session
+        setSessions((prev) => prev.filter((s) => s.is_current));
+      } else {
+        setError(result.error || "Kunne ikke logge ud af andre enheder");
+      }
+    } catch {
+      setError("Der opstod en fejl ved udlogning af andre enheder");
+    } finally {
+      setRevokingAll(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("da-DK", {
@@ -161,20 +198,18 @@ const Security = () => {
       <div className="flex items-start justify-between">
         <div>
           <h3 className="text-lg font-semibold">
-            {t("settings.active_sessions", { defaultValue: "Aktive sessioner" })}
+            {t("security_settings.active_sessions")}
           </h3>
           <p className="text-sm text-zinc-500">
-            {t("settings.active_sessions_desc", {
-              defaultValue:
-                "Enheder hvor du er logget ind og modtager notifikationer. Fjern adgang for enheder du ikke genkender.",
-            })}
+            {t("security_settings.active_sessions_desc")}
           </p>
         </div>
         <button
           onClick={fetchSessions}
           disabled={loading}
-          className="btn btn-ghost btn-sm"
-          title={t("settings.refresh_sessions", { defaultValue: "Opdater" })}
+          className="btn btn-ghost btn-sm tooltip"
+          data-tip={t("security_settings.refresh")}
+          title={t("security_settings.refresh")}
         >
           <FaSync className={loading ? "animate-spin" : ""} />
         </button>
@@ -195,34 +230,27 @@ const Security = () => {
       ) : sessions.length === 0 ? (
         <div className="text-center py-8 text-zinc-500">
           <p>
-            {t("settings.no_sessions", {
-              defaultValue: "Ingen aktive sessioner fundet",
-            })}
-          </p>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3">
-          {[...sessions]
-            .sort((a, b) => {
-              // Sortér så current device er øverst
-              const aIsCurrent = currentEndpoint ? a.endpoint === currentEndpoint : a.is_current;
-              const bIsCurrent = currentEndpoint ? b.endpoint === currentEndpoint : b.is_current;
-              if (aIsCurrent && !bIsCurrent) return -1;
-              if (!aIsCurrent && bIsCurrent) return 1;
-              return 0;
-            })
-            .map((session) => {
+            {t("security_settings.no_sessions")}
+        </p>
+      </div>
+    ) : (
+      <div className="flex flex-col gap-3">
+        {[...sessions]
+          .sort((a, b) => {
+            // Sortér så current device er øverst
+            if (a.is_current && !b.is_current) return -1;
+            if (!a.is_current && b.is_current) return 1;
+            return 0;
+          })
+          .map((session) => {
             const { device, browser, os } = parseUserAgent(session.user_agent);
             const isRevoking = revoking === session.id;
-            // Match endpoint for at finde den aktuelle enhed
-            const isCurrent = currentEndpoint
-              ? session.endpoint === currentEndpoint
-              : session.is_current;
+            const isCurrent = session.is_current;
 
             return (
               <div
                 key={session.id}
-                className="flex items-center justify-between p-4 bg-base-200 rounded-lg"
+                className="flex items-center justify-between py-4 bg-base-200 rounded-lg"
                   
               >
                 <div className="flex items-center gap-4">
@@ -231,13 +259,13 @@ const Security = () => {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">
+                      <span className="font-medium text-sm">
                         {browser} - {os}
                       </span>
                       {isCurrent && (
-                        <span className="badge badge-primary badge-sm flex items-center gap-1">
-                          <FaCheck className="text-xs" />
-                          {t("security_settings.current")}
+                        <span className="badge badge-success badge-xs md:badge-sm flex items-center gap-1">
+                          <FaCheck className="text-[10px] sm:text-xs " />
+                          <span className="">{t("security_settings.current")}</span>
                         </span>
                       )}
                     </div>
@@ -248,23 +276,56 @@ const Security = () => {
                     </p>
                   </div>
                 </div>
-                {!isCurrent && (
-                  <button
-                    onClick={() => handleRevoke(session.id)}
-                    disabled={isRevoking}
-                    className="btn btn-ghost btn-sm text-error hover:bg-error/10"
-                    title={t("security_settings.revoke")}
-                  >
-                    {isRevoking ? (
-                      <FaSpinner className="animate-spin" />
-                    ) : (
-                      <FaTrash />
-                    )}
-                  </button>
-                )}
+                <div className="flex items-center gap-2">
+                  {!isCurrent && (
+                    <button
+                      onClick={() => handleRevoke(session.id)}
+                      disabled={isRevoking}
+                      className="btn btn-soft btn-sm btn-error flex items-center gap-2 md:tooltip md:tooltip-left"
+                      
+                      data-tip={t("security_settings.revoke")}
+                    >
+                      {isRevoking ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <>
+                          <FaTrash />
+                          <span className="hidden sm:inline">{t("logout")}</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Log ud af alle andre enheder knap */}
+      {sessions.filter((s) => !s.is_current).length > 0 && (
+        <div className="mt-4 pt-4 border-t border-base-300 items-center justify-center flex flex-col gap-2">
+          <button
+            onClick={handleRevokeAllOthers}
+            disabled={revokingAll || loading}
+            className="btn btn-sm btn-error btn-soft"
+            title={t("security_settings.logout_all_other_devices")}
+          >
+            {revokingAll ? (
+              <>
+                <FaSpinner className="animate-spin" />
+                  {t("security_settings.logging_out_all")}
+                </>
+            ) : (
+              <>
+                <FaTrash />
+                {t("security_settings.logout_all_other_devices")}
+              </>
+            )}
+          </button>
+          <p className="text-xs text-zinc-500 mt-2 text-center">
+            {t("security_settings.logout_all_other_devices_desc")}
+          </p>
         </div>
       )}
     </div>

@@ -49,6 +49,8 @@ const LoginPage = () => {
         const formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
+        // Send browser user agent to track sessions properly
+        formData.append("userAgent", navigator.userAgent);
 
         const response = await login(formData);
         if (response.success) {

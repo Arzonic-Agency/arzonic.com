@@ -1,9 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 
 export async function createServerClientInstance() {
   const cookieStore = await cookies();
+  const headersList = await headers();
+  const userAgent = headersList.get("user-agent") || undefined;
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,6 +26,9 @@ export async function createServerClientInstance() {
             // user sessions.
           }
         },
+      },
+      global: {
+        headers: userAgent ? { "user-agent": userAgent } : {},
       },
     }
   );
