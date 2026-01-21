@@ -196,7 +196,7 @@ const NotificationList = () => {
         className="dropdown-content menu bg-base-200 border-2 border-base-300 rounded-box shadow-lg overflow-x-hidden w-60"
       >
         <div className="flex flex-col items-center">
-          <span className="font-semibold">{t("notifications")}</span>
+          <span className="font-semibold">{t("notifications.title")}</span>
           {!hasNotifications && (
             <span className="text-sm text-base-content/60">
               {headerSubtitle}

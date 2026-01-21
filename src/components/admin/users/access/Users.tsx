@@ -72,7 +72,7 @@ const Users = () => {
           <div>
             <button
               onClick={() => setShowRegister(true)}
-              className="btn btn-primary "
+              className="btn btn-primary btn-sm md:btn-md"
             >
               {t("create_user")}
             </button>

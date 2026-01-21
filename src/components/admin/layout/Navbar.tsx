@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  FaFileLines,
   FaGear,
   FaHouse,
-  FaList,
   FaRightFromBracket,
   FaUserGroup,
 } from "react-icons/fa6";
@@ -33,17 +33,18 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
-      <div className="flex flex-col sm:gap-5 h-full ">
-        <div className="flex flex-col items-center justify-center h-32 w-full text-xl">
-          <Image
-            src="/icon-192x192.png"
-            alt="App ikon"
-            width={60}
-            height={60}
-            priority
-          />
-          <span className="font-bold">ADMIN</span>
+    <div className="flex flex-col items-center sm:justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
+      <div className="flex flex-col sm:gap-5 h-full">
+        <div className="flex items-center justify-center h-20 sm:h-24 w-full text-xl">
+            <Image
+              src="/icon-192x192.png"
+              alt="App ikon"
+              width={60}
+              height={60}
+              priority
+            />
+            <span className="font-semibold hidden md:block">Dashboard</span>
+        
         </div>
         <div className="hidden sm:flex">
           <ul className="menu menu-lg gap-2 rounded-box w-56 xl:w-72">
@@ -65,7 +66,7 @@ const Navbar = () => {
                 href="/admin/content"
                 aria-label={t("aria.navigation.linkToContent")}
               >
-                <FaList className="size-[1.1em] mr-[0.15rem]" />
+                <FaFileLines className="size-[1.1em] mr-[0.15rem]" />
                 {t("content")}
               </Link>
             </li>
@@ -86,6 +87,7 @@ const Navbar = () => {
                   className={pathname === "/admin/users" ? "menu-active" : ""}
                   aria-label={t("aria.navigation.linkToUsers")}
                 >
+               
                   <FaShieldAlt className="size-[1.1em] mr-[0.15rem]" />
                   {t("user_access")}
                 </Link>
@@ -108,14 +110,14 @@ const Navbar = () => {
         
           </ul>
         </div>
-        <div className="dock sm:hidden z-30 bg-base-200">
+        <div className="dock dock-md sm:hidden z-30 bg-base-200">
           {["admin", "developer"].includes(role || "") && (
             <Link
               href="/admin"
               className={pathname === "/admin" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToOverview")}
             >
-              <FaHouse className="" />
+              <FaHouse className="text-lg" />
             </Link>
           )}
           <Link
@@ -123,14 +125,14 @@ const Navbar = () => {
             className={pathname === "/admin/content" ? "dock-active" : ""}
             aria-label={t("aria.navigation.linkToContent")}
           >
-            <FaList className="" />
+            <FaFileLines className="text-lg" />
           </Link>
           <Link
             href="/admin/messages"
             className={pathname === "/admin/messages" ? "dock-active" : ""}
             aria-label={t("aria.navigation.linkToCustomers")}
           >
-            <FaUserGroup className="" />
+            <FaUserGroup className="text-lg" />
           </Link>
           {["admin", "developer"].includes(role || "") && (
             <Link
@@ -138,7 +140,7 @@ const Navbar = () => {
               className={pathname === "/admin/users" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToUsers")}
             >
-              <FaShieldAlt className="" />
+              <FaShieldAlt className="text-lg" />
             </Link>
           )}
           {["admin", "developer"].includes(role || "") && (
@@ -147,7 +149,7 @@ const Navbar = () => {
               className={pathname === "/admin/settings" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToSettings")}
             >
-              <FaGear className="" />
+              <FaGear className="text-lg" />
             </Link>
           )}
     

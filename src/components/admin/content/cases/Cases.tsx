@@ -69,7 +69,7 @@ const Cases = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateCase(true)}
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm md:btn-md"
               aria-label={t("aria.cases.createCase")}
             >
               {t("create")} Case

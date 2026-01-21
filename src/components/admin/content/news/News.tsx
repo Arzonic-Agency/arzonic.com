@@ -59,7 +59,7 @@ const News = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateNews(true)}
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm md:btn-md"
             >
               {t("create")} {t("news")}
             </button>

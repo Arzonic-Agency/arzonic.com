@@ -26,7 +26,7 @@ const SetupJobs = ({ onEdit, onCreate }: SetupJobsProps) => {
       </div>
 
       <div>
-        <button className="btn btn-sm btn-primary" onClick={onCreate}>
+        <button className="btn btn-sm btn-primary md:btn-md" onClick={onCreate}>
           {t("setup.create")} {t("setup.job")}
         </button>
       </div>

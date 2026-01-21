@@ -207,9 +207,8 @@ const Security = () => {
         <button
           onClick={fetchSessions}
           disabled={loading}
-          className="btn btn-ghost btn-sm tooltip"
+          className="btn btn-ghost btn-sm sm:tooltip"
           data-tip={t("security.refresh")}
-          title={t("security.refresh")}
         >
           <FaSync className={loading ? "animate-spin" : ""} />
         </button>

@@ -87,7 +87,7 @@ const Reviews = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateReview(true)}
-              className="btn btn-primary"
+              className="btn btn-primary btn-sm md:btn-md"
               aria-label={t("aria.reviews.createReviewButton")}
             >
               {t("create")} {t("review")}

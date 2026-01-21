@@ -2,15 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-
 import {
   FaAngleLeft,
   FaBell,
+  FaKey,
   FaPalette,
   FaUserGear,
   FaXmark,
 } from "react-icons/fa6";
-import { FaShieldAlt } from "react-icons/fa";
 import { useUserSettingsModal } from "./UserSettingsModalContext";
 import ChangePassword from "./config/ChangePassword";
 import UserDetails from "./config/UserDetails";
@@ -112,7 +111,7 @@ const UserSettingsModal = () => {
                   className={`${activeTab === "security" ? "menu-active" : ""}`}
                   onClick={() => setActiveTab("security")}
                 >
-                  <FaShieldAlt className="md:text-base text-lg" />{" "}
+                  <FaKey className="md:text-base text-lg" />{" "}
                   <span className="text-base hidden sm:block">
                     {t("security.title")}
                   </span>
