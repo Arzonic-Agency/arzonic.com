@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { FaAngleRight, FaLocationDot } from "react-icons/fa6";
-import { FiArrowRight } from "react-icons/fi";
 import Link from "next/link";
 
 export interface CaseItem {

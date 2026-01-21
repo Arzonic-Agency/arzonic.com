@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaArrowUpRightDots, FaHandshake } from "react-icons/fa6";
+import { FaArrowUpRightDots } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import { FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
