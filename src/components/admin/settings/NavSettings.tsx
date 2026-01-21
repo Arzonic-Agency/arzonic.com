@@ -26,7 +26,6 @@ const NavSettings = () => {
           <FaExternalLinkAlt />
           {t("layout_settings")}
         </button>
- 
         <button
           role="tab"
           className={`tab gap-2  ${

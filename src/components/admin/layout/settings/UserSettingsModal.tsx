@@ -103,7 +103,7 @@ const UserSettingsModal = () => {
                 >
                   <FaBell className="md:text-base text-lg" />{" "}
                   <span className="text-base hidden sm:block">
-                    {t("notifications")}
+                    {t("notifications.title")}
                   </span>
                 </button>
               </li>
@@ -114,7 +114,7 @@ const UserSettingsModal = () => {
                 >
                   <FaShieldAlt className="md:text-base text-lg" />{" "}
                   <span className="text-base hidden sm:block">
-                    {t("security")}
+                    {t("security.title")}
                   </span>
                 </button>
               </li>
@@ -126,6 +126,9 @@ const UserSettingsModal = () => {
             <div className="h-full">
               {activeTab === "user" && (
                 <div>
+                  <h3 className="text-lg font-semibold mb-6 md:mb-10">
+                    {t("user_profile")}
+                  </h3>
                   {!showChangePassword ? (
                     <UserDetails
                       onChangePassword={() => setShowChangePassword(true)}
@@ -149,9 +152,9 @@ const UserSettingsModal = () => {
               )}
               {activeTab === "appearance" && (
                 <div>
-                  <h4 className="text-lg font-semibold mb-4">
+                  <h3 className="text-lg font-semibold mb-6 md:mb-10">
                     {t("appearance")}
-                  </h4>
+                  </h3>
                   <p className="text-sm text-base-content/70">
                     {t("settings_content_coming_soon")}
                   </p>
@@ -159,17 +162,17 @@ const UserSettingsModal = () => {
               )}
               {activeTab === "notifications" && (
                 <div>
-                  <h4 className="text-lg font-semibold mb-4">
-                    {t("notifications")}
-                  </h4>
+                  <h3 className="text-lg font-semibold mb-6 md:mb-10">
+                    {t("notifications.title")}
+                  </h3>
                   <PushNotificationToggle />
                 </div>
               )}
               {activeTab === "security" && (
                 <div>
-                  <h4 className="text-lg font-semibold mb-4">
-                    {t("security")}
-                  </h4>
+                    <h3 className="text-lg font-semibold mb-6 md:mb-10">
+                    {t("security.title")}
+                  </h3>
                 <Security />
                 </div>
               )}

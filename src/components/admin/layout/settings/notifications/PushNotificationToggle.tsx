@@ -3,16 +3,18 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createClient } from "@/utils/supabase/client";
-import { updateUserPushNotificationPreference } from "@/lib/server/subscribe";
+import { updateUserPushNotificationPreference, updateUserDashboardNotificationPreference } from "@/lib/server/subscribe";
 
 const PushNotificationToggle = () => {
   const { t } = useTranslation();
-  const [enabled, setEnabled] = useState<boolean | null>(null); // null = ikke indlæst endnu
+  const [pushEnabled, setPushEnabled] = useState<boolean | null>(null);
+  const [dashboardEnabled, setDashboardEnabled] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [savingPush, setSavingPush] = useState(false);
+  const [savingDashboard, setSavingDashboard] = useState(false);
 
   useEffect(() => {
-    const fetchPreference = async () => {
+    const fetchPreferences = async () => {
       const supabase = createClient();
       const {
         data: { user },
@@ -25,35 +27,34 @@ const PushNotificationToggle = () => {
 
       const { data: member, error } = await supabase
         .from("members")
-        .select("push_notifications_enabled")
+        .select("push_notifications_enabled, dashboard_notifications_enabled")
         .eq("id", user.id)
         .single();
 
       if (error) {
-        console.error("Fejl ved hentning af push notification preference:", error);
-        setEnabled(true); // Default til true ved fejl
+        console.error("Fejl ved hentning af notification preferences:", error);
+        setPushEnabled(true);
+        setDashboardEnabled(true);
       } else if (member) {
-        // Brug værdien fra databasen, eller true hvis null/undefined
-        // (kolonnen har DEFAULT true, men eksisterende rækker kan have null)
-        const preferenceValue = member.push_notifications_enabled ?? true;
-        setEnabled(preferenceValue);
+        setPushEnabled(member.push_notifications_enabled ?? true);
+        setDashboardEnabled(member.dashboard_notifications_enabled ?? true);
       } else {
-        setEnabled(true); // Default til true hvis member ikke findes
+        setPushEnabled(true);
+        setDashboardEnabled(true);
       }
 
       setLoading(false);
     };
 
-    fetchPreference();
+    fetchPreferences();
   }, []);
 
-  const handleToggle = async (checked: boolean) => {
-    setSaving(true);
-    const previousValue = enabled;
-    
-    // Optimistisk opdatering - sæt værdien med det samme
-    setEnabled(checked);
-    
+  const handlePushToggle = async (checked: boolean) => {
+    setSavingPush(true);
+    const previousValue = pushEnabled;
+
+    setPushEnabled(checked);
+
     try {
       const supabase = createClient();
       const {
@@ -62,79 +63,124 @@ const PushNotificationToggle = () => {
 
       if (!user) {
         console.error("Bruger ikke fundet");
-        setEnabled(previousValue); // Revert til forrige værdi
-        setSaving(false);
+        setPushEnabled(previousValue);
+        setSavingPush(false);
         return;
       }
 
       const result = await updateUserPushNotificationPreference(user.id, checked);
-      
-      if (result.success) {
-        // Værdien er allerede sat via optimistisk opdatering
-      } else {
+
+      if (!result.success) {
         console.error("Fejl ved opdatering:", result.error);
-        // Revert til forrige værdi hvis fejl
-        setEnabled(previousValue);
+        setPushEnabled(previousValue);
       }
     } catch (error) {
       console.error("Fejl ved opdatering af push notification preference:", error);
-      // Revert til forrige værdi hvis fejl
-      setEnabled(previousValue);
+      setPushEnabled(previousValue);
     } finally {
-      setSaving(false);
+      setSavingPush(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center gap-4">
-        <span className="loading loading-spinner loading-sm"></span>
-        <span className="text-sm">{t("loading") || "Loading..."}</span>
-      </div>
-    );
-  }
+  const handleDashboardToggle = async (checked: boolean) => {
+    setSavingDashboard(true);
+    const previousValue = dashboardEnabled;
+
+    setDashboardEnabled(checked);
+
+    try {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        console.error("Bruger ikke fundet");
+        setDashboardEnabled(previousValue);
+        setSavingDashboard(false);
+        return;
+      }
+
+      const result = await updateUserDashboardNotificationPreference(user.id, checked);
+
+      if (!result.success) {
+        console.error("Fejl ved opdatering:", result.error);
+        setDashboardEnabled(previousValue);
+      }
+    } catch (error) {
+      console.error("Fejl ved opdatering af dashboard notification preference:", error);
+      setDashboardEnabled(previousValue);
+    } finally {
+      setSavingDashboard(false);
+    }
+  };
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <h5 className="font-semibold text-base">
-            {t("push_notifications") || "Push Notifications"}
-          </h5>
-          <p className="text-sm text-base-content/70">
-            {t("push_notifications_description") ||
-              "Modtag push notifications når der oprettes nye requests eller beskeder"}
-          </p>
-        </div>
-        <input
-          type="checkbox"
-          checked={enabled ?? false}
-          onChange={(e) => handleToggle(e.target.checked)}
-          disabled={saving || loading}
-          className="toggle toggle-primary"
-        />
+    <div className="flex flex-col gap-6">
+      {/* Push Notifications Toggle */}
+      <div className="flex flex-col gap-4">
+        {loading ? (
+          <>
+            <div className="skeleton h-5 w-full"></div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="skeleton h-4 flex-1"></div>
+              <div className="skeleton h-6 w-12 rounded-full shrink-0"></div>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h5 className="font-semibold text-sm md:text-base">
+                {t("notifications.push")}
+              </h5>
+              <p className="text-sm text-base-content/70">
+                {t("notifications.push_description")}
+              </p>
+            </div>
+              <input
+                type="checkbox"
+                checked={pushEnabled ?? false}
+                onChange={(e) => handlePushToggle(e.target.checked)}
+                disabled={savingPush || loading}
+                className="toggle toggle-primary"
+              />
+          </div>
+        )}
       </div>
-      {!enabled && (
-        <div className="alert alert-info">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="stroke-current shrink-0 w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          <span className="text-sm">
-            {t("push_notifications_disabled") ||
-              "Push notifications er deaktiveret. Du vil stadig modtage notifications i appen, men ikke som push beskeder."}
-          </span>
-        </div>
-      )}
+  
+      {/* Dashboard Notifications Toggle */}
+      <div className="flex flex-col gap-4">
+        {loading ? (
+          <>
+            <div className="skeleton h-5 w-full"></div>
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col gap-2 flex-1">
+                <div className="skeleton h-4 w-full"></div>
+                <div className="skeleton h-4 w-full"></div>
+              </div>
+              <div className="skeleton h-6 w-full max-w-12 rounded-full shrink-0"></div>
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h5 className="font-semibold text-sm md:text-base">
+                {t("notifications.dashboard")}
+              </h5>
+              <p className="text-sm text-base-content/70">
+                {t("notifications.dashboard_description")}
+              </p>
+            </div>
+            <input
+              type="checkbox"
+              checked={dashboardEnabled ?? false}
+              onChange={(e) => handleDashboardToggle(e.target.checked)}
+              disabled={savingDashboard || loading}
+              className="toggle toggle-primary"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

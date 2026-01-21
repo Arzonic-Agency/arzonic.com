@@ -27,12 +27,12 @@ type Session = {
   is_current: boolean;
 };
 
-const parseUserAgent = (userAgent: string | null) => {
-  if (!userAgent) return { device: "Ukendt enhed", browser: "Ukendt browser", os: "Ukendt OS" };
+const parseUserAgent = (userAgent: string | null, t: (key: string) => string) => {
+  if (!userAgent) return { device: t("security.unknown"), browser: t("security.unknown"), os: t("security.unknown") };
 
   let device = "Desktop";
-  let browser = "Ukendt browser";
-  let os = "Ukendt OS";
+  let browser = t("security.unknown");
+  let os = t("security.unknown");
 
   // Detect device type
   if (/mobile/i.test(userAgent)) {
@@ -197,19 +197,19 @@ const Security = () => {
     <div className="flex flex-col gap-4">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="text-lg font-semibold">
-            {t("security_settings.active_sessions")}
+          <h3 className="md:text-base text-sm font-semibold">
+            {t("security.active_sessions")}
           </h3>
           <p className="text-sm text-zinc-500">
-            {t("security_settings.active_sessions_desc")}
+            {t("security.active_sessions_desc")}
           </p>
         </div>
         <button
           onClick={fetchSessions}
           disabled={loading}
           className="btn btn-ghost btn-sm tooltip"
-          data-tip={t("security_settings.refresh")}
-          title={t("security_settings.refresh")}
+          data-tip={t("security.refresh")}
+          title={t("security.refresh")}
         >
           <FaSync className={loading ? "animate-spin" : ""} />
         </button>
@@ -230,11 +230,11 @@ const Security = () => {
       ) : sessions.length === 0 ? (
         <div className="text-center py-8 text-zinc-500">
           <p>
-            {t("security_settings.no_sessions")}
+            {t("security.no_sessions")}
         </p>
       </div>
     ) : (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
         {[...sessions]
           .sort((a, b) => {
             // Sortér så current device er øverst
@@ -243,7 +243,7 @@ const Security = () => {
             return 0;
           })
           .map((session) => {
-            const { device, browser, os } = parseUserAgent(session.user_agent);
+            const { device, browser, os } = parseUserAgent(session.user_agent, t);
             const isRevoking = revoking === session.id;
             const isCurrent = session.is_current;
 
@@ -265,13 +265,13 @@ const Security = () => {
                       {isCurrent && (
                         <span className="badge badge-success badge-xs md:badge-sm flex items-center gap-1">
                           <FaCheck className="text-[10px] sm:text-xs " />
-                          <span className="">{t("security_settings.current")}</span>
+                          <span>{t("security.current")}</span>
                         </span>
                       )}
                     </div>
                     <p className="text-sm text-zinc-500">{device}</p>
                     <p className="text-xs text-zinc-500">
-                      {t("security_settings.last_active")}:{" "}
+                      {t("security.last_active")}:{" "}
                       {formatDate(session.updated_at || session.created_at)}
                     </p>
                   </div>
@@ -283,7 +283,7 @@ const Security = () => {
                       disabled={isRevoking}
                       className="btn btn-soft btn-sm btn-error flex items-center gap-2 md:tooltip md:tooltip-left"
                       
-                      data-tip={t("security_settings.revoke")}
+                      data-tip={t("security.revoke")}
                     >
                       {isRevoking ? (
                         <FaSpinner className="animate-spin" />
@@ -309,22 +309,22 @@ const Security = () => {
             onClick={handleRevokeAllOthers}
             disabled={revokingAll || loading}
             className="btn btn-sm btn-error btn-soft"
-            title={t("security_settings.logout_all_other_devices")}
+            title={t("security.logout_all_other_devices")}
           >
             {revokingAll ? (
               <>
                 <FaSpinner className="animate-spin" />
-                  {t("security_settings.logging_out_all")}
+                  {t("security.logging_out_all")}
                 </>
             ) : (
               <>
                 <FaTrash />
-                {t("security_settings.logout_all_other_devices")}
+                {t("security.logout_all_other_devices")}
               </>
             )}
           </button>
           <p className="text-xs text-zinc-500 mt-2 text-center">
-            {t("security_settings.logout_all_other_devices_desc")}
+            {t("security.logout_all_other_devices_desc")}
           </p>
         </div>
       )}

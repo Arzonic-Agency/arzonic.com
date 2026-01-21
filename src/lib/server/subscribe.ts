@@ -233,3 +233,51 @@ export async function updateUserPushNotificationPreference(
     };
   }
 }
+
+/**
+ * Opdaterer dashboard notification preference for en bruger
+ */
+export async function updateUserDashboardNotificationPreference(
+  userId: string,
+  enabled: boolean
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createServerClientInstance();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return { success: false, error: "Ikke autentificeret" };
+  }
+
+  if (user.id !== userId) {
+    return { success: false, error: "Ikke autoriseret til at opdatere denne bruger" };
+  }
+
+  try {
+    const { error } = await supabase
+      .from("members")
+      .update({ dashboard_notifications_enabled: enabled })
+      .eq("id", userId);
+
+    if (error) {
+      const adminSupabase = await createAdminClient();
+      const { error: adminError } = await adminSupabase
+        .from("members")
+        .update({ dashboard_notifications_enabled: enabled })
+        .eq("id", userId);
+
+      if (adminError) {
+        return { success: false, error: adminError.message };
+      }
+    }
+
+    return { success: true };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
+  }
+}

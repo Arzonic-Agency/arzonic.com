@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Policy from "@/components/elements/Policy";
+import { useTranslation } from "react-i18next";
 
 interface PolicyModalProps {
   buttonText: string;
@@ -11,7 +12,7 @@ interface PolicyModalProps {
 
 const PolicyModal = ({ buttonText, variant = "hover" }: PolicyModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { t } = useTranslation();
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
@@ -21,7 +22,7 @@ const PolicyModal = ({ buttonText, variant = "hover" }: PolicyModalProps) => {
       <button
         type="button"
         onClick={openModal}
-        className={`font-medium ${
+        className={`font-medium text-[11px] ${
           variant === "primary"
             ? "btn btn-link btn-primary p-0"
             : "link link-hover"
@@ -46,10 +47,10 @@ const PolicyModal = ({ buttonText, variant = "hover" }: PolicyModalProps) => {
 
             <div className="modal-action justify-between">
               <Link href="/policy" className="btn btn-link">
-                Read full policy
+                {t("Policy.readFullPolicy")}
               </Link>
               <button className="btn btn-primary" onClick={closeModal}>
-                Close
+                {t("close")}
               </button>
             </div>
           </div>

@@ -175,8 +175,7 @@
   "profile_settings": "Brugerindstillinger",
   "user_profile": "Brugerprofil",
   "appearance": "Udseende",
-  "notifications": "Notifikationer",
-  "security": "Sikkerhed",
+
   "settings_content_coming_soon": "Indstillinger kommer snart...",
   "site": "Side",
   "site_setup": "Sideopsætning",
@@ -200,17 +199,26 @@
   "push_notifications_enabled": "Notifikationer er slået til",
   "push_notifications_disabled": "Notifikationer er slået fra",
   "go_website": "Gå til hjemmeside",
-  "security_settings": {
+  "security": {
+    "title": "Sikkerhed",
     "logging_out_all": "Logger ud...",
     "logout_all_other_devices": "Log ud af alle enheder",
     "logout_all_other_devices_desc": "Dette vil logge dig ud af alle enheder undtagen denne.",
     "current": "Denne enhed",
     "last_active": "Sidst aktiv",
+    "unknown": "Ukendt",
     "revoke": "Log ud af enheden & fjerner adgang",
     "refresh": "Opdater",
     "no_sessions": "Ingen aktive sessioner fundet",
     "active_sessions": "Aktive sessioner",
-    "active_sessions_desc": "Enheder hvor du er logget ind og modtager notifikationer. Fjern adgang for enheder du ikke genkender."
+    "active_sessions_desc": "Enheder hvor du er logget ind."
+  },
+  "notifications": {
+    "title": "Notifikationer",
+    "push": "Push notifikationer",
+    "push_description": "Modtag push beskeder på din mobil eller browser når der oprettes nye requests",
+    "dashboard": "Dashboard notifikationer",
+    "dashboard_description": "Vis notifikationer i dashboard bjælken når der oprettes nye requests"
   },
   "messages": {
     "email_already_exists": "Der findes allerede en bruger med denne e-mail",
@@ -729,12 +737,11 @@
     }
   },
   "Policy": {
-    "meta": {
-      "title": "Privatlivspolitik & Samtykke",
-      "lastUpdated": "Sidst opdateret: 2. december 2025",
-      "company": "Arzonic ApS"
-    },
-
+    "readFullPolicy": "Læs fuld på siden",
+    "lastUpdated": "Sidst opdateret: 2. december 2025",
+    "intro": "Denne privatlivspolitik beskriver, hvordan vi indsamler, bruger, opbevarer og deler dine personlige oplysninger, når du bruger vores hjemmeside, tjenester eller interagerer med os.",
+    "title": "Privatlivspolitik & Samtykke",
+    "company": "Arzonic ApS",
     "section1": {
       "title": "1. Hvornår vi indsamler personoplysninger",
       "description": "Vi indsamler kun personoplysninger, når du aktivt vælger at dele dem med os – typisk når du:",

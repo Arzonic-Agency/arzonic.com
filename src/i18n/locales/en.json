@@ -173,8 +173,6 @@
   "layout": "Layout Settings",
   "general": "General",
   "appearance": "Appearance",
-  "notifications": "Notifications",
-  "security": "Security",
   "settings_content_coming_soon": "Settings content coming soon...",
   "profile_settings": "User Settings",
   "user_profile": "User Profile",
@@ -200,17 +198,26 @@
   "push_notifications_enabled": "Notifications are turned on",
   "push_notifications_disabled": "Notifications are turned off",
   "go_website": "Go to Website",
-  "security_settings": {
+  "security": {
+    "title": "Security",
     "logging_out_all": "Logging out...",
     "logout_all_other_devices": "Logout from all devices",
     "logout_all_other_devices_desc": "This will log you out of all devices except this one.",
     "current": "This device",
     "last_active": "Last active",
+    "unknown": "Unknown",
     "revoke": "Logout & revoke access",  
     "refresh": "Refresh",
     "no_sessions": "No active sessions found",
     "active_sessions": "Active sessions",
-    "active_sessions_desc": "Devices where you are logged in and receive notifications. Revoke access for devices you do not recognize."
+    "active_sessions_desc": "Devices where you are logged in."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "push": "Push notifications",
+    "push_description": "Receive push notifications on your mobile or browser when new requests are created",
+    "dashboard": "Dashboard notifications",
+    "dashboard_description": "Receive notifications in the dashboard when new requests are created"
   },
   "messages": {
     "email_already_exists": "A user with this email already exists",
@@ -728,12 +735,11 @@
     }
   },
   "Policy": {
-    "meta": {
-      "title": "Privacy Policy & Consent",
-      "lastUpdated": "Last updated: December 2, 2025",
-      "company": "Arzonic ApS"
-    },
-
+    "readFullPolicy": "Read full",
+    "lastUpdated": "Last updated: December 2, 2025",
+    "intro": "This Privacy Policy outlines how we collect, use, store and share your personal data when you use our website, services or interact with us.",
+    "title": "Privacy Policy & Consent",
+    "company": "Arzonic ApS",
     "section1": {
       "title": "1. When we collect personal data",
       "description": "We only collect personal data when you actively choose to share it with us, typically when you:",

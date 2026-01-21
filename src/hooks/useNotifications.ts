@@ -54,12 +54,25 @@ export function useNotifications() {
       }
       const { data: member } = await supabase
         .from("members")
-        .select("role")
+        .select("role, dashboard_notifications_enabled")
         .eq("id", user.id)
         .single();
 
       if (!member || !["admin", "developer"].includes(member.role)) {
         if (isMounted) setLoading(false);
+        return;
+      }
+
+      // Tjek om dashboard notifikationer er slået fra
+      const dashboardEnabled = member.dashboard_notifications_enabled ?? true;
+
+      if (!dashboardEnabled) {
+        // Dashboard notifikationer er slået fra - vis ikke nogen notifikationer
+        if (isMounted) {
+          setNotifications([]);
+          setUnreadCount(0);
+          setLoading(false);
+        }
         return;
       }
 
@@ -77,72 +90,75 @@ export function useNotifications() {
         setLoading(false);
       }
 
-      // Create a unique channel name
-      const channelName = `user-notifications-${user.id}-${Date.now()}`;
+      // Kun opsæt realtime hvis dashboard notifikationer er slået til
+      if (dashboardEnabled) {
+        // Create a unique channel name
+        const channelName = `user-notifications-${user.id}-${Date.now()}`;
 
-      // Clean up existing channel if any
-      if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
+        // Clean up existing channel if any
+        if (channelRef.current) {
+          supabase.removeChannel(channelRef.current);
+        }
+
+        const newChannel = supabase
+          .channel(channelName, {
+            config: {
+              broadcast: { self: false },
+              presence: { key: user.id },
+            },
+          })
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "notifications",
+              filter: `user_id=eq.${user.id}`,
+            },
+            (payload) => {
+              const notif = payload.new as Notification;
+              if (!isMounted) return;
+
+              // Ensure created_at exists
+              if (!notif.created_at) {
+                notif.created_at = new Date().toISOString();
+              }
+
+              setNotifications((prev) => {
+                // Check if notification already exists
+                const exists = prev.some(
+                  (existing) =>
+                    existing.id === notif.id ||
+                    (existing.request_id === notif.request_id &&
+                      existing.notification_type === notif.notification_type)
+                );
+
+                if (exists) return prev;
+
+                // Add new notification at the beginning
+                return [notif, ...prev];
+              });
+
+              // Increment unread count if notification is unread
+              if (!notif.is_read) {
+                setUnreadCount((prev) => prev + 1);
+              }
+            }
+          )
+          .subscribe((status) => {
+            if (status === "SUBSCRIBED") {
+              clearPoll();
+            } else if (
+              status === "CHANNEL_ERROR" ||
+              status === "TIMED_OUT" ||
+              status === "CLOSED"
+            ) {
+              startPoll(user.id);
+            }
+          });
+
+        channelRef.current = newChannel;
       }
-
-      const newChannel = supabase
-        .channel(channelName, {
-          config: {
-            broadcast: { self: false },
-            presence: { key: user.id },
-          },
-        })
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "notifications",
-            filter: `user_id=eq.${user.id}`,
-          },
-          (payload) => {
-            const notif = payload.new as Notification;
-            if (!isMounted) return;
-
-            // Ensure created_at exists
-            if (!notif.created_at) {
-              notif.created_at = new Date().toISOString();
-            }
-
-            setNotifications((prev) => {
-              // Check if notification already exists
-              const exists = prev.some(
-                (existing) =>
-                  existing.id === notif.id ||
-                  (existing.request_id === notif.request_id &&
-                    existing.notification_type === notif.notification_type)
-              );
-
-              if (exists) return prev;
-
-              // Add new notification at the beginning
-              return [notif, ...prev];
-            });
-
-            // Increment unread count if notification is unread
-            if (!notif.is_read) {
-              setUnreadCount((prev) => prev + 1);
-            }
-          }
-        )
-        .subscribe((status) => {
-          if (status === "SUBSCRIBED") {
-            clearPoll();
-          } else if (
-            status === "CHANNEL_ERROR" ||
-            status === "TIMED_OUT" ||
-            status === "CLOSED"
-          ) {
-            startPoll(user.id);
-          }
-        });
-
-      channelRef.current = newChannel;
     }
 
     fetchNotifications();
@@ -185,11 +201,42 @@ export function useNotifications() {
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
+  const markAsReadByRequestId = async (requestId: string) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    // Find all unread notifications for this request_id
+    const unreadNotifs = notifications.filter(
+      (n) => String(n.request_id) === requestId && !n.is_read
+    );
+
+    if (unreadNotifs.length === 0) return;
+
+    // Mark them as read in database
+    await supabase
+      .from("notifications")
+      .update({ is_read: true })
+      .eq("user_id", user.id)
+      .eq("request_id", requestId)
+      .eq("is_read", false);
+
+    // Update local state
+    setUnreadCount((prev) => Math.max(0, prev - unreadNotifs.length));
+    setNotifications((prev) =>
+      prev.map((n) =>
+        String(n.request_id) === requestId ? { ...n, is_read: true } : n
+      )
+    );
+  };
+
   return {
     notifications,
     unreadCount,
     loading,
     markAsRead,
     markAllAsRead,
+    markAsReadByRequestId,
   };
 }

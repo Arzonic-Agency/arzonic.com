@@ -43,29 +43,39 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
     };
   }, []);
   return (
-    <>
-      <h4 className="text-lg font-semibold mb-8">{t("user_profile")}</h4>
       <div className="flex flex-col gap-5 items-start">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <h5 className="text-sm font-medium text-gray-400">Name</h5>
-          <p>{loading ? "…" : name ?? "—"}</p>
+          {loading ? (
+            <div className="skeleton w-full h-4"></div>
+          ) : (
+            <p>{name ? name : "—"}</p>
+          )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <h5 className="text-sm font-medium text-gray-400">Email</h5>
-          <p>{loading ? "…" : email ?? "—"}</p>
+          {loading ? (
+            <div className="skeleton w-full h-4"></div>
+          ) : (
+            <p>{email ? email : "—"}</p>
+          )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <h5 className="text-sm font-medium text-gray-400">Adgangsniveau</h5>
-          <p>{roleLabel()}</p>
+          {loading ? (
+            <div className="skeleton w-full h-4"></div>
+          ) : (
+            <p>{roleLabel()}</p>
+          )}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <h5 className="text-sm font-medium text-gray-400">Password</h5>
           <button className="btn btn-sm btn-soft" onClick={onChangePassword}>
             {t("change_password")}
           </button>
         </div>
       </div>
-    </>
+    
   );
 };
 

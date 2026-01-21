@@ -7,11 +7,11 @@ const Policy = () => {
   return (
     <>
       <h3 className="font-bold text-xl md:text-2xl py-2">
-        {t("Policy.meta.title")}
+        {t("Policy.title")}
       </h3>
 
       <p className="text-sm opacity-80 mb-5">
-        {t("Policy.meta.company")} · {t("Policy.meta.lastUpdated")}
+        {t("Policy.company")} · {t("Policy.lastUpdated")}
       </p>
 
       <div className="py-4 text-sm max-h-96 md:max-h-[40vh] overflow-y-auto flex flex-col gap-5">

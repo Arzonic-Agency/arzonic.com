@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  FaComment,
   FaGear,
   FaHouse,
   FaList,
   FaRightFromBracket,
-  FaUsers,
+  FaUserGroup,
 } from "react-icons/fa6";
 import { readUserSession } from "@/lib/auth/readUserSession";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
+import { FaShieldAlt } from "react-icons/fa";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -75,7 +75,7 @@ const Navbar = () => {
                 href="/admin/messages"
                 aria-label={t("aria.navigation.linkToCustomers")}
               >
-                <FaComment className="size-[1.1em] mr-[0.15rem]" />
+                <FaUserGroup className="size-[1.1em] mr-[0.15rem]" />
                 {t("customers")}
               </Link>
             </li>
@@ -86,7 +86,7 @@ const Navbar = () => {
                   className={pathname === "/admin/users" ? "menu-active" : ""}
                   aria-label={t("aria.navigation.linkToUsers")}
                 >
-                  <FaUsers className="size-[1.1em] mr-[0.15rem]" />
+                  <FaShieldAlt className="size-[1.1em] mr-[0.15rem]" />
                   {t("user_access")}
                 </Link>
               </li>
@@ -108,14 +108,14 @@ const Navbar = () => {
         
           </ul>
         </div>
-        <div className="dock dock-sm sm:hidden z-30 bg-base-200">
+        <div className="dock sm:hidden z-30 bg-base-200">
           {["admin", "developer"].includes(role || "") && (
             <Link
               href="/admin"
               className={pathname === "/admin" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToOverview")}
             >
-              <FaHouse className="size-[1.2em]" />
+              <FaHouse className="" />
             </Link>
           )}
           <Link
@@ -123,14 +123,14 @@ const Navbar = () => {
             className={pathname === "/admin/content" ? "dock-active" : ""}
             aria-label={t("aria.navigation.linkToContent")}
           >
-            <FaList className="size-[1.2em]" />
+            <FaList className="" />
           </Link>
           <Link
             href="/admin/messages"
             className={pathname === "/admin/messages" ? "dock-active" : ""}
             aria-label={t("aria.navigation.linkToCustomers")}
           >
-            <FaComment className="size-[1.2em]" />
+            <FaUserGroup className="" />
           </Link>
           {["admin", "developer"].includes(role || "") && (
             <Link
@@ -138,7 +138,7 @@ const Navbar = () => {
               className={pathname === "/admin/users" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToUsers")}
             >
-              <FaUsers className="size-[1.2em]" />
+              <FaShieldAlt className="" />
             </Link>
           )}
           {["admin", "developer"].includes(role || "") && (
@@ -147,7 +147,7 @@ const Navbar = () => {
               className={pathname === "/admin/settings" ? "dock-active" : ""}
               aria-label={t("aria.navigation.linkToSettings")}
             >
-              <FaGear className="size-[1.2em]" />
+              <FaGear className="" />
             </Link>
           )}
     

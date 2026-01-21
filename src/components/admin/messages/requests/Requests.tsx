@@ -12,10 +12,12 @@ import RequestsPagination from "./RequestsPagination";
 
 import { useTranslation } from "react-i18next";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const Requests = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { markAsReadByRequestId } = useNotifications();
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null
   );
@@ -38,6 +40,10 @@ const Requests = () => {
     if (request) {
       setSelectedRequestId(idStr);
       setSelectedRequestData(request);
+      // Mark notification as read when viewing request
+      if (isUuid(idStr)) {
+        markAsReadByRequestId(idStr);
+      }
       // Sync URL so back/refresh keeps the same view
       if (isUuid(idStr) && searchParams.get("requestId") !== idStr) {
         router.push(`/admin/messages?requestId=${idStr}`);
@@ -58,6 +64,8 @@ const Requests = () => {
               }
               return prev;
             });
+            // Mark notification as read when viewing request
+            markAsReadByRequestId(idStr);
             if (isUuid(idStr) && searchParams.get("requestId") !== idStr) {
               router.push(`/admin/messages?requestId=${idStr}`);
             }
@@ -162,6 +170,8 @@ const Requests = () => {
     if (existing) {
       setSelectedRequestId(param);
       setSelectedRequestData(existing);
+      // Mark notification as read when viewing request
+      markAsReadByRequestId(param);
       return;
     }
 
@@ -177,13 +187,15 @@ const Requests = () => {
             }
             return prev;
           });
+          // Mark notification as read when viewing request
+          markAsReadByRequestId(param);
         }
       } catch (error) {
         console.error("Failed to fetch request by ID:", error);
       }
     };
     fetchRequest();
-  }, [searchParams, selectedRequestId, requests]);
+  }, [searchParams, selectedRequestId, requests, markAsReadByRequestId]);
 
   const handleUpdateRequest = async (
     requestId: string,
