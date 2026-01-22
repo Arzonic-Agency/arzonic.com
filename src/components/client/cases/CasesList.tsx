@@ -45,7 +45,7 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
             className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-base-200/30 border border-base-200/50"
           >
             {/* Skeleton billede */}
-            <div className="skeleton w-full md:w-80 aspect-video md:aspect-4/3 rounded-xl shrink-0" />
+            <div className="skeleton w-full md:w-80 aspect-4/3 rounded-xl shrink-0" />
 
             {/* Skeleton indhold */}
             <div className="flex flex-col justify-between py-2 flex-1">
@@ -86,12 +86,12 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
           const cardContent = (
             <>
               {/* Billede */}
-              <div className="relative md:w-80 aspect-video md:aspect-4/3 rounded-xl overflow-hidden shrink-0">
+              <div className="relative md:w-80 aspect-4/3 md:aspect-4/3 rounded-xl overflow-hidden shrink-0">
                 <Image
                   src={item.image || FALLBACK_IMAGE}
                   alt={item.company}
                   fill
-                  className={`object-cover transition-transform duration-500 ${hasWebsite ? "group-hover:scale-105" : ""}`}
+                  className={`object-cover transition-transform duration-500 ${hasWebsite ? "md:group-hover:scale-105" : ""}`}
                   sizes="(max-width: 768px) 100vw, 320px"
                 />
               </div>
@@ -99,10 +99,10 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
               {/* Indhold */}
               <div className="flex flex-col justify-between py-2 flex-1">
                 <div>
-                  <h2 className={`text-xl font-bold mb-3 ${hasWebsite ? "group-hover:text-primary transition-colors" : ""}`}>
+                  <h2 className="text-xl font-bold mb-3">
                     {item.company}
                   </h2>
-                  <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3">
+                  <p className="text-sm text-zinc-400 leading-relaxed line-clamp-3 md:line-clamp-4">
                     {item.desc}
                   </p>
                 </div>
@@ -117,7 +117,7 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
                     </span>
                   </div>
                   {hasWebsite && (
-                    <span className="flex items-center text-sm md:text-base font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="hidden md:flex items-center text-sm md:text-base font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                       {t("case_view")}
                       <FaAngleRight className="group-hover:translate-x-1 transition-transform" />
                     </span>
@@ -138,7 +138,7 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
               {hasWebsite ? (
                 <Link
                   href={item.website!}
-                  className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-base-200/40 border-4 border-base-200/50 hover:border-accent transition-all duration-300"
+                  className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-base-200/40 border-4 border-base-200/50 md:hover:border-accent  md:transition-all duration-300"
                   aria-label={
                     t("aria.navigation.linkToCases") || "Go to customer's website"
                   }
@@ -146,7 +146,7 @@ const CasesList: React.FC<CasesListProps> = ({ cases, loading }) => {
                   {cardContent}
                 </Link>
               ) : (
-                <div className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-base-200/40 border-4 border-base-200/50 hover:border-accent transition-all duration-300">
+                <div className="flex flex-col md:flex-row gap-6 p-4 rounded-2xl bg-base-200/40 border-4 border-base-200/50 md:hover:border-accent md:hover:shadow-lg transition-all duration-300">
                   {cardContent}
                 </div>
               )}

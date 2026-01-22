@@ -34,8 +34,8 @@ const Navbar = () => {
 
   return (
     <div className="flex flex-col items-center sm:justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
-      <div className="flex flex-col sm:gap-5 h-full">
-        <div className="flex items-center justify-center h-20 sm:h-24 w-full text-xl">
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-start h-20 sm:h-22 w-full text-xl sm:pl-4">
             <Image
               src="/icon-192x192.png"
               alt="App ikon"
@@ -43,7 +43,7 @@ const Navbar = () => {
               height={60}
               priority
             />
-            <span className="font-semibold hidden md:block">Dashboard</span>
+            <span className="font-semibold hidden sm:block">Dashboard</span>
         
         </div>
         <div className="hidden sm:flex">
