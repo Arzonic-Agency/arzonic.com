@@ -26,7 +26,7 @@ const formatTime = (iso: string, locale: string) => {
     now.getMonth() === date.getMonth() &&
     now.getDate() === date.getDate()
   ) {
-    if (diffMs >= 0 && diffMs < 20 * 60 * 1000) {
+    if (diffMs >= 0 && diffMs < 5 * 60 * 1000) {
       return { label: isDa ? "Lige nu" : "Just now", tooltip };
     }
 
@@ -36,9 +36,9 @@ const formatTime = (iso: string, locale: string) => {
     let label: string;
 
     if (isDa) {
-      label = hours > 0 ? `${hours}t siden` : `${minutes}m siden`;
+      label = hours > 0 ? `${hours}t` : `${minutes}m`;
     } else {
-      label = hours > 0 ? `${hours}h ago` : `${minutes}m ago`;
+      label = hours > 0 ? `${hours}h` : `${minutes}m`;
     }
     return { label, tooltip };
   }
