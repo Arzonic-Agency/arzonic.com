@@ -1,5 +1,5 @@
 // Service Worker for Push Notifications
-const SW_VERSION = "2.3.0";
+const SW_VERSION = "2.4.0";
 
 self.addEventListener("install", () => {
     self.skipWaiting();
@@ -46,25 +46,40 @@ self.addEventListener("notificationclick", (event) => {
         : `${self.location.origin}/admin/messages`;
 
     event.waitUntil(
-        clients.matchAll({
-            type: "window",
-            includeUncontrolled: true
-        }).then((clientList) => {
-            // Søg efter et eksisterende PWA vindue (standalone mode)
-            for (const client of clientList) {
-                // Tjek om det er vores admin app
-                if (client.url.includes("/admin")) {
-                    // Naviger til den specifikke henvendelse og fokuser
-                    return client.navigate(targetUrl).then((client) => {
-                        if (client) {
-                            return client.focus();
-                        }
-                    });
-                }
-            }
+        Promise.all([
+            // Mark notification as read via API
+            requestId ? fetch(`${self.location.origin}/api/notifications/mark-read`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ requestId }),
+                credentials: "include",
+            }).catch((error) => {
+                console.error("Failed to mark notification as read:", error);
+            }) : Promise.resolve(),
 
-            // Hvis ingen PWA vindue findes, åbn et nyt
-            return clients.openWindow(targetUrl);
-        })
+            // Navigate to the target page
+            clients.matchAll({
+                type: "window",
+                includeUncontrolled: true
+            }).then((clientList) => {
+                // Søg efter et eksisterende PWA vindue (standalone mode)
+                for (const client of clientList) {
+                    // Tjek om det er vores admin app
+                    if (client.url.includes("/admin")) {
+                        // Naviger til den specifikke henvendelse og fokuser
+                        return client.navigate(targetUrl).then((client) => {
+                            if (client) {
+                                return client.focus();
+                            }
+                        });
+                    }
+                }
+
+                // Hvis ingen PWA vindue findes, åbn et nyt
+                return clients.openWindow(targetUrl);
+            })
+        ])
     );
 });
