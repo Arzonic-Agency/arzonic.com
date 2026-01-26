@@ -156,11 +156,9 @@ const Present = () => {
             </motion.p>
             <Link
               className="btn btn-accent md:btn-primary flex items-center gap-2 w-fit group-hover:bg-primary/90 transition-colors relative z-10"
-          
               href="/cases"
             >
               {t("Present.customDesign.button") || "View Cases"}
-
             </Link>
             <motion.div
               className="absolute bottom-6 right-6 text-secondary z-10"
@@ -301,27 +299,22 @@ const Present = () => {
               {t("Present.cta.description") ||
                 "Let's create digital experiences that drive measurable growth for your business."}
             </motion.p>
-            <Link
-              className="btn btn-accent "
-              href="/contact"
-            >
+            <Link className="btn btn-accent " href="/contact">
               {t("Present.cta.button") || "Book a call"}
-         
             </Link>
-            <Image
+            {/* <Image
               src="/team/marc2.png"
               alt="Phone"
               width={180}
               height={180}
               className="absolute bottom-0 right-10 w-34 h-34 transition-all duration-300"
-            />
-               {/* <Image
+            /> */}
+            {/* <Image
               src="/test.png"
               alt="Phone"
               fill
               className="absolute bottom-0 right-10 w-full h-full object-cover blur-xs group-hover:blur-none transition-all duration-300"
             /> */}
-              
           </motion.div>
 
           {/* Medium Card - Right */}
@@ -361,8 +354,20 @@ const Present = () => {
             >
               {t("Present.builtToGrow.title")}
             </motion.h3>
-            <Image src="/seo.png" alt="Phone" width={180} height={180} className="w-20 h-auto absolute bottom-10 left-10 grayscale group-hover:grayscale-0 transition-all duration-300" />
-            <Image src="/ads.png" alt="Phone" width={180} height={180} className="w-33 h-auto absolute bottom-9 left-40 grayscale group-hover:grayscale-0 transition-all duration-300" />
+            <Image
+              src="/seo.png"
+              alt="Phone"
+              width={180}
+              height={180}
+              className="w-20 h-auto absolute bottom-10 left-10 grayscale group-hover:grayscale-0 transition-all duration-300"
+            />
+            <Image
+              src="/ads.png"
+              alt="Phone"
+              width={180}
+              height={180}
+              className="w-33 h-auto absolute bottom-9 left-40 grayscale group-hover:grayscale-0 transition-all duration-300"
+            />
             <motion.p
               className="text-sm md:text-base text-zinc-400 font-light relative z-10 flex-1"
               initial={{ opacity: 0 }}

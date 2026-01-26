@@ -27,8 +27,16 @@ type Session = {
   is_current: boolean;
 };
 
-const parseUserAgent = (userAgent: string | null, t: (key: string) => string) => {
-  if (!userAgent) return { device: t("security.unknown"), browser: t("security.unknown"), os: t("security.unknown") };
+const parseUserAgent = (
+  userAgent: string | null,
+  t: (key: string) => string,
+) => {
+  if (!userAgent)
+    return {
+      device: t("security.unknown"),
+      browser: t("security.unknown"),
+      os: t("security.unknown"),
+    };
 
   let device = "Desktop";
   let browser = t("security.unknown");
@@ -43,11 +51,18 @@ const parseUserAgent = (userAgent: string | null, t: (key: string) => string) =>
 
   // Detect browser (rækkefølge er vigtig!)
   // Mere specifikke browsere skal tjekkes først
-  if (/edg\//i.test(userAgent) || /edga\//i.test(userAgent) || /edgios\//i.test(userAgent)) {
+  if (
+    /edg\//i.test(userAgent) ||
+    /edga\//i.test(userAgent) ||
+    /edgios\//i.test(userAgent)
+  ) {
     browser = "Microsoft Edge";
   } else if (/opr\//i.test(userAgent) || /opera/i.test(userAgent)) {
     browser = "Opera";
-  } else if (/brave\//i.test(userAgent) || (userAgent.includes("Chrome") && userAgent.includes("Brave"))) {
+  } else if (
+    /brave\//i.test(userAgent) ||
+    (userAgent.includes("Chrome") && userAgent.includes("Brave"))
+  ) {
     browser = "Brave";
   } else if (/vivaldi\//i.test(userAgent)) {
     browser = "Vivaldi";
@@ -96,7 +111,10 @@ const parseUserAgent = (userAgent: string | null, t: (key: string) => string) =>
   } else if (/android (\d+(\.\d+)?)/i.test(userAgent)) {
     const match = userAgent.match(/android (\d+(\.\d+)?)/i);
     os = match ? `Android ${match[1]}` : "Android";
-  } else if (/iphone os (\d+_\d+)/i.test(userAgent) || /cpu os (\d+_\d+)/i.test(userAgent)) {
+  } else if (
+    /iphone os (\d+_\d+)/i.test(userAgent) ||
+    /cpu os (\d+_\d+)/i.test(userAgent)
+  ) {
     const match = userAgent.match(/(?:iphone )?os (\d+_\d+)/i);
     os = match ? `iOS ${match[1].replace(/_/g, ".")}` : "iOS";
   } else if (/ipad|ipod|iphone/i.test(userAgent)) {
@@ -228,76 +246,77 @@ const Security = () => {
         </div>
       ) : sessions.length === 0 ? (
         <div className="text-center py-8 text-zinc-500">
-          <p>
-            {t("security.no_sessions")}
-        </p>
-      </div>
-    ) : (
-      <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-        {[...sessions]
-          .sort((a, b) => {
-            // Sortér så current device er øverst
-            if (a.is_current && !b.is_current) return -1;
-            if (!a.is_current && b.is_current) return 1;
-            return 0;
-          })
-          .map((session) => {
-            const { device, browser, os } = parseUserAgent(session.user_agent, t);
-            const isRevoking = revoking === session.id;
-            const isCurrent = session.is_current;
+          <p>{t("security.no_sessions")}</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          {[...sessions]
+            .sort((a, b) => {
+              // Sortér så current device er øverst
+              if (a.is_current && !b.is_current) return -1;
+              if (!a.is_current && b.is_current) return 1;
+              return 0;
+            })
+            .map((session) => {
+              const { device, browser, os } = parseUserAgent(
+                session.user_agent,
+                t,
+              );
+              const isRevoking = revoking === session.id;
+              const isCurrent = session.is_current;
 
-            return (
-              <div
-                key={session.id}
-                className="flex items-center justify-between py-4 bg-base-200 rounded-lg"
-                  
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-base-300 rounded-lg">
-                    {getDeviceIcon(device)}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">
-                        {browser} - {os}
-                      </span>
-                      {isCurrent && (
-                        <span className="badge badge-success badge-xs md:badge-sm flex items-center gap-1">
-                          <FaCheck className="text-[10px] sm:text-xs " />
-                          <span>{t("security.current")}</span>
-                        </span>
-                      )}
+              return (
+                <div
+                  key={session.id}
+                  className="flex items-center justify-between py-4 bg-base-200 rounded-lg"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 bg-base-300 rounded-lg">
+                      {getDeviceIcon(device)}
                     </div>
-                    <p className="text-sm text-zinc-500">{device}</p>
-                    <p className="text-xs text-zinc-500">
-                      {t("security.last_active")}:{" "}
-                      {formatDate(session.updated_at || session.created_at)}
-                    </p>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">
+                          {browser} - {os}
+                        </span>
+                        {isCurrent && (
+                          <span className="badge badge-success badge-xs md:badge-sm flex items-center gap-1">
+                            <FaCheck className="text-[10px] sm:text-xs " />
+                            <span>{t("security.current")}</span>
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-zinc-500">{device}</p>
+                      <p className="text-xs text-zinc-500">
+                        {t("security.last_active")}:{" "}
+                        {formatDate(session.updated_at || session.created_at)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!isCurrent && (
+                      <button
+                        onClick={() => handleRevoke(session.id)}
+                        disabled={isRevoking}
+                        className="btn btn-soft btn-sm btn-error flex items-center gap-2 md:tooltip md:tooltip-left"
+                        data-tip={t("security.revoke")}
+                      >
+                        {isRevoking ? (
+                          <FaSpinner className="animate-spin" />
+                        ) : (
+                          <>
+                            <FaTrash />
+                            <span className="hidden sm:inline">
+                              {t("logout")}
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  {!isCurrent && (
-                    <button
-                      onClick={() => handleRevoke(session.id)}
-                      disabled={isRevoking}
-                      className="btn btn-soft btn-sm btn-error flex items-center gap-2 md:tooltip md:tooltip-left"
-                      
-                      data-tip={t("security.revoke")}
-                    >
-                      {isRevoking ? (
-                        <FaSpinner className="animate-spin" />
-                      ) : (
-                        <>
-                          <FaTrash />
-                          <span className="hidden sm:inline">{t("logout")}</span>
-                        </>
-                      )}
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
 
@@ -313,8 +332,8 @@ const Security = () => {
             {revokingAll ? (
               <>
                 <FaSpinner className="animate-spin" />
-                  {t("security.logging_out_all")}
-                </>
+                {t("security.logging_out_all")}
+              </>
             ) : (
               <>
                 <FaTrash />

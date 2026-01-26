@@ -51,6 +51,7 @@
   "confirm_password": "Bekræft kodeord",
   "mobile": "Mobil nr.",
   "name": "Navn",
+  "access_level": "Adgangsniveau",
   "message": "Besked",
   "no_message": "Ingen besked",
   "chars": "tegn",

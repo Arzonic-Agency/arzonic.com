@@ -45,7 +45,7 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
   return (
       <div className="flex flex-col gap-5 items-start">
         <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">Name</h5>
+          <h5 className="text-sm font-medium text-gray-400">{t("name")}</h5>
           {loading ? (
             <div className="skeleton w-full h-4"></div>
           ) : (
@@ -53,7 +53,7 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">Email</h5>
+          <h5 className="text-sm font-medium text-gray-400">{t("email")}</h5>
           {loading ? (
             <div className="skeleton w-full h-4"></div>
           ) : (
@@ -61,7 +61,7 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">Adgangsniveau</h5>
+          <h5 className="text-sm font-medium text-gray-400">{t("access_level")}</h5>
           {loading ? (
             <div className="skeleton w-full h-4"></div>
           ) : (
@@ -69,7 +69,7 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">Password</h5>
+          <h5 className="text-sm font-medium text-gray-400">{t("password")}</h5>
           <button className="btn btn-sm btn-soft" onClick={onChangePassword}>
             {t("change_password")}
           </button>
