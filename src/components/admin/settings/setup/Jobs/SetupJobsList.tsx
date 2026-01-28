@@ -68,7 +68,7 @@ const SetupJobsList = ({ onEdit }: SetupJobsListProps) => {
       {jobs.map((job) => (
         <li
           key={job.id}
-          className="list-row flex justify-between items-center p-4 w-full"
+          className="list-row flex justify-between items-center px-0 py-4 w-full"
         >
           <div className="flex flex-col gap-1">
             <h3 className="font-bold">{job.title}</h3>

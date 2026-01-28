@@ -61,8 +61,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning data-theme="arzonicdark">
+    <html lang="da" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+          (function() {
+            const LIGHT_THEME = "arzoniclight";
+            const DARK_THEME = "arzonicdark";
+            const AUTO_THEME = "auto";
+            const DASHBOARD_THEME_KEY = "dashboard-theme";
+            
+            try {
+              const storedTheme = localStorage.getItem(DASHBOARD_THEME_KEY);
+
+              if (storedTheme === AUTO_THEME) {
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                const themeToApply = prefersDark ? DARK_THEME : LIGHT_THEME;
+                document.documentElement.setAttribute("data-theme", themeToApply);
+              } else if (storedTheme === LIGHT_THEME) {
+                document.documentElement.setAttribute("data-theme", LIGHT_THEME);
+              } else if (storedTheme === DARK_THEME) {
+                document.documentElement.setAttribute("data-theme", DARK_THEME);
+              } else {
+                document.documentElement.setAttribute("data-theme", DARK_THEME);
+              }
+            } catch (e) {
+              document.documentElement.setAttribute("data-theme", DARK_THEME);
+            }
+                    })();
+                    `,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

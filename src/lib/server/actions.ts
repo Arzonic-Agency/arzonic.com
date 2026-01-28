@@ -4,8 +4,7 @@ import {
   createAdminClient,
   createServerClientInstance,
 } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { after } from "next/server";
 import sharp from "sharp";
 import {
   postToFacebookPage,
@@ -21,7 +20,7 @@ const DEEPL_ENDPOINT = "https://api-free.deepl.com/v2/translate";
 
 async function translateWithDeepL(
   text: string,
-  targetLang: string
+  targetLang: string,
 ): Promise<{ text: string; detected_source_language: string }> {
   const apiKey = process.env.DEEPL_API_KEY!;
   const response = await fetch(DEEPL_ENDPOINT, {
@@ -42,276 +41,6 @@ async function translateWithDeepL(
     translations: { text: string; detected_source_language: string }[];
   };
   return result.translations[0];
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// AUTHENTICATION
-// ─────────────────────────────────────────────────────────────────────────────
-
-export async function login(formData: FormData) {
-  const supabase = await createServerClientInstance();
-
-  const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
-
-  const { error } = await supabase.auth.signInWithPassword(data);
-
-  if (error) {
-    // Return a generic error message
-    return { success: false, message: "Wrong credentials" };
-  } else {
-    return { success: true };
-  }
-}
-
-export async function createMember(data: {
-  email: string;
-  password: string;
-  role: "editor" | "admin" | "developer";
-  name: string;
-}) {
-  const supabase = await createAdminClient();
-
-  try {
-    if (!supabase.auth.admin) {
-      throw new Error("REGISTRATION_ERROR");
-    }
-
-    const createResult = await supabase.auth.admin.createUser({
-      email: data.email,
-      password: data.password,
-      email_confirm: true,
-      user_metadata: {
-        role: data.role,
-      },
-    });
-
-    if (createResult.error) {
-      const msg = createResult.error.message.toLowerCase();
-
-      if (msg.includes("already") && msg.includes("registered")) {
-        throw new Error("EMAIL_ALREADY_EXISTS");
-      }
-
-      if (msg.includes("not allowed")) {
-        throw new Error("REGISTRATION_ERROR");
-      }
-
-      throw new Error("REGISTRATION_ERROR");
-    }
-
-    const userId = createResult.data.user?.id;
-    if (!userId) {
-      throw new Error("REGISTRATION_ERROR");
-    }
-
-    const memberResult = await supabase
-      .from("members")
-      .insert({ name: data.name, id: userId, role: data.role });
-
-    if (memberResult.error) {
-      console.error(
-        "Failed to insert into members:",
-        memberResult.error.message
-      );
-      throw new Error("REGISTRATION_ERROR");
-    }
-
-    return createResult.data.user;
-  } catch (err) {
-    console.error("Unexpected error during member creation:", err);
-    throw err;
-  }
-}
-
-export async function signOut() {
-  const supabase = await createServerClientInstance();
-
-  // Log kun ud på denne enhed (local scope)
-  await supabase.auth.signOut({ scope: 'local' });
-
-  revalidatePath("/", "layout");
-  redirect("/login");
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// USERS
-// ─────────────────────────────────────────────────────────────────────────────
-
-export async function getAllUsers() {
-  const supabase = await createAdminClient();
-
-  const {
-    data: { users },
-    error: fetchError,
-  } = await supabase.auth.admin.listUsers();
-
-  if (fetchError) {
-    throw new Error("Failed to fetch users: " + fetchError.message);
-  }
-
-  const userIds = users.map((user) => user.id);
-
-  const { data: members, error: membersError } = await supabase
-    .from("members")
-    .select("id, name, role")
-    .in("id", userIds);
-
-  if (membersError) {
-    throw new Error("Failed to fetch members: " + membersError.message);
-  }
-
-  const usersWithRolesAndNames = users.map((user) => {
-    const member = members.find((m) => m.id === user.id);
-    return {
-      ...user,
-      role: member?.role ?? null,
-      name: member?.name ?? null,
-    };
-  });
-
-  return usersWithRolesAndNames || [];
-}
-
-export async function deleteUser(userId: string) {
-  const supabase = await createAdminClient();
-
-  try {
-    const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(
-      userId
-    );
-
-    if (deleteAuthError) {
-      console.error(
-        "Failed to delete user from auth:",
-        deleteAuthError.message
-      );
-      throw new Error(
-        "Failed to delete user from auth: " + deleteAuthError.message
-      );
-    }
-
-    console.log("User deleted from auth:", userId);
-
-    const { error: deleteMemberError } = await supabase
-      .from("members")
-      .delete()
-      .eq("id", userId);
-
-    if (deleteMemberError) {
-      console.error(
-        "Failed to delete user from members:",
-        deleteMemberError.message
-      );
-      throw new Error(
-        "Failed to delete user from members: " + deleteMemberError.message
-      );
-    }
-
-    console.log("User deleted from members:", userId);
-
-    return { success: true };
-  } catch (err) {
-    console.error("Unexpected error during user deletion:", err);
-    throw err;
-  }
-}
-
-export async function updateUser(
-  userId: string,
-  data: {
-    email?: string;
-    password?: string;
-    role?: "admin" | "editor" | "developer";
-    name?: string;
-  }
-): Promise<void> {
-  const supabase = await createAdminClient();
-
-  try {
-    const { error: authError } = await supabase.auth.admin.updateUserById(
-      userId,
-      {
-        email: data.email,
-        password: data.password,
-      }
-    );
-
-    if (authError) {
-      throw new Error(`Failed to update user in auth: ${authError.message}`);
-    }
-
-    const memberPayload: Record<string, unknown> = {};
-    if (data.name !== undefined) memberPayload.name = data.name;
-    if (data.role !== undefined) memberPayload.role = data.role;
-
-    if (Object.keys(memberPayload).length > 0) {
-      const { error: memberError } = await supabase
-        .from("members")
-        .update(memberPayload)
-        .eq("id", userId);
-
-      if (memberError) {
-        throw new Error(
-          `Failed to update user in members: ${memberError.message}`
-        );
-      }
-    }
-  } catch (error) {
-    console.error("Error in updateUser:", error);
-    throw error;
-  }
-}
-
-export async function changeOwnPassword(
-  currentPassword: string,
-  newPassword: string
-): Promise<{ success: boolean; message?: string }> {
-  const supabase = await createServerClientInstance();
-
-  try {
-    // Get current user
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      throw new Error("Not authenticated");
-    }
-
-    // Verify current password by attempting to sign in
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: user.email!,
-      password: currentPassword,
-    });
-
-    if (signInError) {
-      return {
-        success: false,
-        message: "Current password is incorrect",
-      };
-    }
-
-    // Update password
-    const { error: updateError } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-
-    if (updateError) {
-      throw new Error(`Failed to update password: ${updateError.message}`);
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error("Error in changeOwnPassword:", error);
-    if (error instanceof Error) {
-      return { success: false, message: error.message };
-    }
-    return { success: false, message: "An unexpected error occurred" };
-  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -410,7 +139,7 @@ export async function updateCase(
   contact: string,
   image: File | null,
   created_at?: string,
-  website?: string
+  website?: string,
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -553,11 +282,23 @@ export async function createNews({
   images?: File[];
   sharedFacebook?: boolean;
   sharedInstagram?: boolean;
-}): Promise<{ linkFacebook?: string; linkInstagram?: string }> {
+}): Promise<{
+  newsId: number;
+  status: "created" | "processing_social";
+  linkFacebook?: string;
+  linkInstagram?: string;
+}> {
   try {
     // Input validation
     if (!content || content.trim().length === 0) {
       throw new Error("Content is required");
+    }
+
+    // Validate Instagram requirement early
+    if (sharedInstagram && (!images || images.length === 0)) {
+      throw new Error(
+        "Instagram kræver mindst ét billede for at dele et opslag",
+      );
     }
 
     const supabase = await createServerClientInstance();
@@ -566,30 +307,43 @@ export async function createNews({
       throw new Error("Translation service not configured");
     }
 
-    // Authenticate user
-    const { data: ud, error: ue } = await supabase.auth.getUser();
+    // Run auth check and translation in parallel for speed
+    const [authResult, translationResult] = await Promise.all([
+      supabase.auth.getUser(),
+      translateWithDeepL(content, "EN").catch((err) => {
+        console.error("Content translation error:", err);
+        return null;
+      }),
+    ]);
+
+    const { data: ud, error: ue } = authResult;
     if (ue || !ud?.user) {
       throw new Error("Not authenticated");
     }
 
-    // Translate content
+    // Process translation result
     let content_translated = content;
     let sourceLang = "da";
 
-    try {
-      const first = await translateWithDeepL(content, "EN");
-      sourceLang = first.detected_source_language?.toLowerCase() || "da";
-      content_translated = first.text;
+    if (translationResult) {
+      sourceLang =
+        translationResult.detected_source_language?.toLowerCase() || "da";
+      content_translated = translationResult.text;
 
+      // If source is English, translate to Danish
       if (sourceLang === "en") {
-        const second = await translateWithDeepL(content, "DA");
-        content_translated = second.text;
+        try {
+          const second = await translateWithDeepL(content, "DA");
+          content_translated = second.text;
+        } catch {
+          content_translated = content;
+        }
       }
-    } catch (contentError) {
-      console.error("Content translation error:", contentError);
-      // Continue with original content if translation fails
-      content_translated = content;
     }
+
+    // Determine initial social status
+    const needsSocialPosting = sharedFacebook || sharedInstagram;
+    const initialSocialStatus = needsSocialPosting ? "pending" : null;
 
     // Insert news into database
     const { data: newsData, error: insertError } = await supabase
@@ -600,6 +354,7 @@ export async function createNews({
           content_translated,
           source_lang: sourceLang,
           creator_id: ud.user.id,
+          social_status: initialSocialStatus,
         },
       ])
       .select("id")
@@ -614,23 +369,19 @@ export async function createNews({
     const imageUrls: string[] = [];
     if (images?.length) {
       try {
-        await Promise.all(
+        // Process all images in parallel
+        const uploadResults = await Promise.all(
           images.map(async (file, index) => {
             const ext = "webp";
             const name = `${Math.random().toString(36).slice(2)}.${ext}`;
             const path = `${ud.user.id}/${name}`;
 
             try {
-              
-
               const buf = await sharp(Buffer.from(await file.arrayBuffer()))
                 .rotate()
                 .resize({ width: 1080, height: 1350, fit: "cover" })
                 .webp({ quality: 80 })
                 .toBuffer();
-
-              // Log buffer size after processing
-              console.log("Buffer size after processing:", buf.length);
 
               const { error: uploadError } = await supabase.storage
                 .from("news-images")
@@ -640,124 +391,169 @@ export async function createNews({
 
               if (uploadError) {
                 console.error("Image upload error:", uploadError);
-                return; // Skip this image but continue with others
+                return null;
               }
 
-              // Get public URL
               const publicUrlData = supabase.storage
                 .from("news-images")
                 .getPublicUrl(path);
 
               if (!publicUrlData.data?.publicUrl) {
                 console.error("Public URL generation failed for path:", path);
-                return; // Skip this image but continue with others
+                return null;
               }
 
-              console.log(
-                "Public URL generated:",
-                publicUrlData.data.publicUrl
-              );
-              imageUrls.push(publicUrlData.data.publicUrl);
-
-              await supabase.from("news_images").insert({
-                news_id: newsData.id,
+              return {
+                url: publicUrlData.data.publicUrl,
                 path,
-                sort_order: index,
-              });
+                index,
+              };
             } catch (imageProcessingError) {
               console.error("Image processing error:", imageProcessingError);
+              return null;
             }
-          })
+          }),
         );
+
+        // Filter successful uploads and insert metadata
+        const successfulUploads = uploadResults.filter(
+          (r): r is { url: string; path: string; index: number } => r !== null,
+        );
+
+        // Insert all image metadata in parallel
+        if (successfulUploads.length > 0) {
+          await Promise.all(
+            successfulUploads.map((upload) =>
+              supabase.from("news_images").insert({
+                news_id: newsData.id,
+                path: upload.path,
+                sort_order: upload.index,
+              }),
+            ),
+          );
+
+          // Collect URLs in order
+          successfulUploads
+            .sort((a, b) => a.index - b.index)
+            .forEach((upload) => imageUrls.push(upload.url));
+        }
       } catch (imageError) {
         console.error("General image upload error:", imageError);
-        // Continue without images if upload fails
       }
     }
 
-    // Post to Facebook if requested
-    let fbResult: { link?: string } | null = null;
-    if (sharedFacebook) {
-      try {
-        console.log("🔄 [SERVER] Attempting Facebook post...");
-        const fbMessage = content;
-        fbResult = await postToFacebookPage({
-          message: fbMessage,
-          imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
-        });
+    // If social posting is requested, run it in background using Next.js after()
+    if (needsSocialPosting) {
+      const newsId = newsData.id;
 
-        if (fbResult?.link) {
+      // Use Next.js after() to run social posting after response is sent
+      after(async () => {
+        // Create a new supabase client for the background task
+        const bgSupabase = await createServerClientInstance();
+
+        try {
           console.log(
-            "✅ [SERVER] Facebook post successful, updating database..."
-          );
-          await supabase
-            .from("news")
-            .update({
-              linkFacebook: fbResult.link,
-              sharedFacebook: true,
-            })
-            .eq("id", newsData.id);
-        }
-      } catch (fbError) {
-        console.error("❌ [SERVER] Failed to post to Facebook:", fbError);
-        // Don't fail the entire news creation if Facebook fails
-        // Just log the error and continue
-      }
-    }
-
-    // Post to Instagram if requested (requires at least one image)
-    let igResult: { success: boolean; id?: string; permalink?: string } | null =
-      null;
-    if (sharedInstagram) {
-      if (imageUrls.length === 0) {
-        throw new Error(
-          "Instagram kræver mindst ét billede for at dele et opslag"
-        );
-      }
-
-      try {
-        console.log("🔄 [SERVER] Attempting Instagram post...");
-        const igCaption = content;
-        igResult = await postToInstagram({
-          caption: igCaption,
-          imageUrls: imageUrls, // Send alle billeder til Instagram
-        });
-
-        if (igResult?.success && igResult?.id) {
-          console.log(
-            "✅ [SERVER] Instagram post successful, updating database..."
+            "🚀 Starting background social posting for news:",
+            newsId,
           );
 
-          // Use permalink if available, otherwise just store the ID (we'll handle display in the frontend)
-          const instagramLink =
-            igResult.permalink || `Instagram Media ID: ${igResult.id}`;
-
-          await supabase
+          // Update status to processing
+          await bgSupabase
             .from("news")
-            .update({
-              linkInstagram: instagramLink,
-              sharedInstagram: true,
-            })
-            .eq("id", newsData.id);
+            .update({ social_status: "processing" })
+            .eq("id", newsId);
+
+          // Post to Facebook and Instagram in parallel
+          const [fbResult, igResult] = await Promise.allSettled([
+            sharedFacebook
+              ? postToFacebookPage({
+                  message: content,
+                  imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+                })
+              : Promise.resolve(null),
+            sharedInstagram && imageUrls.length > 0
+              ? postToInstagram({
+                  caption: content,
+                  imageUrls,
+                })
+              : Promise.resolve(null),
+          ]);
+
+          let hasErrors = false;
+
+          // Process Facebook result
+          if (sharedFacebook) {
+            if (fbResult.status === "fulfilled" && fbResult.value?.link) {
+              await bgSupabase
+                .from("news")
+                .update({
+                  linkFacebook: fbResult.value.link,
+                  sharedFacebook: true,
+                })
+                .eq("id", newsId);
+              console.log("✅ Facebook post successful:", fbResult.value.link);
+            } else if (fbResult.status === "rejected") {
+              hasErrors = true;
+              console.error("❌ Facebook posting failed:", fbResult.reason);
+            }
+          }
+
+          // Process Instagram result
+          if (sharedInstagram && imageUrls.length > 0) {
+            if (
+              igResult.status === "fulfilled" &&
+              igResult.value?.success &&
+              igResult.value?.id
+            ) {
+              const instagramLink =
+                igResult.value.permalink ||
+                `Instagram Media ID: ${igResult.value.id}`;
+              await bgSupabase
+                .from("news")
+                .update({
+                  linkInstagram: instagramLink,
+                  sharedInstagram: true,
+                })
+                .eq("id", newsId);
+              console.log("✅ Instagram post successful:", instagramLink);
+            } else if (igResult.status === "rejected") {
+              hasErrors = true;
+              console.error("❌ Instagram posting failed:", igResult.reason);
+            }
+          }
+
+          // Update final status
+          const finalStatus = hasErrors ? "partial" : "completed";
+          await bgSupabase
+            .from("news")
+            .update({ social_status: finalStatus })
+            .eq("id", newsId);
+
+          console.log(
+            `✅ Social posting completed with status: ${finalStatus}`,
+          );
+        } catch (err) {
+          console.error("Background social posting error:", err);
+          await bgSupabase
+            .from("news")
+            .update({ social_status: "error" })
+            .eq("id", newsId);
         }
-      } catch (igError) {
-        console.error("❌ [SERVER] Failed to post to Instagram:", igError);
-        // Re-throw Instagram errors since they are likely validation errors
-        throw igError;
-      }
+      });
+
+      return {
+        newsId: newsData.id,
+        status: "processing_social",
+      };
     }
 
     return {
-      linkFacebook: fbResult?.link,
-      linkInstagram:
-        igResult?.success && igResult?.id
-          ? igResult.permalink || `Instagram Media ID: ${igResult.id}`
-          : undefined,
+      newsId: newsData.id,
+      status: "created",
     };
   } catch (error) {
     console.error("createNews error:", error);
 
-    // Re-throw with a sanitized error message for production
     if (error instanceof Error) {
       throw new Error(error.message);
     } else {
@@ -858,13 +654,13 @@ export async function deleteNews(newsId: number): Promise<void> {
     try {
       console.log(
         "🔍 [deleteNews] Found Facebook link:",
-        newsData.linkFacebook
+        newsData.linkFacebook,
       );
       const postId = newsData.linkFacebook.split("/").pop();
       if (postId) {
         console.log(
           "🗑️ [deleteNews] Attempting to delete Facebook post:",
-          postId
+          postId,
         );
         await deleteFacebookPost(postId);
       } else {
@@ -879,11 +675,11 @@ export async function deleteNews(newsId: number): Promise<void> {
   // Delete Instagram post if it exists
   if (newsData?.linkInstagram) {
     console.log(
-      "⚠️ [deleteNews] Instagram post found but cannot be deleted automatically via API"
+      "⚠️ [deleteNews] Instagram post found but cannot be deleted automatically via API",
     );
     console.log("🔍 [deleteNews] Instagram link:", newsData.linkInstagram);
     console.log(
-      "ℹ️ [deleteNews] Please manually delete the Instagram post if needed"
+      "ℹ️ [deleteNews] Please manually delete the Instagram post if needed",
     );
     // Note: Instagram API does not support programmatic deletion of posts
     // The post will need to be manually deleted on Instagram
@@ -938,7 +734,7 @@ export async function createReview(
   desc: string,
   rate: number,
   company: string,
-  contact: string
+  contact: string,
 ): Promise<void> {
   const supabase = await createServerClientInstance();
   const { sourceLang, translated } = await detectAndTranslate(desc);
@@ -1015,7 +811,7 @@ export async function updateReview(
   company: string,
   contact: string,
   desc: string,
-  rate: number
+  rate: number,
 ): Promise<void> {
   const supabase = await createServerClientInstance();
   const { sourceLang, translated } = await detectAndTranslate(desc);
@@ -1076,7 +872,7 @@ export async function getAllRequests(page: number = 1, limit: number = 6) {
 
     if (error) {
       throw new Error(
-        `Failed to fetch requests: ${error.message || "Unknown error"}`
+        `Failed to fetch requests: ${error.message || "Unknown error"}`,
       );
     }
 
@@ -1108,7 +904,6 @@ export async function deleteRequest(requestId: string): Promise<void> {
 export async function updateRequest(
   requestId: string,
   data: {
-
     company?: string;
     category?: string;
     mobile?: string;
@@ -1116,7 +911,7 @@ export async function updateRequest(
     message?: string;
     address?: string;
     city?: string;
-  }
+  },
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -1162,7 +957,7 @@ export async function getRequestById(requestId: string) {
 
 export async function createRequestNote(
   message: string,
-  requestId: string
+  requestId: string,
 ): Promise<{ id: string; message: string; created_at: string }> {
   const supabase = await createServerClientInstance();
 
@@ -1245,7 +1040,7 @@ export async function sendPushNotificationsToUsers(
     tag?: string;
     url?: string;
     requestId?: string | number;
-  }
+  },
 ): Promise<{ success: boolean; sent: number; errors: number }> {
   let webpush: typeof import("web-push") | null = null;
   try {
@@ -1283,7 +1078,7 @@ export async function sendPushNotificationsToUsers(
     .in("id", userIds);
 
   const preferencesMap = new Map(
-    (members || []).map((m) => [m.id, m.push_notifications_enabled ?? true])
+    (members || []).map((m) => [m.id, m.push_notifications_enabled ?? true]),
   );
 
   for (const sub of subscriptions) {
@@ -1307,7 +1102,7 @@ export async function sendPushNotificationsToUsers(
           tag: notification.tag || "default",
           url: notification.url || "/admin/messages",
           requestId: notification.requestId || null,
-        })
+        }),
       );
       sent++;
     } catch (error: unknown) {
@@ -1335,7 +1130,7 @@ export async function createNotificationForAdmins(
   requestId: number | string,
   company: string,
   allowedRoles: Array<"admin" | "developer"> = ["admin", "developer"],
-  notificationType: "request" | "estimator" = "request"
+  notificationType: "request" | "estimator" = "request",
 ) {
   const supabase = await createAdminClient();
 
@@ -1351,7 +1146,7 @@ export async function createNotificationForAdmins(
   const now = new Date().toISOString();
   const notifications = admins.map((admin) => ({
     user_id: admin.id,
-    request_id: typeof requestId === 'string' ? requestId : requestId,
+    request_id: typeof requestId === "string" ? requestId : requestId,
     message: company,
     notification_type: notificationType,
     is_read: false,
@@ -1367,11 +1162,15 @@ export async function createNotificationForAdmins(
   }
 
   // Send push notifications til admins
-  const pushTitle = notificationType === "estimator" ? "Ny prisberegning foretaget" : "Ny henvendelse";
-  const pushBody = notificationType === "estimator" 
-    ? `${company} har foretaget en ny prisberegning`
-    : `${company} har sendt en ny henvendelse`;
-  
+  const pushTitle =
+    notificationType === "estimator"
+      ? "Ny prisberegning foretaget"
+      : "Ny henvendelse";
+  const pushBody =
+    notificationType === "estimator"
+      ? `${company} har foretaget en ny prisberegning`
+      : `${company} har sendt en ny henvendelse`;
+
   try {
     const adminIds = admins.map((admin) => admin.id);
     await sendPushNotificationsToUsers(adminIds, {
@@ -1404,7 +1203,7 @@ export async function getAllJobs(page: number = 1, limit: number = 6) {
 
     if (error) {
       throw new Error(
-        `Failed to fetch requests: ${error.message || "Unknown error"}`
+        `Failed to fetch requests: ${error.message || "Unknown error"}`,
       );
     }
 
@@ -1427,7 +1226,7 @@ export async function getJobEnums() {
       if (error || !data) {
         console.error(
           `[getJobEnums] Failed to fetch ${enumName}:`,
-          error?.message || "No data returned"
+          error?.message || "No data returned",
         );
         return [];
       }
@@ -1436,7 +1235,7 @@ export async function getJobEnums() {
     } catch (err) {
       console.error(
         `[getJobEnums] Unexpected error while fetching ${enumName}:`,
-        err
+        err,
       );
       return [];
     }
@@ -1534,7 +1333,7 @@ export async function updateJob(
     start_date?: string | null;
     deadline?: string;
     active?: boolean; // Added active property
-  }
+  },
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -1554,7 +1353,7 @@ export async function updateJob(
     console.error(
       "[updateJob] Supabase update error:",
       error.message,
-      error.details
+      error.details,
     );
     throw new Error("Kunne ikke opdatere job. Tjek rettigheder og data.");
   }
@@ -1647,7 +1446,7 @@ export async function getApplicationsByJobId(jobId: string) {
           cvSignedUrl: cvSigned.data?.signedUrl || null,
           applicationSignedUrl: appSigned.data?.signedUrl || null,
         };
-      })
+      }),
     );
 
     return signedApplications;
@@ -1671,12 +1470,12 @@ export async function deleteApplication(applicationId: string): Promise<void> {
     }
 
     console.log(
-      `[deleteApplication] Application with ID ${applicationId} deleted successfully.`
+      `[deleteApplication] Application with ID ${applicationId} deleted successfully.`,
     );
   } catch (err) {
     console.error(
       "[deleteApplication] Unexpected error during application deletion:",
-      err
+      err,
     );
     throw err;
   }
@@ -1732,7 +1531,7 @@ export async function updatePackage(
     label?: string;
     price_eur?: number;
     price_dkk?: number;
-  }
+  },
 ): Promise<void> {
   const supabase = await createServerClientInstance();
 
@@ -1814,7 +1613,7 @@ export async function savePushSubscription(
     };
   },
   userId?: string,
-  userAgent?: string
+  userAgent?: string,
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = await createServerClientInstance();
 
@@ -1876,7 +1675,7 @@ export async function savePushSubscription(
  * Sletter push subscription fra Supabase
  */
 export async function deletePushSubscription(
-  endpoint: string
+  endpoint: string,
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = await createServerClientInstance();
 
@@ -1904,7 +1703,7 @@ export async function deletePushSubscription(
  */
 export async function updateUserPushNotificationPreference(
   userId: string,
-  enabled: boolean
+  enabled: boolean,
 ): Promise<{ success: boolean; error?: string }> {
   const supabase = await createServerClientInstance();
 
@@ -1923,221 +1722,6 @@ export async function updateUserPushNotificationPreference(
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error",
-    };
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ACTIVE SESSIONS
-// ─────────────────────────────────────────────────────────────────────────────
-
-type Session = {
-  id: string;
-  user_agent: string | null;
-  ip: string | null;
-  created_at: string;
-  updated_at: string | null;
-  not_after: string | null;
-  is_current: boolean;
-};
-
-/**
- * Henter alle aktive sessioner fra Supabase Auth for den aktuelle bruger
- */
-export async function getActiveSessions(): Promise<{
-  success: boolean;
-  sessions?: Session[];
-  error?: string;
-}> {
-  const supabase = await createAdminClient();
-
-  try {
-    // Hent nuværende bruger
-    const userSupabase = await createServerClientInstance();
-    const {
-      data: { user },
-      error: userError,
-    } = await userSupabase.auth.getUser();
-
-    if (userError || !user) {
-      return { success: false, error: "Ikke autentificeret" };
-    }
-
-    // Hent den aktuelle session
-    const {
-      data: { session: currentSession },
-    } = await userSupabase.auth.getSession();
-
-    // Få session ID fra JWT token
-    let currentSessionId: string | null = null;
-    if (currentSession?.access_token) {
-      try {
-        // Decode JWT payload (base64url decode middle part)
-        const payloadBase64 = currentSession.access_token.split('.')[1];
-        const payloadJson = Buffer.from(payloadBase64, 'base64url').toString('utf-8');
-        const payload = JSON.parse(payloadJson);
-        currentSessionId = payload.session_id;
-      } catch (e) {
-        console.error("Failed to decode session ID from JWT:", e);
-      }
-    }
-
-    // Brug direkte SQL query via RPC for at hente sessions fra auth schema
-    const { data: authSessions, error: sessionsError } = await supabase.rpc(
-      "get_user_sessions",
-      { target_user_id: user.id }
-    );
-
-    if (sessionsError) {
-      return { success: false, error: sessionsError.message };
-    }
-
-    // Map sessions og marker den aktuelle
-    const sessions: Session[] = (authSessions || []).map((session: {
-      id: string;
-      user_agent: string | null;
-      ip: string | null;
-      created_at: string;
-      updated_at: string | null;
-      not_after: string | null;
-    }) => ({
-      id: session.id,
-      user_agent: session.user_agent,
-      ip: session.ip,
-      created_at: session.created_at,
-      updated_at: session.updated_at,
-      not_after: session.not_after,
-      is_current: currentSessionId ? session.id === currentSessionId : false,
-    }));
-
-    return { success: true, sessions };
-  } catch (err) {
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : "Ukendt fejl",
-    };
-  }
-}
-
-/**
- * Fjerner en specifik session fra Supabase Auth
- */
-export async function revokeSession(
-  sessionId: string
-): Promise<{ success: boolean; error?: string }> {
-  const adminSupabase = await createAdminClient();
-
-  try {
-    // Hent nuværende bruger
-    const userSupabase = await createServerClientInstance();
-    const {
-      data: { user },
-      error: userError,
-    } = await userSupabase.auth.getUser();
-
-    if (userError || !user) {
-      return { success: false, error: "Ikke autentificeret" };
-    }
-
-    // Brug RPC til at slette session
-    const { error } = await adminSupabase.rpc(
-      "delete_user_session",
-      {
-        target_user_id: user.id,
-        target_session_id: sessionId
-      }
-    );
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    return { success: true };
-  } catch (err) {
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : "Ukendt fejl",
-    };
-  }
-}
-
-/**
- * Fjerner alle sessioner undtagen den nuværende
- */
-export async function revokeAllOtherSessions(): Promise<{ success: boolean; error?: string; count?: number }> {
-  const adminSupabase = await createAdminClient();
-
-  try {
-    // Hent nuværende bruger og session
-    const userSupabase = await createServerClientInstance();
-    const {
-      data: { user },
-      error: userError,
-    } = await userSupabase.auth.getUser();
-
-    if (userError || !user) {
-      return { success: false, error: "Ikke autentificeret" };
-    }
-
-    // Hent nuværende session ID
-    const {
-      data: { session: currentSession },
-    } = await userSupabase.auth.getSession();
-
-    let currentSessionId: string | null = null;
-    if (currentSession?.access_token) {
-      try {
-        const payload = JSON.parse(atob(currentSession.access_token.split(".")[1]));
-        currentSessionId = payload.session_id;
-      } catch (e) {
-        console.error("Failed to decode session ID from JWT:", e);
-        return { success: false, error: "Kunne ikke identificere nuværende session" };
-      }
-    }
-
-    if (!currentSessionId) {
-      return { success: false, error: "Kunne ikke identificere nuværende session" };
-    }
-
-    // Hent alle sessioner
-    const { data: authSessions, error: sessionsError } = await adminSupabase.rpc(
-      "get_user_sessions",
-      { target_user_id: user.id }
-    );
-
-    if (sessionsError) {
-      return { success: false, error: sessionsError.message };
-    }
-
-    // Filtrer alle sessioner undtagen den nuværende
-    const sessionsToRevoke = (authSessions || []).filter(
-      (session: { id: string }) => session.id !== currentSessionId
-    );
-
-    if (sessionsToRevoke.length === 0) {
-      return { success: true, count: 0 };
-    }
-
-    // Slet alle andre sessioner
-    let revokedCount = 0;
-    for (const session of sessionsToRevoke) {
-      const { error } = await adminSupabase.rpc(
-        "delete_user_session",
-        {
-          target_user_id: user.id,
-          target_session_id: session.id
-        }
-      );
-      if (!error) {
-        revokedCount++;
-      }
-    }
-
-    return { success: true, count: revokedCount };
-  } catch (err) {
-    return {
-      success: false,
-      error: err instanceof Error ? err.message : "Ukendt fejl",
     };
   }
 }

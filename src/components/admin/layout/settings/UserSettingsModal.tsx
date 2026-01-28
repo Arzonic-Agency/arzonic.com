@@ -15,6 +15,7 @@ import ChangePassword from "./config/ChangePassword";
 import UserDetails from "./config/UserDetails";
 import PushNotificationToggle from "./notifications/PushNotificationToggle";
 import Security from "./security/Security";
+import Appearance from "./appearance/Appearance";
 
 
 const UserSettingsModal = () => {
@@ -154,9 +155,7 @@ const UserSettingsModal = () => {
                   <h3 className="text-lg font-semibold mb-6 md:mb-10">
                     {t("appearance")}
                   </h3>
-                  <p className="text-sm text-base-content/70">
-                    {t("settings_content_coming_soon")}
-                  </p>
+                  <Appearance />
                 </div>
               )}
               {activeTab === "notifications" && (

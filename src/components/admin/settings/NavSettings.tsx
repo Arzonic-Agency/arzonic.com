@@ -40,23 +40,18 @@ const NavSettings = () => {
           {t("docs_settings")}
         </button>
       </div>
-      <div className="mt-3 2xl:flex gap-3">
-        <div className="flex-3/4 4xl:flex-3/5">
-          {activeTab === "setup" && (
-            <div className="">
-              <Setup />
-            </div>
-          )}
-       
-          {activeTab === "docs" && (
-            <div className="">
-              <Docs />
-            </div>
-          )}
-        </div>
-        <div className="hidden 2xl:flex flex-1/4 4xl:flex-2/5 bg-base-200 rounded-box shadow-md p-5 md:p-7 h-fit">
-          test
-        </div>
+      <div className="mt-3 gap-3">
+        {activeTab === "setup" && (
+          <div className="">
+            <Setup />
+          </div>
+        )}
+
+        {activeTab === "docs" && (
+          <div className="">
+            <Docs />
+          </div>
+        )}
       </div>
     </div>
   );

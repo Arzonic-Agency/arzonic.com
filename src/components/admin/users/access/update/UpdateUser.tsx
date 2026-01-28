@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaEnvelope, FaKey, FaShield, FaSignature } from "react-icons/fa6";
-import { updateUser, getAllUsers } from "@/lib/server/actions";
+import { updateMember, getAllMembers } from "@/lib/auth/actions";
 import { useTranslation } from "react-i18next";
 
 const UpdateUser = ({
@@ -26,7 +26,7 @@ const UpdateUser = ({
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const users = await getAllUsers();
+        const users = await getAllMembers();
         const user = users.find((user) => user.id === userId);
         if (user) {
           setEmail(user.email || "");
@@ -82,7 +82,7 @@ const UpdateUser = ({
         if (role) updateData.role = role;
         if (name) updateData.name = name;
 
-        await updateUser(userId, updateData);
+        await updateMember(userId, updateData);
         onUserUpdated();
       } catch {
         setErrors({ ...errors, password: t("registration_error") });

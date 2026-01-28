@@ -5,6 +5,7 @@ import { getAllNews, deleteNews } from "@/lib/server/actions";
 import { useTranslation } from "react-i18next";
 import { FaInfoCircle } from "react-icons/fa";
 import { openSocialLink } from "@/utils/socialLinks";
+import { useNewsListRealtime, type NewsUpdate } from "@/hooks/useNewsRealtime";
 
 interface NewsListProps {
   view: "cards" | "list";
@@ -22,6 +23,13 @@ interface NewsItem {
   sharedInstagram?: boolean;
   linkFacebook?: string;
   linkInstagram?: string;
+  social_status?:
+    | "pending"
+    | "processing"
+    | "completed"
+    | "partial"
+    | "error"
+    | null;
 }
 
 const FALLBACK_IMAGE = "/demo.webp";
@@ -53,6 +61,29 @@ const NewsList = ({
     }
   }, [page, itemsPerPage, setTotal, setNews]);
 
+  // Listen for realtime updates on news items (social posting status)
+  const handleNewsUpdate = useCallback(
+    (update: NewsUpdate) => {
+      setNews((prevNews) =>
+        prevNews.map((item) =>
+          item.id === update.id
+            ? {
+                ...item,
+                social_status: update.social_status ?? item.social_status,
+                sharedFacebook: update.sharedFacebook ?? item.sharedFacebook,
+                sharedInstagram: update.sharedInstagram ?? item.sharedInstagram,
+                linkFacebook: update.linkFacebook ?? item.linkFacebook,
+                linkInstagram: update.linkInstagram ?? item.linkInstagram,
+              }
+            : item,
+        ),
+      );
+    },
+    [setNews],
+  );
+
+  useNewsListRealtime(handleNewsUpdate);
+
   useEffect(() => {
     fetchNews();
   }, [page, setTotal, fetchNews]);
@@ -80,7 +111,7 @@ const NewsList = ({
 
   const truncateDescription = (
     description: string | null,
-    maxLength: number
+    maxLength: number,
   ) => {
     if (!description || description.length <= maxLength)
       return description || "";
@@ -116,7 +147,7 @@ const NewsList = ({
             {[...Array(itemsPerPage)].map((_, index) => (
               <div
                 key={index}
-                className="card card-compact shadow-lg rounded-md"
+                className="card card-compact shadow-lg rounded-lg bg-base-100/50"
               >
                 <figure className="relative w-full aspect-4/3 h-56 overflow-hidden rounded-t-md">
                   <div className="skeleton w-full h-full"></div>
@@ -168,9 +199,9 @@ const NewsList = ({
               {newsItems.map((item, itemIndex) => (
                 <div
                   key={item.id}
-                  className="card card-compact shadow-lg rounded-md"
+                  className="card card-compact shadow-lg rounded-lg bg-base-100/50"
                 >
-                  <figure className="relative w-full aspect-4/3 h-56 overflow-hidden">
+                  <figure className="relative w-full aspect-4/3 h-60 overflow-hidden">
                     {item.images && item.images.length > 0 ? (
                       item.images.length === 1 ? (
                         <div className="relative w-full h-full">
@@ -211,7 +242,7 @@ const NewsList = ({
                                           index === 0
                                             ? item.images.length - 1
                                             : index - 1
-                                        }`
+                                        }`,
                                       );
                                       prevSlide?.scrollIntoView({
                                         behavior: "instant",
@@ -229,7 +260,7 @@ const NewsList = ({
                                           index === item.images.length - 1
                                             ? 0
                                             : index + 1
-                                        }`
+                                        }`,
                                       );
                                       nextSlide?.scrollIntoView({
                                         behavior: "instant",
@@ -264,8 +295,9 @@ const NewsList = ({
                       {truncateDescription(item.content, 100)}
                     </p>
                     <div className="card-actions justify-between items-center mt-2">
-                      <div className="flex gap-2">
-                        {item.linkFacebook && (
+                      <div className="flex gap-2 items-center">
+                        {/* Facebook button - show skeleton if processing, link if ready */}
+                        {item.linkFacebook ? (
                           <button
                             onClick={() =>
                               openSocialLink(item.linkFacebook!, "facebook")
@@ -273,13 +305,18 @@ const NewsList = ({
                             className="btn md:btn-sm"
                             title="Se Facebook opslag"
                           >
-                            <FaFacebook className="text-lg  md:text-base" />
-                            <span className=" font-normal text-base-content hidden md:block">
+                            <FaFacebook className="text-lg md:text-base" />
+                            <span className="font-normal text-base-content hidden md:block">
                               Facebook
                             </span>
                           </button>
-                        )}
-                        {item.linkInstagram && (
+                        ) : item.social_status === "pending" ||
+                          item.social_status === "processing" ? (
+                          <div className="skeleton h-12 w-12 md:h-8 md:w-24 rounded-lg"></div>
+                        ) : null}
+
+                        {/* Instagram button - show skeleton if processing, link if ready */}
+                        {item.linkInstagram ? (
                           <button
                             onClick={() =>
                               openSocialLink(item.linkInstagram!, "instagram")
@@ -287,12 +324,15 @@ const NewsList = ({
                             className="btn md:btn-sm"
                             title="Se Instagram opslag"
                           >
-                            <FaInstagram className="text-lg  md:text-base" />
+                            <FaInstagram className="text-lg md:text-base" />
                             <span className="font-normal text-base-content hidden md:block">
                               Instagram
                             </span>
                           </button>
-                        )}
+                        ) : item.social_status === "pending" ||
+                          item.social_status === "processing" ? (
+                          <div className="skeleton h-12 w-12 md:h-8 md:w-24 rounded-lg"></div>
+                        ) : null}
                       </div>
                       <div className="flex gap-2">
                         <button
@@ -337,8 +377,9 @@ const NewsList = ({
                           </p>
                         </div>
                       </div>
-                      <div className="flex gap-5 md:gap-2">
-                        {item.linkFacebook && (
+                      <div className="flex gap-5 md:gap-2 items-center">
+                        {/* Facebook button - show skeleton if processing, link if ready */}
+                        {item.linkFacebook ? (
                           <button
                             onClick={() =>
                               openSocialLink(item.linkFacebook!, "facebook")
@@ -347,12 +388,17 @@ const NewsList = ({
                             title="Se Facebook opslag"
                           >
                             <FaFacebook className="text-[15px] md:text-base" />
-                            <span className=" font-normal text-base-content hidden md:block">
+                            <span className="font-normal text-base-content hidden md:block">
                               Facebook
                             </span>
                           </button>
-                        )}
-                        {item.linkInstagram && (
+                        ) : item.social_status === "pending" ||
+                          item.social_status === "processing" ? (
+                          <div className="skeleton h-8 w-8 md:w-24 rounded-lg"></div>
+                        ) : null}
+
+                        {/* Instagram button - show skeleton if processing, link if ready */}
+                        {item.linkInstagram ? (
                           <button
                             onClick={() =>
                               openSocialLink(item.linkInstagram!, "instagram")
@@ -365,7 +411,10 @@ const NewsList = ({
                               Instagram
                             </span>
                           </button>
-                        )}
+                        ) : item.social_status === "pending" ||
+                          item.social_status === "processing" ? (
+                          <div className="skeleton h-8 w-8 md:w-24 rounded-lg"></div>
+                        ) : null}
 
                         <button
                           className="btn btn-sm"

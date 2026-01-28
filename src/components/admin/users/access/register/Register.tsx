@@ -1,5 +1,5 @@
-import { createMember } from "@/lib/server/actions";
-import React, { useState } from "react";
+import { createMember } from "@/lib/auth/actions";
+import { useState } from "react";
 import { FaEnvelope, FaKey, FaShield, FaSignature } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 

@@ -55,7 +55,7 @@
 
   --color-base-100: #EAEAEB;
   --color-base-200: #F8FAFC;
-  --color-base-300: #E2E2E2;
+  --color-base-300: #F1F2F4;
   --color-base-content: #171717;
   --color-primary: oklch(51% 0.096 186.391);
   --color-primary-content: oklch(98% 0.003 247.858);
@@ -356,4 +356,11 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--bc) / 0.3);
+}
+
+/* Hide collapse arrow on large screens when force-open */
+@media (min-width: 1024px) {
+  .collapse.collapse-arrow.lg\:collapse-open .collapse-title:after {
+    display: none;
+  }
 }

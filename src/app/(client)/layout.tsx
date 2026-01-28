@@ -19,6 +19,11 @@ export default function ClientLayout({
   const [showScroll, setShowScroll] = useState(false);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
 
+  // Sikrer at client altid bruger dark theme
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", "arzonicdark");
+  }, []);
+
   useEffect(() => {
     // Check if user has already seen the cookie banner
     const hasSeenCookie = localStorage.getItem("cookieBannerSeen");

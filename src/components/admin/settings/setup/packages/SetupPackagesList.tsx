@@ -44,7 +44,7 @@ const SetupPackagesList = ({ onEdit }) => {
   return (
     <ul className="list">
       {packages.map((pkg) => (
-        <li key={pkg.id} className="list-row">
+        <li key={pkg.id} className="list-row px-0 py-4">
           <div>
             <div className="font-bold">{pkg.label}</div>
             <div className="text-sm text-gray-500">

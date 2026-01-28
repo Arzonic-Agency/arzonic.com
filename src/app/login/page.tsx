@@ -1,7 +1,6 @@
 "use client";
 
-import { login } from "@/lib/server/actions";
-import React, { useState } from "react";
+import React, { useState, useActionState, useEffect } from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -10,6 +9,7 @@ import PolicyModal from "@/components/client/modal/PolicyModal";
 import Link from "next/link";
 import Image from "next/image";
 import { readUserSession } from "@/lib/auth/readUserSession";
+import { login } from "@/lib/auth/actions";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -17,59 +17,58 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (_prevState: any, formData: FormData) => {
+    const emailValue = formData.get("email") as string;
+    const passwordValue = formData.get("password") as string;
+
     let valid = true;
-    const errors = { email: "", password: "" };
+    const validationErrors = { email: "", password: "" };
 
-    if (!validateEmail(email)) {
-      errors.email = "Invalid email address";
+    if (!validateEmail(emailValue)) {
+      validationErrors.email = "Invalid email address";
       valid = false;
     }
 
-    if (password.length < 6) {
-      errors.password = "Password must be at least 6 characters";
+    if (passwordValue.length < 6) {
+      validationErrors.password = "Password must be at least 6 characters";
       valid = false;
     }
 
-    setErrors(errors);
-    setServerError(""); // Clear previous server error
+    setErrors(validationErrors);
 
-    if (valid) {
-      setLoading(true);
-      try {
-        const formData = new FormData();
-        formData.append("email", email);
-        formData.append("password", password);
-        // Send browser user agent to track sessions properly
-        formData.append("userAgent", navigator.userAgent);
+    if (!valid) {
+      return { success: false, message: "Validation failed" };
+    }
 
-        const response = await login(formData);
-        if (response.success) {
-          // Read user session to get role and route accordingly
-          const session = await readUserSession();
-          if (session?.role === "editor") {
-            router.push("/admin/content");
-          } else {
-            router.push("/admin");
-          }
+    return await login(formData);
+  };
+
+  const [state, formAction, isPending] = useActionState(handleLogin, null);
+
+  useEffect(() => {
+    if (state?.success) {
+      const routeUser = async () => {
+        const session = await readUserSession();
+        if (session?.role === "editor") {
+          router.push("/admin/content");
         } else {
-          setServerError(t("messages.error_wrong")); // Display generic error message
+          router.push("/admin");
         }
-      } catch {
-        setServerError(t("messages.error_wrong")); // Fallback error message
-      } finally {
-        setLoading(false);
-      }
+      };
+      routeUser();
     }
+  }, [state, router]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    formAction(formData);
   };
 
   return (
@@ -134,12 +133,14 @@ const LoginPage = () => {
           <button
             type="submit"
             className="btn btn-primary mt-2"
-            disabled={loading}
+            disabled={isPending}
           >
-            {loading ? t("logging_in") : t("login")}
+            {isPending ? t("logging_in") : t("login")}
           </button>
           <span className="text-xs text-red-500 min-h-4 text-center">
-            {serverError}
+            {state && !state.success
+              ? state.message || t("messages.error_wrong")
+              : ""}
           </span>
         </form>
         <Link

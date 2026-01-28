@@ -15,17 +15,8 @@ import {
   getActiveSessions,
   revokeSession,
   revokeAllOtherSessions,
-} from "@/lib/server/actions";
-
-type Session = {
-  id: string;
-  user_agent: string | null;
-  ip: string | null;
-  created_at: string;
-  updated_at: string | null;
-  not_after: string | null;
-  is_current: boolean;
-};
+  type Session,
+} from "@/lib/auth/readUserSession";
 
 const parseUserAgent = (
   userAgent: string | null,

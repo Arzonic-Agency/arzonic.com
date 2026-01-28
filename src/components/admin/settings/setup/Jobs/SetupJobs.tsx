@@ -19,8 +19,6 @@ const SetupJobs = ({ onEdit, onCreate }: SetupJobsProps) => {
 
   return (
     <div className="flex flex-col gap-5 w-full">
-      <h3 className="text-xl">{t("setup.jobs")}</h3>
-
       <div className="flex flex-col items-start gap-5">
         <SetupJobsList onEdit={onEdit} />
       </div>

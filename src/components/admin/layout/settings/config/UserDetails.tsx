@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { readUserSession } from "@/lib/auth/readUserSession";
 
@@ -13,7 +13,7 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | undefined>();
   const [role, setRole] = useState<"admin" | "editor" | "developer" | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(true);
 
@@ -43,39 +43,40 @@ const UserDetails = ({ onChangePassword }: UserDetailsProps) => {
     };
   }, []);
   return (
-      <div className="flex flex-col gap-5 items-start">
-        <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">{t("name")}</h5>
-          {loading ? (
-            <div className="skeleton w-full h-4"></div>
-          ) : (
-            <p>{name ? name : "—"}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">{t("email")}</h5>
-          {loading ? (
-            <div className="skeleton w-full h-4"></div>
-          ) : (
-            <p>{email ? email : "—"}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">{t("access_level")}</h5>
-          {loading ? (
-            <div className="skeleton w-full h-4"></div>
-          ) : (
-            <p>{roleLabel()}</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1">
-          <h5 className="text-sm font-medium text-gray-400">{t("password")}</h5>
-          <button className="btn btn-sm btn-soft" onClick={onChangePassword}>
-            {t("change_password")}
-          </button>
-        </div>
+    <div className="flex flex-col gap-5 items-start">
+      <div className="flex flex-col gap-1">
+        <h5 className="text-sm font-medium text-gray-400">{t("name")}</h5>
+        {loading ? (
+          <div className="skeleton w-full h-4"></div>
+        ) : (
+          <p>{name ? name : "—"}</p>
+        )}
       </div>
-    
+      <div className="flex flex-col gap-1">
+        <h5 className="text-sm font-medium text-gray-400">{t("email")}</h5>
+        {loading ? (
+          <div className="skeleton w-full h-4"></div>
+        ) : (
+          <p>{email ? email : "—"}</p>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <h5 className="text-sm font-medium text-gray-400">
+          {t("access_level")}
+        </h5>
+        {loading ? (
+          <div className="skeleton w-full h-4"></div>
+        ) : (
+          <p>{roleLabel()}</p>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <h5 className="text-sm font-medium text-gray-400">{t("password")}</h5>
+        <button className="btn btn-sm btn-soft" onClick={onChangePassword}>
+          {t("change_password")}
+        </button>
+      </div>
+    </div>
   );
 };
 

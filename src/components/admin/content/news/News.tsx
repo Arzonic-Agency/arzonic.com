@@ -13,8 +13,18 @@ interface NewsItem {
   id: number;
   title: string;
   content: string;
-  images: string[]; // Add the 'images' property
-  // Add other fields as needed
+  images: string[];
+  sharedFacebook?: boolean;
+  sharedInstagram?: boolean;
+  linkFacebook?: string;
+  linkInstagram?: string;
+  social_status?:
+    | "pending"
+    | "processing"
+    | "completed"
+    | "partial"
+    | "error"
+    | null;
 }
 
 const News = () => {
@@ -37,7 +47,7 @@ const News = () => {
   const handleNewsCreated = () => {
     setShowCreateNews(false);
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
+    setTimeout(() => setShowToast(false), 4000);
   };
 
   return (
@@ -59,7 +69,7 @@ const News = () => {
           <div className="flex justify-between items-center w-full">
             <button
               onClick={() => setShowCreateNews(true)}
-              className="btn btn-primary btn-sm md:btn-md"
+              className="btn btn-primary btn-sm"
             >
               {t("create")} {t("news")}
             </button>
@@ -78,11 +88,9 @@ const News = () => {
         </>
       )}
       {showToast && (
-        <div className="toast bottom-20 md:bottom-0 toast-end">
+        <div className="toast bottom-20 md:toast-bottom toast-end">
           <div className="alert alert-success text-neutral-content">
-            <span className="text-base md:text-lg">
-              {t("news_created")}
-            </span>
+            <span className="text-base md:text-lg">{t("news_created")}</span>
           </div>
         </div>
       )}

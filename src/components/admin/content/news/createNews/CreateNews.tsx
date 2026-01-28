@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { createNews } from "@/lib/server/actions";
-import { FaXmark } from "react-icons/fa6";
+import { FaXmark, FaFacebook, FaInstagram, FaCheck } from "react-icons/fa6";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import {
+  useNewsRealtime,
+  type NewsSocialStatus,
+} from "@/hooks/useNewsRealtime";
+
+type LoadingPhase = "idle" | "uploading" | "processing_social" | "done";
 
 const CreateNews = ({
   onNewsCreated,
@@ -25,6 +31,36 @@ const CreateNews = ({
     instagram?: string;
   }>({});
   const [loading, setLoading] = useState(false);
+  const [loadingPhase, setLoadingPhase] = useState<LoadingPhase>("idle");
+  const [createdNewsId, setCreatedNewsId] = useState<number | null>(null);
+  const [socialStatus, setSocialStatus] = useState<{
+    facebook?: "pending" | "success" | "error";
+    instagram?: "pending" | "success" | "error";
+  }>({});
+
+  // Listen for realtime updates on the created news
+  const handleStatusUpdate = useCallback(
+    (update: {
+      social_status?: NewsSocialStatus;
+      sharedFacebook?: boolean;
+      sharedInstagram?: boolean;
+      linkFacebook?: string | null;
+      linkInstagram?: string | null;
+    }) => {
+      // Update social status based on realtime update
+      if (update.sharedFacebook && update.linkFacebook) {
+        setSocialStatus((prev) => ({ ...prev, facebook: "success" }));
+      }
+      if (update.sharedInstagram && update.linkInstagram) {
+        setSocialStatus((prev) => ({ ...prev, instagram: "success" }));
+      }
+
+      // Social posting happens in background, we don't wait for it here
+    },
+    [setShowCreateNews, fetchNews, onNewsCreated],
+  );
+
+  useNewsRealtime(createdNewsId, handleStatusUpdate);
 
   // Create object URLs for images (client-side only)
   useEffect(() => {
@@ -68,7 +104,16 @@ const CreateNews = ({
     }
 
     setLoading(true);
+    setLoadingPhase("uploading");
     setErrors({});
+
+    // Initialize social status if posting to social media
+    if (postToFacebook || postToInstagram) {
+      setSocialStatus({
+        ...(postToFacebook ? { facebook: "pending" } : {}),
+        ...(postToInstagram ? { instagram: "pending" } : {}),
+      });
+    }
 
     try {
       const result = await createNews({
@@ -78,36 +123,45 @@ const CreateNews = ({
         sharedInstagram: postToInstagram,
       });
 
-      // Log posting results if available
-      if (result?.linkFacebook) {
-        console.log("News posted to Facebook:", result.linkFacebook);
-      }
-      if (result?.linkInstagram) {
-        console.log("News posted to Instagram:", result.linkInstagram);
-      }
+      // Store the news ID for realtime updates
+      setCreatedNewsId(result.newsId);
 
-      // Clear form
-      setDesc("");
-      setImages([]);
-      setPostToFacebook(true);
-      setPostToInstagram(true);
-      setErrors({});
-      setShowCreateNews(false);
-      onNewsCreated();
-
-      // Refresh data
-      if (fetchNews) fetchNews();
+      // If social posting is happening in background
+      if (result.status === "processing_social") {
+        // Social posting happens in background, close modal after short delay
+        setLoadingPhase("processing_social");
+        setTimeout(() => {
+          setLoading(false);
+          setLoadingPhase("idle");
+          onNewsCreated();
+          setShowCreateNews(false);
+          if (fetchNews) fetchNews();
+        }, 2500);
+      } else {
+        // No social posting, close immediately
+        setDesc("");
+        setImages([]);
+        setPostToFacebook(true);
+        setPostToInstagram(true);
+        setErrors({});
+        setShowCreateNews(false);
+        onNewsCreated();
+        if (fetchNews) fetchNews();
+        setLoading(false);
+        setLoadingPhase("idle");
+      }
     } catch (error) {
       const msg =
         error instanceof Error
           ? error.message
           : typeof error === "string"
-          ? error
-          : "Ukendt fejl";
+            ? error
+            : "Ukendt fejl";
 
       setErrors({ general: msg });
-    } finally {
       setLoading(false);
+      setLoadingPhase("idle");
+      setSocialStatus({});
     }
   };
 
@@ -145,6 +199,7 @@ const CreateNews = ({
                 cols={30}
                 rows={8}
                 style={{ resize: "none" }}
+                disabled={loading}
               />
               <div className="text-right text-xs font-medium text-zinc-500 absolute right-1 -bottom-5">
                 {desc.length} / 800
@@ -166,6 +221,7 @@ const CreateNews = ({
                 className="file-input file-input-md w-full"
                 onChange={handleImageChange}
                 multiple
+                disabled={loading}
               />
             </fieldset>
 
@@ -194,10 +250,11 @@ const CreateNews = ({
                           className="absolute top-1 right-1 btn md:btn-xs btn-sm btn-soft md:hidden md:group-hover:block text-lg"
                           onClick={() => {
                             setImages((prev) =>
-                              prev.filter((_, i) => i !== index)
+                              prev.filter((_, i) => i !== index),
                             );
                           }}
                           title="Fjern billede"
+                          disabled={loading}
                         >
                           <FaXmark />
                         </button>
@@ -225,6 +282,7 @@ const CreateNews = ({
               className="toggle toggle-primary"
               checked={postToFacebook}
               onChange={(e) => setPostToFacebook(e.target.checked)}
+              disabled={loading}
             />
             <label htmlFor="postToFacebook" className="label-text">
               {t("share_fb")}
@@ -238,6 +296,7 @@ const CreateNews = ({
               className="toggle toggle-primary"
               checked={postToInstagram}
               onChange={(e) => setPostToInstagram(e.target.checked)}
+              disabled={loading}
             />
             <label htmlFor="postToInstagram" className="label-text">
               {t("share_instagram")}
@@ -252,7 +311,7 @@ const CreateNews = ({
 
         <button
           type="submit"
-          className="btn btn-primary mt-2"
+          className="btn btn-sm btn-primary mt-2"
           disabled={loading}
         >
           {loading ? (

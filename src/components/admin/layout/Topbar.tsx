@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
-import { signOut } from "@/lib/server/actions";
+import { useRef } from "react";
+import { signOut } from "@/lib/auth/actions";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import "@/i18n/config";
 import { FaRightFromBracket } from "react-icons/fa6";
 
 import LanguageAdmin from "./LanguageAdmin";
-import ThemeAdmin from "./ThemeAdmin";
 import Settings from "./settings/UserSettings";
 import { FaUserCircle } from "react-icons/fa";
 import NotificationList from "./notifications/NotificationList";
@@ -54,9 +53,6 @@ const Topbar = () => {
           >
             <li>
               <Settings />
-            </li>
-            <li>
-              <ThemeAdmin />
             </li>
             <li>
               <LanguageAdmin />

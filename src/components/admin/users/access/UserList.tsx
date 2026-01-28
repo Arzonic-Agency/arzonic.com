@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaPen, FaTrash } from "react-icons/fa6";
-import { getAllUsers, deleteUser } from "@/lib/server/actions";
+import { getAllMembers, deleteMember } from "@/lib/auth/actions";
 import { readUserSession } from "@/lib/auth/readUserSession";
 import { useTranslation } from "react-i18next";
 
@@ -42,7 +42,7 @@ const UserList = ({
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const users = await getAllUsers();
+        const users = await getAllMembers();
         setUsers(users || []);
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -66,7 +66,7 @@ const UserList = ({
   const handleDelete = async () => {
     if (userToDelete) {
       try {
-        await deleteUser(userToDelete.id);
+        await deleteMember(userToDelete.id);
         setUsers(users.filter((user) => user.id !== userToDelete.id));
         setUserToDelete(null);
         setIsModalOpen(false);
@@ -139,10 +139,10 @@ const UserList = ({
                         {user.role === "admin"
                           ? t("admin")
                           : user.role === "editor"
-                          ? t("editor")
-                          : user.role === "developer"
-                          ? t("developer")
-                          : user.role}
+                            ? t("editor")
+                            : user.role === "developer"
+                              ? t("developer")
+                              : user.role}
                       </span>
                     </div>
                     <div className="w-20 md:w-32">
@@ -182,7 +182,7 @@ const UserList = ({
                     )}
                   </div>
                 </li>
-                <hr className="border-[1px] rounded-lg border-base-200" />
+                <hr className="border rounded-lg border-base-200" />
               </React.Fragment>
             ))}
           </ul>

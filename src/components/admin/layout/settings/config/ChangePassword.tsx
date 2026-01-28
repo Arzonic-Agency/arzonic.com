@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { changeOwnPassword } from "@/lib/server/actions";
+import { changeOwnPassword } from "@/lib/auth/actions";
 
 const ChangePassword = () => {
   const { t } = useTranslation();

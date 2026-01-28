@@ -57,7 +57,7 @@ const Setup = () => {
   return (
     <div className="">
       {isEditingPackage ? (
-        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7 ">
+        <div className="bg-base-100 rounded-lg shadow-md p-5 md:p-7">
           <SetupPackagesEdit
             packageData={selectedPackage}
             onSave={handleSave}
@@ -65,11 +65,11 @@ const Setup = () => {
           />
         </div>
       ) : isCreatingJob ? (
-        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
+        <div className="bg-base-100 rounded-lg shadow-md p-5 md:p-7">
           <SetupJobsCreate onSave={handleSave} onBack={handleBackToMain} />
         </div>
       ) : isViewingJobDetails ? (
-        <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
+        <div className="bg-base-100 rounded-lg shadow-md p-5 md:p-7">
           <SetupJobsDetails
             jobId={selectedJob?.id}
             onBack={handleBackToMain}
@@ -77,15 +77,27 @@ const Setup = () => {
           />
         </div>
       ) : (
-        <div className="flex flex-col gap-5">
-          <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
-            <SetupPackages onEdit={handlePackageEditToggle} />
+        <div className="flex flex-col xl:flex-row gap-3">
+          <div className="collapse collapse-arrow lg:collapse-open bg-base-200 border-base-300 border lg:border-0 lg:rounded-lg lg:shadow-md lg:p-5 lg:md:p-7">
+            <input type="checkbox" className="lg:hidden" />
+            <div className="collapse-title font-semibold text-lg lg:text-xl xl:text-2xl lg:p-0! lg:pb-4! lg:cursor-default!">
+              {t("packages")}
+            </div>
+            <div className="collapse-content lg:block! lg:visible!">
+              <SetupPackages onEdit={handlePackageEditToggle} />
+            </div>
           </div>
-          <div className="bg-base-200 rounded-box shadow-md p-5 md:p-7">
-            <SetupJobs
-              onEdit={(job) => handleJobEditToggle(job)}
-              onCreate={handleJobCreateToggle}
-            />
+          <div className="collapse collapse-arrow lg:collapse-open bg-base-200 border-base-300 border lg:border-0 lg:rounded-lg lg:shadow-md lg:p-5 lg:md:p-7">
+            <input type="checkbox" className="lg:hidden" />
+            <div className="collapse-title font-semibold text-lg lg:text-xl xl:text-2xl lg:p-0! lg:pb-4! lg:cursor-default!">
+              {t("setup.jobs")}
+            </div>
+            <div className="collapse-content lg:block! lg:visible!">
+              <SetupJobs
+                onEdit={(job) => handleJobEditToggle(job)}
+                onCreate={handleJobCreateToggle}
+              />
+            </div>
           </div>
         </div>
       )}
