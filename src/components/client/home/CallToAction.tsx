@@ -2,7 +2,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import OfferForm from "../forms/OfferForm";
 import EuropeMap from "@/components/elements/EuropeMap";
-import BookingButton from "@/components/elements/BookingButton";
 import { FaPhone } from "react-icons/fa6";
 
 const CallToAction = () => {
@@ -29,11 +28,6 @@ const CallToAction = () => {
             >
               {t("ContactPage.phoneNumber")}
             </a>
-
-            <div className="">
-              <p className="font-medium mb-4">{t("ContactPage.bookPrompt")}</p>
-              <BookingButton />
-            </div>
           </div>
         </div>
       </div>
