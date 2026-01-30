@@ -108,7 +108,7 @@ export async function calculateEstimateFromAnswers(
 
   const { data: pkg, error: pkgErr } = await supabase
     .from("packages")
-    .select("price_eur, price_dkk, month_eur, month_dkk, fee_eur, fee_dkk")
+    .select("yearly_eur, yearly_dkk, month_eur, month_dkk, fee_eur, fee_dkk")
     .eq("id", packageId)
     .maybeSingle();
   if (pkgErr) {
@@ -118,7 +118,7 @@ export async function calculateEstimateFromAnswers(
     throw new Error(`No package found with id="${packageId}"`);
   }
   const isDanish = lang === "da";
-  const basePackageValue = Number(isDanish ? pkg.price_dkk : pkg.price_eur);
+  const basePackageValue = Number(isDanish ? pkg.yearly_dkk : pkg.yearly_eur);
   let price = basePackageValue;
 
   const otherOptionIds = answers

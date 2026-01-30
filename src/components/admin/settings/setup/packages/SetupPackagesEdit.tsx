@@ -9,8 +9,8 @@ interface SetupPackagesEditProps {
   packageData: {
     id: string;
     label: string;
-    price_eur: number;
-    price_dkk: number;
+    yearly_eur: number;
+    yearly_dkk: number;
   };
   onSave: () => void;
   onBack: () => void;
@@ -24,15 +24,15 @@ const SetupPackagesEdit: React.FC<SetupPackagesEditProps> = ({
   const { t } = useTranslation();
 
   const [label, setLabel] = useState(packageData.label);
-  const [priceEur, setPriceEur] = useState<number>(packageData.price_eur);
-  const [priceDkk, setPriceDkk] = useState<number>(packageData.price_dkk);
+  const [priceEur, setPriceEur] = useState<number>(packageData.yearly_eur);
+  const [priceDkk, setPriceDkk] = useState<number>(packageData.yearly_dkk);
 
   const handleSave = async () => {
     try {
       await updatePackage(packageData.id, {
         label,
-        price_eur: priceEur,
-        price_dkk: priceDkk,
+        yearly_eur: priceEur,
+        yearly_dkk: priceDkk,
       });
       onSave();
     } catch (error) {

@@ -8,15 +8,15 @@ import { useTranslation } from "react-i18next";
 
 interface Package {
   label: string;
-  price_eur: number;
-  price_dkk: number;
+  yearly_eur: number;
+  yearly_dkk: number;
   month_eur?: number;
   month_dkk?: number;
 }
 
 interface PlansProps {
-  pricingType: "oneTime" | "monthly";
-  setPricingType: React.Dispatch<React.SetStateAction<"oneTime" | "monthly">>;
+  pricingType: "monthly" | "yearly";
+  setPricingType: React.Dispatch<React.SetStateAction<"monthly" | "yearly">>;
 }
 
 const Plans = ({ pricingType, setPricingType }: PlansProps) => {
@@ -36,15 +36,15 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         const data = await getPackages();
 
         const keyToLabel: Record<string, string> = {
-          Starter: "Starter",
-          Pro: "Pro",
-          Premium: "Premium",
+          Starter: "foundation",
+          Pro: "growth",
+          Premium: "scale",
         };
 
         const map: Record<string, Package> = {};
         data.forEach((p) => {
           const match = Object.entries(keyToLabel).find(
-            ([, lab]) => lab === p.label
+            ([, lab]) => lab === p.label,
           );
           if (match) {
             map[match[0]] = p;
@@ -76,8 +76,8 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
           ? pkg.month_dkk
           : pkg.month_eur
         : isDanish
-        ? pkg.price_dkk
-        : pkg.price_eur;
+          ? pkg.yearly_dkk
+          : pkg.yearly_eur;
 
     if (value == null) return "–";
 
@@ -91,7 +91,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   const getTabLabel = () =>
     pricingType === "monthly"
       ? t("PricingPage.monthly48")
-      : t("PricingPage.oneTime");
+      : t("PricingPage.yearly");
 
   const planCards = [
     {
@@ -171,15 +171,15 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
               <li key={idx} className="flex gap-2 items-center">
                 {f}
               </li>
-            )
+            ),
           )}
         </ul>
         <div className="flex flex-col gap-1 items-start">
           <span className="text-xs md:text-sm text-zinc-300">
             {getTabLabel()}
           </span>
-          <span className="text-2xl sm:text-3xl  font-semibold tracking-wide">
-            {getPrice(key)}
+          <span className=" text-2xl font-semibold tracking-wide">
+            {t("PricingPage.from")} {getPrice(key)}
           </span>
         </div>
       </div>
@@ -189,7 +189,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   return (
     <div className="flex flex-col gap-10 items-center justify-center w-full relative">
       {/* Titel og undertekst */}
-      <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center gap-5 max-w-[280px]">
         <span className="text-xl sm:text-xl md:text-2xl font-light text-center">
           {t("PricingPage.subtitle")}
         </span>
@@ -198,18 +198,8 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       {/* Tab knapper */}
       <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
         <button
-          onClick={() => setPricingType("oneTime")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
-            pricingType === "oneTime"
-              ? "bg-primary text-white "
-              : "bg-transparent text-primary"
-          }`}
-        >
-          {t("PricingPage.oneTimeTab")}
-        </button>
-        <button
           onClick={() => setPricingType("monthly")}
-          className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+          className={`px-4 py-1 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
             pricingType === "monthly"
               ? "bg-primary text-white"
               : "bg-transparent text-primary"
@@ -217,6 +207,21 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         >
           {t("PricingPage.monthlyTab")}
         </button>
+        <div className="indicator">
+          <span className="indicator-item badge badge-xs badge-primary text-xs px-1.5">
+            {t("PricingPage.yearlySavings")}
+          </span>
+          <button
+            onClick={() => setPricingType("yearly")}
+            className={`px-4 py-1 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
+              pricingType === "yearly"
+                ? "bg-primary text-white"
+                : "bg-transparent text-primary"
+            }`}
+          >
+            {t("PricingPage.yearlyTab")}
+          </button>
+        </div>
       </div>
       {/* Desktop grid visning */}
       <motion.div

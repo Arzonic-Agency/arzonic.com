@@ -134,14 +134,14 @@ export async function sendEstimatorEmail(
 ): Promise<void> {
   const estimateLine =
     lang === "da"
-      ? `Anslået Pakkepris: Engangspris ${estimate}${
+      ? `Anslået Pakkepris: Årlig pris ${estimate}${
           monthlyInstallment
-            ? ` eller ${monthlyInstallment} pr. måned i 48 måneder`
+            ? ` eller ${monthlyInstallment} pr. måned`
             : ""
         }`
-      : `Estimated Package price: One-time price ${estimate}${
+      : `Estimated Package price: Yearly price ${estimate}${
           monthlyInstallment
-            ? ` or ${monthlyInstallment} per month for 48 months`
+            ? ` or ${monthlyInstallment} per month`
             : ""
         }`;
 

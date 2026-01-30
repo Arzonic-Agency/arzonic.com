@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaCircleExclamation, FaSquareCheck } from "react-icons/fa6";
+import { FaCircleInfo, FaSquareCheck } from "react-icons/fa6";
 import { getPackages, getExtraServices } from "@/lib/server/client-actions";
 import { useTranslation } from "react-i18next";
 
 interface DBPackage {
   label: string;
-  price_eur: number;
-  price_dkk?: number;
+  yearly_eur: number;
+  yearly_dkk?: number;
   fee_eur?: number;
   fee_dkk?: number;
   month_eur?: number;
@@ -48,7 +48,7 @@ const featureKeys = [
 const planKeys: PlanKey[] = ["starter", "pro", "premium"];
 
 interface PlansComparisonProps {
-  pricingType: "oneTime" | "monthly";
+  pricingType: "yearly" | "monthly";
 }
 
 const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
@@ -77,10 +77,9 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
         const map: Partial<Record<PlanKey, DBPackage>> = {};
         packageData.forEach((p) => {
           const lab = p.label.toLowerCase();
-          if (lab.includes("starter")) map.starter = p;
-          else if (lab.includes("pro")) map.pro = p;
-          else if (lab.includes("premium") || lab.includes("3"))
-            map.premium = p;
+          if (lab.includes("foundation")) map.starter = p;
+          else if (lab.includes("growth")) map.pro = p;
+          else if (lab.includes("scale")) map.premium = p;
         });
 
         setPkgMap(map);
@@ -111,9 +110,9 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
         ? isDanish && pkg.month_dkk != null
           ? pkg.month_dkk
           : pkg.month_eur
-        : isDanish && pkg.price_dkk != null
-        ? pkg.price_dkk
-        : pkg.price_eur;
+        : isDanish && pkg.yearly_dkk != null
+          ? pkg.yearly_dkk
+          : pkg.yearly_eur;
     const currency = isDanish ? "DKK" : "EUR";
     return formatCurrency(value, currency);
   };
@@ -144,7 +143,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
 
   const getExtraServicePrice = (dkk: number, eur?: number) => {
     const currency = isDanish ? "DKK" : "EUR";
-    const value = isDanish ? dkk : eur ?? dkk;
+    const value = isDanish ? dkk : (eur ?? dkk);
     return formatCurrency(value, currency);
   };
 
@@ -161,17 +160,24 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
       name: tp(`${shortKey}.name`),
 
       values: featureKeys.map((fk) => {
-        if (fk === "serviceFee") return getFee(key);
+        if (fk === "serviceFee")
+          return (
+            <FaSquareCheck
+              key={`${key}-serviceFee`}
+              size={20}
+              className="text-secondary"
+            />
+          );
 
         // FIX: hent seo/cms fra `plans.*`
         if (fk === "seo" || fk === "cms") return tp(`${shortKey}.${fk}`);
 
         const has = (() => {
           if (key === "starter")
-            return [0, 1, 2, 3, 4].includes(featureKeys.indexOf(fk));
+            return [0, 1, 2, 3, 4, 7, 8].includes(featureKeys.indexOf(fk));
           if (key === "pro")
             return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(
-              featureKeys.indexOf(fk)
+              featureKeys.indexOf(fk),
             );
           return true;
         })();
@@ -207,9 +213,6 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                 {rawPlans.map((plan) => (
                   <th key={plan.key} className="p-5 text-left">
                     <div className="font-semibold">{plan.name}</div>
-                    <div className="text-sm font-medium text-zinc-500">
-                      {translate("startingFrom")} {getPrice(plan.key)}
-                    </div>
                   </th>
                 ))}
               </tr>
@@ -217,7 +220,20 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
             <tbody>
               {features.map((feat, idx) => (
                 <tr key={idx}>
-                  <td className="p-5 font-medium text-xs md:text-sm">{feat}</td>
+                  <td className="p-5 font-medium text-xs md:text-sm flex items-center gap-1">
+                    {feat}
+                    {featureKeys[idx] === "serviceFee" && (
+                      <div
+                        className="tooltip tooltip-top cursor-help"
+                        data-tip={t("PricingPage.serviceAgreementTip")}
+                      >
+                        <FaCircleInfo
+                          size={14}
+                          className="text-zinc-400 shrink-0"
+                        />
+                      </div>
+                    )}
+                  </td>
                   {rawPlans.map((plan) => (
                     <td key={`${plan.key}-${idx}`} className="p-3 text-sm">
                       {plan.values[idx]}
@@ -249,20 +265,13 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                       <td className="p-5 font-medium text-xs md:text-sm flex items-center gap-1">
                         {isDanish ? service.label_dk : service.label_en}
                         {(service.desc_dk || service.desc_en) && (
-                          <div className="dropdown dropdown-start">
-                            <div
-                              tabIndex={0}
-                              role="button"
-                              className="btn btn-xs btn-circle btn-ghost cursor-pointer m-0"
-                            >
-                              <FaCircleExclamation size={13} />
-                            </div>
-                            <div
-                              tabIndex={0}
-                              className="dropdown-content bg-base-200 rounded-box z-1 w-64 p-2 shadow-sm text-center"
-                            >
-                              {isDanish ? service.desc_dk : service.desc_en}
-                            </div>
+                          <div
+                            className="tooltip tooltip-right cursor-help"
+                            data-tip={
+                              isDanish ? service.desc_dk : service.desc_en
+                            }
+                          >
+                            <FaCircleInfo size={13} className="text-zinc-400" />
                           </div>
                         )}
                       </td>
@@ -275,12 +284,12 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                           isBlockedForStarter(service.label_en)
                             ? "–"
                             : plan.key === "pro" &&
-                              isBlockedForPro(service.label_en)
-                            ? "–"
-                            : getExtraServicePrice(
-                                service.price_dkk,
-                                service.price_eur
-                              )}
+                                isBlockedForPro(service.label_en)
+                              ? "–"
+                              : getExtraServicePrice(
+                                  service.price_dkk,
+                                  service.price_eur,
+                                )}
                         </td>
                       ))}
                     </tr>
@@ -331,20 +340,30 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
           <table className="table w-full text-sm">
             <thead className="bg-base-200">
               <tr>
-                <th className="p-3">{translate("table.featureColumn")}</th>
-                <th className="p-3">
+                <th className="p-3 text-left">{translate("table.featureColumn")}</th>
+                <th className="p-3 text-left">
                   {rawPlans.find((p) => p.key === selectedPlan)?.name}
-                  <div className="text-xs font-medium text-zinc-400 mt-1">
-                    {translate("startingFrom")} {getPrice(selectedPlan)}
-                  </div>
                 </th>
               </tr>
             </thead>
             <tbody>
               {features.map((feat, idx) => (
                 <tr key={`mobile-${idx}`}>
-                  <td className="px-3 py-3 font-medium text-xs">{feat}</td>
-                  <td className="px-3 py-3">
+                  <td className="px-3 py-3 font-medium text-xs flex items-center gap-1">
+                    {feat}
+                    {featureKeys[idx] === "serviceFee" && (
+                      <div
+                        className="tooltip tooltip-top cursor-help"
+                        data-tip={t("PricingPage.serviceAgreementTip")}
+                      >
+                        <FaCircleInfo
+                          size={12}
+                          className="text-zinc-400 shrink-0"
+                        />
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-3 py-3 text-left align-top w-1/2">
                     {rawPlans.find((p) => p.key === selectedPlan)?.values[idx]}
                   </td>
                 </tr>
@@ -363,23 +382,16 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                 <tbody>
                   {extraServices.map((service, idx) => (
                     <tr key={`extra-mobile-${idx}`}>
-                      <td className="px-3 py-3 font-medium text-xs flex items-center gap-1">
+                      <td className="px-3 py-3 font-medium text-xs flex items-start gap-1">
                         {isDanish ? service.label_dk : service.label_en}
                         {(service.desc_dk || service.desc_en) && (
-                          <div className="dropdown dropdown-start">
-                            <div
-                              tabIndex={0}
-                              role="button"
-                              className="btn btn-xs btn-circle btn-ghost m-0 cursor-pointer"
-                            >
-                              <FaCircleExclamation size={12} />
-                            </div>
-                            <div
-                              tabIndex={0}
-                              className="dropdown-content bg-base-200 rounded-box z-1 w-60 p-2 shadow-sm text-center"
-                            >
-                              {isDanish ? service.desc_dk : service.desc_en}
-                            </div>
+                          <div
+                            className="tooltip tooltip-right cursor-help"
+                            data-tip={
+                              isDanish ? service.desc_dk : service.desc_en
+                            }
+                          >
+                            <FaCircleInfo size={12} className="text-zinc-400" />
                           </div>
                         )}
                       </td>
@@ -389,7 +401,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                           ? "–"
                           : getExtraServicePrice(
                               service.price_dkk,
-                              service.price_eur
+                              service.price_eur,
                             )}
                       </td>
                     </tr>

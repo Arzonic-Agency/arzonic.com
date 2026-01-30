@@ -91,7 +91,7 @@ const WebAppProducts = () => {
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-60px" }}
       layout
     >
       {products.map((product, index) => {

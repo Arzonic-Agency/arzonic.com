@@ -74,7 +74,7 @@ export async function getAllActiveJobs() {
 
     if (error) {
       throw new Error(
-        `Failed to fetch requests: ${error.message || "Unknown error"}`
+        `Failed to fetch requests: ${error.message || "Unknown error"}`,
       );
     }
 
@@ -282,7 +282,7 @@ export async function createRequest(
   mail: string,
   category: string,
   consent: boolean,
-  message: string
+  message: string,
 ): Promise<void> {
   console.log(`📝 createRequest kaldt for company: ${company}`);
   const supabase = await createAdminClient();
@@ -322,7 +322,9 @@ export async function createRequest(
     // Create notifications for admins/developers using service role
     const displayName = (company && company.trim()) || "kunde";
 
-    console.log(`🔔 Kalder createNotificationForAdmins for request ${request.id}`);
+    console.log(
+      `🔔 Kalder createNotificationForAdmins for request ${request.id}`,
+    );
     await createNotificationForAdmins(request.id, displayName, [
       "admin",
       "developer",
@@ -340,7 +342,7 @@ export async function createContactRequest(
   country: string,
   mobile: string,
   answers: { questionId: number; optionIds: number[] }[],
-  consentChecked: boolean
+  consentChecked: boolean,
 ): Promise<{ requestId: number }> {
   const supabase = await createAdminClient();
 
@@ -373,10 +375,12 @@ export async function createContactRequest(
   // Create notifications for admins/developers
   const displayName = (company && company.trim()) || "kunde";
 
-  await createNotificationForAdmins(requestId, displayName, [
-    "admin",
-    "developer",
-  ], "estimator");
+  await createNotificationForAdmins(
+    requestId,
+    displayName,
+    ["admin", "developer"],
+    "estimator",
+  );
 
   return { requestId };
 }
@@ -402,16 +406,12 @@ export async function registerPushSubscription(
     };
   },
   userId?: string,
-  userAgent?: string
+  userAgent?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { savePushSubscription } = await import("@/lib/server/subscribe");
 
-    return await savePushSubscription(
-      subscriptionData,
-      userId,
-      userAgent
-    );
+    return await savePushSubscription(subscriptionData, userId, userAgent);
   } catch (error) {
     console.error("Fejl ved registrering af push subscription:", error);
     return {
@@ -422,7 +422,7 @@ export async function registerPushSubscription(
 }
 
 export async function getEstimatorQuestions(
-  lang: "en" | "da" = "en"
+  lang: "en" | "da" = "en",
 ): Promise<EstimatorQuestion[]> {
   const supabase = createClient();
 
@@ -439,7 +439,7 @@ export async function getEstimatorQuestions(
         text,
         text_translated
       )
-    `
+    `,
     )
     .order("id", { ascending: true })
     .order("id", { referencedTable: "options", ascending: true });
@@ -468,9 +468,9 @@ export async function getEstimatorQuestions(
         (o: { id: number; text: string; text_translated?: string }) => ({
           id: o.id,
           text: lang === "da" && o.text_translated ? o.text_translated : o.text,
-        })
+        }),
       ),
-    })
+    }),
   );
 }
 
@@ -481,7 +481,7 @@ export async function getPackages() {
     const { data, error } = await supabase
       .from("packages")
       .select("*")
-      .order("price_eur", { ascending: true });
+      .order("yearly_eur", { ascending: true });
 
     if (error) {
       throw new Error(`Failed to fetch packages: ${error.message}`);
@@ -519,7 +519,7 @@ export async function getModelUrl(fileName: string): Promise<string> {
 
     if (error || !data) {
       throw new Error(
-        `Failed to fetch model URL: ${error?.message || "Unknown error"}`
+        `Failed to fetch model URL: ${error?.message || "Unknown error"}`,
       );
     }
 
@@ -536,15 +536,19 @@ export async function getModelUrl(fileName: string): Promise<string> {
 
 export async function updatePushNotificationPreference(
   userId: string,
-  enabled: boolean
+  enabled: boolean,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // Importer og kald server action direkte
-    const { updateUserPushNotificationPreference } = await import("@/lib/server/subscribe");
-    
+    const { updateUserPushNotificationPreference } =
+      await import("@/lib/server/subscribe");
+
     return await updateUserPushNotificationPreference(userId, enabled);
   } catch (error) {
-    console.error("Fejl ved opdatering af push notification preference:", error);
+    console.error(
+      "Fejl ved opdatering af push notification preference:",
+      error,
+    );
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

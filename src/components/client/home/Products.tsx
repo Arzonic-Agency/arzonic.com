@@ -1,4 +1,3 @@
-import React from "react";
 import WebAppProducts from "../solutions/WebAppProducts";
 import { useTranslation } from "react-i18next";
 

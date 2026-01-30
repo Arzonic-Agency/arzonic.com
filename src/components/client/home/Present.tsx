@@ -72,7 +72,7 @@ const Present = () => {
           transition={{ duration: 0.6 }}
         >
           <motion.span
-            className="badge badge-secondary badge-soft bagde-xl uppercase"
+            className="badge badge-secondary badge-soft badge-base md:badge-xl uppercase"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -129,7 +129,7 @@ const Present = () => {
               initial={false}
             />
             <div className="flex items-center gap-3 mb-2 relative z-10">
-              <span className="badge badge-secondary badge-soft lg:badge-lg uppercase">
+              <span className="badge badge-secondary badge-soft badge-base md:badge-lg uppercase">
                 {t("Present.customDesign.badge") || "DEVELOPMENT"}
               </span>
               <span className="text-xs text-zinc-400">
@@ -137,7 +137,7 @@ const Present = () => {
               </span>
             </div>
             <motion.h3
-              className="text-xl md:text-2xl font-semibold relative z-10"
+              className="text-base md:text-2xl font-semibold relative z-10"
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -146,7 +146,7 @@ const Present = () => {
               {t("Present.customDesign.title")}
             </motion.h3>
             <motion.p
-              className="text-sm md:text-base text-zinc-400 font-light relative z-10 flex-1 w-65 md:w-full"
+              className="text-sm md:text-base text-zinc-400 font-light relative z-10 flex-1 w-full max-w-[250px] md:max-w-md"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -202,12 +202,12 @@ const Present = () => {
               initial={false}
             />
             <div className="flex items-center gap-3 mb-2 relative z-10">
-              <span className="badge badge-secondary badge-soft lg:badge-lg uppercase">
+              <span className="badge badge-secondary badge-soft badge-base md:badge-lg uppercase">
                 {t("Present.landingPages.badge") || "LANDING PAGES"}
               </span>
             </div>
             <motion.h3
-              className="text-xl md:text-2xl font-semibold relative z-10"
+              className="text-base md:text-2xl font-semibold relative z-10"
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -290,17 +290,16 @@ const Present = () => {
               {t("Present.cta.title") || "Ready to Transform?"}
             </motion.h3>
             <motion.p
-              className="text-base md:text-lg text-base-content/80 font-light relative z-10 flex-1"
+              className="text-base md:text-lg text-base-content/80 font-light relative z-10 flex-1 max-w-[250px] md:max-w-[410px]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              {t("Present.cta.description") ||
-                "Let's create digital experiences that drive measurable growth for your business."}
+              {t("Present.cta.description")}
             </motion.p>
             <Link className="btn btn-accent " href="/contact">
-              {t("Present.cta.button") || "Book a call"}
+              {t("Present.cta.button")}
             </Link>
             {/* <Image
               src="/team/marc2.png"
@@ -341,12 +340,12 @@ const Present = () => {
               initial={false}
             />
             <div className="flex items-center gap-3 mb-2 relative z-10">
-              <span className="badge badge-secondary badge-soft lg:badge-lg uppercase">
+              <span className="badge badge-secondary badge-soft badge-base md:badge-lg uppercase">
                 {t("Present.builtToGrow.badge") || "GROWTH"}
               </span>
             </div>
             <motion.h3
-              className="text-xl md:text-2xl font-bold relative z-10"
+              className="text-base md:text-2xl font-bold relative z-10"
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}

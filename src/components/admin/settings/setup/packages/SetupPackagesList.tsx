@@ -48,7 +48,7 @@ const SetupPackagesList = ({ onEdit }) => {
           <div>
             <div className="font-bold">{pkg.label}</div>
             <div className="text-sm text-gray-500">
-              {pkg.price_eur} EUR&nbsp;/&nbsp;{pkg.price_dkk} DKK
+              {pkg.yearly_eur} EUR&nbsp;/&nbsp;{pkg.yearly_dkk} DKK
             </div>
           </div>
           <div>

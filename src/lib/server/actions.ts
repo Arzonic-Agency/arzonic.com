@@ -1492,7 +1492,7 @@ export async function getPackages() {
     const { data, error } = await supabase
       .from("packages")
       .select("*")
-      .order("price_eur", { ascending: true });
+      .order("yearly_eur", { ascending: true });
 
     if (error) {
       throw new Error(`Failed to fetch packs: ${error.message}`);
@@ -1529,8 +1529,8 @@ export async function updatePackage(
   packageId: string,
   data: {
     label?: string;
-    price_eur?: number;
-    price_dkk?: number;
+    yearly_eur?: number;
+    yearly_dkk?: number;
   },
 ): Promise<void> {
   const supabase = await createServerClientInstance();

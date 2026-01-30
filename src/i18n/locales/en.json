@@ -208,7 +208,7 @@
     "current": "This device",
     "last_active": "Last active",
     "unknown": "Unknown",
-    "revoke": "Logout & revoke access",  
+    "revoke": "Logout & revoke access",
     "refresh": "Refresh",
     "no_sessions": "No active sessions found",
     "active_sessions": "Active sessions",
@@ -436,22 +436,23 @@
     "visualization": "3D Design",
     "webApplications": "Web Applications",
     "seeMore": "See Solutions",
-    "customerFeedback": "Efficient, user-friendly system – Arzonic always delivers professional, fast service."
+    "customerFeedback": "Efficient, user-friendly system – Arzonic always delivers professional, fast service.",
+    "externalSoftwareDevelopmentTeam": "External software team — idea to production"
   },
   "Present": {
-    "title": "Superfast webapps – built for performance and growth",
+    "title": "Scalable software — built for growth",
     "badge": "OUR EXPERTISE",
     "customDesign": {
       "badge": "DEVELOPMENT",
       "stats": "15+ Projects",
       "title": "Web Applications",
-      "description": "We design and develop high-performing web and mobile applications.",
+      "description": "We design, build, and maintain high-performance applications as your external software development team",
       "button": "View Cases"
     },
     "landingPages": {
       "badge": "LANDING PAGES",
       "title": "Landing Pages",
-      "description": "Launch faster with powerful, fully customizable landing pages built with modern tools that are easy to manage and optimized for conversion.",
+      "description": "Landing pages built as part of a larger software solution — optimized for conversion and seamless integration",
       "examples": [
         "Lead generation",
         "Product launches",
@@ -470,18 +471,18 @@
     "builtToGrow": {
       "badge": "GROWTH",
       "title": "Built to grow with your business",
-      "description": "From small team to full-scale operation. Your website is flexible, future-proof, and ready to scale with you."
+      "description": "From small team to full-scale operation. Your software is flexible, future-proof, and built to scale with you"
     },
     "cta": {
       "title": "Ready to Transform?",
-      "description": "Let's create digital experiences that drive measurable growth for your business.",
+      "description": "Let’s build software that supports real growth — from idea to production",
       "button": "Book a call"
     }
   },
   "Preview": {
     "badge": "Dashboard",
-    "title": "Your Content, Your Way",
-    "subtitle": "Stay in control with a dashboard built around you",
+    "title": "Control and insight — built for your growth",
+    "subtitle": "Stay in control with a custom dashboard built as part of your overall software solution",
     "aria": {
       "imageAlt": "Example of a solution"
     }
@@ -631,20 +632,23 @@
     "imageAlt": "hero"
   },
   "PricingPage": {
-    "titleStart": "Flexible plans,",
+    "titleStart": "Flexible collaboration,",
     "titleEnd": "Transparent pricing",
-    "subtitle": "Choose a solution that fits your needs – no surprises, just results",
+    "subtitle": "Choose the collaboration level that fits your business",
     "vatNote": "All prices are indicative and exclude VAT",
     "aria": {
       "getQuoteButton": "Get a quote"
     },
-    "oneTime": "One-time (excl. service agreement)",
-    "monthly48": "Price per month over 48 months",
-    "paymentInfo": "All plans require service agreement, includes maintenance, support, and hosting",
-    "oneTimeTab": "One-time",
+    "yearly": "Yearly payment",
+    "monthly48": "Monthly price",
+    "from": "from",
+    "paymentInfo": "Service agreement included in all plans (maintenance, support, and hosting)",
+    "serviceAgreementTip": "Hosting, maintenance and support",
+    "yearlyTab": "Yearly",
+    "yearlySavings": "Save 10%",
     "monthlyTab": "Monthly"
   },
-  "PlansComparison": {
+  "plansComparison": {
     "title": "Compare our plans",
     "table": {
       "featureColumn": "Feature / Package"
@@ -653,11 +657,11 @@
     "selectLabel": "Select a package to view details",
 
     "text-btn": "Get Started",
-    "startingFrom": "Package Price",
+    "startingFrom": "From",
     "vatNote": "All prices are indicative and exclude VAT",
     "legend": "Included | – Not included in standard package",
     "features": {
-      "serviceFee": "Monthly Service Agreement",
+      "serviceFee": "Service agreement",
       "customDesign": "Custom design",
       "responsive": "Responsive and fast",
       "contactForm": "Contact form",
@@ -676,9 +680,9 @@
   },
   "plans": {
     "starter": {
-      "name": "Starter",
-      "title": "Starter",
-      "description": "Perfect for small businesses or personal brands",
+      "name": "Foundation",
+      "title": "Foundation",
+      "description": "Perfect for small teams getting started smoothly",
       "including": " Included",
       "adminDashboard": "Admin dashboard",
       "seo": "Basic",
@@ -691,9 +695,9 @@
       }
     },
     "pro": {
-      "name": "Pro",
-      "title": "Pro",
-      "description": "Ideal for digital products and functional solutions",
+      "name": "Growth",
+      "title": "Growth",
+      "description": "Ideal for growing teams and products together",
       "including": "Included",
       "seo": "Extended",
       "cms": "Advanced",
@@ -705,9 +709,9 @@
       }
     },
     "premium": {
-      "name": "Premium",
-      "title": "Premium",
-      "description": "Everything combined – premium features, visual effects, and 3D",
+      "name": "Scale",
+      "title": "Scale",
+      "description": "Designed for complex and scalable software systems",
       "including": "Included",
       "seo": "Extended",
       "cms": "Advanced",
@@ -1100,7 +1104,7 @@
     },
     "q2": {
       "title": "Is maintenance included?",
-      "answer": "All our solutions include a service agreement covering hosting, support, maintenance, and operations. You can choose between a one-time payment or a monthly installment plan – and we’ll take care of the rest."
+      "answer": "All our solutions include a service agreement covering hosting, support, maintenance, and operations. You can choose between a yearly payment or a monthly installment plan – and we’ll take care of the rest."
     },
     "q3": {
       "title": "Can I edit content myself?",

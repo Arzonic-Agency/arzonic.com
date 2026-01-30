@@ -434,22 +434,23 @@
     "visualization": "3D Design",
     "webApplications": "Webapplikationer",
     "seeMore": "Se løsninger",
-    "customerFeedback": "Effektivt, brugervenligt system – Arzonic leverer altid professionel, hurtig service."
+    "customerFeedback": "Effektivt, brugervenligt system – Arzonic leverer altid professionel, hurtig service.",
+    "externalSoftwareDevelopmentTeam": "Eksternt softwareudviklingsteam – fra idé til produktion"
   },
   "Present": {
-    "title": "Superhurtige webapps – bygget til ydeevne og vækst",
+    "title": "Skalerbar software – bygget til vækst",
     "badge": "VORES EKSPERTISE",
     "customDesign": {
       "badge": "UDVIKLING",
       "stats": "15+ Projekter",
       "title": "Webapplikationer",
-      "description": "Vi designer og udvikler højtydende webapplikationer til mobil og desktop",
+      "description": "Vi designer, udvikler og vedligeholder højtydende applikationer som jeres eksterne softwareudviklingsteam",
       "button": "Se Cases"
     },
     "landingPages": {
       "badge": "LANDINGPAGES",
       "title": "Landingpages",
-      "description": "Lancer hurtigere med kraftfulde, fuldt tilpasselige landingpages bygget med moderne værktøjer, der er nemme at administrere og optimeret til konvertering",
+      "description": "Landingssider bygget som en del af en samlet softwareløsning – optimeret til konvertering og integration",
       "examples": [
         "Lead generation",
         "Product launches",
@@ -468,18 +469,18 @@
     "builtToGrow": {
       "badge": "VÆKST",
       "title": "Bygget til at vokse med din virksomhed",
-      "description": "Fra lille team til fuldskala operation. Din hjemmeside er fleksibel, fremtidssikret og klar til at skalere med dig."
+      "description": "Fra lille team til fuldskala drift. Jeres software er fleksibel, fremtidssikret og klar til at skalere med jer"
     },
     "cta": {
       "title": "Klar til at transformere?",
-      "description": "Lad os skabe digitale oplevelser, der driver målbar vækst for din virksomhed.",
+      "description": "Lad os bygge software, der understøtter reel vækst – fra idé til produktion",
       "button": "Book et møde"
     }
   },
   "Preview": {
     "badge": "Dashboard",
-    "title": "Dit Indhold, Din Måde",
-    "subtitle": "Hold kontrollen med et dashboard, bygget til jer",
+    "title": "Kontrol og overblik – bygget til jeres forretning",
+    "subtitle": "Hold overblikket med et skræddersyet dashboard, udviklet som en del af jeres samlede softwareløsning",
     "aria": {
       "imageAlt": "Eksempel på løsning"
     }
@@ -635,19 +636,22 @@
     "imageAlt": "hero"
   },
   "PricingPage": {
-    "titleStart": "Fleksible pakker,",
+    "titleStart": "Fleksibelt samarbejde,",
     "titleEnd": "Gennemsigtige priser",
-    "subtitle": "Vælg en løsning, der matcher dine behov – ingen overraskelser, kun resultater",
+    "subtitle": "Vælg det samarbejdsniveau, der passer til jeres forretning",
     "vatNote": "Alle priser er vejledende og ekskl. moms",
     "aria": {
       "getQuoteButton": "Få et tilbud"
     },
-    "oneTime": "Engangsbetaling (ekskl. serviceaftale)",
-    "monthly48": "Pris pr. måned over 48 måneder",
-    "paymentInfo": "Alle pakker kræver serviceaftale, som dækker drift, support og hosting",
+    "yearly": "Årlig betaling",
+    "monthly48": "Månedlig pris",
+    "from": "fra",
+    "paymentInfo": "Serviceaftale inkluderet i alle pakker (drift, support og hosting)",
+    "serviceAgreementTip": "Hosting, drift og support",
 
-    "oneTimeTab": "Engangsbetaling",
-    "monthlyTab": "Månedlig løsning"
+    "yearlyTab": "Årlig",
+    "yearlySavings": "spar 10 %",
+    "monthlyTab": "Månedlig"
   },
   "plansComparison": {
     "title": "Sammenlign vores pakker",
@@ -657,11 +661,11 @@
     "selectLabel": "Vælg en pakke for at se detaljer",
     "title-btn": "Klar til at komme i gang?",
     "text-btn": "Find din pakke",
-    "startingFrom": "Pakkepris",
+    "startingFrom": "Fra",
     "vatNote": "Alle priser er vejledende og ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
-      "serviceFee": "Serviceaftale pr. måned",
+      "serviceFee": "Serviceaftale",
       "customDesign": "Tilpasset design",
       "responsive": "Responsiv og hurtig",
       "contactForm": "Kontaktformular",
@@ -680,9 +684,9 @@
   },
   "plans": {
     "starter": {
-      "name": "Starter",
-      "title": "Starter",
-      "description": "Perfekt til mindre virksomheder eller personlige brands",
+      "name": "Basis",
+      "title": "Basis",
+      "description": "Perfekt til små teams, der skal godt i gang fra starten",
       "seo": "Grundlæggende",
       "adminDashboard": "Admin dashboard",
       "cms": "Simpelt",
@@ -694,9 +698,9 @@
       }
     },
     "pro": {
-      "name": "Pro",
-      "title": "Pro",
-      "description": "Ideel til digitale produkter og funktionelle løsninger",
+      "name": "Vækst",
+      "title": "Vækst",
+      "description": "Ideel til teams og produkter i stabil, langsigtet vækst",
       "including": "Inkluderet",
       "seo": "Udvidet",
       "cms": "Avanceret",
@@ -708,9 +712,9 @@
       }
     },
     "premium": {
-      "name": "Premium",
-      "title": "Premium",
-      "description": "Alt samlet – premium funktioner, visuelle effekter og 3D",
+      "name": "Skalering",
+      "title": "Skalering",
+      "description": "Designet til komplekse og skalerbare softwaresystemer",
       "including": "Inkluderet",
       "seo": "Udvidet",
       "cms": "Avanceret",
@@ -1105,7 +1109,7 @@
     },
     "q2": {
       "title": "Er der vedligeholdelse?",
-      "answer": "Alle vores løsninger inkluderer en serviceaftale, som dækker drift, support, hosting og vedligeholdelse. Du kan vælge mellem engangsbetaling eller en afdragsordning – og så klarer vi resten."
+      "answer": "Alle vores løsninger inkluderer en serviceaftale, som dækker drift, support, hosting og vedligeholdelse. Du kan vælge mellem årlig betaling eller en afdragsordning – og så klarer vi resten."
     },
     "q3": {
       "title": "Kan jeg selv redigere indhold?",

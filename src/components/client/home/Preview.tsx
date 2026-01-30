@@ -19,16 +19,16 @@ const Preview = () => {
         transition={{ duration: 0.6 }}
       >
         <motion.span
-          className="badge badge-secondary badge-soft badge-lg md:badge-xl uppercase"
+          className="badge badge-secondary badge-soft badge-base md:badge-xl uppercase"
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.4 }}
         >
-          {t("Preview.badge") || "PREVIEW"}
+          {t("Preview.badge")}
         </motion.span>
         <motion.h3
-          className="text-xl font-semibold sm:text-3xl md:text-4xl lg:text-5xl text-start md:text-center"
+          className="text-base font-semibold sm:text-3xl md:text-4xl  text-start md:text-center"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -103,7 +103,7 @@ const Preview = () => {
 
         {/* Subtle grid pattern overlay */}
         <div className="absolute -inset-6 md:-inset-10 bg-[radial-gradient(circle_at_center,transparent_0%,transparent_50%,var(--color-base-100)_100%)] opacity-60" />
-        
+
         <motion.div
           className="relative rounded-2xl overflow-hidden  p-10 md:p-16 shadow-2xl shadow-accent"
           whileHover={{ scale: 1.01, y: -2 }}
