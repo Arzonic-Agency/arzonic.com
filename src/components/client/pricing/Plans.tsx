@@ -24,8 +24,8 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   const locale = i18n.language;
 
   const tStarter = (key: string) => t(`plans.starter.${key}`);
-  const tPro = (key: string) => t(`plans.pro.${key}`);
-  const tPremium = (key: string) => t(`plans.premium.${key}`);
+  const tGrowth = (key: string) => t(`plans.growth.${key}`);
+  const tDedicated = (key: string) => t(`plans.dedicated.${key}`);
 
   const [packages, setPackages] = useState<Record<string, Package>>({});
   const [loading, setLoading] = useState(true);
@@ -36,9 +36,9 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         const data = await getPackages();
 
         const keyToLabel: Record<string, string> = {
-          Starter: "foundation",
-          Pro: "growth",
-          Premium: "scale",
+          Starter: "starter",
+          Growth: "growth",
+          Dedicated: "scale",
         };
 
         const map: Record<string, Package> = {};
@@ -63,21 +63,21 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   }, []);
 
   const getPrice = (key: string) => {
+    if (key === "Dedicated") return t("PricingPage.priceOnRequest");
     if (loading) return "…";
     const pkg = packages[key];
-    if (!pkg) return t("PricingPage.startingFrom") + "…";
+    if (!pkg) return "…";
 
     const isDanish = locale.startsWith("da");
     const currency = isDanish ? "DKK" : "EUR";
-
+    const monthlyValue = isDanish ? pkg.month_dkk : pkg.month_eur;
+    const yearlyValue = isDanish ? pkg.yearly_dkk : pkg.yearly_eur;
     const value =
-      pricingType === "monthly"
-        ? isDanish
-          ? pkg.month_dkk
-          : pkg.month_eur
-        : isDanish
-          ? pkg.yearly_dkk
-          : pkg.yearly_eur;
+      pricingType === "yearly"
+        ? yearlyValue
+        : monthlyValue != null
+        ? monthlyValue
+        : yearlyValue ?? null;
 
     if (value == null) return "–";
 
@@ -90,8 +90,8 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
 
   const getTabLabel = () =>
     pricingType === "monthly"
-      ? t("PricingPage.monthly48")
-      : t("PricingPage.yearly");
+      ? t("PricingPage.monthly")
+      : `${t("PricingPage.monthly")} (${t("PricingPage.billedYearly")})`;
 
   const planCards = [
     {
@@ -100,59 +100,60 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       desc: tStarter("description"),
       features: [
         <span
-          key="base"
+          key="badge"
           className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
         >
           <FaStar size={17} /> {tStarter("adminDashboard")}
         </span>,
-        "customDesign",
-        "responsiveFast",
-        "simpleCMS",
-        "basicSEO",
+        "websiteOrWebapp",
+        "contactAndData",
+        "simpleLogin",
+        "hosting",
+        "support",
       ],
       tFeature: tStarter,
     },
     {
-      key: "Pro",
-      title: tPro("title"),
-      desc: tPro("description"),
+      key: "Growth",
+      title: tGrowth("title"),
+      desc: tGrowth("description"),
       features: [
         <span
           key="base"
           className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
         >
-          <FaStar size={17} className="" /> {tStarter("title")}{" "}
-          {tPro("including")}
+          <FaStar size={17} /> {tGrowth("starLabel")}
         </span>,
-        "bespokeUIUX",
-        "socialMedia",
-        "featureRich",
-        "databaseIntegration",
-        ,
+        "databaseWebapp",
+        "userProfilesRoles",
+        "adminPanel",
+        "integrations",
+        "cro",
       ],
-      tFeature: tPro,
+      tFeature: tGrowth,
     },
     {
-      key: "Premium",
-      title: tPremium("title"),
-      desc: tPremium("description"),
+      key: "Dedicated",
+      title: tDedicated("title"),
+      desc: tDedicated("description"),
       features: [
         <span
-          key="base"
+          key="badge"
           className="text-xs sm:text-sm font-semibold text-secondary badge-secondary badge-soft badge flex items-center gap-2"
         >
-          <FaStar size={17} /> {tPro("title")} {tPremium("including")}
+          <FaStar size={17} /> {tDedicated("developmentPartner")}
         </span>,
-        "sleekLayout",
-        "parallaxEffects",
-        "integrated3D",
-        "customer",
+        "dedicatedCapacity",
+        "ongoingDevelopment",
+        "advancedSystems",
+        "strategicAdvice",
+        "customSetup",
       ],
-      tFeature: tPremium,
+      tFeature: tDedicated,
     },
   ].map(({ key, title, desc, features, tFeature }) => (
     <div key={key} className="relative" aria-label={title}>
-      <div className="flex flex-col justify-evenly gap-10 shadow-lg  w-70 sm:w-80 h-[460px] sm:h-[500px] p-7 md:p-8 rounded-xl bg-accent  shadow-base-200 ring-2 ring-base-200">
+      <div className="flex flex-col justify-evenly gap-10 shadow-lg  w-70 sm:w-80 h-[490px] sm:h-[510px] p-7 md:p-8 rounded-xl bg-accent  shadow-base-200 ring-2 ring-base-200">
         <div className="flex flex-col gap-5">
           <h3 className="text-3xl font-bold tracking-wide">{title}</h3>
           <p className="text-sm sm:text-base">{desc}</p>
@@ -176,10 +177,14 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         </ul>
         <div className="flex flex-col gap-1 items-start">
           <span className="text-xs md:text-sm text-zinc-300">
-            {getTabLabel()}
+            {key === "Dedicated"
+              ? t("PricingPage.ongoingCollaboration")
+              : getTabLabel()}
           </span>
-          <span className=" text-2xl font-semibold tracking-wide">
-            {t("PricingPage.from")} {getPrice(key)}
+          <span className="text-xl md:text-2xl font-semibold tracking-wide">
+            {key === "Dedicated"
+              ? getPrice(key)
+              : `${t("PricingPage.from")} ${getPrice(key)}`}
           </span>
         </div>
       </div>
@@ -189,7 +194,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
   return (
     <div className="flex flex-col gap-10 items-center justify-center w-full relative">
       {/* Titel og undertekst */}
-      <div className="flex flex-col items-center gap-5 max-w-[280px]">
+      <div className="flex flex-col items-center gap-5 max-w-[320px] md:max-w-[400px]">
         <span className="text-xl sm:text-xl md:text-2xl font-light text-center">
           {t("PricingPage.subtitle")}
         </span>
@@ -199,7 +204,7 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
       <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
         <button
           onClick={() => setPricingType("monthly")}
-          className={`px-4 py-1 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
+          className={`px-5 py-2 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
             pricingType === "monthly"
               ? "bg-primary text-white"
               : "bg-transparent text-primary"
@@ -207,13 +212,16 @@ const Plans = ({ pricingType, setPricingType }: PlansProps) => {
         >
           {t("PricingPage.monthlyTab")}
         </button>
-        <div className="indicator">
-          <span className="indicator-item badge badge-xs badge-primary text-xs px-1.5">
+        <div
+          className="indicator cursor-pointer"
+          onClick={() => setPricingType("yearly")}
+        >
+          <span className="indicator-item badge badge-xs badge-primary text-xs px-1.5 pointer-events-none">
             {t("PricingPage.yearlySavings")}
           </span>
           <button
             onClick={() => setPricingType("yearly")}
-            className={`px-4 py-1 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
+            className={`px-5 py-2 rounded-lg text-sm sm:text-base font-medium transition cursor-pointer ${
               pricingType === "yearly"
                 ? "bg-primary text-white"
                 : "bg-transparent text-primary"

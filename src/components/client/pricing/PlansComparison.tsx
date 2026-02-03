@@ -25,7 +25,7 @@ interface DBExtraService {
   price_eur: number;
 }
 
-type PlanKey = "starter" | "pro" | "premium";
+type PlanKey = "starter" | "growth" | "dedicated";
 
 const featureKeys = [
   "serviceFee",
@@ -45,7 +45,7 @@ const featureKeys = [
   "scroll",
 ] as const;
 
-const planKeys: PlanKey[] = ["starter", "pro", "premium"];
+const planKeys: PlanKey[] = ["starter", "growth", "dedicated"];
 
 interface PlansComparisonProps {
   pricingType: "yearly" | "monthly";
@@ -77,9 +77,9 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
         const map: Partial<Record<PlanKey, DBPackage>> = {};
         packageData.forEach((p) => {
           const lab = p.label.toLowerCase();
-          if (lab.includes("foundation")) map.starter = p;
-          else if (lab.includes("growth")) map.pro = p;
-          else if (lab.includes("scale")) map.premium = p;
+          if (lab.includes("starter")) map.starter = p;
+          else if (lab.includes("growth")) map.growth = p;
+          else if (lab.includes("scale")) map.dedicated = p;
         });
 
         setPkgMap(map);
@@ -102,6 +102,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
     }).format(value);
 
   const getPrice = (key: PlanKey) => {
+    if (key === "dedicated") return t("PricingPage.priceOnRequest");
     if (loading) return "…";
     const pkg = pkgMap[key];
     if (!pkg) return "–";
@@ -111,24 +112,16 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
           ? pkg.month_dkk
           : pkg.month_eur
         : isDanish && pkg.yearly_dkk != null
-          ? pkg.yearly_dkk
-          : pkg.yearly_eur;
+        ? pkg.yearly_dkk
+        : pkg.yearly_eur;
     const currency = isDanish ? "DKK" : "EUR";
     return formatCurrency(value, currency);
   };
 
-  const isBlockedForStarter = (label: string) => {
-    const blocked = ["webshop", "booking", "ai"];
-    return (
-      label.toLowerCase().includes(blocked[0]) ||
-      label.toLowerCase().includes(blocked[1]) ||
-      label.toLowerCase().includes(blocked[2])
-    );
-  };
-
-  const isBlockedForPro = (label: string) => {
-    const blocked = ["webshop"];
-    return label.toLowerCase().includes(blocked[0]);
+  const isStarterExtraAllowed = (labelEn: string, labelDk?: string) => {
+    const label = `${labelEn} ${labelDk ?? ""}`.toLowerCase();
+    const allowed = ["nyhedsbrev", "newsletter", "booking", "bookingsystem"];
+    return allowed.some((term) => label.includes(term));
   };
 
   const getFee = (key: PlanKey) => {
@@ -143,7 +136,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
 
   const getExtraServicePrice = (dkk: number, eur?: number) => {
     const currency = isDanish ? "DKK" : "EUR";
-    const value = isDanish ? dkk : (eur ?? dkk);
+    const value = isDanish ? dkk : eur ?? dkk;
     return formatCurrency(value, currency);
   };
 
@@ -151,13 +144,9 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
   const tp = (key: string) => t(`plans.${key}`);
 
   const rawPlans = planKeys.map((key) => {
-    const shortKey =
-      key === "starter" ? "starter" : key === "pro" ? "pro" : "premium";
-
     return {
       key,
-      // FIX: hent navn fra `plans.*`
-      name: tp(`${shortKey}.name`),
+      name: tp(`${key}.name`),
 
       values: featureKeys.map((fk) => {
         if (fk === "serviceFee")
@@ -169,16 +158,21 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
             />
           );
 
-        // FIX: hent seo/cms fra `plans.*`
-        if (fk === "seo" || fk === "cms") return tp(`${shortKey}.${fk}`);
-
+        if (fk === "seo" || fk === "cms") {
+          return (
+            <span
+              key={`${key}-${fk}`}
+              className="text-xs sm:text-sm font-medium text-zinc-300"
+            >
+              {tp(`${key}.${fk}`)}
+            </span>
+          );
+        }
+        const idx = featureKeys.indexOf(fk);
         const has = (() => {
-          if (key === "starter")
-            return [0, 1, 2, 3, 4, 7, 8].includes(featureKeys.indexOf(fk));
-          if (key === "pro")
-            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(
-              featureKeys.indexOf(fk),
-            );
+          if (key === "starter") return [0, 1, 2, 3, 4, 7, 8].includes(idx);
+          if (key === "growth")
+            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].includes(idx);
           return true;
         })();
 
@@ -213,6 +207,11 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                 {rawPlans.map((plan) => (
                   <th key={plan.key} className="p-5 text-left">
                     <div className="font-semibold">{plan.name}</div>
+                    <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                      {plan.key === "dedicated"
+                        ? t("PricingPage.priceOnRequest")
+                        : `${t("PricingPage.from")} ${getPrice(plan.key)}`}
+                    </div>
                   </th>
                 ))}
               </tr>
@@ -235,7 +234,10 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                     )}
                   </td>
                   {rawPlans.map((plan) => (
-                    <td key={`${plan.key}-${idx}`} className="p-3 text-sm">
+                    <td
+                      key={`${plan.key}-${idx}`}
+                      className="p-5 text-sm text-left"
+                    >
                       {plan.values[idx]}
                     </td>
                   ))}
@@ -248,13 +250,25 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
               <>
                 <thead className="bg-base-200">
                   <tr>
-                    <th className="p-5 text-left">Ekstra services</th>
+                    <th className="p-5 text-left">
+                      <div className="font-semibold">
+                        {translate("extraServices")}
+                      </div>
+                      <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                        {translate("pricesPerMonth")}
+                      </div>
+                    </th>
                     {rawPlans.map((plan) => (
                       <th
                         key={`extra-head-${plan.key}`}
                         className="p-5 text-left"
                       >
                         <div className="font-semibold">{plan.name}</div>
+                        <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                          {plan.key === "dedicated"
+                            ? t("PricingPage.priceOnRequest")
+                            : `${t("PricingPage.from")} ${getPrice(plan.key)}`}
+                        </div>
                       </th>
                     ))}
                   </tr>
@@ -262,7 +276,7 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                 <tbody>
                   {extraServices.map((service, idx) => (
                     <tr key={`desktop-extra-${idx}`}>
-                      <td className="p-5 font-medium text-xs md:text-sm flex items-center gap-1">
+                      <td className="p-5 font-medium text-xs md:text-sm flex items-center gap-1 text-left">
                         {isDanish ? service.label_dk : service.label_en}
                         {(service.desc_dk || service.desc_en) && (
                           <div
@@ -278,18 +292,25 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                       {rawPlans.map((plan) => (
                         <td
                           key={`extra-cell-${plan.key}-${idx}`}
-                          className="p-5 text-sm"
+                          className="p-5 text-sm text-left"
                         >
-                          {plan.key === "starter" &&
-                          isBlockedForStarter(service.label_en)
-                            ? "–"
-                            : plan.key === "pro" &&
-                                isBlockedForPro(service.label_en)
-                              ? "–"
-                              : getExtraServicePrice(
-                                  service.price_dkk,
-                                  service.price_eur,
-                                )}
+                          {plan.key === "dedicated" ? (
+                            <FaSquareCheck
+                              size={20}
+                              className="text-secondary"
+                            />
+                          ) : plan.key === "starter" &&
+                            !isStarterExtraAllowed(
+                              service.label_en,
+                              service.label_dk,
+                            ) ? (
+                            "–"
+                          ) : (
+                            getExtraServicePrice(
+                              service.price_dkk,
+                              service.price_eur,
+                            )
+                          )}
                         </td>
                       ))}
                     </tr>
@@ -313,17 +334,17 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
 
       {/* Mobile version */}
       <div className="md:hidden w-full overflow-hidden px-2 mt-10 flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 items-start">
           <span className="text-xl font-semibold">
             {translate("selectLabel") || "Choose a plan"}
           </span>
-          <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm">
+          <div className="flex gap-3 bg-base-200 p-1 rounded-xl shadow-sm ">
             {rawPlans.map((plan) => (
               <button
                 key={plan.key}
                 type="button"
                 aria-pressed={selectedPlan === plan.key}
-                className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+                className={`px-4 py-1 rounded-lg text-[15px] font-medium transition ${
                   selectedPlan === plan.key
                     ? "bg-primary text-white"
                     : "bg-transparent text-primary"
@@ -340,16 +361,31 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
           <table className="table w-full text-sm">
             <thead className="bg-base-200">
               <tr>
-                <th className="p-3 text-left">{translate("table.featureColumn")}</th>
                 <th className="p-3 text-left">
-                  {rawPlans.find((p) => p.key === selectedPlan)?.name}
+                  {translate("table.featureColumn")}
+                </th>
+                <th className="p-3 text-left">
+                  {(() => {
+                    const plan = rawPlans.find((p) => p.key === selectedPlan);
+                    if (!plan) return null;
+                    return (
+                      <>
+                        <div className="font-semibold">{plan.name}</div>
+                        <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                          {plan.key === "dedicated"
+                            ? t("PricingPage.priceOnRequest")
+                            : `${t("PricingPage.from")} ${getPrice(plan.key)}`}
+                        </div>
+                      </>
+                    );
+                  })()}
                 </th>
               </tr>
             </thead>
             <tbody>
               {features.map((feat, idx) => (
                 <tr key={`mobile-${idx}`}>
-                  <td className="px-3 py-3 font-medium text-xs flex items-center gap-1">
+                  <td className="px-3 py-3 font-medium text-xs flex items-center gap-1 text-left">
                     {feat}
                     {featureKeys[idx] === "serviceFee" && (
                       <div
@@ -373,16 +409,40 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
               <>
                 <thead className="bg-base-200">
                   <tr>
-                    <th className="p-3">Ekstra services</th>
-                    <th className="p-3">
-                      {rawPlans.find((p) => p.key === selectedPlan)?.name}
+                    <th className="p-3 text-left">
+                      <div className="font-semibold">
+                        {translate("extraServices")}
+                      </div>
+                      <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                        {translate("pricesPerMonth")}
+                      </div>
+                    </th>
+                    <th className="p-3 text-left">
+                      {(() => {
+                        const plan = rawPlans.find(
+                          (p) => p.key === selectedPlan,
+                        );
+                        if (!plan) return null;
+                        return (
+                          <>
+                            <div className="font-semibold">{plan.name}</div>
+                            <div className="text-xs text-zinc-400 font-normal mt-0.5">
+                              {plan.key === "dedicated"
+                                ? t("PricingPage.priceOnRequest")
+                                : `${t("PricingPage.from")} ${getPrice(
+                                    plan.key,
+                                  )}`}
+                            </div>
+                          </>
+                        );
+                      })()}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {extraServices.map((service, idx) => (
                     <tr key={`extra-mobile-${idx}`}>
-                      <td className="px-3 py-3 font-medium text-xs flex items-start gap-1">
+                      <td className="px-3 py-3 font-medium text-xs flex items-start gap-1 text-left">
                         {isDanish ? service.label_dk : service.label_en}
                         {(service.desc_dk || service.desc_en) && (
                           <div
@@ -395,14 +455,21 @@ const PlansComparison = ({ pricingType }: PlansComparisonProps) => {
                           </div>
                         )}
                       </td>
-                      <td className="px-3 py-3">
-                        {selectedPlan === "starter" &&
-                        isBlockedForStarter(service.label_en)
-                          ? "–"
-                          : getExtraServicePrice(
-                              service.price_dkk,
-                              service.price_eur,
-                            )}
+                      <td className="px-3 py-3 text-left">
+                        {selectedPlan === "dedicated" ? (
+                          <FaSquareCheck size={18} className="text-secondary" />
+                        ) : selectedPlan === "starter" &&
+                          !isStarterExtraAllowed(
+                            service.label_en,
+                            service.label_dk,
+                          ) ? (
+                          "–"
+                        ) : (
+                          getExtraServicePrice(
+                            service.price_dkk,
+                            service.price_eur,
+                          )
+                        )}
                       </td>
                     </tr>
                   ))}

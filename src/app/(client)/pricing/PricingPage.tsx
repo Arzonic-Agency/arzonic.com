@@ -14,7 +14,7 @@ const PricingPage = () => {
   );
 
   return (
-    <div className="p-5 md:p-8 w-full h-full flex flex-col gap-0 md:gap-20 xl:gap-32 justify-center items-center my-10 md:my-20 ">
+    <div className="p-5 md:p-8 w-full h-full flex flex-col gap-0 md:gap-20 justify-center items-center my-10 md:my-20 ">
       <div className="max-w-[320px] md:max-w-[500px]">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center">
           {t("PricingPage.titleStart")}

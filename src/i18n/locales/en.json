@@ -639,17 +639,21 @@
     "aria": {
       "getQuoteButton": "Get a quote"
     },
-    "yearly": "Yearly payment",
-    "monthly48": "Monthly price",
+    "monthly": "Monthly payment",
     "from": "from",
     "paymentInfo": "Service agreement included in all plans (maintenance, support, and hosting)",
     "serviceAgreementTip": "Hosting, maintenance and support",
     "yearlyTab": "Yearly",
     "yearlySavings": "Save 10%",
-    "monthlyTab": "Monthly"
+    "monthlyTab": "Monthly",
+    "priceOnRequest": "Price on request",
+    "startingFrom": "From",
+    "ongoingCollaboration": "Ongoing collaboration",
+    "billedYearly": "billed annually"
   },
   "plansComparison": {
     "title": "Compare our plans",
+    "extraServices": "Extra services",
     "table": {
       "featureColumn": "Feature / Package"
     },
@@ -657,6 +661,7 @@
     "selectLabel": "Select a package to view details",
 
     "text-btn": "Get Started",
+    "pricesPerMonth": "Prices per month",
     "startingFrom": "From",
     "vatNote": "All prices are indicative and exclude VAT",
     "legend": "Included | – Not included in standard package",
@@ -680,46 +685,51 @@
   },
   "plans": {
     "starter": {
-      "name": "Foundation",
-      "title": "Foundation",
-      "description": "Perfect for small teams getting started smoothly",
-      "including": " Included",
-      "adminDashboard": "Admin dashboard",
+      "name": "Starter",
+      "title": "Starter",
+      "description": "For businesses that want to be professional online",
+      "adminDashboard": "Admin Dashboard",
       "seo": "Basic",
       "cms": "Simple",
       "features": {
-        "customDesign": "Custom design",
-        "responsiveFast": "Responsive and fast",
-        "basicSEO": "Basic SEO setup",
-        "simpleCMS": "CMS / Editable content"
+        "websiteOrWebapp": "Website or simple web app",
+        "contactAndData": "Contact form and basic data",
+        "simpleLogin": "Simple login (optional)",
+        "hosting": "Stable hosting and operations",
+        "support": "Limited support and updates"
       }
     },
-    "pro": {
+    "growth": {
       "name": "Growth",
       "title": "Growth",
-      "description": "Ideal for growing teams and products together",
+      "description": "For data-driven teams focused on optimisation and scalable growth",
+      "starLabel": "Growth-ready platform",
       "including": "Included",
       "seo": "Extended",
       "cms": "Advanced",
       "features": {
-        "bespokeUIUX": "Unique UI/UX design",
-        "featureRich": "Advanced functionality",
-        "databaseIntegration": "Database integration",
-        "socialMedia": "Social Media integration"
+        "allFromStarter": "Everything from Starter",
+        "databaseWebapp": "Database-based web app",
+        "userProfilesRoles": "User profiles and roles",
+        "adminPanel": "Statistics and analytics",
+        "integrations": "Integrations and automation",
+        "cro": "Ongoing optimization (CRO)"
       }
     },
-    "premium": {
-      "name": "Scale",
-      "title": "Scale",
-      "description": "Designed for complex and scalable software systems",
+    "dedicated": {
+      "name": "Dedicated",
+      "title": "Dedicated",
+      "description": "For businesses that need a dedicated development team",
+      "developmentPartner": "Development Partner",
       "including": "Included",
       "seo": "Extended",
       "cms": "Advanced",
       "features": {
-        "sleekLayout": "Elegant and animated layout",
-        "parallaxEffects": "Parallax and motion effects",
-        "integrated3D": "Integrated 3D elements",
-        "performance": "Optimized for high performance"
+        "dedicatedCapacity": "Dedicated development capacity",
+        "ongoingDevelopment": "Continuous improvement",
+        "advancedSystems": "Advanced systems and flows",
+        "strategicAdvice": "Strategic sparring and advice",
+        "customSetup": "Custom setup to fit your needs"
       }
     }
   },

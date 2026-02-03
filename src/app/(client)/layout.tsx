@@ -48,7 +48,6 @@ export default function ClientLayout({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -88,7 +87,7 @@ export default function ClientLayout({
             <FaAngleUp size={17} />
           </button>
         )}
-        
+
         {/* Cookie Banner */}
         {showCookieBanner && (
           <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-80 z-50 animate-in slide-in-from-bottom-4 duration-300">
@@ -96,11 +95,15 @@ export default function ClientLayout({
               <div className="card-body p-4 items-center text-center gap-3">
                 <div className="flex items-center gap-2">
                   <FaCookieBite className="text-xl text-secondary" />
-                  <h2 className="card-title text-base">{t("CookieBanner.title")}!</h2>
+                  <h2 className="card-title text-base">
+                    {t("CookieBanner.title")}!
+                  </h2>
                 </div>
-                <p className="text-sm text-zinc-400">{t("CookieBanner.message")}</p>
+                <p className="text-sm text-zinc-400">
+                  {t("CookieBanner.message")}
+                </p>
                 <div className="card-actions">
-                  <button 
+                  <button
                     className="btn btn-primary btn-sm"
                     onClick={dismissCookieBanner}
                   >
@@ -111,7 +114,7 @@ export default function ClientLayout({
             </div>
           </div>
         )}
-        
+
         <ScreenFade />
       </div>
     </div>

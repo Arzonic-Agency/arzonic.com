@@ -638,34 +638,38 @@
   "PricingPage": {
     "titleStart": "Fleksibelt samarbejde,",
     "titleEnd": "Gennemsigtige priser",
-    "subtitle": "Vælg det samarbejdsniveau, der passer til jeres forretning",
+    "subtitle": "Vælg det rette samarbejdsniveau",
     "vatNote": "Alle priser er vejledende og ekskl. moms",
     "aria": {
       "getQuoteButton": "Få et tilbud"
     },
-    "yearly": "Årlig betaling",
-    "monthly48": "Månedlig pris",
+    "monthly": "Månedlig betaling",
     "from": "fra",
     "paymentInfo": "Serviceaftale inkluderet i alle pakker (drift, support og hosting)",
     "serviceAgreementTip": "Hosting, drift og support",
-
     "yearlyTab": "Årlig",
     "yearlySavings": "spar 10 %",
-    "monthlyTab": "Månedlig"
+    "monthlyTab": "Månedlig",
+    "priceOnRequest": "Pris efter behov",
+    "startingFrom": "Fra",
+    "ongoingCollaboration": "Løbende samarbejde",
+    "billedYearly": "faktureres årligt"
   },
   "plansComparison": {
     "title": "Sammenlign vores pakker",
+    "extraServices": "Ekstra services",
     "table": {
       "featureColumn": "Funktion / Pakke"
     },
     "selectLabel": "Vælg en pakke for at se detaljer",
     "title-btn": "Klar til at komme i gang?",
     "text-btn": "Find din pakke",
-    "startingFrom": "Fra",
+    "pricesPerMonth": "Priser pr. måned",
+    "startingFrom": "Pakkepris",
     "vatNote": "Alle priser er vejledende og ekskl. moms",
     "legend": "Inkluderet | – Ikke inkluderet i standardpakken",
     "features": {
-      "serviceFee": "Serviceaftale",
+      "serviceFee": "Serviceaftale pr. måned",
       "customDesign": "Tilpasset design",
       "responsive": "Responsiv og hurtig",
       "contactForm": "Kontaktformular",
@@ -684,45 +688,51 @@
   },
   "plans": {
     "starter": {
-      "name": "Basis",
-      "title": "Basis",
-      "description": "Perfekt til små teams, der skal godt i gang fra starten",
+      "name": "Starter",
+      "title": "Starter",
+      "description": "For virksomheder der vil professionelt online",
+      "adminDashboard": "Admin Dashboard",
       "seo": "Grundlæggende",
-      "adminDashboard": "Admin dashboard",
       "cms": "Simpelt",
       "features": {
-        "customDesign": "Skræddersyet design",
-        "responsiveFast": "Responsivt og hurtigt",
-        "basicSEO": "Grundlæggende SEO-opsætning",
-        "simpleCMS": "CMS / Redigerbart indhold"
+        "websiteOrWebapp": "Hjemmeside eller simpel webapp",
+        "contactAndData": "Kontaktformular og basis data",
+        "simpleLogin": "Simpelt login (valgfrit)",
+        "hosting": "Stabil hosting og drift",
+        "support": "Mindre support og opdateringer"
       }
     },
-    "pro": {
+    "growth": {
       "name": "Vækst",
       "title": "Vækst",
-      "description": "Ideel til teams og produkter i stabil, langsigtet vækst",
+      "description": "For datadrevne teams, der vil optimere og skalere",
+      "starLabel": "Vækst-klar platform",
       "including": "Inkluderet",
       "seo": "Udvidet",
       "cms": "Avanceret",
       "features": {
-        "bespokeUIUX": "Unikt UI/UX design",
-        "featureRich": "Avanceret funktionalitet",
-        "databaseIntegration": "Databaseintegration",
-        "socialMedia": "Social Media integration"
+        "allFromStarter": "Alt fra Starter",
+        "databaseWebapp": "Database-baseret webapp",
+        "userProfilesRoles": "Brugerprofiler og roller",
+        "adminPanel": "Statistikker og analyse",
+        "integrations": "Integrationer og automatisering",
+        "cro": "Løbende optimering (CRO)"
       }
     },
-    "premium": {
-      "name": "Skalering",
-      "title": "Skalering",
-      "description": "Designet til komplekse og skalerbare softwaresystemer",
+    "dedicated": {
+      "name": "Dedikeret",
+      "title": "Dedikeret",
+      "description": "For virksomheder der har brug for et fast udviklingspartnerteam",
+      "developmentPartner": "Udviklingspartner",
       "including": "Inkluderet",
       "seo": "Udvidet",
       "cms": "Avanceret",
       "features": {
-        "sleekLayout": "Elegant og animeret layout",
-        "parallaxEffects": "Parallax og bevægelseseffekter",
-        "integrated3D": "Integrerede 3D-elementer",
-        "customer": "Kundelogin og Profilsider"
+        "dedicatedCapacity": "Dedikeret udviklingskapacitet",
+        "ongoingDevelopment": "Løbende udvikling og prioritering",
+        "advancedSystems": "Avancerede systemer og flows",
+        "strategicAdvice": "Strategisk sparring og rådgivning",
+        "customSetup": "Skræddersyet setup efter behov"
       }
     }
   },
@@ -1109,7 +1119,7 @@
     },
     "q2": {
       "title": "Er der vedligeholdelse?",
-      "answer": "Alle vores løsninger inkluderer en serviceaftale, som dækker drift, support, hosting og vedligeholdelse. Du kan vælge mellem årlig betaling eller en afdragsordning – og så klarer vi resten."
+      "answer": "Alle vores løsninger inkluderer en serviceaftale, som dækker drift, support, hosting og vedligeholdelse. Du kan vælge mellem engangsbetaling eller en afdragsordning – og så klarer vi resten."
     },
     "q3": {
       "title": "Kan jeg selv redigere indhold?",
