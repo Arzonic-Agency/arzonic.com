@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useActionState, useEffect } from "react";
+import React, {
+  useState,
+  useActionState,
+  useEffect,
+  startTransition,
+} from "react";
 import { FaEnvelope, FaKey } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
@@ -68,7 +73,9 @@ const LoginPage = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    formAction(formData);
+    startTransition(() => {
+      formAction(formData);
+    });
   };
 
   return (
