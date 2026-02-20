@@ -19,6 +19,7 @@ import { FaShieldAlt } from "react-icons/fa";
 const Navbar = () => {
   const pathname = usePathname();
   const [role, setRole] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -26,11 +27,22 @@ const Navbar = () => {
       const session = await readUserSession();
       if (session) {
         setRole(session.role);
+        setName(session.name);
       } else {
         setRole(null);
+        setName(null);
       }
     })();
   }, []);
+
+  const initials = name
+    ? name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : null;
 
   return (
     <div className="flex flex-col items-center sm:justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
@@ -155,7 +167,20 @@ const Navbar = () => {
     
         </div>
       </div>
-      <div className="flex-col gap-10 items-center justify-center w-full p-4 absolute bottom-12 hidden sm:flex">
+      <div className="flex-col gap-3 items-center justify-center w-full p-4 absolute bottom-12 hidden sm:flex">
+        {initials && (
+          <div className="flex items-center gap-3 w-full px-2">
+            <div className="avatar placeholder">
+              <div className="bg-primary text-primary-content w-10 rounded-full">
+                <span className="text-sm font-semibold">{initials}</span>
+              </div>
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-sm font-medium truncate">{name}</span>
+              <span className="text-xs text-zinc-500 capitalize">{role}</span>
+            </div>
+          </div>
+        )}
         <Link
           href="/"
           className="btn btn-sm md:btn-md btn-soft flex items-center gap-2"

@@ -643,6 +643,7 @@
     "aria": {
       "getQuoteButton": "Få et tilbud"
     },
+
     "monthly": "Månedlig betaling",
     "from": "fra",
     "paymentInfo": "Serviceaftale inkluderet i alle pakker (drift, support og hosting)",
