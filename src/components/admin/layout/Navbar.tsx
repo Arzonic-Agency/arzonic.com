@@ -48,15 +48,14 @@ const Navbar = () => {
     <div className="flex flex-col items-center sm:justify-between bg-base-200 rounded-lg sm:fixed sm:h-full md:py-0 md:pr-0">
       <div className="flex flex-col h-full">
         <div className="flex items-center justify-start h-20 sm:h-22 w-full text-xl sm:pl-4">
-            <Image
-              src="/icon-192x192.png"
-              alt="App ikon"
-              width={60}
-              height={60}
-              priority
-            />
-            <span className="font-semibold hidden sm:block">Dashboard</span>
-        
+          <Image
+            src="/icon-192x192.png"
+            alt="App ikon"
+            width={60}
+            height={60}
+            priority
+          />
+          <span className="font-semibold hidden sm:block">Dashboard</span>
         </div>
         <div className="hidden sm:flex">
           <ul className="menu menu-lg gap-2 rounded-box w-56 xl:w-72">
@@ -99,7 +98,6 @@ const Navbar = () => {
                   className={pathname === "/admin/users" ? "menu-active" : ""}
                   aria-label={t("aria.navigation.linkToUsers")}
                 >
-               
                   <FaShieldAlt className="size-[1.1em] mr-[0.15rem]" />
                   {t("user_access")}
                 </Link>
@@ -114,12 +112,11 @@ const Navbar = () => {
                   href="/admin/settings"
                   aria-label={t("aria.navigation.linkToSettings")}
                 >
-                    <FaGear className="size-[1.1em] mr-[0.15rem]" />
+                  <FaGear className="size-[1.1em] mr-[0.15rem]" />
                   {t("settings")}
                 </Link>
               </li>
             )}
-        
           </ul>
         </div>
         <div className="dock dock-md sm:hidden z-30 bg-base-200">
@@ -164,14 +161,13 @@ const Navbar = () => {
               <FaGear className="text-lg" />
             </Link>
           )}
-    
         </div>
       </div>
       <div className="flex-col gap-3 items-center justify-center w-full p-4 absolute bottom-12 hidden sm:flex">
         {initials && (
-          <div className="flex items-center gap-3 w-full px-2">
+          <div className="flex items-center gap-3 w-full px-2 justify-center">
             <div className="avatar placeholder">
-              <div className="bg-primary text-primary-content w-10 rounded-full">
+              <div className="bg-primary text-primary-content w-10 rounded-full flex items-center justify-center">
                 <span className="text-sm font-semibold">{initials}</span>
               </div>
             </div>

@@ -1551,7 +1551,10 @@ export async function updatePackage(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Documentation
+// Documentation (Topics & Sections)
+// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// TOPICS
 // ─────────────────────────────────────────────────────────────────────────────
 
 export async function getAllTopics() {
@@ -1561,7 +1564,7 @@ export async function getAllTopics() {
     const { data, error } = await supabase
       .from("doc_topics")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("order_index", { ascending: true });
 
     if (error) {
       throw new Error(`Failed to fetch topics: ${error.message}`);
@@ -1574,22 +1577,499 @@ export async function getAllTopics() {
   }
 }
 
-export async function createDocsTopic(title: string, slug: string) {
+export async function createDocsTopic(title: string): Promise<void> {
   const supabase = await createServerClientInstance();
 
   try {
+    // Validation
+    if (!title || title.trim().length === 0) {
+      throw new Error("Title is required");
+    }
+
+    const trimmedTitle = title.trim();
+
+    if (trimmedTitle.length > 200) {
+      throw new Error("Title must be 200 characters or less");
+    }
+
+    // Generate slug from title (same pattern as Jobs)
+    const baseSlug = trimmedTitle
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    if (!baseSlug) {
+      throw new Error("Title must contain at least one alphanumeric character");
+    }
+
+    let slug = baseSlug;
+    let counter = 1;
+
+    // Check for duplicate slugs and append -1, -2, etc. if necessary
+    while (true) {
+      const { data: existing } = await supabase
+        .from("doc_topics")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (!existing) break;
+      slug = `${baseSlug}-${counter++}`;
+    }
+
+    // Find max order_index and add 10
+    const { data: maxOrderData } = await supabase
+      .from("doc_topics")
+      .select("order_index")
+      .order("order_index", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const order_index = (maxOrderData?.order_index || 0) + 10;
+
+    // Insert new topic
     const { error } = await supabase.from("doc_topics").insert([
       {
-        title,
+        title: trimmedTitle,
         slug,
+        order_index,
+        is_hidden: false,
       },
     ]);
 
     if (error) {
+      console.error("[createDocsTopic] Supabase insert error:", error.message);
       throw new Error(`Failed to create topic: ${error.message}`);
     }
+
+    console.log("[createDocsTopic] Topic created with slug:", slug);
   } catch (err) {
-    console.error("Unexpected error during topic creation:", err);
+    console.error(
+      "[createDocsTopic] Unexpected error during topic creation:",
+      err,
+    );
+    throw err;
+  }
+}
+
+export async function updateDocsTopic(
+  topicId: string,
+  title: string,
+  isHidden?: boolean,
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!topicId || topicId.trim().length === 0) {
+      throw new Error("Topic ID is required");
+    }
+
+    if (!title || title.trim().length === 0) {
+      throw new Error("Title is required");
+    }
+
+    const trimmedTitle = title.trim();
+
+    if (trimmedTitle.length > 200) {
+      throw new Error("Title must be 200 characters or less");
+    }
+
+    const { data: existingTopic } = await supabase
+      .from("doc_topics")
+      .select("id")
+      .eq("id", topicId)
+      .maybeSingle();
+
+    if (!existingTopic) {
+      throw new Error("Topic not found");
+    }
+
+    const baseSlug = trimmedTitle
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    if (!baseSlug) {
+      throw new Error("Title must contain at least one alphanumeric character");
+    }
+
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (true) {
+      const { data: duplicate } = await supabase
+        .from("doc_topics")
+        .select("id")
+        .eq("slug", slug)
+        .neq("id", topicId)
+        .maybeSingle();
+
+      if (!duplicate) break;
+      slug = `${baseSlug}-${counter++}`;
+    }
+
+    const { error } = await supabase
+      .from("doc_topics")
+      .update({
+        title: trimmedTitle,
+        slug,
+        ...(isHidden !== undefined && { is_hidden: isHidden }),
+      })
+      .eq("id", topicId);
+
+    if (error) {
+      throw new Error(`Failed to update topic: ${error.message}`);
+    }
+  } catch (err) {
+    console.error("[updateDocsTopic] Unexpected error during update:", err);
+    throw err;
+  }
+}
+
+export async function deleteDocsTopic(topicId: string): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!topicId || topicId.trim().length === 0) {
+      throw new Error("Topic ID is required");
+    }
+
+    const { error: deleteSectionsError } = await supabase
+      .from("doc_sections")
+      .delete()
+      .eq("topic_id", topicId);
+
+    if (deleteSectionsError) {
+      throw new Error(
+        `Failed to delete sections for topic: ${deleteSectionsError.message}`,
+      );
+    }
+
+    const { error: deleteTopicError } = await supabase
+      .from("doc_topics")
+      .delete()
+      .eq("id", topicId);
+
+    if (deleteTopicError) {
+      throw new Error(`Failed to delete topic: ${deleteTopicError.message}`);
+    }
+  } catch (err) {
+    console.error("[deleteDocsTopic] Unexpected error during delete:", err);
+    throw err;
+  }
+}
+
+export async function updateDocsTopicsOrder(topicIds: string[]): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!Array.isArray(topicIds) || topicIds.length === 0) {
+      throw new Error("Topic IDs are required");
+    }
+
+    const updatePromises = topicIds.map((topicId, index) =>
+      supabase
+        .from("doc_topics")
+        .update({ order_index: (index + 1) * 10 })
+        .eq("id", topicId),
+    );
+
+    const results = await Promise.all(updatePromises);
+    const failed = results.find((result) => result.error);
+
+    if (failed?.error) {
+      throw new Error(`Failed to update topic order: ${failed.error.message}`);
+    }
+  } catch (err) {
+    console.error("[updateDocsTopicsOrder] Unexpected error:", err);
+    throw err;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTIONS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function getAllSectionsByTopicId(topicId: string) {
+  const supabase = await createServerClientInstance();
+
+  try {
+    const { data, error } = await supabase
+      .from("doc_sections")
+      .select("*")
+      .eq("topic_id", topicId)
+      .order("order_index", { ascending: true });
+
+    if (error) {
+      throw new Error(`Failed to fetch sections: ${error.message}`);
+    }
+
+    return { sections: data || [] };
+  } catch (err) {
+    console.error("Unexpected error during fetching sections:", err);
+    throw err;
+  }
+}
+
+export async function createDocsSection(
+  topicId: string,
+  title: string,
+  description: string,
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    // Validation
+    if (!topicId || topicId.trim().length === 0) {
+      throw new Error("Topic ID is required");
+    }
+
+    if (!title || title.trim().length === 0) {
+      throw new Error("Title is required");
+    }
+
+    if (!description || description.trim().length === 0) {
+      throw new Error("Description is required");
+    }
+
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+
+    if (trimmedTitle.length > 200) {
+      throw new Error("Title must be 200 characters or less");
+    }
+
+    if (trimmedDescription.length > 500) {
+      throw new Error("Description must be 500 characters or less");
+    }
+
+    // Verify topic exists
+    const { data: topicExists } = await supabase
+      .from("doc_topics")
+      .select("id")
+      .eq("id", topicId)
+      .maybeSingle();
+
+    if (!topicExists) {
+      throw new Error("Topic not found");
+    }
+
+    // Generate slug from title
+    const baseSlug = trimmedTitle
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    if (!baseSlug) {
+      throw new Error("Title must contain at least one alphanumeric character");
+    }
+
+    let slug = baseSlug;
+    let counter = 1;
+
+    // Check for duplicate slugs within the same topic
+    while (true) {
+      const { data: existing } = await supabase
+        .from("doc_sections")
+        .select("id")
+        .eq("topic_id", topicId)
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (!existing) break;
+      slug = `${baseSlug}-${counter++}`;
+    }
+
+    // Find max order_index for this topic and add 10
+    const { data: maxOrderData } = await supabase
+      .from("doc_sections")
+      .select("order_index")
+      .eq("topic_id", topicId)
+      .order("order_index", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const order_index = (maxOrderData?.order_index || 0) + 10;
+
+    // Insert new section
+    const { error } = await supabase.from("doc_sections").insert([
+      {
+        topic_id: topicId,
+        title: trimmedTitle,
+        slug,
+        description: trimmedDescription,
+        order_index,
+        is_hidden: false,
+      },
+    ]);
+
+    if (error) {
+      console.error(
+        "[createDocsSection] Supabase insert error:",
+        error.message,
+      );
+      throw new Error(`Failed to create section: ${error.message}`);
+    }
+
+    console.log("[createDocsSection] Section created with slug:", slug);
+  } catch (err) {
+    console.error(
+      "[createDocsSection] Unexpected error during section creation:",
+      err,
+    );
+    throw err;
+  }
+}
+
+export async function updateDocsSection(
+  sectionId: string,
+  title: string,
+  description: string,
+  isHidden?: boolean,
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!sectionId || sectionId.trim().length === 0) {
+      throw new Error("Section ID is required");
+    }
+
+    if (!title || title.trim().length === 0) {
+      throw new Error("Title is required");
+    }
+
+    if (!description || description.trim().length === 0) {
+      throw new Error("Description is required");
+    }
+
+    const trimmedTitle = title.trim();
+    const trimmedDescription = description.trim();
+
+    if (trimmedTitle.length > 200) {
+      throw new Error("Title must be 200 characters or less");
+    }
+
+    if (trimmedDescription.length > 500) {
+      throw new Error("Description must be 500 characters or less");
+    }
+
+    const { data: existingSection } = await supabase
+      .from("doc_sections")
+      .select("id, topic_id")
+      .eq("id", sectionId)
+      .maybeSingle();
+
+    if (!existingSection) {
+      throw new Error("Section not found");
+    }
+
+    const baseSlug = trimmedTitle
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9\-]/g, "")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    if (!baseSlug) {
+      throw new Error("Title must contain at least one alphanumeric character");
+    }
+
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (true) {
+      const { data: duplicate } = await supabase
+        .from("doc_sections")
+        .select("id")
+        .eq("topic_id", existingSection.topic_id)
+        .eq("slug", slug)
+        .neq("id", sectionId)
+        .maybeSingle();
+
+      if (!duplicate) break;
+      slug = `${baseSlug}-${counter++}`;
+    }
+
+    const { error } = await supabase
+      .from("doc_sections")
+      .update({
+        title: trimmedTitle,
+        description: trimmedDescription,
+        slug,
+        ...(isHidden !== undefined && { is_hidden: isHidden }),
+      })
+      .eq("id", sectionId);
+
+    if (error) {
+      throw new Error(`Failed to update section: ${error.message}`);
+    }
+  } catch (err) {
+    console.error("[updateDocsSection] Unexpected error during update:", err);
+    throw err;
+  }
+}
+
+export async function deleteDocsSection(sectionId: string): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!sectionId || sectionId.trim().length === 0) {
+      throw new Error("Section ID is required");
+    }
+
+    const { error } = await supabase
+      .from("doc_sections")
+      .delete()
+      .eq("id", sectionId);
+
+    if (error) {
+      throw new Error(`Failed to delete section: ${error.message}`);
+    }
+  } catch (err) {
+    console.error("[deleteDocsSection] Unexpected error during delete:", err);
+    throw err;
+  }
+}
+
+export async function updateDocsSectionsOrder(
+  topicId: string,
+  sectionIds: string[],
+): Promise<void> {
+  const supabase = await createServerClientInstance();
+
+  try {
+    if (!topicId || topicId.trim().length === 0) {
+      throw new Error("Topic ID is required");
+    }
+
+    if (!Array.isArray(sectionIds) || sectionIds.length === 0) {
+      throw new Error("Section IDs are required");
+    }
+
+    const updatePromises = sectionIds.map((sectionId, index) =>
+      supabase
+        .from("doc_sections")
+        .update({ order_index: (index + 1) * 10 })
+        .eq("id", sectionId)
+        .eq("topic_id", topicId),
+    );
+
+    const results = await Promise.all(updatePromises);
+    const failed = results.find((result) => result.error);
+
+    if (failed?.error) {
+      throw new Error(
+        `Failed to update section order: ${failed.error.message}`,
+      );
+    }
+  } catch (err) {
+    console.error("[updateDocsSectionsOrder] Unexpected error:", err);
     throw err;
   }
 }
